@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AE Renewable Ltd - Premium Proposal</title>
+    <style>
+        :root {
+            --primary-color: #1A365D; /* Premium Deep Navy */
+            --accent-color: rgb(187, 147, 15);  /* Solar Gold */
+            --text-color: #2D3748;    /* Charcoal Grey */
+            --bg-light: #F7FAFC;
+            --border-color: #E2E8F0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            background-color: #F0F4F8;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .proposal-container {
+            background: #FFFFFF;
+            max-width: 850px;
+            width: 100%;
+            padding: 50px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        /* Premium Header Styling */
+        .header-block {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .logo-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 180px;
+            height: 70px;
+            background: var(--bg-light);
+            border: 2px dashed #CBD5E0;
+            color: #718096;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 6px;
+        }
+
+        .logo-placeholder img{
+           max-height: 100%;
+           max-width: 100%;
+        }
+
+        .company-title {
+            text-align: right;
+        }
+
+        .company-title h1 {
+            color: var(--primary-color);
+            font-size: 28px;
+            margin: 0;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+        }
+
+        .company-title p {
+            margin: 5px 0 0 0;
+            color: var(--accent-color);
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 3px;
+        }
+
+        /* Project Meta Table */
+        .meta-table {
+            width: 100%;
+            margin-bottom: 40px;
+            border-collapse: collapse;
+            background: var(--bg-light);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .meta-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 15px;
+        }
+
+        .meta-table td:first-child {
+            font-weight: 700;
+            color: var(--primary-color);
+            width: 25%;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Section Headings */
+        h2 {
+            color: var(--primary-color);
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        h2::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 18px;
+            background-color: var(--accent-color);
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #4A5568;
+            margin-bottom: 20px;
+        }
+
+        /* Standardized Premium Tables */
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+
+        .spec-table th {
+            background-color: var(--primary-color);
+            color: #FFFFFF;
+            text-align: left;
+            padding: 14px 18px;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .spec-table td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-color);
+            color: #4A5568;
+        }
+
+        .spec-table tr:nth-child(even) {
+            background-color: #F8FAFC;
+        }
+
+        /* Lists styling */
+        ul {
+            padding-left: 20px;
+            margin-bottom: 30px;
+        }
+
+        li {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #4A5568;
+            margin-bottom: 8px;
+        }
+
+        li strong {
+            color: var(--primary-color);
+        }
+
+        /* Footer & Signatures */
+        .footer-note {
+            font-size: 13px;
+            color: #A0AEC0;
+            text-align: center;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .signature-section {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .sig-block {
+            width: 45%;
+        }
+
+        .sig-line {
+            border-bottom: 1px solid #CBD5E0;
+            margin-top: 40px;
+            margin-bottom: 8px;
+        }
+
+        .sig-label {
+            font-size: 13px;
+            color: #718096;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="proposal-container">
+    
+<!-- Premium Header Area with Logo Placeholder -->
+    <div class="header-block">
+        <div class="logo-placeholder">
+            <!-- Replace this text/box with your actual image tag when ready:
+                 <img src="your-logo-path.png" alt="AE Renewable Logo" style="max-height: 100%; max-width: 100%;"> -->
+            <img src="WhatsApp Image 2026-06-10 at 09.47.00.jpeg"  alt="AE Renewable Logo" >
+        </div>
+        <div class="company-title">
+            <h1>AE RENEWABLE LTD</h1>
+            <p class="tagline">ENERGY SOLUTIONS</p>
+            
+            <!-- Added Company Contacts Section -->
+            <div class="company-contacts" style="margin-top: 5px; font-size: 0.9rem; color: #555;">
+                <p style="margin: 2px 0;"> +234 813 361 5132</p>
+                <!-- <p style="margin: 2px 0;">✉️ info@aerenewable.com</p> -->
+                <!-- <p style="margin: 2px 0;">📍 Bwari, Abuja, Nigeria</p> -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Meta Information -->
+    <table class="meta-table">
+        <tr>
+            <td>Project</td>
+            <td>Premium 160KVA Hybrid Solar Power System (integrate from Dual 80KVA Units)</td>
+        </tr>
+        <tr>
+            <td>Date</td>
+            <td>June 2026</td>
+        </tr>
+        <tr>
+            <td>Client</td>
+            <td> <strong>Engr KAY-WI</strong> </td>
+        </tr>
+    </table>
+
+    <h2>1. Project Description</h2>
+    <p>This proposal outlines the premium engineering, procurement, and deployment of a High-Capacity Hybrid Solar PV System. The system is masterfully engineered to provide flawless, uninterrupted power generation, maximizing efficiency and eliminating operational downtime for the facility.</p>
+
+    <h2>2. System Design Overview</h2>
+    <table class="spec-table">
+        <thead>
+            <tr>
+                <th style="width: 35%;">Component / Item</th>
+                <th style="width: 65%;">Premium Technical Specifications</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong style="color: green;">Inverter Capacity</strong></td>
+                <td> DEYE 160KVA High-Efficiency Three-Phase Hybrid Inverter System (Tier-1 Intelligent Smart-Management Configuration)</td>
+            </tr>
+            <tr>
+                <td><strong style="color: green;">Solar PV Array</strong></td>
+                <td>140 × 750W Ultra-High Efficiency Monocrystalline Solar Panels (Bifacial Technology for optimal low-light yield)</td>
+            </tr>
+            <tr>
+                <td><strong style="color: green;">Battery Storage</strong></td>
+                <td> DEYE High-Voltage 400KWH Premium Lithium Battery Bank (Rack-Mounted Architecture)</td>
+            </tr>
+            <tr>
+                <td><strong style="color: green;">Battery Type</strong></td>
+                <td>Lithium Iron Phosphate (LiFePO4) with integrated Intelligent Battery Management System (BMS)</td>
+            </tr>
+            <tr>
+                <td><strong style="color: green;">Backup Capacity</strong></td>
+                <td>Customized optimized configuration engineered to meet bespoke heavy-load facility runtime requirements</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>3. Scope of Work</h2>
+    <ul>
+        <li>Load analysis and system engineering design</li>
+        <li>Installation and mounting structures and cabling system</li>
+        <li>3-Phase distribution and load balancing </li>
+        <li>Protection system (MCB, MCCB, SPD, ATS, 600ABAR, Isolator)</li>
+        <li>System testing, commissioning and handover</li>
+    </ul>
+
+    <h2>4. Key System Features</h2>
+    <ul>
+        <li>Stable 3-Phase Power Supply</li>
+        <li>Hight-Capacity lithium battery backup</li>
+        <li>Smart energy management system (BMS)</li>
+        <li>Reduced fuel Consumption</li>
+        <li>Expandable system architecture</li>
+    </ul>
+
+<h2>5. Commercial Summary</h2>
+    <table class="spec-table">
+    <thead>
+        <tr>
+            <th style="width: 50%;">Investment Breakdown / Component</th>
+            <th style="width: 20%; text-align: right;">Unit / Qty</th>
+            <th style="width: 30%; text-align: right;">Amount (₦) / Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Inverter:</strong> DEYE 80KVA High-Efficiency Three-Phase Hybrid Inverter System</td>
+            <td style="text-align: right;">2 (Unit)</td>
+            <td style="text-align: right; color: #2B6CB0;"> <strong style="font-weight: 600;">₦ 18,000,000</strong> </td>
+        </tr>
+        <tr>
+            <td><strong>Battery:</strong> DEYE High-Voltage 60KWH Premium Lithium Battery Bank (Including PDU N Rack-Mounted )</td>
+            <td style="text-align: right;">7 (Unit)</td>
+            <td style="text-align: right; color: #2B6CB0;"> <strong style="font-weight: 600;">₦ 103,950,000</strong> </td>
+        </tr>
+        <tr>
+            <td><strong>Panels:</strong> Ultra-High Efficiency Monocrystalline Solar Panels (Bifacial Technology)</td>
+            <td style="text-align: right;">140 × 750W</td>
+            <td style="text-align: right; font-weight: 600; color: #2B6CB0;"> <strong style="font-weight: 600;">₦ 19,600,000</strong></td>
+        </tr>
+        <tr>
+            <td><strong>Cable AC:</strong> Heavy-Duty AC Cabling (150mm Single-Core Flex) N Log</td>
+            <td style="text-align: right;">160 meters</td>
+            <td style="text-align: right;">-------</td>
+        </tr>
+        <tr>
+            <td><strong>Cable DC:</strong> Heavy-Duty DC Cabling (16mm Single-core) N Log</td>
+            <td style="text-align: right;">1000 meters</td>
+            <td style="text-align: right;">-------</td>
+        </tr>
+         <tr>
+            <td><strong>Chint Breaker DC 63A 2Pole N SPD:</strong> Integrated Protection System Component</td>
+            <td style="text-align: right;">7 (Unit)</td>
+            <td style="text-align: right; font-style: italic; color: #4A5568;">-------</td>
+        </tr>
+         <tr>
+            <td><strong>Schneider AC Breaker 600A / 250A / 400A:</strong> Main Distribution Protection (MCB/MCCB)</td>
+            <td style="text-align: right;">600A(1-Unit) / 250A(2-Unit) / 400A(2-Unit)</td>
+            <td style="text-align: right; font-style: italic; color: #4A5568;">--------</td>
+        </tr>
+        <tr>
+            <td><strong>Copper BusBar (3-Phase):</strong> Main Power Distribution Bar</td>
+            <td style="text-align: right;">600A (3 Unit)</td>
+            <td style="text-align: right;">-------</td>
+        </tr>
+         <tr>
+            <td><strong>Schneider AVR & SPD AC 3-Phase:</strong> Surge Protection & 3-Phase AVR for Load Balancing</td>
+            <td style="text-align: right;">1 (Unit)</td>
+            <td style="text-align: right; font-style: italic; color: #4A5568;">---------</td>
+        </tr>
+        <tr>
+            <td><strong>Panel Accessories & Cable Tray:</strong> Panel Mounting Rails, Connectors , Protective Cable Trays & Insulator Tape </td>
+            <td style="text-align: right;">50L / 22Pairs / 40L / 6Pieces</td>
+            <td style="text-align: right;">-------</td>
+        </tr>
+        <tr>
+          <td><strong>Breaker Enclosure:</strong> Heavy-Duty Protective Casing for Distribution Panels</td>
+          <td style="text-align: right;">4 (Unit)</td>
+          <td style="text-align: right;">-------</td>
+        </tr>
+        <tr>
+            <td><strong>Civil Engineering, Professional Installation:</strong> Logistics & Earthing Works</td>
+            <td style="text-align: right;">Lump</td>
+            <td style="text-align: right; font-weight: 600; color: #38A169;">---------</td>
+        </tr>
+        <!-- <tr>
+            <td><strong>AI Cloud Monitoring:</strong> Integration & Professional Commissioning</td>
+            <td style="text-align: right;">1</td>
+            <td style="text-align: right; font-weight: 600; color: #38A169;">----------</td>
+        </tr> -->
+       <tr>
+            <td><strong>Earthing & Lightning Protection:</strong> Dedicated Electronic & Structural Grounding Works</td>
+            <td style="text-align: right;">1(Unit)</td>
+            <td style="text-align: right; font-weight: 600; color: #38A169;">----------</td>
+       </tr>
+    </tbody>
+</table>
+
+    <h2>6. Execution & Deployment Timeline</h2>
+    <table class="spec-table">
+        <thead>
+            <tr>
+                <th>Phase Description</th>
+                <th style="text-align: right;">Projected Duration</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Detailed Technical Design & Electrical Engineering Schematics</td>
+                <td style="text-align: right;">3 Day</td>
+            </tr>
+            <tr>
+                <td>Procurement & Logistics</td>
+                <td style="text-align: right;">1 Week</td>
+            </tr>
+            <tr>
+                <td>On-Site Installation, Structural Array Setup & Cabling</td>
+                <td style="text-align: right;">1 Week</td>
+            </tr>
+            <tr>
+                <td>Testing, Load Calibration, Final Handover</td>
+                <td style="text-align: right;">2 – 3 Days</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>7. Industry-Leading Warranty Package</h2>
+    <ul>
+        <li><strong>Tier-1 Solar Panels:</strong> 20-Year Linear Power Output Warranty</li>
+        <li><strong>Premium Hybrid Inverters:</strong> 5-Year Full Manufacturer Warranty</li>
+        <li><strong>Lithium Battery Bank:</strong> 5 – 10 Year Comprehensive Lifecycle Warranty</li>
+        <li><strong>Engineering Workmanship:</strong> 1-Year Full Elite Post-Installation Support Warranty</li>
+    </ul>
+
+    <h2>8. Payment Terms & Execution</h2>
+    <ul>
+        <li><strong>70% Advance Payment:</strong> Required for component procurement, structural planning, and site mobilization.</li>
+        <li><strong>20% Milestone Payment:</strong> Due midway through structural placement and electrical integration.</li>
+        <li><strong>10% Retainage Payment:</strong> Payable immediately following full system commissioning, handover, and client validation.</li>
+    </ul>
+    <!-- <p style="font-size: 13px; font-style: italic; color: #718096; margin-top: 10px;">*Payment structure remains adaptable to formal review and mutual institutional agreement.*</p> -->
+
+    <!-- Professional Signature Sign-off Block -->
+    <div class="signature-section">
+        <div class="sig-block">
+            <div class="sig-line"></div>
+            <div class="sig-label">Authorized Signatory — AE Renewable Ltd</div>
+        </div>
+        <div class="sig-block">
+            <div class="sig-line"></div>
+            <div class="sig-label">Client Acceptance — Engr Daniel</div>
+        </div>
+    </div>
+    
+    <div class="footer-note" style="margin-top: 40px;"> • AE Renewable Ltd Confidential Proposal</div>
+
+</div>
+
+</body>
+</html>

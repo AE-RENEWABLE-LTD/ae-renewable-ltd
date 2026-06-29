@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SG8800UD-MV-20 Technical Datasheet</title>
+    <style>
+        /* --- Clean, Professional Technical Spec Sheet Layout --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #222222;
+            padding: 2.5rem;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .page-container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* --- Header Styles mirroring the Document --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 3px solid #e68a00;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-box {
+            background-color: #e68a00;
+            color: #ffffff;
+            font-weight: bold;
+            padding: 0.4rem 0.6rem;
+            font-size: 1.2rem;
+            border-radius: 3px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #111111;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text span {
+            color: #e68a00;
+        }
+
+        .model-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #333333;
+            text-align: right;
+            line-height: 1.1;
+        }
+
+        .model-subtitle {
+            font-size: 0.9rem;
+            color: #666666;
+            font-weight: normal;
+            margin-top: 0.2rem;
+        }
+
+        /* --- Grid Features Bar --- */
+        .features-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-box {
+            border-top: 3px solid #e68a00;
+            background-color: #f7f9fa;
+            padding: 0.75rem;
+        }
+
+        .feature-box h4 {
+            font-size: 11px;
+            color: #e68a00;
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+
+        .feature-box p {
+            font-size: 11px;
+            color: #444444;
+            line-height: 1.3;
+        }
+
+        /* --- Precision Datasheet Chart Realization --- */
+        .chart-container {
+            border: 1px solid #dddddd;
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            background-color: #ffffff;
+        }
+
+        .chart-title {
+            font-weight: bold;
+            font-size: 12px;
+            color: #222222;
+            margin-bottom: 1.5rem;
+        }
+
+        .graph-wrapper {
+            display: flex;
+            position: relative;
+            margin: 0 auto;
+            max-width: 550px;
+            padding-right: 120px; /* Space for embedded legend box */
+        }
+
+        /* Y-Axis Label Scale */
+        .y-axis-labels {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-right: 8px;
+            height: 180px;
+            font-size: 11px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .graph-area {
+            width: 100%;
+            height: 180px;
+            border-left: 1px solid #777;
+            border-bottom: 1px solid #777;
+            position: relative;
+            /* Precise gridlines corresponding to the 2% step layout */
+            background: linear-gradient(to top, 
+                #eee 1px, transparent 1px) repeat-y;
+            background-size: 100% 30px; 
+        }
+
+        /* Smooth vector curves modeling the exact 98%+ efficiency sweep */
+        .curve-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* X-Axis Label Alignment */
+        .x-axis-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-left: 35px;
+            max-width: 395px;
+            margin-top: 6px;
+            font-size: 11px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .x-axis-title {
+            text-align: center;
+            font-size: 12px;
+            color: #333;
+            margin-top: 8px;
+            margin-left: 35px;
+            max-width: 395px;
+        }
+
+        /* Legend box inside the chart block container */
+        .embedded-legend {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 1px solid #cccccc;
+            padding: 0.6rem 0.8rem;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            font-size: 11px;
+        }
+
+        .legend-line {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .line-indicator {
+            width: 18px;
+            height: 2px;
+            display: inline-block;
+        }
+
+        /* --- Main Technical Data Table --- */
+        .section-header {
+            background-color: #333333;
+            color: #ffffff;
+            padding: 0.4rem 0.75rem;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 0.5rem;
+        }
+
+        tr {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        td {
+            padding: 0.5rem 0.75rem;
+            vertical-align: top;
+            font-size: 12px;
+        }
+
+        td.param-label {
+            width: 40%;
+            color: #555555;
+            font-weight: 500;
+        }
+
+        td.param-value {
+            width: 60%;
+            color: #111111;
+            font-weight: bold;
+            white-space: pre-line;
+        }
+
+        .footer-note {
+            margin-top: 2rem;
+            font-size: 11px;
+            color: #666666;
+            border-top: 1px solid #eeeeee;
+            padding-top: 1rem;
+        }
+
+        /* --- Advanced Print Stylesheets Integration --- */
+        @media print {
+            body {
+                padding: 0;
+                font-size: 11px;
+                background: #ffffff;
+                color: #000000;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .page-container {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            /* Prevent elements breaking awkwardly across pages */
+            .chart-container, .features-bar, table, tr {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            .section-header {
+                background-color: #333333 !important;
+                color: #ffffff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                page-break-after: avoid;
+                break-after: avoid;
+            }
+
+            .feature-box {
+                background-color: #f7f9fa !important;
+                border-top: 3px solid #e68a00 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .footer-note {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-container">
+
+    <header>
+        <div class="logo-area">
+            <div class="logo-box">AE</div>
+            <div class="logo-text">RENEWABLE<span> LTD</span></div>
+        </div>
+        <div class="model-number">
+            SG8800UD-MV-20
+            <div class="model-subtitle">Turnkey Station for 1500 Vdc System MV Transformer Integrated</div>
+        </div>
+    </header>
+
+    <div class="features-bar">
+        <div class="feature-box">
+            <h4>High Yield</h4>
+            <p>Advanced three-level technology, max. inverter efficiency 99%<br>Effective cooling, full power operation at 51°C</p>
+        </div>
+        <div class="feature-box">
+            <h4>Saved Investment</h4>
+            <p>Low transportation and installation cost due to 40-foot container design<br>DC 1500V system, low system cost</p>
+        </div>
+        <div class="feature-box">
+            <h4>Smart O&M</h4>
+            <p>Integrated zone monitoring and MV parameters monitoring function for online analysis<br>Modular design, easy maintenance</p>
+        </div>
+        <div class="feature-box">
+            <h4>Grid Support</h4>
+            <p>Compliance with standards: IEC 61727, IEC 62116, IEC 62271<br>Low/High voltage ride through (L/HVRT)</p>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <div class="chart-title">EFFICIENCY CURVE</div>
+        
+        <div class="graph-wrapper">
+            <div class="y-axis-labels">
+                <div>100%</div>
+                <div>98%</div>
+                <div>96%</div>
+                <div>94%</div>
+                <div>92%</div>
+                <div>90%</div>
+                <div>88%</div>
+            </div>
+
+            <div class="graph-area">
+                <svg class="curve-svg" viewBox="0 0 400 180" preserveAspectRatio="none">
+                    <path d="M 0,33 Q 60,18 120,17 T 400,24" fill="none" stroke="#3a84b8" stroke-width="2.5"/>
+                    <path d="M 0,55 Q 60,24 120,18 T 400,25" fill="none" stroke="#d43f3a" stroke-width="2.5"/>
+                    <path d="M 0,62 Q 60,28 120,19 T 400,27" fill="none" stroke="#111111" stroke-width="2.5"/>
+                </svg>
+            </div>
+
+            <div class="embedded-legend">
+                <div class="legend-line">
+                    <span class="line-indicator" style="background-color: #3a84b8;"></span>
+                    <span>Vdc=938V</span>
+                </div>
+                <div class="legend-line">
+                    <span class="line-indicator" style="background-color: #d43f3a;"></span>
+                    <span>Vdc=1100V</span>
+                </div>
+                <div class="legend-line">
+                    <span class="line-indicator" style="background-color: #111111;"></span>
+                    <span>Vdc=1300V</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="x-axis-labels">
+            <div>5%</div>
+            <div>10%</div>
+            <div>20%</div>
+            <div>30%</div>
+            <div>50%</div>
+            <div>75%</div>
+            <div>100%</div>
+        </div>
+        <div class="x-axis-title">Normalized Output Power</div>
+    </div>
+
+    <div class="section-header">Input (DC)</div>
+    <table>
+        <tr>
+            <td class="param-label">Max. PV input voltage</td>
+            <td class="param-value">1500 V</td>
+        </tr>
+        <tr>
+            <td class="param-label">Min. PV input voltage / Startup input voltage</td>
+            <td class="param-value">938 V / 950 V</td>
+        </tr>
+        <tr>
+            <td class="param-label">MPP voltage range</td>
+            <td class="param-value">938 – 1500 V</td>
+        </tr>
+        <tr>
+            <td class="param-label">No. of independent MPP inputs</td>
+            <td class="param-value">8</td>
+        </tr>
+        <tr>
+            <td class="param-label">No. of DC inputs</td>
+            <td class="param-value">40 (optional: 48 / 56 inputs negative grounding)</td>
+        </tr>
+        <tr>
+            <td class="param-label">Max. PV input current</td>
+            <td class="param-value">8 * 1435 A</td>
+        </tr>
+        <tr>
+            <td class="param-label">Max. DC short-circuit current</td>
+            <td class="param-value">8 * 3528 A</td>
+        </tr>
+        <tr>
+            <td class="param-label">PV array configuration</td>
+            <td class="param-value">Negative grounding or floating</td>
+        </tr>
+    </table>
+
+    <div class="section-header">Output (AC)</div>
+    <table>
+        <tr>
+            <td class="param-label">AC output power</td>
+            <td class="param-value">8800 kVA @ 51°C / 10560 kVA @ 23°C</td>
+        </tr>
+        <tr>
+            <td class="param-label">Max. Inverter output current</td>
+            <td class="param-value">8 * 1155 A</td>
+        </tr>
+        <tr>
+            <td class="param-label">Max. AC output current</td>
+            <td class="param-value">305 A</td>
+        </tr>
+        <tr>
+            <td class="param-label">AC voltage range</td>
+            <td class="param-value">20 KV - 35 KV</td>
+        </tr>
+        <tr>
+            <td class="param-label">Nominal grid frequency / Grid frequency range</td>
+            <td class="param-value">50 Hz / 45-55 Hz, 60 Hz / 55-65 Hz</td>
+        </tr>
+        <tr>
+            <td class="param-label">Harmonic (THD)</td>
+            <td class="param-value">&lt; 3% (at nominal power)</td>
+        </tr>
+        <tr>
+            <td class="param-label">Power factor at nominal power / Adjustable power factor</td>
+            <td class="param-value">&gt; 0.99 / 0.8 leading - 0.8 lagging</td>
+        </tr>
+        <tr>
+            <td class="param-label">Feed-in phases / AC connection</td>
+            <td class="param-value">3 / 3</td>
+        </tr>
+    </table>
+
+    <div class="footer-note" style="display: flex; align-items: center; gap: 1rem;">
+        <img src="WhatsApp Image 2026-06-10 at 09.47.00.jpeg" alt="AE Renewable Logo" style="width: 100px; height: auto;">
+        <div>© 2026 AE RENEWABLE LTD. Technical Documentation Layout Profile. All Rights Reserved.</div>
+    </div>
+
+</div>
+
+</body>
+</html>

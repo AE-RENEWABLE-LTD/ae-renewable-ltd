@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AE Renewable Ltd - Company Profile</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-blue: #0A3663;
+            --secondary-blue: #002347;
+            --accent-green: #2E8B57;
+            --light-green: #E8F5E9;
+            --light-bg: #F4F7F6;
+            --text-dark: #333333;
+            --text-light: #FFFFFF;
+            --border-color: #E0E0E0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-dark);
+            background-color: #FFFFFF;
+            line-height: 1.6;
+            font-display: swap;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Utility Headers */
+        .section-header {
+            background-color: var(--primary-blue);
+            color: var(--text-light);
+            padding: 12px 20px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-top-right-radius: 20px;
+            margin-bottom: 25px;
+            display: inline-block;
+        }
+
+        /* --- HERO & HOME SECTION --- */
+        .hero {
+            /* Optimized image placeholder aspect ratio for vertical/hybrid viewports */
+            background: linear-gradient(rgba(10, 54, 99, 0.85), rgba(0, 35, 71, 0.9)), url('https://via.placeholder.com/853x1280/0A3663/FFFFFF?text=Solar+Panel+Background') no-repeat center center/cover;
+            color: var(--text-light);
+            padding: 60px 25px;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-green);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .logo-area img {
+            max-width: 140px;
+            margin-bottom: 15px;
+        }
+
+        .hero h1 {
+            font-size: 2.4rem;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+
+        .hero .subtitle {
+            font-size: 1.1rem;
+            letter-spacing: 4px;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .hero .tagline {
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #E0E0E0;
+            margin-bottom: 35px;
+        }
+
+        .hero-contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            font-size: 0.9rem;
+            /* FIXED: Removed 'px' from rgba channel values to restore background rendering */
+            background: rgba(25, 25, 25, 0.4);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .hero-contact-info span {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .hero-contact-info span i {
+            color: #FFD700;
+            margin-right: 8px;
+        }
+
+        /* --- ABOUT SECTION --- */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+            margin-bottom: 50px;
+        }
+
+        .about-text p {
+            margin-bottom: 15px;
+            color: #444;
+            text-align: justify;
+        }
+
+        .vision-mission-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            background: var(--light-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--accent-green);
+        }
+
+        .vision-mission-box i {
+            font-size: 1.8rem;
+            color: var(--accent-green);
+            margin-top: 30px;
+        }
+
+        .vision-mission-box h4 {
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .values-why-choose {
+            background-color: var(--light-bg);
+            padding: 25px;
+            border-radius: 12px;
+            height: fit-content;
+        }
+
+        .values-why-choose h4 {
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--accent-green);
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            margin-top: 25px;
+        }
+
+        .values-why-choose h4:first-child { margin-top: 0; }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .list-item i {
+            color: var(--accent-green);
+            font-size: 0.9rem;
+        }
+
+        /* --- SERVICES SECTION --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .service-card {
+            border: 1px solid var(--border-color);
+            border-top: 4px solid var(--primary-blue);
+            border-radius: 8px;
+            padding: 20px;
+            background: #fff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .service-title-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .service-icon-wrapper {
+            background-color: var(--primary-blue);
+            color: #fff;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .service-card:nth-child(2) .service-icon-wrapper { background-color: var(--accent-green); }
+        .service-card:nth-child(2) { border-top-color: var(--accent-green); }
+        .service-card:nth-child(3) .service-icon-wrapper { background-color: #E67E22; }
+        .service-card:nth-child(3) { border-top-color: #E67E22; }
+        .service-card:nth-child(4) .service-icon-wrapper { background-color: #8E44AD; }
+        .service-card:nth-child(4) { border-top-color: #8E44AD; }
+
+        .service-title-area h3 {
+            font-size: 1.05rem;
+            color: var(--secondary-blue);
+            line-height: 1.3;
+        }
+
+        .service-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .service-list li {
+            font-size: 0.9rem;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .service-list li::before {
+            content: "•";
+            color: var(--accent-green);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* --- PROJECTS GALLERY --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .gallery-item {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+            background: #fff;
+            text-align: center;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-caption {
+            padding: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: #f9f9f9;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .gallery-caption span {
+            display: block;
+            font-size: 0.75rem;
+            color: #777;
+            font-weight: 400;
+            margin-top: 2px;
+        }
+
+        .statement-bar {
+            text-align: center;
+            background-color: var(--light-green);
+            color: var(--accent-green);
+            padding: 15px;
+            font-weight: 600;
+            border-radius: 6px;
+            margin-bottom: 25px;
+        }
+
+        /* --- PRODUCTS & CLIENTS SECTION --- */
+        .products-clients-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .products-subgrid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .product-cat-card {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-cat-card h5 {
+            color: var(--accent-green);
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .product-cat-card img {
+            max-width: 100%;
+            height: 65px;
+            object-fit: contain;
+            margin: 0 auto 10px auto;
+        }
+
+        .product-brands {
+            font-size: 0.7rem;
+            color: #666;
+            line-height: 1.3;
+        }
+
+        /* Clients Logos styling */
+        .clients-logos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            align-items: center;
+            text-align: center;
+        }
+
+        .client-logo-box {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 6px;
+            background: #fff;
+            min-height: 95px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .client-logo-box img {
+            max-height: 45px;
+            max-width: 100%;
+            object-fit: contain;
+            margin-bottom: 5px;
+        }
+
+        .client-logo-box p {
+            font-size: 0.65rem;
+            font-weight: 600;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+
+        /* --- CONTACT & FOOTER --- */
+        .footer-banner {
+            background: linear-gradient(rgba(0, 35, 71, 0.95), rgba(0, 23, 48, 0.95)), url('https://via.placeholder.com/853x1280/002347/FFFFFF?text=Solar+Footer') no-repeat center center/cover;
+            color: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+
+        .contact-flex-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .contact-info-list h3 {
+            color: #FFD700;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+        }
+
+        .contact-info-list div {
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+        }
+
+        .contact-info-list i {
+            color: #FFD700;
+            font-size: 1.1rem;
+            width: 20px;
+        }
+
+        .qr-code-box {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 18px;
+            border-radius: 8px;
+            margin: 0 auto;
+        }
+
+        .qr-code-box img {
+            width: 110px;
+            height: 110px;
+            background: white;
+            padding: 5px;
+            border-radius: 4px;
+        }
+
+        .qr-code-box p {
+            font-size: 0.75rem;
+            margin-top: 10px;
+            letter-spacing: 1px;
+            line-height: 1.3;
+        }
+
+        /* Bottom trust anchors row */
+        .trust-anchors {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            border-top: 2px solid var(--border-color);
+            padding-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .anchor-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--secondary-blue);
+        }
+
+        .anchor-item i {
+            color: var(--accent-green);
+            font-size: 1.1rem;
+        }
+
+        /* --- RESPONSIVE LAYOUT BREAKPOINTS (OPTIMIZED FOR 853px VIEWPORTS) --- */
+        @media (max-width: 853px) {
+            .hero h1 {
+                font-size: 2.1rem;
+            }
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 35px;
+            }
+            .products-clients-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .products-subgrid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .contact-flex-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .qr-code-box {
+                margin: 10px 0 0 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .products-subgrid, .clients-logos-grid {
+                grid-template-columns: 1fr;
+            }
+            .client-logo-box {
+                min-height: auto;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- --- HERO / HEADER HEADER --- -->
+        <header class="hero">
+            <div class="logo-area">
+                <img src="WhatsApp Image 2026-06-10 at 09.47.00.jpeg" alt="AE Renewable Logo">
+            </div>
+            <h1>AE RENEWABLE LTD</h1>
+            <div class="subtitle">— COMPANY PROFILE —</div>
+            <div class="tagline">"Delivering Smart Energy Solutions for a Sustainable Future."</div>
+            
+            <div class="hero-contact-info">
+                <span><i class="fa-solid fa-phone"></i> 0813 361 5132</span>
+                <span><i class="fa-solid fa-envelope"></i> AERenewablesolution@gmail.com</span>
+                <span><i class="fa-solid fa-globe"></i> AERenewablesolution.com</span>
+                <span><i class="fa-solid fa-location-dot"></i> Abuja, FCT, Nigeria</span>
+            </div>
+        </header>
+
+        <main>
+            <!-- --- ABOUT US SECTION --- -->
+            <div class="about-grid">
+                <div class="about-text">
+                    <div class="section-header">About AE Renewable Ltd</div>
+                    <p><strong>AE Renewable Ltd</strong> is a leading renewable energy and electrical engineering company committed to providing reliable, efficient, and cost-effective energy solutions for homes, businesses, institutions, and industries across Nigeria.</p>
+                    <p>We specialize in the design, supply, installation and maintenance of solar power systems, inverter and battery solutions, electrical installations, CCTV surveillance systems and smart home automation.</p>
+                    <p>Our team of experienced engineers and technicians delivers quality solutions that promote energy independence, operational efficiency and a greener tomorrow.</p>
+                    
+                    <div class="vision-mission-box" style="margin-top: 30px;">
+                        <i class="fa-solid fa-bullseye"></i>
+                        <div>
+                            <h4>OUR MISSION</h4>
+                            <p style="margin:0; font-size:0.9rem;">To provide sustainable, reliable, and affordable renewable energy solutions that improve lives, empower businesses, and support national development.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="vision-mission-box">
+                        <i class="fa-solid fa-eye"></i>
+                        <div>
+                            <h4>OUR VISION</h4>
+                            <p style="margin:0; font-size:0.9rem;">To become Nigeria's most trusted renewable energy company, delivering innovative energy solutions that drive sustainable growth and energy independence.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="values-why-choose">
+                    <h4>OUR CORE VALUES</h4>
+                    <div class="list-item"><i class="fa-solid fa-circle-check"></i> Integrity</div>
+                    <div class="list-item"><i class="fa-solid fa-circle-check"></i> Excellence</div>
+                    <div class="list-item"><i class="fa-solid fa-circle-check"></i> Innovation</div>
+                    <div class="list-item"><i class="fa-solid fa-circle-check"></i> Reliability</div>
+                    <div class="list-item"><i class="fa-solid fa-circle-check"></i> Sustainability</div>
+                    <div class="list-item"><i class="fa-solid fa-circle-check"></i> Customer Satisfaction</div>
+
+                    <h4 style="margin-top: 35px; background: var(--primary-blue); color: white; padding: 6px 12px; border-radius: 4px;">WHY CHOOSE US?</h4>
+                    <div class="list-item"><i class="fa-solid fa-check"></i> Experienced & Professional Team</div>
+                    <div class="list-item"><i class="fa-solid fa-check"></i> Quality Products from Trusted Brands</div>
+                    <div class="list-item"><i class="fa-solid fa-check"></i> Customized Energy Solutions</div>
+                    <div class="list-item"><i class="fa-solid fa-check"></i> Excellent After-Sales Support</div>
+                    <div class="list-item"><i class="fa-solid fa-check"></i> Competitive Pricing</div>
+                    <div class="list-item"><i class="fa-solid fa-check"></i> Commitment to Safety & Quality</div>
+                </div>
+            </div>
+
+            <!-- --- SERVICES SECTION --- -->
+            <section>
+                <div class="section-header">Our Services</div>
+                <div class="services-grid">
+                    
+                    <div class="service-card">
+                        <div class="service-title-area">
+                            <div class="service-icon-wrapper"><i class="fa-solid fa-solar-panel"></i></div>
+                            <h3>SOLAR ENERGY SOLUTIONS</h3>
+                        </div>
+                        <ul class="service-list">
+                            <li>Residential Solar Systems</li>
+                            <li>Commercial Solar Installations</li>
+                            <li>Hybrid Solar Systems</li>
+                            <li>Off-Grid Solar Systems</li>
+                            <li>Solar Street Lights</li>
+                            <li>Solar Water Pumping Systems</li>
+                        </ul>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-title-area">
+                            <div class="service-icon-wrapper"><i class="fa-solid fa-car-battery"></i></div>
+                            <h3>INVERTER & BATTERY SOLUTIONS</h3>
+                        </div>
+                        <ul class="service-list">
+                            <li>Hybrid Inverter Installations</li>
+                            <li>Lithium Battery Systems</li>
+                            <li>Energy Storage Solutions</li>
+                            <li>Backup Power Systems</li>
+                            <li>System Maintenance and Upgrades</li>
+                        </ul>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-title-area">
+                            <div class="service-icon-wrapper"><i class="fa-solid fa-bolt"></i></div>
+                            <h3>ELECTRICAL ENGINEERING SERVICES</h3>
+                        </div>
+                        <ul class="service-list">
+                            <li>Electrical Wiring & Installations</li>
+                            <li>Cable Sizing & Load Analysis</li>
+                            <li>Distribution Board Installations</li>
+                            <li>Electrical Maintenance Services</li>
+                            <li>Power System Upgrades</li>
+                        </ul>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-title-area">
+                            <div class="service-icon-wrapper"><i class="fa-solid fa-video"></i></div>
+                            <h3>SECURITY & SMART TECHNOLOGY</h3>
+                        </div>
+                        <ul class="service-list">
+                            <li>CCTV Camera Installation</li>
+                            <li>Access Control Systems</li>
+                            <li>Smart Home Automation</li>
+                            <li>Remote Monitoring Solutions</li>
+                            <li>Integrated Security Systems</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- --- PROJECTS GALLERY --- -->
+            <section>
+                <div class="section-header">Our Projects Gallery</div>
+                <div class="gallery-grid">
+                    
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/300x200/eee?text=Project+1" alt="25kW On-Grid Solar System Installation by AE Renewable Ltd">
+                        <div class="gallery-caption">25kW On-Grid Solar System <span>Residential Project - Abuja</span></div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/300x200/eee?text=Project+2" alt="15kVA Hybrid Inverter System Installation by AE Renewable Ltd">
+                        <div class="gallery-caption">15kVA Hybrid Inverter System <span>Abuja</span></div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/300x200/eee?text=Project+3" alt="10kVA Hybrid Power System by AE Renewable Ltd">
+                        <div class="gallery-caption">10kVA Hybrid Power System <span>Residential Installation - Abuja</span></div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/300x200/eee?text=Project+4" alt="30kW Commercial Solar Design by AE Renewable Ltd">
+                        <div class="gallery-caption">30kW Commercial Solar System <span>Abuja</span></div>
+                    </div>
+
+                </div>
+                <div class="statement-bar">
+                    <i class="fa-solid fa-circle-check"></i> We deliver quality. We ensure reliability. We power the future.
+                </div>
+            </section>
+
+            <!-- --- PRODUCTS & CLIENTS COMBINED GRID --- -->
+            <section style="margin-top: 40px;">
+                <div class="products-clients-grid">
+                    
+                    <!-- Left Column: Products Installed -->
+                    <div>
+                        <div class="section-header">Products We Install</div>
+                        <div class="products-subgrid">
+                            
+                            <div class="product-cat-card">
+                                <h5>Solar Panels</h5>
+                                <img src="https://via.placeholder.com/100x70/fff?text=Panels" alt="Solar Panel Brands Supported">
+                                <div class="product-brands">LONGI | Jinko | Canadian Solar</div>
+                            </div>
+
+                            <div class="product-cat-card">
+                                <h5>Inverters</h5>
+                                <img src="https://via.placeholder.com/100x70/fff?text=Inverters" alt="Inverter Brands Supported">
+                                <div class="product-brands">Deye | Growatt | Solis | Must</div>
+                            </div>
+
+                            <div class="product-cat-card">
+                                <h5>Lithium Batteries</h5>
+                                <img src="https://via.placeholder.com/100x70/fff?text=Batteries" alt="Lithium Battery Brands Supported">
+                                <div class="product-brands">Dyness | Pylontech</div>
+                            </div>
+
+                            <div class="product-cat-card">
+                                <h5>Electrical Components</h5>
+                                <img src="https://via.placeholder.com/100x70/fff?text=Breakers" alt="Electrical Gear Installed">
+                                <div class="product-brands">MCB | MCCB | DB Boards | Cables</div>
+                            </div>
+
+                            <div class="product-cat-card">
+                                <h5>CCTV Systems</h5>
+                                <img src="https://via.placeholder.com/100x70/fff?text=CCTV" alt="CCTV Equipment Supported">
+                                <div class="product-brands">Hikvision | Dahua | Uniview</div>
+                            </div>
+
+                            <div class="product-cat-card">
+                                <h5>Solar Accessories</h5>
+                                <img src="https://via.placeholder.com/100x70/fff?text=Mounts" alt="Solar Mounting Hardware">
+                                <div class="product-brands">Mounting Structures | MC4 Cables</div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Our Clients -->
+                    <div>
+                        <div class="section-header">Our Clients</div>
+                        <div class="clients-logos-grid">
+                            
+                            <div class="client-logo-box">
+                                <img src="https://via.placeholder.com/60x50/eee?text=Logo" alt="Nigerian Army Client Logo">
+                                <p>Nigerian Army</p>
+                            </div>
+                            <div class="client-logo-box">
+                                <img src="https://via.placeholder.com/60x50/eee?text=Logo" alt="FCTA Client Logo">
+                                <p>FCTA <span style="font-size:0.55rem; display:block; font-weight:normal;">Federal Capital Territory Admin</span></p>
+                            </div>
+                            <div class="client-logo-box">
+                                <img src="https://via.placeholder.com/60x50/eee?text=Logo" alt="NCC Client Logo">
+                                <p>NCC <span style="font-size:0.55rem; display:block; font-weight:normal;">Nigerian Comm. Commission</span></p>
+                            </div>
+                            <div class="client-logo-box">
+                                <img src="https://via.placeholder.com/60x50/eee?text=Logo" alt="Zenith Bank Client Logo">
+                                <p>Zenith Bank PLC</p>
+                            </div>
+                            <div class="client-logo-box">
+                                <img src="https://via.placeholder.com/60x50/eee?text=Logo" alt="Dunamis Centre Client Logo">
+                                <p>Dunamis Int'l</p>
+                            </div>
+                            <div class="client-logo-box">
+                                <p style="font-size:0.75rem; color:#777; font-weight:600;">& MANY MORE CLIENTS</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- --- CONTACT US BOTTOM BANNER --- -->
+            <footer class="footer-banner">
+                <div class="contact-flex-container">
+                    <div class="contact-info-list">
+                        <h3>CONTACT US</h3>
+                        <div><i class="fa-solid fa-phone"></i> 0813 361 5132</div>
+                        <div><i class="fa-solid fa-envelope"></i> AERenewablesolution@gmail.com</div>
+                        <div><i class="fa-solid fa-globe"></i> AERenewablesolution.com</div>
+                        <div><i class="fa-solid fa-location-dot"></i> Abuja, Federal Capital Territory, Nigeria</div>
+                    </div>
+                    
+                    <div class="qr-code-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://AERenewablesolution.com" alt="QR Code Link to AE Renewable Ltd Website">
+                        <p>SCAN TO VISIT<br><strong>OUR WEBSITE</strong></p>
+                    </div>
+                </div>
+            </footer>
+
+            <!-- Trust Badges Footer Bar -->
+            <div class="trust-anchors">
+                <div class="anchor-item"><i class="fa-solid fa-solar-panel"></i> RENEWABLE ENERGY</div>
+                <div class="anchor-item"><i class="fa-solid fa-shield-halved"></i> RELIABLE SOLUTIONS</div>
+                <div class="anchor-item"><i class="fa-solid fa-gears"></i> QUALITY INSTALLATIONS</div>
+                <div class="anchor-item"><i class="fa-solid fa-leaf"></i> SUSTAINABLE FUTURE</div>
+            </div>
+
+        </main>
+    </div>
+</body>
+</html>

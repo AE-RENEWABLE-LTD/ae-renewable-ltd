@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    /* --- Global Styles & Variables --- */
+:root {
+    --primary-blue: #0A3C82;
+    --primary-green: #388E3C;
+    --light-blue-bg: #F0F4FA;
+    --text-dark: #222222;
+    --text-muted: #555555;
+    --border-color: #D3E0EA;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #F4F6F9;
+    color: var(--text-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* --- Document Container --- */
+.quotation-container {
+    background-color: #FFFFFF;
+    width: 100%;
+    max-width: 850px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border-radius: 4px;
+    padding-bottom: 60px; /* Space for footer bar */
+}
+
+/* --- Top Wave Accent Decorative Layout --- */
+.top-accent {
+    height: 6px;
+    background: var(--primary-blue);
+    width: 100%;
+}
+
+/* --- Header --- */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 40px 20px 40px;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-icon {
+    position: relative;
+    color: var(--primary-blue);
+    font-size: 2.5rem;
+}
+.logo-icon .fa-leaf {
+    color: var(--primary-green);
+    font-size: 1.5rem;
+    position: absolute;
+    bottom: -2px;
+    right: -8px;
+}
+
+.logo-text h1 {
+    color: var(--primary-green);
+    font-size: 1.85rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.logo-text p {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+.meta-area {
+    text-align: right;
+}
+
+.meta-area .date {
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.meta-area .badge {
+    background-color: var(--primary-green);
+    color: #FFFFFF;
+    padding: 6px 24px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+
+/* --- Sections Shared Layout --- */
+.section {
+    padding: 10px 40px;
+    margin-bottom: 15px;
+}
+
+.section-title {
+    color: var(--primary-blue);
+    font-size: 1.15rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid var(--primary-blue);
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+}
+
+.icon-wrap {
+    background-color: var(--primary-blue);
+    color: #FFFFFF;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.85rem;
+}
+
+.description-text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #333333;
+    text-align: justify;
+}
+
+/* --- Data Table --- */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+th {
+    background-color: var(--primary-blue);
+    color: #FFFFFF;
+    font-weight: 600;
+    padding: 8px 10px;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+td {
+    padding: 6px 10px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+    color: #333333;
+}
+
+tr:nth-child(even) td {
+    background-color: #F9FAFC;
+}
+
+.text-left {
+    text-align: left;
+    font-weight: 600;
+}
+
+/* --- System Summary Section --- */
+.footer-layout {
+    padding: 5px 40px;
+    margin-bottom: 20px;
+}
+
+.summary-box {
+    background-color: var(--light-blue-bg);
+    border-radius: 6px;
+    padding: 15px 20px;
+}
+
+.section-title.compact {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 12px;
+    font-size: 1.05rem;
+}
+
+.icon-wrap.small {
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
+}
+
+.summary-list {
+    list-style: none;
+}
+
+.summary-list li {
+    font-size: 0.82rem;
+    line-height: 1.45;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.summary-list li i {
+    color: var(--primary-green);
+    margin-top: 2px;
+}
+
+/* --- Contact Footer Bar --- */
+.contact-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--primary-blue);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    padding: 12px 40px;
+    gap: 30px;
+    font-size: 0.85rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 2;
+}
+
+/* Right Side Abstract Green Curve Shape */
+/* .footer-curve {
+    position: absolute;
+    right: -20px;
+    bottom: -10px;
+    width: 250px;
+    height: 180px;
+    background: var(--primary-green);
+    transform: rotate(-15deg);
+    border-radius: 40px 0 0 0;
+    z-index: 1;
+} */
+
+/* --- Print Friendly Configuration --- */
+@media print {
+    body {
+        background-color: #FFFFFF;
+        padding: 0;
+    }
+    .quotation-container {
+        box-shadow: none;
+        max-width: 100%;
+    }
+}
+  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Quotation - AE Renewable Ltd</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="quotation-container">
+        <div class="top-accent"></div>
+
+        <header class="header">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <img src="WhatsApp Image 2026-06-10 at 09.47.00.jpeg" alt="AE Renewable Logo" style="width: 80px; height: 60px;">
+                </div>
+                <div class="logo-text">
+                    <h1>AE RENEWABLE LTD</h1>
+                    <p>Solar | Inverter | CCTV | Smart Energy Solutions</p>
+                </div>
+            </div>
+            <div class="meta-area">
+                <p class="date"><strong>Date:</strong> 19 June 2026</p>
+                <div class="badge">QUOTATION</div>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2 class="section-title">
+                <span class="icon-wrap"><i class="fa-solid fa-file-invoice"></i></span>
+                PROJECT DESCRIPTION
+            </h2>
+            <p class="description-text">
+                An intelligent 8kVA-8000W solar power backup system designed to provide reliable energy for Resident applications. The system is configured with a minimum 15kWh lithium battery bank and 8 units of 750W solar panels, enabling substantial daytime solar generation and extended nighttime backup. The system includes all major installation accessories, protection devices, and monitoring components for safe and efficient operation.
+            </p>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">
+                <span class="icon-wrap"><i class="fa-solid fa-cubes"></i></span>
+                SCOPE OF SUPPLY
+            </h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 8%;">S/N</th>
+                            <th style="width: 62%; text-align: left;">DESCRIPTION</th>
+                            <th style="width: 15%;">QTY</th>
+                            <th style="width: 15%;">UNIT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td class="text-left">8kVA Hybrid Inverter</td><td>1</td><td>Unit</td></tr>
+                        <tr><td>2</td><td class="text-left">15kWh Lithium Battery</td><td>1</td><td>Unit</td></tr>
+                        <tr><td>3</td><td class="text-left">750W Solar Panel</td><td>8</td><td>Units</td></tr>
+                        <tr><td>4</td><td class="text-left">Solar Mounting Rail (6 Lengths)</td><td>4</td><td>Lengths</td></tr>
+                        <tr><td>5</td><td class="text-left">Roofing Screws</td><td>1</td><td>Packet</td></tr>
+                        <tr><td>6</td><td class="text-left">Stainless Steel Bolts & Nuts (17mm) N Silicon Sealant</td><td>30</td><td>Pieces</td></tr>
+                        <tr><td>7</td><td class="text-left">MC4 Connectors</td><td>4</td><td>Pairs</td></tr>
+                        <tr><td>8</td><td class="text-left">mm / Flexible Solar Cable</td><td>30<small>(2core)</small>  40 <small>(3core)</small></td><td>Meters</td></tr>
+                        <tr><td>9</td><td class="text-left">Trunking Pipe (75mm × 100mm)</td><td>2</td><td>Lengths</td></tr>
+                        <tr><td>10</td><td class="text-left">Peg Size 8</td><td>1</td><td>Packet</td></tr>
+                        <tr><td>11</td><td class="text-left">40A AC Breaker</td><td>2</td><td>Units</td></tr>
+                        <tr><td>12</td><td class="text-left">40A DC Breaker (2-Pole)</td><td>2</td><td>Units</td></tr>
+                        <tr><td>13</td><td class="text-left">DC Surge Protection Device (SPD)</td><td>2</td><td>Units</td></tr>
+                        <tr><td>14</td><td class="text-left">125A Changeover Breaker</td><td>1</td><td>Unit</td></tr>
+                        <tr><td>15</td><td class="text-left">12-Way Breaker Box</td><td>2</td><td>Units</td></tr>
+                        <tr><td>16</td><td class="text-left">Automatic Voltage Regulator (AVR)</td><td>2</td><td>Units</td></tr>
+                        <tr><td>17</td><td class="text-left">Installation, Testing & Commissioning</td><td>—</td><td>300,000</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="footer-layout">
+            <section class="summary-box">
+                <h2 class="section-title compact">
+                    <span class="icon-wrap small"><i class="fa-solid fa-chart-bar"></i></span>
+                    SYSTEM CAPACITY SUMMARY
+                </h2>
+                <ul class="summary-list">
+                    <li><i class="fa-solid fa-circle-check"></i> <strong>Inverter Capacity:</strong> 8kVA</li>
+                    <li><i class="fa-solid fa-circle-check"></i> <strong>Battery Storage:</strong> 15kWh Minimum</li>
+                    <li><i class="fa-solid fa-circle-check"></i> <strong>Solar Capacity:</strong> 6kWp (8 × 750W)</li>
+                    <li><i class="fa-solid fa-circle-check"></i> <strong>Battery Type:</strong> Lithium</li>
+                 
+                </ul>
+            </section>
+        </div>
+
+        <footer class="contact-footer">
+            <div class="contact-item">
+                <i class="fa-solid fa-phone"></i> 08133615132
+            </div>
+            <div class="contact-item">
+                <i class="fa-solid fa-envelope"></i> Aerenewablesolution@gmail.com
+            </div>
+            <div class="contact-item">
+                <i class="fa-solid fa-globe"></i> Aerenewablesolution.com
+            </div>
+            <div class="footer-curve"></div>
+        </footer>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AE RENEWABLE LTD — Precision Sizing Engine</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        
+        /* Wizard Steps Indicator */
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .progress-container::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            height: 4px;
+            width: 100%;
+            background-color: #e0e0e0;
+            z-index: 1;
+        }
+        .progress-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            height: 4px;
+            width: 0%;
+            background-color: #27ae60;
+            z-index: 2;
+            transition: width 0.4s ease;
+        }
+        .step-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #7f8c8d;
+            z-index: 3;
+            transition: all 0.4s ease;
+        }
+        .step-node.active {
+            background-color: #27ae60;
+            color: white;
+            box-shadow: 0 0 0 5px rgba(39, 174, 96, 0.2);
+        }
+        .step-node.completed {
+            background-color: #2cc594;
+            color: white;
+        }
+
+        .step-panel {
+            display: none;
+        }
+        .step-panel.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #34495e;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        
+        .btn-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .btn-next {
+            background-color: #27ae60;
+            color: white;
+            flex-grow: 1;
+        }
+        .btn-next:hover {
+            background-color: #219653;
+        }
+        .btn-prev {
+            background-color: #95a5a6;
+            color: white;
+        }
+        .btn-prev:hover {
+            background-color: #7f8c8d;
+        }
+
+        .blueprint-card {
+            background: #fdfefe;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .blueprint-title {
+            color: #2c3e50;
+            font-size: 18px;
+            margin-top: 0;
+            border-bottom: 2px solid #27ae60;
+            padding-bottom: 5px;
+        }
+
+        .error-box {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #fadbd8;
+            border-left: 5px solid #e74c3c;
+            border-radius: 4px;
+            color: #78281f;
+            display: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            vertical-align: top;
+        }
+        th {
+            background-color: #d1f2eb;
+            color: #16a085;
+        }
+        .tech-spec {
+            font-size: 13px;
+            color: #555;
+            background: #f9f9f9;
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 5px;
+            line-height: 1.5;
+        }
+        .badge {
+            background-color: #27ae60;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>AE RENEWABLE LTD — Precision Sizing Engine</h2>
+    
+    <div class="progress-container">
+        <div class="progress-line" id="progressLine"></div>
+        <div class="step-node active" id="node1">1</div>
+        <div class="step-node" id="node2">2</div>
+        <div class="step-node" id="node3">3</div>
+        <div class="step-node" id="node4">4</div>
+    </div>
+    
+    <div id="errorOutput" class="error-box"></div>
+
+    <div class="step-panel active" id="step1">
+        <h3>Step 1: Load Infrastructure</h3>
+        <div class="form-group">
+            <label for="loadKw">Base Load Requirement (kW):</label>
+            <input type="number" id="loadKw" min="0" step="any" value="12">
+        </div>
+        <div class="form-group">
+            <label for="solarWatt">Desired Target Solar Input (Watts):</label>
+            <input type="number" id="solarWatt" min="0" value="18000">
+        </div>
+    </div>
+
+    <div class="step-panel" id="step2">
+        <h3>Step 2: Energy Storage Limits</h3>
+        <div class="form-group">
+            <label for="backupHours">Required Usage/Backup Time (Hours):</label>
+            <input type="number" id="backupHours" min="0" step="any" value="12">
+        </div>
+    </div>
+
+    <div class="step-panel" id="step3">
+        <h3>Step 3: Photovoltaic Specifications</h3>
+        <div class="form-group">
+            <label for="panelUnitWatt">Solar Panel Unit Size (Watts):</label>
+            <input type="number" id="panelUnitWatt" min="1" value="750">
+        </div>
+    </div>
+
+    <div class="step-panel" id="step4">
+        <h3>Engineered Multi-Brand System Matrix (Max 3 Inverters Ceiling)</h3>
+        <div id="blueprintsContainer"></div>
+    </div>
+
+    <div class="btn-row">
+        <button class="btn-prev" id="btnPrev" onclick="moveStep(-1)" style="display: none;">Back</button>
+        <button class="btn-next" id="btnNext" onclick="moveStep(1)">Continue</button>
+    </div>
+</div>
+
+<script>
+const inverterInventory = [
+    { brand: "Firman", model: "FSP-1000X", capacity: 1.0, Phase: 1, battery_Voltage: 12, Max_pv_Wattage: 1200 },
+    { brand: "Firman", model: "FSP-3000X", capacity: 3.5, Phase: 1, battery_Voltage: 24, Max_pv_Wattage: 3000 },
+    { brand: "Firman", model: "FSP-5000X", capacity: 5.0, Phase: 1, battery_Voltage: 48, Max_pv_Wattage: 8000 },
+    { brand: "Firman", model: "FSP-10000X", capacity: 8.0, Phase: 1, battery_Voltage: 48, Max_pv_Wattage: 10000 },
+    { brand: "Firman", model: "FSP-16000X", capacity: 11.0, Phase: 1, battery_Voltage: 48, Max_pv_Wattage: 16000 },
+
+    { brand: "Felicity", model: "FL-IVPS2512", capacity: 2.5, Phase: 1, battery_Voltage: 12, Max_pv_Wattage: 2500 },
+    { brand: "Felicity", model: "IVCM3024", capacity: 3.5, Phase: 1, battery_Voltage: 24, Max_pv_Wattage: 4500 },
+    { brand: "Felicity", model: "IVEM5048", capacity: 6.0, Phase: 1, battery_Voltage: 48, Max_pv_Wattage: 8000 },
+    { brand: "Felicity", model: "IVBM8048P1G1", capacity: 8.0, Phase: 1, battery_Voltage: 48, Max_pv_Wattage: 10000 },
+    { brand: "Felicity", model: "IVGM10K-P3G1", capacity: 12.0, Phase: 3, battery_Voltage: 48, Max_pv_Wattage: 16000 },
+    { brand: "Felicity", model: "IVGM125KHP3G1", capacity: 20.0, Phase: 3, battery_Voltage: 48, Max_pv_Wattage: 32000 },
+
+    { brand: "Deye", model: "SUN-3K-SG04LP1", capacity: 3.0, Phase: 1, battery_Voltage: 24, Max_pv_Wattage: 3900 },
+    { brand: "Deye", model: "SUN-5K-SG01HP3", capacity: 5.0, Phase: 3, battery_Voltage: 300, Max_pv_Wattage: 8000 },
+    { brand: "Deye", model: "SUN-8K-SG01LP1", capacity: 8.0, Phase: 1, battery_Voltage: 48, Max_pv_Wattage: 10400 },
+    { brand: "Deye", model: "SUN-12K-SG04LP3", capacity: 12.0, Phase: 3, battery_Voltage: 48, Max_pv_Wattage: 15600 },
+    { brand: "Deye", model: "SUN-16K-SG01LP1", capacity: 16.0, Phase: 1, battery_Voltage: 48, Max_pv_Wattage: 20800 },
+    { brand: "Deye", model: "SUN-50K-SG01HP3", capacity: 50.0, Phase: 3, battery_Voltage: 600, Max_pv_Wattage: 65000 }
+];
+
+const batteryInventory = [
+    { brand: "Firman", model: "FBP-24100L", capacity_kwh: 2.56, Voltage: 25.6 },
+    { brand: "Firman", model: "FBP-48100L", capacity_kwh: 5.12, Voltage: 51.2 },
+    { brand: "Firman", model: "FBP-48200L", capacity_kwh: 10.24, Voltage: 51.2 },
+    
+    { brand: "Felicity", model: "LPBF48100-H", capacity_kwh: 5.12, Voltage: 51.2 },
+    { brand: "Felicity", model: "LPBF48150", capacity_kwh: 7.20, Voltage: 51.2 },
+    { brand: "Felicity", model: "LPBF48200-W", capacity_kwh: 10.00, Voltage: 51.2 },
+    { brand: "Felicity", model: "LPBF48350", capacity_kwh: 17.50, Voltage: 51.2 },
+
+    { brand: "Deye", model: "SE-G5.6", capacity_kwh: 5.60, Voltage: 51.2 },
+    { brand: "Deye", model: "RW-M6.1", capacity_kwh: 6.14, Voltage: 51.2 },
+    { brand: "Deye", model: "RW-F10.6", capacity_kwh: 10.64, Voltage: 51.2 }
+];
+
+let currentStep = 1;
+const totalSteps = 4;
+
+function moveStep(direction) {
+    if (direction === 1 && !validateCurrentStepInputs()) return;
+
+    document.getElementById(`step${currentStep}`).classList.remove('active');
+    currentStep += direction;
+    document.getElementById(`step${currentStep}`).classList.add('active');
+
+    if (currentStep === 4) {
+        calculateSystemCore();
+    }
+    updateWizardUIElements();
+}
+
+function validateCurrentStepInputs() {
+    document.getElementById('errorOutput').style.display = 'none';
+    if (currentStep === 1) {
+        const loadKw = parseFloat(document.getElementById('loadKw').value);
+        const solarWatt = parseFloat(document.getElementById('solarWatt').value);
+        if (isNaN(loadKw) || isNaN(solarWatt) || loadKw <= 0 || solarWatt <= 0) {
+            showError("Please enter valid parameters for Load and Target Solar layout values.");
+            return false;
+        }
+    }
+    return true;
+}
+
+function updateWizardUIElements() {
+    const progressPercent = ((currentStep - 1) / (totalSteps - 1)) * 100;
+    document.getElementById('progressLine').style.width = `${progressPercent}%`;
+
+    for (let i = 1; i <= totalSteps; i++) {
+        const node = document.getElementById('node' + i);
+        if (i < currentStep) node.className = 'step-node completed';
+        else if (i === currentStep) node.className = 'step-node active';
+        else node.className = 'step-node';
+    }
+
+    document.getElementById('btnPrev').style.display = currentStep === 1 ? 'none' : 'inline-block';
+    if (currentStep === totalSteps) {
+        document.getElementById('btnNext').style.display = 'none';
+    } else {
+        document.getElementById('btnNext').style.display = 'inline-block';
+        document.getElementById('btnNext').innerText = currentStep === totalSteps - 1 ? 'Run Engineering Loop' : 'Continue';
+    }
+}
+
+function showError(message) {
+    const errBox = document.getElementById('errorOutput');
+    errBox.innerText = message;
+    errBox.style.display = 'block';
+}
+
+function calculateSystemCore() {
+    const loadKw = parseFloat(document.getElementById('loadKw').value);
+    const solarWatt = parseFloat(document.getElementById('solarWatt').value);
+    const backupHours = parseFloat(document.getElementById('backupHours').value);
+    const panelUnitWatt = parseFloat(document.getElementById('panelUnitWatt').value);
+
+    const requiredKva = loadKw / 0.8; 
+    const requiredKwh = requiredKva * backupHours; 
+
+    const brands = ["Firman", "Felicity", "Deye"];
+    let matchedOptions = [];
+
+    brands.forEach(brandName => {
+        let brandInverters = inverterInventory.filter(inv => inv.brand === brandName);
+        
+        let selectedInverter = null;
+        let selectedCount = 0;
+        let note = "";
+
+        const targetPV = solarWatt;
+        const pvLimit = targetPV * 1.5;
+
+        brandInverters.sort((a, b) => a.Max_pv_Wattage - b.Max_pv_Wattage);
+
+        for (let inv of brandInverters) {
+            if (inv.Max_pv_Wattage === targetPV && inv.capacity >= requiredKva) {
+                selectedInverter = inv;
+                selectedCount = 1;
+                note = "1 inverter exact PV match.";
+                break;
+            }
+        }
+
+        if (!selectedInverter) {
+            for (let inv of brandInverters) {
+                if (inv.Max_pv_Wattage > targetPV &&
+                    inv.Max_pv_Wattage <= pvLimit &&
+                    inv.capacity >= requiredKva) {
+                    selectedInverter = inv;
+                    selectedCount = 1;
+                    note = "1 inverter within PV × 1.5.";
+                    break;
+                }
+            }
+        }
+
+        if (!selectedInverter) {
+            for (let inv of brandInverters) {
+                const combinedPV = inv.Max_pv_Wattage * 2;
+                const combinedKva = inv.capacity * 2;
+
+                if (combinedPV === targetPV &&
+                    combinedKva >= requiredKva) {
+                    selectedInverter = inv;
+                    selectedCount = 2;
+                    note = "2 identical inverters exact PV match.";
+                    break;
+                }
+            }
+        }
+
+        if (!selectedInverter) {
+            for (let inv of brandInverters) {
+                const combinedPV = inv.Max_pv_Wattage * 2;
+                const combinedKva = inv.capacity * 2;
+
+                if (combinedPV > targetPV &&
+                    combinedPV <= pvLimit &&
+                    combinedKva >= requiredKva) {
+                    selectedInverter = inv;
+                    selectedCount = 2;
+                    note = "2 identical inverters within PV × 1.5.";
+                    break;
+                }
+            }
+        }
+
+        if (!selectedInverter) {
+            for (let inv of brandInverters) {
+                const combinedPV = inv.Max_pv_Wattage * 3;
+                const combinedKva = inv.capacity * 3;
+
+                if (combinedPV === targetPV &&
+                    combinedKva >= requiredKva) {
+                    selectedInverter = inv;
+                    selectedCount = 3;
+                    note = "3 identical inverters exact PV match.";
+                    break;
+                }
+            }
+        }
+
+        if (!selectedInverter) {
+            for (let inv of brandInverters) {
+                const combinedPV = inv.Max_pv_Wattage * 3;
+                const combinedKva = inv.capacity * 3;
+
+                if (combinedPV > targetPV &&
+                    combinedPV <= pvLimit &&
+                    combinedKva >= requiredKva) {
+                    selectedInverter = inv;
+                    selectedCount = 3;
+                    note = "3 identical inverters within PV × 1.5.";
+                    break;
+                }
+            }
+        }
+
+        if (!selectedInverter) return;
+
+        // Brand-Locked Battery Bank Integration
+        let brandBatteries = batteryInventory.filter(b => b.brand === brandName);
+        if (brandBatteries.length === 0) return;
+        
+        brandBatteries.sort((a, b) => b.capacity_kwh - a.capacity_kwh);
+        let activeBat = brandBatteries[0]; 
+
+        let seriesCount = Math.max(1, Math.round(selectedInverter.battery_Voltage / activeBat.Voltage));
+        let singleStringKwh = activeBat.capacity_kwh * seriesCount;
+        let parallelCount = Math.ceil(requiredKwh / singleStringKwh);
+
+        matchedOptions.push({
+            inverter: selectedInverter,
+            count: selectedCount,
+            battery: activeBat,
+            bSeries: seriesCount,
+            bParallel: parallelCount,
+            note: note,
+            targetSolarInput: solarWatt
+        });
+    });
+
+    renderBlueprints(matchedOptions, requiredKva, requiredKwh, panelUnitWatt);
+}
+
+function renderBlueprints(matches, kva, kwh, panelWatt) {
+    const container = document.getElementById('blueprintsContainer');
+    container.innerHTML = "";
+
+    if (matches.length === 0) {
+        container.innerHTML = `<div class='error-box' style='display:block;'>Engineering Filter Alert: No options matched your exact solar path logic specifications within the inventory boundaries.</div>`;
+        return;
+    }
+
+    matches.forEach((option, index) => {
+        let inv = option.inverter;
+        let bat = option.battery;
+        let totalBats = option.bSeries * option.bParallel;
+        let totalPanels = Math.ceil(option.targetSolarInput / panelWatt);
+
+        let card = document.createElement('div');
+        card.className = "blueprint-card";
+        card.innerHTML = `
+            <h4 class="blueprint-title">Configuration #${index + 1}: ${inv.brand} Hardware Layout <span class="badge">Verified</span></h4>
+            <p style="font-size:14px; color:#555; margin-top:-5px;"><em>${option.note}</em></p>
+            <table>
+                <tr><th style="width: 30%;">Ecosystem Unit</th><th>Sizing Specifications</th></tr>
+                <tr>
+                    <td><strong>Inverter Array</strong></td>
+                    <td>
+                        <strong>${option.count}x Inverter Unit(s) — ${inv.model}</strong><br>
+                        <span class="tech-spec">Continuous Combined Load Rating: ${(inv.capacity * option.count).toFixed(1)} kVA | Hardened Solar Array Limit: ${(inv.Max_pv_Wattage * option.count)}W</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Battery Backup Bank</strong></td>
+                    <td>
+                        <strong>${totalBats} Units Required (${bat.model})</strong><br>
+                        <span class="tech-spec">Wiring Setup: ${option.bParallel} Parallel string(s) x ${option.bSeries} Modules in Series | Gross Capacity Yield: ${(bat.capacity_kwh * totalBats).toFixed(2)} kWh</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Photovoltaic Matrix</strong></td>
+                    <td>
+                        <strong>${totalPanels} Total Modules (${panelWatt}W Size)</strong><br>
+                        <span class="tech-spec">Total Array Yield: ${((totalPanels * panelWatt)/1000).toFixed(2)} kW | Designed targeting user-specified baseline input profile.</span>
+                    </td>
+                </tr>
+            </table>
+        `;
+        container.appendChild(card);
+    });
+}
+</script>
+
+</body>
+</html>

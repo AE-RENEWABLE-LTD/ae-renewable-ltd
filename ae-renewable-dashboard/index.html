@@ -1,0 +1,328 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AE Renewable Solar Design Dashboard</title>
+
+<link rel="icon" href="assets/logo.jpeg" type="image/x-icon">
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/quotation.css">
+
+<link
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+rel="stylesheet"
+/>
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <img
+                src="assets/logo.png"
+                alt="AE Renewable Logo"
+                class="logo"
+            >
+
+            <div>
+                <h2>AE Renewable</h2>
+                <p>Energy Solutions</p>
+            </div>
+
+        </div>
+
+        <nav>
+
+            <ul class="menu">
+
+                <li class="active">
+                    <i class="fas fa-solar-panel"></i>
+                    Solar Design
+                </li>
+
+                <li>
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    Quotations
+                </li>
+
+                <li>
+                    <i class="fas fa-chart-line"></i>
+                    Reports
+                </li>
+
+                <li>
+                    <i class="fas fa-folder"></i>
+                    Projects
+                </li>
+
+                <li>
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Solar System Design Engine
+                </h1>
+
+                <p>
+                    Hybrid Solar Sizing & Quotation Platform
+                </p>
+
+            </div>
+
+            <button
+                class="primary-btn"
+                id="generateQuoteBtn"
+            >
+                Generate Quotation
+            </button>
+
+        </header>
+
+        <!-- DASHBOARD STATS -->
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <i class="fas fa-bolt"></i>
+
+                <h3 id="loadDisplay">
+                    0 kW
+                </h3>
+
+                <span>
+                    Load Requirement
+                </span>
+
+            </div>
+
+            <div class="stat-card">
+
+                <i class="fas fa-sun"></i>
+
+                <h3 id="solarDisplay">
+                    0 W
+                </h3>
+
+                <span>
+                    Solar Array
+                </span>
+
+            </div>
+
+            <div class="stat-card">
+
+                <i class="fas fa-battery-full"></i>
+
+                <h3 id="batteryDisplay">
+                    0 kWh
+                </h3>
+
+                <span>
+                    Battery Bank
+                </span>
+
+            </div>
+
+            <div class="stat-card">
+
+                <i class="fas fa-money-bill-wave"></i>
+
+                <h3 id="costDisplay">
+                    $0
+                </h3>
+
+                <span>
+                    Estimated Cost
+                </span>
+
+            </div>
+
+        </section>
+
+        <!-- DESIGN FORM -->
+
+        <section class="form-card">
+
+            <div class="card-header">
+
+                <h2>
+                    System Design Parameters
+                </h2>
+
+            </div>
+
+            <div class="form-grid">
+
+                <div class="input-group">
+
+                    <label>
+                        Load Requirement (kW)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="loadKw"
+                        placeholder="Enter load in kW"
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+                        Solar Array Target (W)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="solarWatt"
+                        placeholder="Enter solar wattage"
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+                        Backup Hours
+                    </label>
+
+                    <input
+                        type="number"
+                        id="backupHours"
+                        placeholder="Battery autonomy"
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+                        Panel Wattage
+                    </label>
+
+                    <select id="panelUnitWatt">
+
+                        <option value="750">
+                            750W
+                        </option>
+
+                        <option value="750" selected>
+                            750W
+                        </option>
+
+                        <option value="750">
+                            750W
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+
+                <!-- <button
+                    class="secondary-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button> -->
+
+                <button
+                    class="primary-btn"
+                    id="calculateBtn"
+                >
+                    Calculate System
+                </button>
+
+            </div>
+
+            <div
+                id="errorOutput"
+                class="error-box"
+            >
+            </div>
+
+        </section>
+
+        <!-- RESULTS -->
+
+        <section
+            id="resultsContainer"
+            class="results-section"
+        >
+
+            <div class="section-title">
+
+                Recommended Solutions
+
+            </div>
+
+            <div
+                id="resultsGrid"
+                class="results-grid"
+            >
+
+            </div>
+
+        </section>
+
+        <!-- QUOTATION -->
+
+        <section
+            id="quotationContainer"
+            class="quotation-section"
+        >
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="data/pricing.js"></script>
+
+<script src="js/inventory.js"></script>
+
+<script src="js/sizing-engine.js"></script>
+
+<script src="js/quotation.js"></script>
+
+<script src="js/ui.js"></script>
+
+</body>
+</html>
+

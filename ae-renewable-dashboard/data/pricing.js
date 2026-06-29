@@ -1,0 +1,11 @@
+const PRICING = {
+
+    PANEL_PRICE_PER_WATT:0.22,
+
+    LABOR_COST:400,
+
+    VAT:0.075,
+
+    ACCESSORY_BASE:350
+
+};

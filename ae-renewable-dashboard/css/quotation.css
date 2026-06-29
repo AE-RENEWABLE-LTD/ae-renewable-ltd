@@ -1,0 +1,618 @@
+
+/* ==========================================
+   QUOTATION SECTION
+========================================== */
+
+.quotation-section{
+
+    margin-top:40px;
+
+}
+
+/* ==========================================
+   QUOTATION CONTAINER
+========================================== */
+
+.quote-card{
+
+    background:#FFFFFF;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 15px 35px rgba(0,0,0,.08);
+
+}
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.quote-header{
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    color:white;
+
+    padding:35px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+}
+
+.quote-company{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+}
+
+.quote-company img{
+
+    width:80px;
+
+    height:80px;
+
+    background:white;
+
+    border-radius:12px;
+
+    padding:8px;
+
+}
+
+.quote-company h1{
+
+    color:white;
+
+    font-size:28px;
+
+    margin-bottom:5px;
+
+}
+
+.quote-company p{
+
+    color:rgba(255,255,255,.85);
+
+}
+
+.quote-number{
+
+    text-align:right;
+
+}
+
+.quote-number h3{
+
+    color:white;
+
+    margin-bottom:8px;
+
+}
+
+.quote-number span{
+
+    display:block;
+
+    color:rgba(255,255,255,.85);
+
+    margin-bottom:4px;
+
+}
+
+/* ==========================================
+   CUSTOMER SECTION
+========================================== */
+
+.customer-section{
+
+    padding:30px;
+
+    border-bottom:
+    1px solid var(--border);
+
+}
+
+.customer-section h3{
+
+    color:var(--primary);
+
+    margin-bottom:15px;
+
+}
+
+.customer-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+
+    gap:20px;
+
+}
+
+.customer-item{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.customer-item label{
+
+    font-size:13px;
+
+    color:var(--text-light);
+
+}
+
+.customer-item span{
+
+    font-weight:600;
+
+}
+
+/* ==========================================
+   SYSTEM SUMMARY
+========================================== */
+
+.system-summary{
+
+    padding:30px;
+
+    background:#F8FAFC;
+
+}
+
+.system-summary h3{
+
+    color:var(--primary);
+
+    margin-bottom:20px;
+
+}
+
+.summary-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(220px,1fr));
+
+    gap:20px;
+
+}
+
+.summary-box{
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:12px;
+
+    text-align:center;
+
+    border:
+    1px solid var(--border);
+
+}
+
+.summary-box h4{
+
+    color:var(--secondary);
+
+    margin-bottom:10px;
+
+}
+
+.summary-box p{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:var(--primary);
+
+}
+
+/* ==========================================
+   ITEM TABLE
+========================================== */
+
+.quote-table-wrapper{
+
+    padding:30px;
+
+    overflow-x:auto;
+
+}
+
+.quote-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.quote-table thead{
+
+    background:var(--primary);
+
+    color:white;
+
+}
+
+.quote-table th{
+
+    padding:16px;
+
+    text-align:left;
+
+    font-size:14px;
+
+}
+
+.quote-table td{
+
+    padding:16px;
+
+    border-bottom:
+    1px solid var(--border);
+
+}
+
+.quote-table tbody tr:hover{
+
+    background:#F8FAFC;
+
+}
+
+/* ==========================================
+   TOTALS
+========================================== */
+
+.totals-section{
+
+    padding:30px;
+
+    display:flex;
+
+    justify-content:flex-end;
+
+}
+
+.totals-box{
+
+    width:350px;
+
+    background:#F8FAFC;
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+}
+
+.total-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:15px 20px;
+
+    border-bottom:
+    1px solid var(--border);
+
+}
+
+.total-row:last-child{
+
+    border-bottom:none;
+
+}
+
+.grand-total{
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    color:white;
+
+    font-size:22px;
+
+    font-weight:700;
+
+}
+
+.grand-total span{
+
+    color:white;
+
+}
+
+/* ==========================================
+   TERMS SECTION
+========================================== */
+
+.terms-section{
+
+    padding:30px;
+
+    border-top:
+    1px solid var(--border);
+
+}
+
+.terms-section h3{
+
+    color:var(--primary);
+
+    margin-bottom:15px;
+
+}
+
+.terms-section ul{
+
+    padding-left:20px;
+
+}
+
+.terms-section li{
+
+    margin-bottom:10px;
+
+    color:var(--text-light);
+
+}
+
+/* ==========================================
+   SIGNATURE SECTION
+========================================== */
+
+.signature-section{
+
+    padding:40px 30px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:40px;
+
+}
+
+.signature-box{
+
+    flex:1;
+
+}
+
+.signature-line{
+
+    border-top:
+    2px solid #CBD5E1;
+
+    margin-top:60px;
+
+    padding-top:10px;
+
+    text-align:center;
+
+    font-weight:600;
+
+}
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+.quote-footer{
+
+    background:#F8FAFC;
+
+    padding:25px;
+
+    text-align:center;
+
+    border-top:
+    1px solid var(--border);
+
+}
+
+.quote-footer p{
+
+    margin-bottom:5px;
+
+}
+
+/* ==========================================
+   ACTION BUTTONS
+========================================== */
+
+.quote-actions{
+
+    display:flex;
+
+    gap:15px;
+
+    justify-content:flex-end;
+
+    margin-bottom:20px;
+
+}
+
+.print-btn{
+
+    background:var(--primary);
+
+    color:white;
+
+    padding:12px 20px;
+
+    border-radius:10px;
+
+    font-weight:600;
+
+}
+
+.print-btn:hover{
+
+    background:var(--primary-dark);
+
+}
+
+.download-btn{
+
+    background:var(--secondary);
+
+    color:white;
+
+    padding:12px 20px;
+
+    border-radius:10px;
+
+    font-weight:600;
+
+}
+
+.download-btn:hover{
+
+    background:var(--secondary-dark);
+
+}
+
+/* ==========================================
+   A4 PRINT LAYOUT
+========================================== */
+
+@media print{
+
+    body{
+
+        background:white;
+
+    }
+
+    .sidebar,
+    .topbar,
+    .quote-actions{
+
+        display:none !important;
+
+    }
+
+    .main-content{
+
+        margin:0;
+        padding:0;
+
+    }
+
+    .quote-card{
+
+        box-shadow:none;
+
+        border-radius:0;
+
+    }
+
+    .quotation-section{
+
+        margin:0;
+
+    }
+
+    @page{
+
+        size:A4;
+
+        margin:12mm;
+
+    }
+
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:768px){
+
+    .quote-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:20px;
+
+    }
+
+    .quote-number{
+
+        text-align:left;
+
+    }
+
+    .signature-section{
+
+        flex-direction:column;
+
+    }
+
+    .totals-section{
+
+        justify-content:center;
+
+    }
+
+    .totals-box{
+
+        width:100%;
+
+    }
+
+}
+
+@media(max-width:480px){
+
+    .customer-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .summary-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+

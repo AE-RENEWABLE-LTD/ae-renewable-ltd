@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AE RENEWABLE LTD — Sizing & Corporate Quotation Engine</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+            margin-top: 0;    
+        }
+        
+        /* Wizard Steps Indicator */
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .progress-container::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            height: 4px;
+            width: 100%;
+            background-color: #e0e0e0;
+            z-index: 1;
+        }
+        .progress-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            height: 4px;
+            width: 0%;
+            background-color: #27ae60;
+            z-index: 2;
+            transition: width 0.4s ease;
+        }
+        .step-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #7f8c8d;
+            z-index: 3;
+            transition: all 0.4s ease;
+        }
+        .step-node.active {
+            background-color: #27ae60;
+            color: white;
+            box-shadow: 0 0 0 5px rgba(39, 174, 96, 0.2);
+        }
+        .step-node.completed {
+            background-color: #2cc594;
+            color: white;
+        }
+
+        .step-panel {
+            display: none;
+        }
+        .step-panel.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #34495e;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        
+        .error-box {
+            display: none;
+            background-color: #fadbd8;
+            color: #78281f;
+            padding: 15px;
+            border-left: 5px solid #cd6155;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .btn-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .btn-next {
+            background-color: #27ae60;
+            color: white;
+            flex-grow: 1;
+        }
+        .btn-next:hover {
+            background-color: #219653;
+        }
+        .btn-prev {
+            background-color: #95a5a6;
+            color: white;
+        }
+        .btn-prev:hover {
+            background-color: #7f8c8d;
+        }
+        .btn-print {
+            background-color: #2c3e50;
+            color: white;
+            margin-top: 25px;
+            width: 100%;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        .btn-print:hover {
+            background-color: #1a252f;
+        }
+
+        /* Quotation & Corporate Format Styling */
+        .quote-wrapper {
+            background: #ffffff;
+            border: 2px solid #ddd;
+            padding: 40px;
+            margin-bottom: 40px;
+            position: relative;
+            color: #000000;
+        }
+        .quote-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .quote-header h1 {
+            font-size: 28px;
+            margin: 0;
+            color: #111;
+            letter-spacing: 1px;
+        }
+        .quote-subtitle {
+            font-size: 14px;
+            color: #555;
+            margin: 5px 0 15px 0;
+            font-weight: 500;
+        }
+        .quote-meta-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: bold;
+            border-bottom: 2px solid #000;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+        .quote-title-main {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 800;
+            margin: 15px 0;
+            text-decoration: underline;
+        }
+        .section-heading {
+            font-size: 15px;
+            font-weight: bold;
+            background-color: #f2f2f2;
+            padding: 6px 10px;
+            border: 1px solid #111;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .project-desc-text {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+        
+        .quote-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .quote-table th, .quote-table td {
+            border: 1px solid #111;
+            padding: 8px 10px;
+            font-size: 13px;
+            text-align: left;
+        }
+        .quote-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .text-center { text-align: center !important; }
+        .text-right { text-align: right !important; }
+        
+        .summary-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        .summary-list li {
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+        .quote-footer {
+            margin-top: 40px;
+            border-top: 1px dashed #777;
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #444;
+        }
+
+        @media print {
+            body { background-color: #fff; padding: 0; }
+            .container { box-shadow: none; max-width: 100%; padding: 0; }
+            .progress-container, .btn-row, .btn-print, h3, .form-group, h2 { display: none !important; }
+            .quote-wrapper { border: none; padding: 0; margin-bottom: 0; page-break-after: always; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>AE RENEWABLE LTD — Sizing Engine</h2>
+    
+    <div class="progress-container">
+        <div class="progress-line" id="progressLine"></div>
+        <div class="step-node active" id="node1">1</div>
+        <div class="step-node" id="node2">2</div>
+        <div class="step-node" id="node3">3</div>
+        <div class="step-node" id="node4">4</div>
+    </div>
+    
+    <div id="errorOutput" class="error-box"></div>
+
+    <div class="step-panel active" id="step1">
+        <h3>Step 1: Load Infrastructure</h3>
+        <div class="form-group">
+            <label for="loadKw">Base Load Requirement (kW):</label>
+            <input type="number" id="loadKw" min="0.1" step="any" value="6.0">
+        </div>
+        <div class="form-group">
+            <label for="solarWatt">Desired Target Solar Input (Watts):</label>
+            <input type="number" id="solarWatt" min="0" value="9000">
+        </div>
+    </div>
+
+    <div class="step-panel" id="step2">
+        <h3>Step 2: Energy Storage Limits</h3>
+        <div class="form-group">
+            <label for="backupHours">Required Usage/Backup Time (Hours):</label>
+            <input type="number" id="backupHours" min="0.1" step="any" value="4">
+        </div>
+    </div>
+
+    <div class="step-panel" id="step3">
+        <h3>Step 3: Photovoltaic Specifications</h3>
+        <div class="form-group">
+            <label for="panelUnitWatt">Solar Panel Unit Size (Watts):</label>
+            <input type="number" id="panelUnitWatt" min="100" value="750">
+        </div>
+    </div>
+
+    <div class="step-panel" id="step4">
+        <h3>Engineered Corporate Quotation Output</h3>
+        <div id="blueprintsContainer"></div>
+    </div>
+
+    <div class="btn-row">
+        <button class="btn-prev" id="btnPrev" onclick="moveStep(-1)" style="display: none;">Back</button>
+        <button class="btn-next" id="btnNext" onclick="moveStep(1)">Continue</button>
+    </div>
+</div>
+
+<script>
+// Inventory and Pricing Matrices
+const inverterInventory = [
+    { brand: "Firman", model: "Firman FH01K0120", capacity: 1, Phase: 1, battery_Voltage: 12, Max_pv_Wattage: 1200, price_USD: 250 },
+    { brand: "Firman", model: "FH3K0110", capacity: 3, Phase: 1, battery_Voltage: 24, Max_pv_Wattage: 3500, price_USD: 500 },
+    { brand: "Firman", model: "FH05K0110", capacity: 5, Phase: 1, battery_Voltage: 48, Max_pv_Wattage: 5500, price_USD: 850 },
+    { brand: "Firman", model: "FH11K0110", capacity: 11, Phase: 1, battery_Voltage: 48, Max_pv_Wattage: 11000, price_USD: 1550 },
+
+    { brand: "Felicity", model: "FL-IVEM3024", capacity: 3, Phase: 1, battery_Voltage: 24, Max_pv_Wattage: 4000, price_USD: 450 },
+    { brand: "Felicity", model: "FL-IVEM6048-II", capacity: 6, Phase: 1, battery_Voltage: 48, Max_pv_Wattage: 7000, price_USD: 820 },
+    { brand: "Felicity", model: "FL-HY-8K (VGM)", capacity: 8, Phase: 1, battery_Voltage: 48, Max_pv_Wattage: 12000, price_USD: 1450 },
+    { brand: "Felicity", model: "IVGM20KLP3GI", capacity: 20, Phase: 3, battery_Voltage: 48, Max_pv_Wattage: 30000, price_USD: 3600 },
+    { brand: "Felicity", model: "IVEM12048-II", capacity: 12, Phase: 3, battery_Voltage: 48, Max_pv_Wattage: 15000, price_USD: 2100 },
+
+    { brand: "Deye", model: "SUN-3.6KSG05LP1-EU", capacity: 3.6, Phase: 1, battery_Voltage: 48, Max_pv_Wattage: 5760, price_USD: 950 },
+    { brand: "Deye", model: "SUN-5.0KSG05LP1-EU", capacity: 5.0, Phase: 1, battery_Voltage: 48, Max_pv_Wattage: 8000, price_USD: 1150 },
+    { brand: "Deye", model: "SUN-6.0-KSG05LP1-EU", capacity: 6.0, Phase: 1, battery_Voltage: 48, Max_pv_Wattage: 9600, price_USD: 1350 },
+    { brand: "Deye", model: "SUN-8K-KSG05LP1-EU", capacity: 8.0, Phase: 1, battery_Voltage: 48, Max_pv_Wattage: 12800, price_USD: 1750 },
+    // { brand: "Deye", model: "SUN-10K-KSG05LP1-EU", capacity: 10.0, Phase: 1, battery_Voltage: 48, Max_pv_Wattage: 16000, price_USD: 2100 },
+    { brand: "Deye", model: "SUN-12K-KSG05LP1-EU", capacity: 12.0, Phase: 3, battery_Voltage: 48, Max_pv_Wattage: 18000, price_USD: 2450 },
+    { brand: "Deye", model: "SUN-16K-KSG05LP3-EU", capacity: 16.0, Phase: 3, battery_Voltage: 48, Max_pv_Wattage: 25000, price_USD: 3200 },
+    { brand: "Deye", model: "SUN-20K-KSG05LP1-EU", capacity: 20.0, Phase: 3, battery_Voltage: 48, Max_pv_Wattage: 32000, price_USD: 3900 },
+    { brand: "Deye", model: "SUN-30K-KSG05LP3-EU", capacity: 30.0, Phase: 3, battery_Voltage: 800, Max_pv_Wattage: 48000, price_USD: 5400 },
+    { brand: "Deye", model: "SUN-50K-KSG05LP3-EU", capacity: 50.0, Phase: 3, battery_Voltage: 800, Max_pv_Wattage: 80000, price_USD: 7800 }
+];
+
+const batteryInventory = [
+    { brand: "Firman", model: "FBP-24100L", capacity_kwh: 2.56, Voltage: 25.6, price_USD: 650 },
+    { brand: "Firman", model: "FBP-48100L", capacity_kwh: 5.12, Voltage: 51.2, price_USD: 1100 },
+    { brand: "Firman", model: "FBP-48200L", capacity_kwh: 10.24, Voltage: 51.2, price_USD: 2100 },
+    { brand: "Firman", model: "FBP-48400L", capacity_kwh: 16.24, Voltage: 51.2, price_USD: 3300 },
+    
+    { brand: "Felicity", model: "LPBF48100-H", capacity_kwh: 5.12, Voltage: 51.2, price_USD: 1150 },
+    { brand: "Felicity", model: "LPBF48150", capacity_kwh: 7.20, Voltage: 51.2, price_USD: 1600 },
+    { brand: "Felicity", model: "LPBF48200-W", capacity_kwh: 10.00, Voltage: 51.2, price_USD: 2050 },
+    { brand: "Felicity", model: "LPBF48350", capacity_kwh: 17.50, Voltage: 51.2, price_USD: 3500 },
+
+    { brand: "Deye", model: "SE-G5.6", capacity_kwh: 5.60, Voltage: 51.2, price_USD: 1350 },
+    { brand: "Deye", model: "RW-M6.1", capacity_kwh: 6.14, Voltage: 51.2, price_USD: 1450 },
+    { brand: "Deye", model: "RW-F10.6", capacity_kwh: 10.64, Voltage: 51.2, price_USD: 2400 }
+];
+
+const PANEL_PRICE_PER_WATT = 0.22;  
+const BASE_INSTALLATION_LABOR_USD = 400.00;
+
+let currentStep = 1;
+const totalSteps = 4;
+
+function moveStep(direction) {
+    if (direction === 1 && !validateCurrentStepInputs()) return;
+
+    document.getElementById(`step${currentStep}`).classList.remove('active');
+    currentStep += direction;
+    document.getElementById(`step${currentStep}`).classList.add('active');
+
+    if (currentStep === 4) {
+        calculateSystemCore();
+    }
+    updateWizardUIElements();
+}
+
+function validateCurrentStepInputs() {
+    document.getElementById('errorOutput').style.display = 'none';
+    if (currentStep === 1) {
+        const loadKw = parseFloat(document.getElementById('loadKw').value);
+        const solarWatt = parseFloat(document.getElementById('solarWatt').value);
+        if (isNaN(loadKw) || isNaN(solarWatt) || loadKw <= 0 || solarWatt <= 0) {
+            showError("Please enter valid positive numeric values for Load capacity and Target Solar array power requirements.");
+            return false;
+        }
+    }
+    if (currentStep === 2) {
+        const backupHours = parseFloat(document.getElementById('backupHours').value);
+        if (isNaN(backupHours) || backupHours <= 0) {
+            showError("Please specify a valid positive required backup window duration in hours.");
+            return false;
+        }
+    }
+    if (currentStep === 3) {
+        const panelUnitWatt = parseFloat(document.getElementById('panelUnitWatt').value);
+        if (isNaN(panelUnitWatt) || panelUnitWatt < 100) {
+            showError("Please provide a standardized solar panel power output sizing unit size (Minimum 100W).");
+            return false;
+        }
+    }
+    return true;
+}
+
+function updateWizardUIElements() {
+    const progressPercent = ((currentStep - 1) / (totalSteps - 1)) * 100;
+    document.getElementById('progressLine').style.width = `${progressPercent}%`;
+
+    for (let i = 1; i <= totalSteps; i++) {
+        const node = document.getElementById('node' + i);
+        if (i < currentStep) node.className = 'step-node completed';
+        else if (i === currentStep) node.className = 'step-node active';
+        else node.className = 'step-node';
+    }
+
+    document.getElementById('btnPrev').style.display = currentStep === 1 ? 'none' : 'inline-block';
+    if (currentStep === totalSteps) {
+        document.getElementById('btnNext').style.display = 'none';
+    } else {
+        document.getElementById('btnNext').style.display = 'inline-block';
+        document.getElementById('btnNext').innerText = currentStep === totalSteps - 1 ? 'Generate Corporate Quotes' : 'Continue';
+    }
+}
+
+function showError(message) {
+    const errBox = document.getElementById('errorOutput');
+    errBox.innerText = message;
+    errBox.style.display = 'block';
+}
+
+function calculateSystemCore() {
+    const loadKw = parseFloat(document.getElementById('loadKw').value);
+    const solarWatt = parseFloat(document.getElementById('solarWatt').value);
+    const backupHours = parseFloat(document.getElementById('backupHours').value);
+    const panelUnitWatt = parseFloat(document.getElementById('panelUnitWatt').value);
+
+    // Operational sizing logic parameters
+    const requiredKva = loadKw / 0.8; 
+    const requiredKwh = loadKw * backupHours; 
+
+    const brands = ["Firman", "Felicity", "Deye"];
+    let matchedOptions = [];
+
+    brands.forEach(brandName => {
+        let brandInverters = inverterInventory.filter(inv => inv.brand === brandName);
+        let selectedInverter = null;
+        let selectedCount = 0;
+        let designRuleNote = "";
+
+        const targetPV = solarWatt;
+        const wasteCeilingLimit = targetPV * 1.5;
+
+        // Ascending sort by capacity to capture the smallest acceptable model configuration
+        brandInverters.sort((a, b) => a.capacity - b.capacity);
+
+        // Tier 1 Search: Prioritize single unit configuration that meets both KVA requirements and stays below 1.5x dynamic waste ceiling
+        for (let inv of brandInverters) {
+            if (inv.capacity >= requiredKva && inv.Max_pv_Wattage >= targetPV && inv.Max_pv_Wattage <= wasteCeilingLimit) {
+                selectedInverter = inv;
+                selectedCount = 1;
+                designRuleNote = "Optimized Single Inverter Topology (Meets requirements under 1.5x waste ceiling window)";
+                break;
+            }
+        }
+
+        // Tier 2 Search: Find an exact or close larger capacity single unit if rules require scaling out before parallelizing
+        if (!selectedInverter) {
+            for (let inv of brandInverters) {
+                if (inv.capacity >= requiredKva && inv.Max_pv_Wattage >= targetPV) {
+                    selectedInverter = inv;
+                    selectedCount = 1;
+                    designRuleNote = "Single Unit Structural Sizing Extension (Over-engineered PV capacity headroom setup)";
+                    break;
+                }
+            }
+        }
+
+        // Tier 3 Search: Fallback to Dual Parallel execution blocks if no single inverter is found matching large scale limits
+        if (!selectedInverter) {
+            for (let inv of brandInverters) {
+                let dualCombinedCapacity = inv.capacity * 2;
+                let dualCombinedPV = inv.Max_pv_Wattage * 2;
+                if (dualCombinedCapacity >= requiredKva && dualCombinedPV >= targetPV && dualCombinedPV <= wasteCeilingLimit) {
+                    selectedInverter = inv;
+                    selectedCount = 2;
+                    designRuleNote = "Balanced Dual Parallel Inverter Configuration array distribution";
+                    break;
+                }
+            }
+        }
+
+        // Tier 4 Search: Fallback to Triple Parallel Matrix arrays
+        if (!selectedInverter) {
+            for (let inv of brandInverters) {
+                let tripleCombinedCapacity = inv.capacity * 3;
+                let tripleCombinedPV = inv.Max_pv_Wattage * 3;
+                if (tripleCombinedCapacity >= requiredKva && tripleCombinedPV >= targetPV && tripleCombinedPV <= wasteCeilingLimit) {
+                    selectedInverter = inv;
+                    selectedCount = 3;
+                    designRuleNote = "Triple Parallel Synchronization Configuration array setup";
+                    break;
+                }
+            }
+        }
+
+        if (!selectedInverter) return; // Structural capacity match criteria fault out for brand group
+
+        // Energy Storage Subsystem Sizing Architecture
+        let brandBatteries = batteryInventory.filter(b => b.brand === brandName);
+        if (brandBatteries.length === 0) return;
+
+        // Select the high capacity module for standard configuration matching efficiency
+        brandBatteries.sort((a, b) => b.capacity_kwh - a.capacity_kwh);
+        let selectedBattery = brandBatteries[0];
+
+        // Ensure series configuration matches inverter DC architecture voltage loops
+        let unitsInSeries = Math.max(1, Math.round(selectedInverter.battery_Voltage / selectedBattery.Voltage));
+        if (selectedInverter.battery_Voltage === 800) {
+            // High voltage architecture balancing step
+            unitsInSeries = Math.ceil(800 / selectedBattery.Voltage);
+        }
+        
+        let singleStringKwh = selectedBattery.capacity_kwh * unitsInSeries;
+        let parallelStrings = Math.ceil(requiredKwh / singleStringKwh);
+        let totalCalculatedBatteryUnits = unitsInSeries * parallelStrings;
+
+        // Enforce strict battery physical stack limits (Max 6 units)
+        let constraintWarning = "";
+        if (totalCalculatedBatteryUnits > 6) {
+            constraintWarning = `System battery configuration stack has been auto-capped to 6 units from original calculated sizing rules (${totalCalculatedBatteryUnits} units) to fit architecture limits.`;
+            totalCalculatedBatteryUnits = 6;
+            parallelStrings = Math.max(1, Math.floor(6 / unitsInSeries));
+        }
+
+        matchedOptions.push({
+            inverter: selectedInverter,
+            count: selectedCount,
+            battery: selectedBattery,
+            bSeries: unitsInSeries,
+            bParallel: parallelStrings,
+            bTotal: totalCalculatedBatteryUnits,
+            note: designRuleNote,
+            warning: constraintWarning,
+            targetSolarInput: solarWatt,
+            loadKw: loadKw
+        });
+    });
+
+    renderCorporateQuotations(matchedOptions, panelUnitWatt);
+}
+
+function renderCorporateQuotations(matches, panelWatt) {
+    const container = document.getElementById('blueprintsContainer');
+    container.innerHTML = "";
+
+    if (matches.length === 0) {
+        container.innerHTML = `<div class='error-box' style='display:block;'>Engineering Sizing Matrix Exception: System load matrix configurations exceed current standard stock ratings profiles. Adjust inputs.</div>`;
+        return;
+    }
+
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    matches.forEach((option, index) => {
+        let inv = option.inverter;
+        let bat = option.battery;
+        let totalPanels = Math.ceil(option.targetSolarInput / panelWatt);
+        let systemInverterKva = inv.capacity * option.count;
+        let totalSystemBatteryBankKwh = bat.capacity_kwh * option.bTotal;
+
+        // Material Accessory Evaluation Algorithms
+        let qtyRails = Math.ceil(totalPanels / 2);
+        let qtyScrews = (systemInverterKva < 16) ? 1 : (systemInverterKva < 32) ? 2 : 3;
+        let qtyBoltsNuts = (totalPanels * 2.08) + (Math.floor(totalPanels / 20) * 6);
+        let qtyFlexCableMeters = 50; 
+        let qtyTrunkingPipes = 2;
+        let qtyPegPackets = 1;
+        let qtyMc4Pairs = Math.ceil(option.count * 2.5); // Derived from active controller tracking loop variables
+
+        // Busbar current handling capability verification
+        let busbarAmpacityRating = (totalSystemBatteryBankKwh / inv.battery_Voltage) * 1000 * 1.5;
+        let busbarDescription = `Copper System Battery Interconnection Busbar Module Array (Rated minimum capacity handling: ${busbarAmpacityRating.toFixed(1)}A)`;
+
+        // Flexible cable cross-section diameter selection rule structures
+        let acCableSizingCrossSection = "6mm²";
+        if (systemInverterKva >= 8 && systemInverterKva < 16) acCableSizingCrossSection = "10mm²";
+        else if (systemInverterKva >= 16 && systemInverterKva < 32) acCableSizingCrossSection = "25mm²";
+        else if (systemInverterKva >= 32 && systemInverterKva < 70) acCableSizingCrossSection = "35mm²";
+        else if (systemInverterKva >= 70) acCableSizingCrossSection = "50mm²";
+
+        // Overcurrent switchgear breakers component dynamic rating formulas
+        let acInputBreakerRatingAmps = Math.ceil(((inv.capacity * 1000) / (inv.Phase === 1 ? 220 : 395)) * 1.3);
+        let roundedBreakerRating = acInputBreakerRatingAmps < 32 ? 32 : acInputBreakerRatingAmps < 63 ? 63 : acInputBreakerRatingAmps < 100 ? 100 : 125;
+
+        // Financial Cost Accumulation Vectors
+        let costInverters = inv.price_USD * option.count;
+        let costBatteries = bat.price_USD * option.bTotal;
+        let costPanels = (totalPanels * panelWatt) * PANEL_PRICE_PER_WATT;
+        
+        // Accessory balance structural allocation overhead factoring values
+        let structuralAccessoriesPackValue = 350.00 + (totalPanels * 8.00); 
+
+        let subtotalAllHardware = costInverters + costBatteries + costPanels + structuralAccessoriesPackValue + BASE_INSTALLATION_LABOR_USD;
+        let vatTaxAmount = subtotalAllHardware * 0.075; 
+        let projectGrandTotal = subtotalAllHardware + vatTaxAmount;
+
+        let wrapper = document.createElement('div');
+        wrapper.className = "quote-wrapper";
+        wrapper.innerHTML = `
+            <div class="quote-header">
+                <h1>AE RENEWABLE LTD</h1>
+                <div class="quote-subtitle">Solar | Inverter | CCTV | Smart Energy Solutions</div>
+            </div>
+
+            <div class="quote-meta-row">
+                <div>Date: ${formattedDate}</div>
+                <div>System Topology: Option #${index + 1} (${inv.brand} Architecture Matrix Line)</div>
+            </div>
+
+            <div class="quote-title-main">QUOTATION</div>
+
+            <div class="section-heading">Project Design Description</div>
+            <p class="project-desc-text">
+                An intelligent system engineering execution blueprint featuring a <strong>${systemInverterKva.toFixed(1)}kVA ${inv.brand} Hybrid Infrastructure Matrix</strong> setup. 
+                The engineered facility matches the user's operational requirement profile (${option.loadKw.toFixed(1)}kW base loads framework). 
+                The technical design is integrated with a <strong>${totalSystemBatteryBankKwh.toFixed(1)}kWh Lithium Iron Phosphate (LiFePO4) storage facility</strong> 
+                and a high yield layout consisting of <strong>${totalPanels} units of ${panelWatt}W monocrystalline solar panels matrix panels</strong> for continuous localized infrastructure power stability.
+                <br><small style="color:#7f8c8d;">Sizing Profile Logic Rule Note: ${option.note}</small>
+                ${option.warning ? `<br><strong style="color:#cd6155; font-size:12px;">Constraint Event Loop Notification: ${option.warning}</strong>` : ''}
+            </p>
+
+            <div class="section-heading">Scope of Supply — Itemized Execution Log</div>
+            <table class="quote-table">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width: 6%;">S/N</th>
+                        <th style="width: 54%;">DESCRIPTION COMPONENT MODEL SPECIFICATION</th>
+                        <th class="text-center" style="width: 10%;">QTY</th>
+                        <th style="width: 12%;">UNIT TYPE</th>
+                        <th class="text-right" style="width: 18%;">EST. COST BLOCK ($)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">1</td>
+                        <td>${inv.brand} ${inv.model} Smart Hybrid Inverter Module (${inv.capacity.toFixed(1)}kVA, ${inv.Phase}-Phase Architecture, ${inv.battery_Voltage}V DC Input )</td>
+                        <td class="text-center">${option.count}</td>
+                        <td>Unit(s)</td>
+                        <td class="text-right">${costInverters.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">2</td>
+                        <td>${bat.brand} ${bat.model} Lithium Iron Phosphate (LiFePO4) Power Storage Battery (${bat.capacity_kwh.toFixed(2)}kWh, ${bat.Voltage}V Matrix Sizing Core)</td>
+                        <td class="text-center">${option.bTotal}</td>
+                        <td>Unit(s)</td>
+                        <td class="text-right">${costBatteries.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">3</td>
+                        <td>High-Efficiency Monocrystalline  Module (${panelWatt}W High-Performance Output Profile)</td>
+                        <td class="text-center">${totalPanels}</td>
+                        <td>Units</td>
+                        <td class="text-right">${costPanels.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">4</td>
+                        <td>Solar Mounting Structural Rail Sets (Anodized High-Tensile Aluminum Framework Profiles)</td>
+                        <td class="text-center">${qtyRails}</td>
+                        <td>Lengths</td>
+                        <td rowspan="10" style="vertical-align: middle; text-align: center; font-weight: bold; background-color:#fafafa; font-size:11px; border-left:1px solid #111;">
+                            Integrated System<br>Balance of Materials<br>Structural Pack Overhead<br><br>
+                            $ ${structuralAccessoriesPackValue.toLocaleString(undefined, {minimumFractionDigits: 2})}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">5</td>
+                        <td>Weatherproof Structural Anti-Vibration Roofing Screw Fastening Module Sets</td>
+                        <td class="text-center">${qtyScrews}</td>
+                        <td>Packet(s)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">6</td>
+                        <td>Stainless Steel Anti-Corrosion Fixing Bolts &amp; Flange Nuts System Sizing (17mm Structural Profile)</td>
+                        <td class="text-center">${qtyBoltsNuts}</td>
+                        <td>Pieces</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">7</td>
+                        <td> MC4 Multi-Contact Waterproof Cable Connector </td>
+                        <td class="text-center">${qtyMc4Pairs}</td>
+                        <td>Pairs</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">8</td>
+                        <td>6mm² Dual-High-Conductivity DC Photovoltaic Solar Power Flexible Cable</td>
+                        <td class="text-center">${qtyFlexCableMeters}</td>
+                        <td>Meters</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">9</td>
+                        <td>High-Impact Isolation PVC Protective Conduit Routing Pipe Trunking Architecture (75mm x 100mm)</td>
+                        <td class="text-center">${qtyTrunkingPipes}</td>
+                        <td>Lengths</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">10</td>
+                        <td>Heavy Gauge Structural Peg Fasteners (Size 12 Expansion Framework Standard)</td>
+                        <td class="text-center">${qtyPegPackets}</td>
+                        <td>Packet</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">11</td>
+                        <td>${busbarDescription}</td>
+                        <td class="text-center">1</td>
+                        <td>Set Array</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">12</td>
+                        <td>Heavy-Duty Ultra-Flexible High-Current AC Power Inverter Connection Cable Trunking Module Line (Sized: <strong>${acCableSizingCrossSection}</strong> Profile Core)</td>
+                        <td class="text-center">1</td>
+                        <td>Lot</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">13</td>
+                        <td>Overcurrent Protection AC Safety Circuit Breaker Protection Control Module System Sizing (Rated Threshold: <strong>${roundedBreakerRating}A</strong> Safety Switchgear)</td>
+                        <td class="text-center">2</td>
+                        <td>Units</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">14</td>
+                        <td>Professional Engineering System Integration Execution Labor: Rigging, Mechanical Array Deployment, Circuit Verification Diagnostics, System Commissioning Services</td>
+                        <td class="text-center">1</td>
+                        <td>Package Allocation</td>
+                        <td class="text-right">${BASE_INSTALLATION_LABOR_USD.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                    </tr>
+                    
+                  
+                    <tr>
+                        <td colspan="4" class="text-right">Corporate Tax Regulations (Statutory 7.5% Standard VAT Assessment Line):</td>
+                        <td class="text-right">${vatTaxAmount.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                    </tr>
+                    <tr style="background-color: #eaf2f8; font-weight: bold; font-size: 14px; border: 2px solid #111;">
+                        <td colspan="4" class="text-right">GRAND TOTAL COMPREHENSIVE PROJECT ENGINEERING STRUCTURAL CAPITAL OUTLAY ($):</td>
+                        <td class="text-right">$ ${projectGrandTotal.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-heading">System Core Integration Parametric Summary Matrix</div>
+            <ul class="summary-list">
+                <li><strong>Inverter Subsystem Configuration Capacity:</strong> ${(inv.capacity * option.count).toFixed(2)}kVA Total Output Capacity Processing Setup (${option.count} x ${inv.capacity.toFixed(2)}kVA Units Running Matrix topology)</li>
+                <li><strong>Energy Storage Battery Cluster Block:</strong> ${(bat.capacity_kwh * option.bTotal).toFixed(2)}kWh Nominal Operating Reserve Capacity (${option.bTotal} x Total Module Components organized into internal layout loops)</li>
+                <li><strong>Photovoltaic Matrix Peak Yield Field:</strong> ${((totalPanels * panelWatt) / 1000).toFixed(2)}kWp Rated Matrix Field Sizing (${totalPanels} Modules x ${panelWatt}W Architecture Modules)</li>
+                <li><strong>Internal Functional Battery Chemistry Structural Line:</strong> Advanced Premium Lithium Iron Phosphate (LiFePO4) Structural Cells Architecture Layer</li>
+                <li><strong>System Structural Appliance Load Compatibility:</strong> Lighting loads network, smart monitoring arrays, refrigeration systems, server processing grids, motor pumping drives, heating, ventilation, and air conditioning equipment loops running within safe system capacity limits.</li>
+            </ul>
+
+            <div class="quote-footer">
+                <div>📞 Phone: 08133615132</div>
+                <div>📧 Corporate Email: Aerenwablesolution@gmail.com</div>
+                <div>🌐 Corporate Web URL: Aerenwablesolution.com</div>
+            </div>
+            
+            <button class="btn-print" onclick="window.print()">Print Official Technical Corporate Quotation Sheet</button>
+        `;
+        container.appendChild(wrapper);
+    });
+}
+</script>
+
+</body>
+</html>
