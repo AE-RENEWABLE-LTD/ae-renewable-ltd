@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <style>
+ <style>
     :root{
     --primary:#004AAD;
     --secondary:#00B140;
@@ -107,9 +107,6 @@ nav a{
 }
 
 .consultation-form{
-    width:100%;
-    max-width:100%;
-    overflow:hidden;
     background:#fff;
     padding:40px;
     border-radius:20px;
@@ -123,11 +120,9 @@ nav a{
 .input-group select,
 .input-group textarea{
     width:100%;
-    max-width:100%;
     padding:15px;
     border:1px solid #ddd;
     border-radius:10px;
-    box-sizing:border-box;
 }
 
 .full-width{
@@ -210,30 +205,31 @@ footer{
     padding:30px;
 }
 
-@media (max-width:768px){
+@media(max-width:768px){
+
+    nav{
+        display:none;
+    }
+
+    .hero h1{
+        font-size:2rem;
+    }
 
     .consultation-form{
         grid-template-columns:1fr;
-        padding:20px;
     }
 
-    .input-group{
-        width:100%;
-    }
-
-    .input-group input,
-    .input-group select,
-    .input-group textarea{
-        width:100%;
-        font-size:16px;
-    }
-
+    .full-width,
     .submit-btn{
-        width:100%;
+        grid-column:auto;
     }
 
+    .benefit-grid,
+    .process-grid{
+        grid-template-columns:1fr;
+    }
 }
-  </style>
+ </style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Free Consultation | AE Renewable Ltd</title>
