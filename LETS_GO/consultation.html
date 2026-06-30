@@ -18,8 +18,13 @@
     font-family:'Poppins',sans-serif;
 }
 
+html{
+    scroll-behavior:smooth;
+}
+
 body{
     overflow-x:hidden;
+    background:#fff;
 }
 
 .container{
@@ -27,6 +32,8 @@ body{
     max-width:1200px;
     margin:auto;
 }
+
+/* HEADER */
 
 header{
     background:#fff;
@@ -40,7 +47,7 @@ header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:20px 0;
+    padding:18px 0;
 }
 
 .logo{
@@ -63,7 +70,14 @@ nav a{
     text-decoration:none;
     color:var(--navy);
     font-weight:600;
+    transition:.3s;
 }
+
+nav a:hover{
+    color:var(--secondary);
+}
+
+/* HERO */
 
 .hero{
     background:linear-gradient(
@@ -71,7 +85,7 @@ nav a{
     #004AAD,
     #00B140
     );
-    color:white;
+    color:#fff;
     text-align:center;
     padding:120px 20px;
 }
@@ -79,70 +93,106 @@ nav a{
 .hero h1{
     font-size:3rem;
     margin-bottom:20px;
+    line-height:1.2;
 }
 
 .hero p{
     max-width:700px;
     margin:auto;
     margin-bottom:30px;
+    font-size:1.05rem;
 }
 
 .hero-btn{
     display:inline-block;
     padding:15px 35px;
     background:var(--accent);
-    color:black;
+    color:#000;
     text-decoration:none;
     border-radius:50px;
     font-weight:700;
+    transition:.3s;
 }
 
-.consultation-section{
-    padding:100px 0;
+.hero-btn:hover{
+    transform:translateY(-3px);
 }
+
+/* SECTION TITLE */
 
 .section-title{
     text-align:center;
     margin-bottom:50px;
 }
 
+.section-title h2{
+    color:var(--navy);
+    margin-bottom:10px;
+}
+
+.section-title p{
+    color:#666;
+}
+
+/* CONSULTATION */
+
+.consultation-section{
+    padding:100px 0;
+}
+
 .consultation-form{
     width:100%;
-    max-width:100%;
-    overflow:hidden;
     background:#fff;
     padding:40px;
     border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,.1);
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
     display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:repeat(2,1fr);
     gap:20px;
+}
+
+.input-group{
+    width:100%;
 }
 
 .input-group input,
 .input-group select,
 .input-group textarea{
     width:100%;
-    max-width:100%;
     padding:15px;
     border:1px solid #ddd;
     border-radius:10px;
-    box-sizing:border-box;
+    outline:none;
+    font-size:15px;
+}
+
+.input-group textarea{
+    resize:vertical;
 }
 
 .full-width{
-    grid-column:1/3;
+    grid-column:1 / 3;
 }
 
 .submit-btn{
-    grid-column:1/3;
-    background:var(--accent);
+    grid-column:1 / 3;
+
+    width:100%;
     border:none;
-    padding:15px;
+    background:var(--accent);
+    padding:16px;
     border-radius:10px;
     font-weight:700;
     cursor:pointer;
+    transition:.3s;
 }
+
+.submit-btn:hover{
+    opacity:.9;
+}
+
+/* BENEFITS */
 
 .benefits{
     background:var(--light);
@@ -156,16 +206,19 @@ nav a{
 }
 
 .card{
-    background:white;
+    background:#fff;
     padding:30px;
     border-radius:15px;
     text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,.06);
 }
 
 .card h3{
     color:var(--primary);
-    margin-bottom:10px;
+    margin-bottom:15px;
 }
+
+/* PROCESS */
 
 .process{
     padding:100px 0;
@@ -179,57 +232,131 @@ nav a{
 
 .step{
     background:var(--primary);
-    color:white;
+    color:#fff;
     padding:25px;
     text-align:center;
     border-radius:12px;
+    font-weight:600;
 }
+
+/* CTA */
 
 .cta{
     background:var(--navy);
-    color:white;
+    color:#fff;
     text-align:center;
     padding:100px 20px;
 }
 
+.cta h2{
+    margin-bottom:15px;
+}
+
+.cta p{
+    margin-bottom:25px;
+}
+
 .cta-btn{
     display:inline-block;
-    margin-top:20px;
-    background:var(--accent);
-    color:black;
-    text-decoration:none;
     padding:15px 35px;
+    background:var(--accent);
+    color:#000;
+    text-decoration:none;
     border-radius:50px;
     font-weight:700;
 }
 
+/* FOOTER */
+
 footer{
     background:#08172d;
-    color:white;
+    color:#fff;
     text-align:center;
-    padding:30px;
+    padding:30px 20px;
 }
 
+/* TABLET */
+
+@media (max-width:992px){
+
+    .benefit-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .process-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+/* MOBILE */
+
 @media (max-width:768px){
+
+    nav{
+        display:none;
+    }
+
+    .hero{
+        padding:80px 15px;
+    }
+
+    .hero h1{
+        font-size:2rem;
+    }
+
+    .hero p{
+        font-size:.95rem;
+    }
+
+    .consultation-section,
+    .benefits,
+    .process,
+    .cta{
+        padding:60px 0;
+    }
 
     .consultation-form{
         grid-template-columns:1fr;
         padding:20px;
     }
 
-    .input-group{
-        width:100%;
-    }
-
-    .input-group input,
-    .input-group select,
-    .input-group textarea{
-        width:100%;
-        font-size:16px;
+    .full-width{
+        grid-column:auto;
     }
 
     .submit-btn{
-        width:100%;
+        grid-column:auto;
+    }
+
+    .benefit-grid{
+        grid-template-columns:1fr;
+    }
+
+    .process-grid{
+        grid-template-columns:1fr;
+    }
+
+    .logo{
+        font-size:22px;
+    }
+
+}
+
+/* SMALL PHONES */
+
+@media (max-width:480px){
+
+    .container{
+        width:95%;
+    }
+
+    .hero h1{
+        font-size:1.8rem;
+    }
+
+    .consultation-form{
+        padding:15px;
     }
 
 }
