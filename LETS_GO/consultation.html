@@ -107,6 +107,9 @@ nav a{
 }
 
 .consultation-form{
+    width:100%;
+    max-width:100%;
+    overflow:hidden;
     background:#fff;
     padding:40px;
     border-radius:20px;
@@ -207,29 +210,28 @@ footer{
     padding:30px;
 }
 
-@media(max-width:768px){
-
-    nav{
-        display:none;
-    }
-
-    .hero h1{
-        font-size:2rem;
-    }
+@media (max-width:768px){
 
     .consultation-form{
         grid-template-columns:1fr;
+        padding:20px;
     }
 
-    .full-width,
+    .input-group{
+        width:100%;
+    }
+
+    .input-group input,
+    .input-group select,
+    .input-group textarea{
+        width:100%;
+        font-size:16px;
+    }
+
     .submit-btn{
-        grid-column:auto;
+        width:100%;
     }
 
-    .benefit-grid,
-    .process-grid{
-        grid-template-columns:1fr;
-    }
 }
   </style>
 <meta charset="UTF-8">
