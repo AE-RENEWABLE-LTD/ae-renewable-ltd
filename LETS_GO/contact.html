@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Contact Us | AE Renewable Ltd</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+--primary:#004AAD;
+--secondary:#00B140;
+--accent:#FFC300;
+--navy:#0B1F3A;
+--light:#F5F7FA;
+--white:#FFFFFF;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+overflow-x:hidden;
+background:#fff;
+}
+
+.container{
+width:90%;
+max-width:1200px;
+margin:auto;
+}
+
+/* HERO */
+
+.hero{
+background:linear-gradient(135deg,#004AAD,#00B140);
+color:white;
+text-align:center;
+padding:120px 20px;
+}
+
+.hero h1{
+font-size:4rem;
+margin-bottom:20px;
+}
+
+.hero p{
+max-width:700px;
+margin:auto;
+line-height:1.8;
+}
+
+/* CONTACT INFO */
+
+.contact-info{
+padding:80px 0;
+background:#F5F7FA;
+}
+
+.info-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:25px;
+}
+
+.info-card{
+background:white;
+padding:30px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+transition:.3s;
+}
+
+.info-card:hover{
+transform:translateY(-8px);
+}
+
+.info-card h3{
+color:#004AAD;
+margin-bottom:10px;
+}
+
+/* CONTACT FORM */
+
+.contact-section{
+padding:100px 0;
+}
+
+.contact-wrapper{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:40px;
+}
+
+.contact-form{
+background:white;
+padding:40px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.contact-form input,
+.contact-form textarea{
+width:100%;
+padding:15px;
+margin-bottom:20px;
+border:1px solid #ddd;
+border-radius:10px;
+}
+
+.contact-form button{
+width:100%;
+padding:15px;
+border:none;
+border-radius:10px;
+background:#FFC300;
+font-weight:700;
+cursor:pointer;
+}
+
+.contact-details{
+background:#0B1F3A;
+color:white;
+padding:40px;
+border-radius:20px;
+}
+
+.contact-details h2{
+margin-bottom:20px;
+}
+
+.contact-details p{
+margin-bottom:15px;
+line-height:1.8;
+}
+
+/* HOURS */
+
+.hours{
+padding:100px 0;
+background:#F5F7FA;
+}
+
+.hours-box{
+background:white;
+padding:40px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.hours-box h2{
+color:#004AAD;
+margin-bottom:20px;
+}
+
+.hours-box p{
+margin-bottom:10px;
+}
+
+/* MAP */
+
+.map{
+padding:100px 0;
+}
+
+.map iframe{
+width:100%;
+height:450px;
+border:none;
+border-radius:20px;
+}
+
+/* CTA */
+
+.cta{
+background:#0B1F3A;
+color:white;
+text-align:center;
+padding:100px 20px;
+}
+
+.cta-btn{
+display:inline-block;
+margin-top:20px;
+padding:15px 35px;
+background:#FFC300;
+color:black;
+text-decoration:none;
+border-radius:50px;
+font-weight:700;
+}
+
+/* FOOTER */
+
+footer{
+background:#08172d;
+color:white;
+text-align:center;
+padding:40px;
+}
+
+/* WHATSAPP */
+
+.whatsapp{
+position:fixed;
+bottom:25px;
+right:25px;
+width:65px;
+height:65px;
+background:#25D366;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+text-decoration:none;
+font-size:30px;
+color:white;
+z-index:999;
+box-shadow:0 5px 20px rgba(0,0,0,.3);
+}
+
+/* MOBILE */
+
+@media(max-width:992px){
+
+.info-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.contact-wrapper{
+grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:768px){
+
+.hero h1{
+font-size:2.5rem;
+}
+
+.info-grid{
+grid-template-columns:1fr;
+}
+
+.contact-form,
+.contact-details{
+padding:25px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+
+<div class="container">
+
+<h1>Contact AE Renewable Ltd</h1>
+
+<p>
+Get in touch with our renewable energy experts for solar installations,
+battery storage, hybrid inverter systems, CCTV security and electrical engineering solutions.
+</p>
+
+</div>
+
+</section>
+
+<section class="contact-info">
+
+<div class="container">
+
+<div class="info-grid">
+
+<div class="info-card">
+<h3>Phone</h3>
+<p>+234 XXX XXX XXXX</p>
+</div>
+
+<div class="info-card">
+<h3>Email</h3>
+<p>info@aerenewable.com</p>
+</div>
+
+<div class="info-card">
+<h3>Office</h3>
+<p>Abuja, Nigeria</p>
+</div>
+
+<div class="info-card">
+<h3>WhatsApp</h3>
+<p>24/7 Support</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="contact-section">
+
+<div class="container">
+
+<div class="contact-wrapper">
+
+<div class="contact-form">
+
+<h2>Send Us A Message</h2>
+
+<form>
+
+<input type="text" placeholder="Full Name" required>
+
+<input type="email" placeholder="Email Address" required>
+
+<input type="tel" placeholder="Phone Number" required>
+
+<textarea rows="6" placeholder="Your Message"></textarea>
+
+<button type="submit">
+Send Message
+</button>
+
+</form>
+
+</div>
+
+<div class="contact-details">
+
+<h2>Why Contact Us?</h2>
+
+<p>✓ Professional Solar Installation</p>
+
+<p>✓ Hybrid Inverter Solutions</p>
+
+<p>✓ Lithium Battery Storage</p>
+
+<p>✓ CCTV Security Systems</p>
+
+<p>✓ Electrical Engineering Services</p>
+
+<p>✓ Site Survey & Consultation</p>
+
+<p>✓ Reliable After-Sales Support</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="hours">
+
+<div class="container">
+
+<div class="hours-box">
+
+<h2>Business Hours</h2>
+
+<p>Monday - Friday : 8:00 AM - 6:00 PM</p>
+
+<p>Saturday : 9:00 AM - 4:00 PM</p>
+
+<p>Sunday : Emergency Support Only</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="map">
+
+<div class="container">
+
+<iframe
+src="https://maps.google.com/maps?q=Abuja&t=&z=13&ie=UTF8&iwloc=&output=embed">
+</iframe>
+
+</div>
+
+</section>
+
+<section class="cta">
+
+<h2>Ready To Power Your Future?</h2>
+
+<p>
+Contact AE Renewable Ltd today and let's build a reliable energy solution for your home or business.
+</p>
+
+<a href="#" class="cta-btn">
+Request Consultation
+</a>
+
+</section>
+
+<footer>
+
+<h3>AE Renewable Ltd</h3>
+
+<p>
+Powering A Sustainable Future Through Renewable Energy.
+</p>
+
+</footer>
+
+<a href="https://wa.me/234XXXXXXXXXX" class="whatsapp">
+💬
+</a>
+
+</body>
+</html>

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Testing & Commissioning | AE Renewable Ltd</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --primary:#004AAD;
+    --secondary:#00B140;
+    --accent:#FFC300;
+    --navy:#0B1F3A;
+    --light:#F5F7FA;
+    --white:#FFFFFF;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#fff;
+    overflow-x:hidden;
+    color:#333;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+}
+
+/* HEADER */
+
+header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:#fff;
+    box-shadow:0 2px 15px rgba(0,0,0,.08);
+}
+
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 0;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:800;
+    color:var(--primary);
+}
+
+.logo span{
+    color:var(--secondary);
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:25px;
+}
+
+nav a{
+    text-decoration:none;
+    color:var(--navy);
+    font-weight:600;
+    transition:.3s;
+}
+
+nav a:hover{
+    color:var(--secondary);
+}
+
+/* HERO */
+
+.hero{
+    background:linear-gradient(135deg,#004AAD,#00B140);
+    color:white;
+    text-align:center;
+    padding:120px 20px;
+}
+
+.hero h1{
+    font-size:3.5rem;
+    margin-bottom:20px;
+}
+
+.hero p{
+    max-width:850px;
+    margin:auto;
+    line-height:1.8;
+    margin-bottom:30px;
+}
+
+.hero-btn{
+    display:inline-block;
+    padding:15px 35px;
+    border-radius:50px;
+    background:var(--accent);
+    color:#000;
+    text-decoration:none;
+    font-weight:700;
+}
+
+/* SECTION TITLE */
+
+.section-title{
+    text-align:center;
+    margin-bottom:60px;
+}
+
+.section-title h2{
+    color:var(--navy);
+    margin-bottom:10px;
+}
+
+.section-title p{
+    color:#666;
+}
+
+/* OVERVIEW */
+
+.overview{
+    padding:100px 0;
+}
+
+.overview-box{
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    text-align:center;
+}
+
+.overview-box p{
+    line-height:1.8;
+}
+
+/* TESTING */
+
+.testing{
+    background:var(--light);
+    padding:100px 0;
+}
+
+.test-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+.test-card{
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.test-card h3{
+    color:var(--primary);
+    margin-bottom:12px;
+}
+
+/* PROCESS */
+
+.process{
+    padding:100px 0;
+}
+
+.process-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.step{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.step-number{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    background:var(--primary);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:auto auto 15px;
+    font-weight:700;
+}
+
+/* QUALITY */
+
+.quality{
+    background:var(--light);
+    padding:100px 0;
+}
+
+.quality-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+}
+
+.quality-card{
+    background:white;
+    padding:30px;
+    border-left:5px solid var(--secondary);
+    border-radius:12px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+    font-weight:600;
+}
+
+/* SAFETY */
+
+.safety{
+    padding:100px 0;
+}
+
+.safety-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+}
+
+.safety-card{
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.safety-card h3{
+    color:var(--secondary);
+}
+
+/* HANDOVER */
+
+.handover{
+    background:linear-gradient(135deg,#004AAD,#0B1F3A);
+    color:white;
+    padding:100px 0;
+}
+
+.handover-box{
+    max-width:800px;
+    margin:auto;
+}
+
+.handover ul{
+    margin-top:30px;
+    list-style:none;
+}
+
+.handover li{
+    padding:12px 0;
+    border-bottom:1px solid rgba(255,255,255,.15);
+}
+
+/* CTA */
+
+.cta{
+    padding:100px 20px;
+    text-align:center;
+}
+
+.cta h2{
+    color:var(--navy);
+    margin-bottom:15px;
+}
+
+.cta p{
+    max-width:700px;
+    margin:auto;
+    margin-bottom:25px;
+}
+
+.cta-btn{
+    display:inline-block;
+    padding:15px 35px;
+    background:var(--accent);
+    color:black;
+    text-decoration:none;
+    border-radius:50px;
+    font-weight:700;
+}
+
+/* FOOTER */
+
+footer{
+    background:#08172d;
+    color:white;
+    text-align:center;
+    padding:40px 20px;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    nav{
+        display:none;
+    }
+
+    .hero{
+        padding:80px 15px;
+    }
+
+    .hero h1{
+        font-size:2rem;
+    }
+
+    .overview,
+    .testing,
+    .process,
+    .quality,
+    .safety,
+    .handover,
+    .cta{
+        padding:60px 0;
+    }
+
+    .container{
+        width:95%;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="container navbar">
+
+<div class="logo">
+AE <span>Renewable</span>
+</div>
+
+<nav>
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="about.html">About</a></li>
+<li><a href="services.html">Services</a></li>
+<li><a href="projects.html">Projects</a></li>
+<li><a href="contact.html">Contact</a></li>
+</ul>
+</nav>
+
+</div>
+</header>
+
+<section class="hero">
+
+<div class="container">
+
+<h1>Testing & Commissioning</h1>
+
+<p>
+Every solar, inverter, battery, CCTV and electrical system installed by AE Renewable undergoes comprehensive testing and commissioning to ensure safety, reliability and peak performance before project handover.
+</p>
+
+<a href="consultation.html" class="hero-btn">
+Schedule Project Review
+</a>
+
+</div>
+
+</section>
+
+<section class="overview">
+
+<div class="container">
+
+<div class="section-title">
+<h2>Engineering Verification Process</h2>
+<p>Ensuring every system performs exactly as designed.</p>
+</div>
+
+<div class="overview-box">
+<p>
+Our engineers conduct detailed inspections, electrical testing, system verification and performance assessments to confirm compliance with project specifications and industry standards before handover.
+</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="testing">
+
+<div class="container">
+
+<div class="section-title">
+<h2>What We Test</h2>
+</div>
+
+<div class="test-grid">
+
+<div class="test-card">
+<h3>Solar PV Testing</h3>
+<p>Panel performance verification and string analysis.</p>
+</div>
+
+<div class="test-card">
+<h3>Battery Testing</h3>
+<p>Capacity validation and charging performance checks.</p>
+</div>
+
+<div class="test-card">
+<h3>Inverter Testing</h3>
+<p>Load handling, efficiency and operational verification.</p>
+</div>
+
+<div class="test-card">
+<h3>Protection Systems</h3>
+<p>Breaker, SPD and protection coordination testing.</p>
+</div>
+
+<div class="test-card">
+<h3>CCTV Testing</h3>
+<p>Coverage verification, recording and monitoring checks.</p>
+</div>
+
+<div class="test-card">
+<h3>Smart Automation</h3>
+<p>Control systems and automation functionality testing.</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="process">
+
+<div class="container">
+
+<div class="section-title">
+<h2>Commissioning Process</h2>
+</div>
+
+<div class="process-grid">
+
+<div class="step">
+<div class="step-number">1</div>
+Visual Inspection
+</div>
+
+<div class="step">
+<div class="step-number">2</div>
+Electrical Verification
+</div>
+
+<div class="step">
+<div class="step-number">3</div>
+Equipment Testing
+</div>
+
+<div class="step">
+<div class="step-number">4</div>
+Performance Measurement
+</div>
+
+<div class="step">
+<div class="step-number">5</div>
+Safety Validation
+</div>
+
+<div class="step">
+<div class="step-number">6</div>
+Client Demonstration
+</div>
+
+<div class="step">
+<div class="step-number">7</div>
+Project Handover
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="quality">
+
+<div class="container">
+
+<div class="section-title">
+<h2>Quality Assurance</h2>
+</div>
+
+<div class="quality-grid">
+
+<div class="quality-card">✓ Equipment Verification</div>
+<div class="quality-card">✓ Installation Inspection</div>
+<div class="quality-card">✓ Performance Validation</div>
+<div class="quality-card">✓ Documentation Review</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="safety">
+
+<div class="container">
+
+<div class="section-title">
+<h2>Safety Standards</h2>
+</div>
+
+<div class="safety-grid">
+
+<div class="safety-card">
+<h3>Electrical Safety</h3>
+</div>
+
+<div class="safety-card">
+<h3>Grounding Verification</h3>
+</div>
+
+<div class="safety-card">
+<h3>Protection Coordination</h3>
+</div>
+
+<div class="safety-card">
+<h3>Operational Readiness</h3>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="handover">
+
+<div class="container">
+
+<div class="section-title">
+<h2 style="color:white;">Project Handover Package</h2>
+</div>
+
+<div class="handover-box">
+
+<ul>
+<li>System Documentation</li>
+<li>Commissioning Report</li>
+<li>User Guide</li>
+<li>Warranty Information</li>
+<li>Maintenance Schedule</li>
+<li>As-Built Drawings</li>
+</ul>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="cta">
+
+<h2>Ready For Project Commissioning?</h2>
+
+<p>
+Our engineers ensure every installation meets the highest standards before handover.
+</p>
+
+<a href="consultation.html" class="cta-btn">
+Speak With Our Engineers
+</a>
+
+</section>
+
+<footer>
+
+<h3>AE Renewable Ltd</h3>
+<p>Powering a Sustainable Future Through Renewable Energy.</p>
+
+</footer>
+
+
+
+</body>
+</html>

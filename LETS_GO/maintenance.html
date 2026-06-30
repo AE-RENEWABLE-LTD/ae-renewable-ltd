@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maintenance & Support | AE Renewable Ltd</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --primary:#004AAD;
+    --secondary:#00B140;
+    --accent:#FFC300;
+    --navy:#0B1F3A;
+    --light:#F5F7FA;
+    --white:#FFFFFF;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    overflow-x:hidden;
+    background:#fff;
+    color:#333;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+}
+
+/* HEADER */
+
+header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:#fff;
+    box-shadow:0 2px 15px rgba(0,0,0,.08);
+}
+
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 0;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:800;
+    color:var(--primary);
+}
+
+.logo span{
+    color:var(--secondary);
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:25px;
+}
+
+nav a{
+    text-decoration:none;
+    color:var(--navy);
+    font-weight:600;
+}
+
+/* HERO */
+
+.hero{
+    background:linear-gradient(135deg,#004AAD,#00B140);
+    color:white;
+    text-align:center;
+    padding:120px 20px;
+}
+
+.hero h1{
+    font-size:3.5rem;
+    margin-bottom:20px;
+}
+
+.hero p{
+    max-width:850px;
+    margin:auto;
+    line-height:1.8;
+    margin-bottom:30px;
+}
+
+.hero-btn{
+    display:inline-block;
+    padding:15px 35px;
+    background:var(--accent);
+    color:black;
+    text-decoration:none;
+    border-radius:50px;
+    font-weight:700;
+}
+
+/* SECTION */
+
+.section{
+    padding:100px 0;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:60px;
+}
+
+.section-title h2{
+    color:var(--navy);
+    margin-bottom:10px;
+}
+
+/* OVERVIEW */
+
+.overview-box{
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    text-align:center;
+    line-height:1.8;
+}
+
+/* SERVICES */
+
+.services{
+    background:var(--light);
+}
+
+.service-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+.service-card{
+    background:white;
+    padding:30px;
+    border-radius:18px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.service-card:hover{
+    transform:translateY(-8px);
+}
+
+.service-card h3{
+    color:var(--primary);
+    margin-bottom:12px;
+}
+
+/* PLANS */
+
+.plan-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:25px;
+}
+
+.plan-card{
+    background:white;
+    border-radius:20px;
+    padding:35px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.plan-card h3{
+    color:var(--primary);
+    margin-bottom:15px;
+}
+
+.plan-card ul{
+    list-style:none;
+    margin-top:20px;
+}
+
+.plan-card ul li{
+    padding:10px 0;
+    border-bottom:1px solid #eee;
+}
+
+/* CHECKLIST */
+
+.checklist{
+    background:var(--light);
+}
+
+.checklist-box{
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.checklist ul{
+    list-style:none;
+}
+
+.checklist li{
+    padding:15px 0;
+    border-bottom:1px solid #eee;
+}
+
+/* SUPPORT */
+
+.support{
+    background:linear-gradient(135deg,#004AAD,#0B1F3A);
+    color:white;
+    text-align:center;
+}
+
+.support h2{
+    margin-bottom:20px;
+}
+
+.support p{
+    max-width:700px;
+    margin:auto;
+    line-height:1.8;
+}
+
+/* BENEFITS */
+
+.benefit-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+}
+
+.benefit-card{
+    background:white;
+    padding:30px;
+    text-align:center;
+    border-radius:18px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+    font-weight:600;
+}
+
+/* CTA */
+
+.cta{
+    text-align:center;
+}
+
+.cta h2{
+    color:var(--navy);
+    margin-bottom:15px;
+}
+
+.cta p{
+    max-width:700px;
+    margin:auto;
+    margin-bottom:25px;
+}
+
+.cta-btn{
+    display:inline-block;
+    padding:15px 35px;
+    background:var(--accent);
+    color:black;
+    text-decoration:none;
+    border-radius:50px;
+    font-weight:700;
+}
+
+/* WHATSAPP */
+
+.whatsapp-float{
+    position:fixed;
+    width:65px;
+    height:65px;
+    bottom:25px;
+    right:25px;
+    background:#25D366;
+    color:#fff;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    box-shadow:0 8px 25px rgba(0,0,0,.25);
+    z-index:9999;
+}
+
+.whatsapp-float svg{
+    width:32px;
+    height:32px;
+}
+
+/* FOOTER */
+
+footer{
+    background:#08172d;
+    color:white;
+    text-align:center;
+    padding:40px 20px;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    nav{
+        display:none;
+    }
+
+    .hero{
+        padding:80px 20px;
+    }
+
+    .hero h1{
+        font-size:2rem;
+    }
+
+    .section{
+        padding:70px 0;
+    }
+
+    .container{
+        width:95%;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="container navbar">
+
+<div class="logo">
+AE <span>Renewable</span>
+</div>
+
+<nav>
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="about.html">About</a></li>
+<li><a href="services.html">Services</a></li>
+<li><a href="projects.html">Projects</a></li>
+<li><a href="contact.html">Contact</a></li>
+</ul>
+</nav>
+
+</div>
+</header>
+
+<section class="hero">
+<div class="container">
+
+<h1>Maintenance & Support Services</h1>
+
+<p>
+Protect your solar, inverter, battery, CCTV and electrical investments with professional maintenance, diagnostics, repairs and long-term technical support from AE Renewable Ltd.
+</p>
+
+<a href="consultation.html" class="hero-btn">
+Request Maintenance Service
+</a>
+
+</div>
+</section>
+
+<section class="section">
+<div class="container">
+
+<div class="section-title">
+<h2>Maintenance Overview</h2>
+</div>
+
+<div class="overview-box">
+Regular maintenance ensures your energy system operates safely, efficiently and reliably. Our engineers perform inspections, diagnostics, performance optimization and preventive maintenance to maximize equipment lifespan and minimize downtime.
+</div>
+
+</div>
+</section>
+
+<section class="section services">
+<div class="container">
+
+<div class="section-title">
+<h2>Our Maintenance Services</h2>
+</div>
+
+<div class="service-grid">
+
+<div class="service-card">
+<h3>Solar Panel Cleaning</h3>
+<p>Restore maximum energy production and efficiency.</p>
+</div>
+
+<div class="service-card">
+<h3>Battery Health Inspection</h3>
+<p>Monitor battery condition and performance.</p>
+</div>
+
+<div class="service-card">
+<h3>Inverter Diagnostics</h3>
+<p>Detect faults and improve reliability.</p>
+</div>
+
+<div class="service-card">
+<h3>Electrical Inspection</h3>
+<p>Check wiring, protection and safety systems.</p>
+</div>
+
+<div class="service-card">
+<h3>CCTV Maintenance</h3>
+<p>Ensure surveillance systems remain operational.</p>
+</div>
+
+<div class="service-card">
+<h3>Smart Home Support</h3>
+<p>Optimize automation and monitoring systems.</p>
+</div>
+
+</div>
+
+</div>
+</section>
+
+<section class="section">
+<div class="container">
+
+<div class="section-title">
+<h2>Maintenance Plans</h2>
+</div>
+
+<div class="plan-grid">
+
+<div class="plan-card">
+<h3>Basic Plan</h3>
+<p>Quarterly Inspection</p>
+
+<ul>
+<li>System Inspection</li>
+<li>Performance Check</li>
+<li>Basic Diagnostics</li>
+<li>Email Support</li>
+</ul>
+</div>
+
+<div class="plan-card">
+<h3>Professional Plan</h3>
+<p>Monthly Maintenance</p>
+
+<ul>
+<li>Detailed Inspection</li>
+<li>Performance Report</li>
+<li>Priority Support</li>
+<li>Preventive Maintenance</li>
+</ul>
+</div>
+
+<div class="plan-card">
+<h3>Enterprise Plan</h3>
+<p>Full Service Contract</p>
+
+<ul>
+<li>Scheduled Visits</li>
+<li>Emergency Response</li>
+<li>System Optimization</li>
+<li>Dedicated Support</li>
+</ul>
+</div>
+
+</div>
+
+</div>
+</section>
+
+<section class="section checklist">
+<div class="container">
+
+<div class="section-title">
+<h2>Inspection Checklist</h2>
+</div>
+
+<div class="checklist-box">
+
+<ul>
+<li>✓ Solar Panel Inspection</li>
+<li>✓ Battery Health Assessment</li>
+<li>✓ Inverter Performance Review</li>
+<li>✓ Cable & Connection Inspection</li>
+<li>✓ Protection Device Testing</li>
+<li>✓ Grounding Verification</li>
+<li>✓ System Performance Analysis</li>
+</ul>
+
+</div>
+
+</div>
+</section>
+
+<section class="section support">
+
+<div class="container">
+
+<h2>Emergency Technical Support</h2>
+
+<p>
+Our engineers are available to diagnose and resolve critical system faults quickly, helping minimize downtime and protect your investment.
+</p>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-title">
+<h2>Why Maintenance Matters</h2>
+</div>
+
+<div class="benefit-grid">
+
+<div class="benefit-card">
+Increase Equipment Lifespan
+</div>
+
+<div class="benefit-card">
+Improve Energy Production
+</div>
+
+<div class="benefit-card">
+Prevent Unexpected Failures
+</div>
+
+<div class="benefit-card">
+Protect Your Investment
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section cta">
+
+<div class="container">
+
+<h2>Keep Your System Performing At Its Best</h2>
+
+<p>
+Schedule professional maintenance today and maximize reliability, efficiency and long-term value.
+</p>
+
+<a href="consultation.html" class="cta-btn">
+Book Maintenance Service
+</a>
+
+</div>
+
+</section>
+
+<footer>
+
+<h3>AE Renewable Ltd</h3>
+
+<p>
+Powering a Sustainable Future Through Renewable Energy
+</p>
+
+<p style="margin-top:10px;">
+© 2026 AE Renewable Ltd. All Rights Reserved.
+</p>
+
+</footer>
+
+<a href="https://wa.me/2348012345678" class="whatsapp-float" target="_blank">
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor">
+<path d="M380.9 97.1C339-6.1 224.5-33.3 127.8 18.7 31.1 70.7-11.6 185.2 18.7 288L0 384l98.7-18.7c96.8 52 211.3 24.8 263.3-72 52-96.7 24.8-211.2 18.9-196.2z"/>
+</svg>
+
+</a>
+
+</body>
+</html>

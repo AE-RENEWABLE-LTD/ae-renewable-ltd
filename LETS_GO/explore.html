@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explore Projects | AE Renewable Ltd</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --primary:#004AAD;
+    --secondary:#00B140;
+    --accent:#FFC300;
+    --navy:#0B1F3A;
+    --light:#F5F7FA;
+    --white:#FFFFFF;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    overflow-x:hidden;
+    background:#fff;
+    color:#333;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+}
+
+/* HEADER */
+
+header{
+    position:sticky;
+    top:0;
+    background:#fff;
+    z-index:1000;
+    box-shadow:0 2px 15px rgba(0,0,0,.08);
+}
+
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 0;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:800;
+    color:var(--primary);
+}
+
+.logo span{
+    color:var(--secondary);
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:25px;
+}
+
+nav a{
+    text-decoration:none;
+    color:var(--navy);
+    font-weight:600;
+}
+
+/* HERO */
+
+.hero{
+    background:linear-gradient(135deg,#004AAD,#00B140);
+    color:white;
+    text-align:center;
+    padding:120px 20px;
+}
+
+.hero h1{
+    font-size:3.5rem;
+    margin-bottom:20px;
+}
+
+.hero p{
+    max-width:850px;
+    margin:auto;
+    line-height:1.8;
+}
+
+/* SECTION */
+
+.section{
+    padding:100px 0;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:60px;
+}
+
+.section-title h2{
+    color:var(--navy);
+    margin-bottom:10px;
+}
+
+/* STATS */
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+}
+
+.stat-card{
+    background:white;
+    padding:35px;
+    text-align:center;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.stat-card h2{
+    color:var(--primary);
+    font-size:2.5rem;
+}
+
+/* PROJECTS */
+
+.projects{
+    background:var(--light);
+}
+
+.project-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+    gap:30px;
+}
+
+.project-card{
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.project-card:hover{
+    transform:translateY(-10px);
+}
+
+.project-image{
+    height:250px;
+    background:#ddd;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+    font-weight:700;
+    color:#666;
+}
+
+.project-content{
+    padding:25px;
+}
+
+.project-content h3{
+    color:var(--primary);
+    margin-bottom:10px;
+}
+
+.project-content p{
+    margin-bottom:15px;
+}
+
+.project-info{
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+    color:#666;
+}
+
+/* SERVICES */
+
+.service-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+}
+
+.service-card{
+    background:white;
+    padding:30px;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.service-card h3{
+    color:var(--secondary);
+    margin-bottom:10px;
+}
+
+/* TESTIMONIALS */
+
+.testimonials{
+    background:var(--light);
+}
+
+.testimonial-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:25px;
+}
+
+.testimonial{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.testimonial h4{
+    color:var(--primary);
+    margin-top:15px;
+}
+
+/* CTA */
+
+.cta{
+    background:linear-gradient(135deg,#004AAD,#0B1F3A);
+    color:white;
+    text-align:center;
+    padding:100px 20px;
+}
+
+.cta-btn{
+    display:inline-block;
+    margin-top:20px;
+    background:var(--accent);
+    color:black;
+    text-decoration:none;
+    padding:15px 35px;
+    border-radius:50px;
+    font-weight:700;
+}
+
+/* FOOTER */
+
+footer{
+    background:#08172d;
+    color:white;
+    text-align:center;
+    padding:40px 20px;
+}
+
+/* WHATSAPP */
+
+.whatsapp-float{
+    position:fixed;
+    width:65px;
+    height:65px;
+    bottom:25px;
+    right:25px;
+    background:#25D366;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    text-decoration:none;
+    box-shadow:0 8px 25px rgba(0,0,0,.25);
+    z-index:9999;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    nav{
+        display:none;
+    }
+
+    .hero{
+        padding:80px 20px;
+    }
+
+    .hero h1{
+        font-size:2rem;
+    }
+
+    .project-grid{
+        grid-template-columns:1fr;
+    }
+
+    .section{
+        padding:70px 0;
+    }
+
+    .container{
+        width:95%;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="container navbar">
+
+<div class="logo">
+AE <span>Renewable</span>
+</div>
+
+<nav>
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="about.html">About</a></li>
+<li><a href="services.html">Services</a></li>
+<li><a href="contact.html">Contact</a></li>
+</ul>
+</nav>
+
+</div>
+</header>
+
+<section class="hero">
+
+<div class="container">
+
+<h1>Explore Our Projects</h1>
+
+<p>
+Discover how AE Renewable Ltd has transformed homes, businesses and institutions through innovative solar energy, inverter systems, battery storage, CCTV and smart automation solutions.
+</p>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-title">
+<h2>Project Performance</h2>
+</div>
+
+<div class="stats-grid">
+
+<div class="stat-card">
+<h2>500+</h2>
+<p>Projects Delivered</p>
+</div>
+
+<div class="stat-card">
+<h2>20MW+</h2>
+<p>Solar Installed</p>
+</div>
+
+<div class="stat-card">
+<h2>99%</h2>
+<p>Client Satisfaction</p>
+</div>
+
+<div class="stat-card">
+<h2>24/7</h2>
+<p>Technical Support</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section projects">
+
+<div class="container">
+
+<div class="section-title">
+<h2>Featured Projects</h2>
+</div>
+
+<div class="project-grid">
+
+<div class="project-card">
+
+<div class="project-image">
+PROJECT IMAGE
+</div>
+
+<div class="project-content">
+
+<h3>12kVA Hybrid Solar System</h3>
+
+<p>
+Complete solar installation with lithium battery storage and smart monitoring.
+</p>
+
+<div class="project-info">
+<span>Residential</span>
+<span>Abuja</span>
+</div>
+
+</div>
+
+</div>
+
+<div class="project-card">
+
+<div class="project-image">
+PROJECT IMAGE
+</div>
+
+<div class="project-content">
+
+<h3>30kWh Commercial Backup System</h3>
+
+<p>
+Reliable energy storage solution for business continuity.
+</p>
+
+<div class="project-info">
+<span>Commercial</span>
+<span>Nigeria</span>
+</div>
+
+</div>
+
+</div>
+
+<div class="project-card">
+
+<div class="project-image">
+PROJECT IMAGE
+</div>
+
+<div class="project-content">
+
+<h3>CCTV Security Deployment</h3>
+
+<p>
+Advanced surveillance system with remote monitoring.
+</p>
+
+<div class="project-info">
+<span>Security</span>
+<span>Abuja</span>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<div class="container">
+
+<div class="section-title">
+<h2>Our Expertise</h2>
+</div>
+
+<div class="service-grid">
+
+<div class="service-card">
+<h3>Solar Energy</h3>
+<p>Residential and commercial solar systems.</p>
+</div>
+
+<div class="service-card">
+<h3>Hybrid Inverters</h3>
+<p>Advanced power management solutions.</p>
+</div>
+
+<div class="service-card">
+<h3>Lithium Batteries</h3>
+<p>Reliable energy storage systems.</p>
+</div>
+
+<div class="service-card">
+<h3>CCTV Systems</h3>
+<p>Professional security installations.</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section testimonials">
+
+<div class="container">
+
+<div class="section-title">
+<h2>Client Testimonials</h2>
+</div>
+
+<div class="testimonial-grid">
+
+<div class="testimonial">
+<p>
+AE Renewable delivered exactly what they promised. Excellent workmanship and support.
+</p>
+<h4>Residential Client</h4>
+</div>
+
+<div class="testimonial">
+<p>
+Our business now enjoys uninterrupted power supply thanks to their team.
+</p>
+<h4>Commercial Client</h4>
+</div>
+
+<div class="testimonial">
+<p>
+Professional engineers, quality equipment and outstanding service.
+</p>
+<h4>Institutional Client</h4>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="cta">
+
+<h2>Ready To Start Your Project?</h2>
+
+<p>
+Join hundreds of satisfied clients benefiting from reliable renewable energy solutions.
+</p>
+
+<a href="consultation.html" class="cta-btn">
+Request Consultation
+</a>
+
+</section>
+
+<footer>
+
+<h3>AE Renewable Ltd</h3>
+
+<p>
+Powering a Sustainable Future Through Renewable Energy
+</p>
+
+</footer>
+
+<a href="https://wa.me/2348012345678" class="whatsapp-float">
+
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 448 512">
+<path d="M380.9 97.1C339-6.1 224.5-33.3 127.8 18.7 31.1 70.7-11.6 185.2 18.7 288L0 384l98.7-18.7c96.8 52 211.3 24.8 263.3-72z"/>
+</svg>
+
+</a>
+
+</body>
+</html>

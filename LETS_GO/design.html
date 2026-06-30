@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engineering Design | AE Renewable Ltd</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --primary:#004AAD;
+    --secondary:#00B140;
+    --accent:#FFC300;
+    --navy:#0B1F3A;
+    --light:#F5F7FA;
+    --white:#FFFFFF;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    overflow-x:hidden;
+    background:#fff;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+}
+
+/* HEADER */
+
+header{
+    position:sticky;
+    top:0;
+    background:#fff;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+    z-index:1000;
+}
+
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 0;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:800;
+    color:var(--primary);
+}
+
+.logo span{
+    color:var(--secondary);
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:25px;
+}
+
+nav a{
+    text-decoration:none;
+    color:var(--navy);
+    font-weight:600;
+}
+
+/* HERO */
+
+.hero{
+    background:linear-gradient(
+        135deg,
+        #004AAD,
+        #00B140
+    );
+    color:white;
+    text-align:center;
+    padding:120px 20px;
+}
+
+.hero h1{
+    font-size:3.5rem;
+    margin-bottom:20px;
+}
+
+.hero p{
+    max-width:800px;
+    margin:auto;
+    line-height:1.8;
+    margin-bottom:35px;
+}
+
+.hero-btn{
+    display:inline-block;
+    padding:15px 35px;
+    background:var(--accent);
+    color:#000;
+    text-decoration:none;
+    border-radius:50px;
+    font-weight:700;
+}
+
+/* DESIGN SERVICES */
+
+.design-services{
+    padding:100px 0;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:60px;
+}
+
+.section-title h2{
+    color:var(--navy);
+    margin-bottom:15px;
+}
+
+.section-title p{
+    color:#666;
+}
+
+.design-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+}
+
+.design-card{
+    background:#fff;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.design-card:hover{
+    transform:translateY(-8px);
+}
+
+.design-card h3{
+    color:var(--primary);
+    margin-bottom:15px;
+}
+
+/* PROCESS */
+
+.process{
+    background:var(--light);
+    padding:100px 0;
+}
+
+.process-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.step{
+    background:#fff;
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.step-number{
+    width:50px;
+    height:50px;
+    background:var(--primary);
+    color:white;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:auto;
+    margin-bottom:15px;
+    font-weight:700;
+}
+
+/* DELIVERABLES */
+
+.deliverables{
+    padding:100px 0;
+}
+
+.deliverables-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:20px;
+}
+
+.deliverable{
+    background:white;
+    border-left:5px solid var(--secondary);
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 5px 20px rgba(0,0,0,.06);
+}
+
+/* CTA */
+
+.cta{
+    background:var(--navy);
+    color:white;
+    text-align:center;
+    padding:100px 20px;
+}
+
+.cta h2{
+    margin-bottom:15px;
+}
+
+.cta p{
+    max-width:700px;
+    margin:auto;
+    margin-bottom:25px;
+}
+
+.cta-btn{
+    display:inline-block;
+    background:var(--accent);
+    color:black;
+    text-decoration:none;
+    padding:15px 35px;
+    border-radius:50px;
+    font-weight:700;
+}
+
+/* FOOTER */
+
+footer{
+    background:#08172d;
+    color:white;
+    text-align:center;
+    padding:30px;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    nav{
+        display:none;
+    }
+
+    .hero{
+        padding:80px 15px;
+    }
+
+    .hero h1{
+        font-size:2rem;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="container navbar">
+
+<div class="logo">
+AE <span>Renewable</span>
+</div>
+
+<nav>
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="about.html">About</a></li>
+<li><a href="services.html">Services</a></li>
+<li><a href="projects.html">Projects</a></li>
+<li><a href="contact.html">Contact</a></li>
+</ul>
+</nav>
+
+</div>
+</header>
+
+<section class="hero">
+<div class="container">
+
+<h1>Engineering Design & System Planning</h1>
+
+<p>
+Every successful renewable energy project begins with precise engineering.
+Our design team develops efficient, scalable and reliable solar, inverter,
+battery and electrical systems tailored to your energy requirements.
+</p>
+
+<a href="consultation.html" class="hero-btn">
+Request Design Consultation
+</a>
+
+</div>
+</section>
+
+<section class="design-services">
+<div class="container">
+
+<div class="section-title">
+<h2>Our Design Services</h2>
+<p>Comprehensive engineering solutions for residential, commercial and industrial projects.</p>
+</div>
+
+<div class="design-grid">
+
+<div class="design-card">
+<h3>Solar PV Design</h3>
+<p>Professional solar array sizing and layout planning.</p>
+</div>
+
+<div class="design-card">
+<h3>Battery Design</h3>
+<p>Accurate battery bank calculations for backup requirements.</p>
+</div>
+
+<div class="design-card">
+<h3>Inverter Design</h3>
+<p>Correct inverter sizing and configuration.</p>
+</div>
+
+<div class="design-card">
+<h3>Load Analysis</h3>
+<p>Detailed power consumption and demand assessment.</p>
+</div>
+
+<div class="design-card">
+<h3>Cable Sizing</h3>
+<p>Proper conductor selection for safety and efficiency.</p>
+</div>
+
+<div class="design-card">
+<h3>Protection Design</h3>
+<p>Breaker, SPD and protection coordination design.</p>
+</div>
+
+</div>
+
+</div>
+</section>
+
+<section class="process">
+<div class="container">
+
+<div class="section-title">
+<h2>Our Design Process</h2>
+</div>
+
+<div class="process-grid">
+
+<div class="step">
+<div class="step-number">1</div>
+Requirement Analysis
+</div>
+
+<div class="step">
+<div class="step-number">2</div>
+Load Assessment
+</div>
+
+<div class="step">
+<div class="step-number">3</div>
+Energy Modeling
+</div>
+
+<div class="step">
+<div class="step-number">4</div>
+Equipment Selection
+</div>
+
+<div class="step">
+<div class="step-number">5</div>
+Technical Drawings
+</div>
+
+<div class="step">
+<div class="step-number">6</div>
+Final Design Package
+</div>
+
+</div>
+
+</div>
+</section>
+
+<section class="deliverables">
+<div class="container">
+
+<div class="section-title">
+<h2>Design Deliverables</h2>
+</div>
+
+<div class="deliverables-grid">
+
+<div class="deliverable">✓ Single Line Diagrams</div>
+<div class="deliverable">✓ Solar Array Layout</div>
+<div class="deliverable">✓ Battery Calculations</div>
+<div class="deliverable">✓ Load Schedule</div>
+<div class="deliverable">✓ Cable Sizing Report</div>
+<div class="deliverable">✓ Protection Coordination</div>
+
+</div>
+
+</div>
+</section>
+
+<section class="cta">
+
+<h2>Need a Professional System Design?</h2>
+
+<p>
+Get a complete engineering design before installation and maximize safety, efficiency and return on investment.
+</p>
+
+<a href="consultation.html" class="cta-btn">
+Start Your Project
+</a>
+
+</section>
+
+<footer>
+<p>© 2026 AE Renewable Ltd. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>
