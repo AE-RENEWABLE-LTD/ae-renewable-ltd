@@ -210,28 +210,29 @@ footer{
     padding:30px;
 }
 
-@media (max-width:768px){
+@media(max-width:768px){
+
+    nav{
+        display:none;
+    }
+
+    .hero h1{
+        font-size:2rem;
+    }
 
     .consultation-form{
         grid-template-columns:1fr;
-        padding:20px;
     }
 
-    .input-group{
-        width:100%;
-    }
-
-    .input-group input,
-    .input-group select,
-    .input-group textarea{
-        width:100%;
-        font-size:16px;
-    }
-
+    .full-width,
     .submit-btn{
-        width:100%;
+        grid-column:auto;
     }
 
+    .benefit-grid,
+    .process-grid{
+        grid-template-columns:1fr;
+    }
 }
   </style>
 <meta charset="UTF-8">
