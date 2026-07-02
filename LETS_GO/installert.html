@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+  :root{
+    --primary:#004AAD;
+    --secondary:#00B140;
+    --accent:#FFC300;
+    --navy:#0B1F3A;
+    --light:#F5F7FA;
+    --white:#FFFFFF;
+    --shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#fff;
+    color:#333;
+    overflow-x:hidden;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+}
+
+/* HEADER */
+
+header{
+    position:sticky;
+    top:0;
+    background:#fff;
+    z-index:999;
+    box-shadow:0 2px 15px rgba(0,0,0,.08);
+}
+
+.nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 0;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    text-decoration:none;
+    gap:15px;
+}
+
+.logo img{
+    width:65px;
+}
+
+.logo h2{
+    color:var(--primary);
+    font-size:28px;
+}
+
+.logo span{
+    color:var(--secondary);
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:30px;
+}
+
+nav a{
+    text-decoration:none;
+    color:var(--navy);
+    font-weight:600;
+    transition:.3s;
+}
+
+nav a:hover{
+    color:var(--secondary);
+}
+
+/* HERO */
+
+.hero{
+    background:linear-gradient(135deg,#004AAD,#00B140);
+    color:#fff;
+    padding:100px 0;
+}
+
+.hero-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    align-items:center;
+}
+
+.badge{
+    display:inline-block;
+    background:#FFC300;
+    color:#000;
+    padding:10px 20px;
+    border-radius:50px;
+    font-weight:700;
+    margin-bottom:20px;
+}
+
+.hero h1{
+    font-size:52px;
+    margin-bottom:20px;
+}
+
+.hero p{
+    line-height:1.9;
+    margin-bottom:35px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.btn-primary{
+    background:#FFC300;
+    color:#000;
+    padding:15px 30px;
+    text-decoration:none;
+    border-radius:50px;
+    font-weight:700;
+}
+
+.btn-secondary{
+    border:2px solid #fff;
+    color:#fff;
+    padding:15px 30px;
+    text-decoration:none;
+    border-radius:50px;
+}
+
+.hero-image img{
+    width:100%;
+    border-radius:25px;
+    box-shadow:var(--shadow);
+}
+
+/* SECTION */
+
+section{
+    padding:90px 0;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:60px;
+}
+
+.section-title h2{
+    font-size:42px;
+    color:var(--primary);
+    margin-bottom:15px;
+}
+
+/* PROFILE */
+
+.profile-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:50px;
+    align-items:center;
+}
+
+.profile-grid img{
+    width:100%;
+    border-radius:20px;
+    box-shadow:var(--shadow);
+}
+
+.profile-grid h3{
+    color:var(--navy);
+    font-size:32px;
+    margin-bottom:20px;
+}
+
+.profile-grid p{
+    line-height:1.9;
+    margin-bottom:20px;
+}
+
+.profile-grid ul{
+    margin-left:20px;
+}
+
+.profile-grid li{
+    margin-bottom:12px;
+}
+
+/* STATS */
+
+.stats{
+    background:var(--primary);
+    color:#fff;
+}
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:30px;
+    text-align:center;
+}
+
+.stats h2{
+    font-size:55px;
+}
+
+.stats p{
+    margin-top:10px;
+}
+
+/* EXPERTISE */
+
+.expertise{
+    background:#F5F7FA;
+}
+
+.expertise-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:30px;
+}
+
+.card{
+    background:#fff;
+    padding:35px;
+    text-align:center;
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+}
+
+.card i{
+    font-size:45px;
+    color:var(--secondary);
+    margin-bottom:20px;
+}
+
+.card h3{
+    margin-bottom:15px;
+    color:var(--primary);
+}
+
+.card p{
+    line-height:1.7;
+}
+
+/* PROCESS */
+
+.timeline{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:20px;
+}
+
+.step{
+    background:#fff;
+    text-align:center;
+    padding:30px 20px;
+    border-radius:20px;
+    box-shadow:var(--shadow);
+}
+
+.step h3{
+    color:var(--secondary);
+    font-size:35px;
+    margin-bottom:10px;
+}
+
+/* GALLERY */
+
+.gallery{
+    background:#F5F7FA;
+}
+
+.gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.gallery-grid img{
+    width:100%;
+    height:260px;
+    object-fit:cover;
+    border-radius:20px;
+    transition:.4s;
+}
+
+.gallery-grid img:hover{
+    transform:scale(1.05);
+}
+
+/* CTA */
+
+.cta{
+    background:var(--navy);
+    color:#fff;
+    text-align:center;
+}
+
+.cta h2{
+    font-size:42px;
+    margin-bottom:20px;
+}
+
+.cta p{
+    max-width:700px;
+    margin:auto;
+    margin-bottom:35px;
+    line-height:1.8;
+}
+
+.cta a{
+    display:inline-block;
+    text-decoration:none;
+    background:#FFC300;
+    color:#000;
+    padding:18px 40px;
+    border-radius:50px;
+    font-weight:700;
+}
+
+/* FOOTER */
+
+footer{
+    background:#08172d;
+    color:#fff;
+    text-align:center;
+    padding:35px 20px;
+}
+
+footer h2{
+    margin-bottom:10px;
+}
+
+/* WHATSAPP */
+
+.whatsapp{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    width:65px;
+    height:65px;
+    background:#25D366;
+    color:#fff;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:34px;
+    text-decoration:none;
+    box-shadow:0 5px 20px rgba(0,0,0,.3);
+    z-index:9999;
+}
+
+.whatsapp:hover{
+    transform:scale(1.1);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:992px){
+
+.hero-grid,
+.profile-grid{
+    grid-template-columns:1fr;
+}
+
+.expertise-grid{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.stats-grid{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.timeline{
+    grid-template-columns:repeat(3,1fr);
+}
+
+.gallery-grid{
+    grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+@media(max-width:768px){
+
+.nav{
+    flex-direction:column;
+    gap:20px;
+}
+
+nav ul{
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:15px;
+}
+
+.hero{
+    text-align:center;
+}
+
+.hero h1{
+    font-size:38px;
+}
+
+.hero-buttons{
+    justify-content:center;
+}
+
+.section-title h2{
+    font-size:32px;
+}
+
+.expertise-grid{
+    grid-template-columns:1fr;
+}
+
+.stats-grid{
+    grid-template-columns:1fr;
+}
+
+.timeline{
+    grid-template-columns:1fr;
+}
+
+.gallery-grid{
+    grid-template-columns:1fr;
+}
+
+.profile-grid h3{
+    font-size:28px;
+}
+
+.logo h2{
+    font-size:22px;
+}
+
+.logo img{
+    width:55px;
+}
+
+.whatsapp{
+    width:60px;
+    height:60px;
+    font-size:30px;
+}
+
+}
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Lead Installer | AE Renewable Ltd</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="installer.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+<div class="container nav">
+
+<a href="index.html" class="logo">
+
+<img src="/LETS_GO/images/WhatsApp Image 2026-06-10 at 09.47.00.jpeg" alt="AE Renewable Ltd">
+
+<h2>AE <span>Renewable Ltd</span></h2>
+
+</a>
+
+<nav>
+
+<ul>
+
+<li><a href="index.html">Home</a></li>
+
+<li><a href="about.html">About</a></li>
+
+<li><a href="services.html">Services</a></li>
+
+<li><a href="projects.html">Projects</a></li>
+
+<li><a href="contact.html">Contact</a></li>
+
+</ul>
+
+</nav>
+
+</div>
+
+</header>
+
+<!-- HERO -->
+
+<section class="hero">
+
+<div class="container hero-grid">
+
+<div class="hero-text">
+
+<span class="badge">
+
+Lead Installation Engineer
+
+</span>
+
+<h1>
+
+Meet Our Professional Installer
+
+</h1>
+
+<p>
+
+Every successful renewable energy project starts with
+proper engineering, quality workmanship and attention
+to detail.
+
+At AE Renewable Ltd, every installation is carried out
+to international engineering standards, ensuring
+maximum efficiency, safety and long-term reliability.
+
+</p>
+
+<div class="hero-buttons">
+
+<a href="consultation.html" class="btn-primary">
+
+Book Consultation
+
+</a>
+
+<a href="projects.html" class="btn-secondary">
+
+View Projects
+
+</a>
+
+</div>
+
+</div>
+
+<div class="hero-image">
+
+<img src="images/project1.jpg" alt="Installer">
+
+</div>
+
+</div>
+
+</section>
+
+<!-- PROFILE -->
+
+<section class="profile">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>Professional Profile</h2>
+
+<p>
+
+Engineering Excellence Through Practical Experience
+
+</p>
+
+</div>
+
+<div class="profile-grid">
+
+<div>
+
+<img src="/LETS_GO/images/installerface2.jpeg" alt="Engineer">
+
+</div>
+
+<div>
+
+<h3>
+
+Lead Renewable Energy Engineer
+
+</h3>
+
+<p>
+
+Specialized in the design, installation,
+testing and maintenance of solar energy systems,
+hybrid inverter systems,
+lithium battery storage,
+electrical engineering,
+CCTV security systems
+and preventive maintenance.
+
+</p>
+
+<p>
+
+Committed to delivering safe,
+efficient and reliable renewable energy
+solutions for residential,
+commercial and industrial clients.
+
+</p>
+
+<ul>
+
+<li>Solar Energy Specialist</li>
+
+<li>Hybrid Inverter Expert</li>
+
+<li>Lithium Battery Integration</li>
+
+<li>CCTV Installation</li>
+
+<li>Electrical Engineering</li>
+
+<li>Preventive Maintenance</li>
+
+<li>Testing & Commissioning</li>
+
+<li>Site Survey & Design</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- STATS -->
+
+<section class="stats">
+
+<div class="container stats-grid">
+
+<div>
+
+<h2>100+</h2>
+
+<p>Projects Completed</p>
+
+</div>
+
+<div>
+
+<h2>99%</h2>
+
+<p>Customer Satisfaction</p>
+
+</div>
+
+<div>
+
+<h2>24/7</h2>
+
+<p>Support</p>
+
+</div>
+
+<div>
+
+<h2>5+</h2>
+
+<p>Engineering Services</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- EXPERTISE -->
+
+<section class="expertise">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>Core Expertise</h2>
+
+</div>
+
+<div class="expertise-grid">
+
+<div class="card">
+
+<i class="fa-solid fa-solar-panel"></i>
+
+<h3>
+
+Solar Energy
+
+</h3>
+
+<p>
+
+Residential and Commercial
+Solar Installation
+
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-bolt"></i>
+
+<h3>
+
+Hybrid Inverters
+
+</h3>
+
+<p>
+
+Hybrid Power Systems
+Installation
+
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-battery-full"></i>
+
+<h3>
+
+Lithium Batteries
+
+</h3>
+
+<p>
+
+Energy Storage Systems
+
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-video"></i>
+
+<h3>
+
+CCTV Security
+
+</h3>
+
+<p>
+
+Professional Surveillance
+Installation
+
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-plug-circle-bolt"></i>
+
+<h3>
+
+Electrical Engineering
+
+</h3>
+
+<p>
+
+Industrial & Commercial
+Electrical Systems
+
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-screwdriver-wrench"></i>
+
+<h3>
+
+Maintenance
+
+</h3>
+
+<p>
+
+Testing,
+Commissioning
+and Repairs
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- INSTALLATION PROCESS -->
+
+<section class="process">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>
+
+Installation Process
+
+</h2>
+
+</div>
+
+<div class="timeline">
+
+<div class="step">
+
+<h3>01</h3>
+
+<p>Consultation</p>
+
+</div>
+
+<div class="step">
+
+<h3>02</h3>
+
+<p>Site Survey</p>
+
+</div>
+
+<div class="step">
+
+<h3>03</h3>
+
+<p>Engineering Design</p>
+
+</div>
+
+<div class="step">
+
+<h3>04</h3>
+
+<p>Installation</p>
+
+</div>
+
+<div class="step">
+
+<h3>05</h3>
+
+<p>Testing</p>
+
+</div>
+
+<div class="step">
+
+<h3>06</h3>
+
+<p>Maintenance</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- GALLERY -->
+
+<section class="gallery">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>
+
+Project Gallery
+
+</h2>
+
+</div>
+
+<div class="gallery-grid">
+
+<img src="images/project1.jpg">
+
+<img src="images/project2.jpg">
+
+<img src="images/project3.jpg">
+
+<img src="images/project1.jpg">
+
+<img src="images/project2.jpg">
+
+<img src="images/project3.jpg">
+
+</div>
+
+</div>
+
+</section>
+
+<!-- CTA -->
+
+<section class="cta">
+
+<div class="container">
+
+<h2>
+
+Let's Build Your Energy Future
+
+</h2>
+
+<p>
+
+Speak with our installation team
+today for a professional consultation.
+
+</p>
+
+<a href="consultation.html">
+
+Book Consultation
+
+</a>
+
+</div>
+
+</section>
+
+<footer>
+
+<div class="container">
+
+<h2>
+
+AE Renewable Ltd
+
+</h2>
+
+<p>
+
+Powering A Sustainable Future.
+
+</p>
+
+</div>
+
+</footer>
+
+<a href="https://wa.me/2348000000000" class="whatsapp">
+
+<i class="fab fa-whatsapp"></i>
+
+</a>
+
+</body>
+</html>
