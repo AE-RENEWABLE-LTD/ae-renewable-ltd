@@ -83,15 +83,38 @@ nav a{
 /* HERO */
 
 .hero{
-    background:linear-gradient(135deg,#004AAD,#00B140);
-    color:white;
-    text-align:center;
-    padding:120px 20px;
+      position: relative;
+    overflow: hidden;
+    min-height: 40vh;
+    color: #fff;
+    text-align: center;
+    padding: 120px 20px;
 }
+.hero-bg{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+}
+
+.hero-overlay{
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: -1;
+}
+
 
 .hero h1{
     font-size:3.5rem;
     margin-bottom:20px;
+}
+.hero .container{
+    position: relative;
+    z-index: 2;
 }
 
 .hero p{
@@ -240,7 +263,7 @@ nav a{
 /* CTA */
 
 .cta{
-    background:url(/LETS_GO/images/frontpageUi.jpeg);
+    background:linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),url("images/frontpageUi.jpeg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -344,6 +367,12 @@ AE <span>Renewable</span>
 
 <section class="hero">
 
+    <video class="hero-bg" autoplay muted loop playsinline>
+        <source src="images/tiktok_spacefoxsolar_7651259422811114772.mp4" type="video/mp4">
+    </video>
+
+    <div class="hero-overlay"></div>
+
 <div class="container">
 
 <h1>Explore Our Projects</h1>
@@ -372,7 +401,7 @@ Discover how AE Renewable Ltd has transformed homes, businesses and institutions
 </div>
 
 <div class="stat-card">
-<h2>20MW+</h2>
+<h2>2MW+</h2>
 <p>Solar Installed</p>
 </div>
 
@@ -405,7 +434,73 @@ Discover how AE Renewable Ltd has transformed homes, businesses and institutions
 <div class="project-card">
 
 <div class="project-image">
-<img src="/LETS_GO/images/instaler.jpeg" alt="">
+<img src="images/image00929.jpeg" alt="" background-size="cover" background-position="center" width="100%">
+</div>
+
+<div class="project-content">
+
+<h3>20kVA Hybrid Solar System</h3>
+
+<p>
+Complete solar installation with lithium battery storage and smart monitoring.
+</p>
+
+<div class="project-info">
+<span>Residential</span>
+<span>Abuja</span>
+</div>
+
+</div>
+
+</div>
+<div class="project-card">
+
+<div class="project-image">
+<img src="images/image00502.jpeg" alt="" background-size="cover" background-position="center" width="100%">
+</div>
+
+<div class="project-content">
+
+<h3>12kVA Hybrid Solar System</h3>
+
+<p>
+Complete solar installation with lithium battery storage and smart monitoring.
+</p>
+
+<div class="project-info">
+<span>Residential</span>
+<span>Abuja</span>
+</div>
+
+</div>
+
+</div>
+<div class="project-card">
+
+<div class="project-image">
+<img src="images/image00934.jpeg" alt="" background-size="cover" background-position="center" width="100%">
+</div>
+
+<div class="project-content">
+
+<h3>12kVA Hybrid Solar System</h3>
+
+<p>
+Complete solar installation with lithium battery storage and smart monitoring.
+</p>
+
+<div class="project-info">
+<span>Residential</span>
+<span>Abuja</span>
+</div>
+
+</div>
+
+</div>
+<div class="project-card">
+
+<div class="project-image">
+<img src="images/image00510.jpeg" alt="" background-size="cover" background-position="center" width="100%">
 </div>
 
 <div class="project-content">
@@ -428,7 +523,73 @@ Complete solar installation with lithium battery storage and smart monitoring.
 <div class="project-card">
 
 <div class="project-image">
-<img src="/LETS_GO/images/utakoinverterdone.jpeg" alt="">
+<img src="images/image00001.jpeg" alt="" width="100%" background-size="cover" background-position="center">
+</div>
+
+<div class="project-content">
+
+<h3>30kWh Commercial Backup System</h3>
+
+<p>
+Reliable energy storage solution for business continuity.
+</p>
+
+<div class="project-info">
+<span>Commercial</span>
+<span>Nigeria</span>
+</div>
+
+</div>
+
+</div>
+<div class="project-card">
+
+<div class="project-image">
+<img src="images/image00646.jpeg" alt="" width="100%" background-size="cover" background-position="center">
+</div>
+
+<div class="project-content">
+
+<h3>0kWh Commercial Backup System</h3>
+
+<p>
+Reliable energy storage solution for business continuity.
+</p>
+
+<div class="project-info">
+<span>Commercial</span>
+<span>Nigeria</span>
+</div>
+
+</div>
+
+</div>
+<div class="project-card">
+
+<div class="project-image">
+<img src="images/image00517.jpeg" alt="" width="100%" background-size="cover" background-position="center">
+</div>
+
+<div class="project-content">
+
+<h3>30kWh Commercial Backup System</h3>
+
+<p>
+Reliable energy storage solution for business continuity.
+</p>
+
+<div class="project-info">
+<span>Commercial</span>
+<span>Nigeria</span>
+</div>
+
+</div>
+
+</div>
+<div class="project-card">
+
+<div class="project-image">
+<img src="images/image00217.jpeg" alt="" width="100%" background-size="cover" background-position="center">
 </div>
 
 <div class="project-content">
@@ -451,7 +612,7 @@ Reliable energy storage solution for business continuity.
 <div class="project-card">
 
 <div class="project-image">
-<img src="/LETS_GO/images/instaler.jpeg" alt="">
+<img src="images/survellance.jpeg" alt="" background-size="cover" background-position="center" width="100%">
 </div>
 
 <div class="project-content">
@@ -527,6 +688,8 @@ Advanced surveillance system with remote monitoring.
 <p>
 AE Renewable delivered exactly what they promised. Excellent workmanship and support.
 </p>
+<span class="rating">
+    <span>⭐⭐⭐</span>
 <h4>Residential Client</h4>
 </div>
 
@@ -534,6 +697,10 @@ AE Renewable delivered exactly what they promised. Excellent workmanship and sup
 <p>
 Our business now enjoys uninterrupted power supply thanks to their team.
 </p>
+<!-- span rated star -->
+<span class="rating">
+    <span>⭐⭐⭐⭐⭐</span>
+</span>
 <h4>Commercial Client</h4>
 </div>
 
@@ -541,6 +708,9 @@ Our business now enjoys uninterrupted power supply thanks to their team.
 <p>
 Professional engineers, quality equipment and outstanding service.
 </p>
+<span class="rating">
+    <span>⭐⭐⭐⭐⭐</span>
+</span>
 <h4>Institutional Client</h4>
 </div>
 
