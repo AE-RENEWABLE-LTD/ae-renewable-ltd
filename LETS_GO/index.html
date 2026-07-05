@@ -57,6 +57,12 @@ header{
     align-items:center;
     padding:15px 20px;
 }
+.menu-toggle{
+    display:none;
+    font-size:30px;
+    cursor:pointer;
+    color:var(--navy);
+}
 
 .logo{
     font-size:1.4rem;
@@ -83,6 +89,53 @@ header{
 .nav-links a:hover{
     color:var(--secondary);
 }
+
+/* ////////////////////////////////////////////// */
+@media(max-width:768px){
+
+.menu-toggle{
+    display:block;
+}
+
+.nav-links{
+    display:none;
+    position:absolute;
+    top:75px;
+    left:0;
+    width:100%;
+    background:#fff;
+    flex-direction:column;
+    text-align:center;
+    padding:20px 0;
+    box-shadow:0 10px 20px rgba(0,0,0,.1);
+}
+
+.nav-links.active{
+    display:flex;
+}
+
+.nav-links a{
+    padding:15px;
+}
+
+.hero h1{
+    font-size:2.2rem;
+}
+
+.hero p{
+    font-size:1rem;
+}
+
+.section-title h2{
+    font-size:2rem;
+}
+
+.cta h2{
+    font-size:2rem;
+}
+
+}
+/* /////////////////////////////////// */
 
 /* HERO */
 
@@ -420,25 +473,24 @@ footer{
 
 <header>
 <div class="navbar">
-<div class="logo">AE <span>Renewable</span></div>
-<!-- <div class="company-brand">
 
-    <img src="images/logo.png" alt="AE Renewable Ltd Logo">
-
-    <div class="company-name">
-        AE Renewable Ltd
+    <div class="logo">
+        AE <span>Renewable</span>
     </div>
 
-</div> -->
+    <div class="nav-links" id="navLinks">
+        <a href="./index.html">Home</a>
+        <a href="./aboutUs.html">About</a>
+        <a href="#">Services</a>
+        <a href="./project.html">Projects</a>
+        <a href="./contact.html">Contact</a>
+        <a href="./installert.html">Installer</a>
+    </div>
 
-<div class="nav-links">
-<a href="./index.html">Home</a>
-<a href="./aboutUs.html">About</a>
-<a href="#">Services</a>
-<a href="./project.html">Projects</a>
-<a href="./contact.html">Contact</a>
- <a href="./installert.html">Installer</a>
-</div>
+    <div class="menu-toggle" onclick="toggleMenu()">
+        ☰
+    </div>
+
 </div>
 </header>
 
@@ -693,4 +745,10 @@ Get Free Consultation
 </footer>
 
 </body>
+
+<script>
+function toggleMenu() {
+    document.getElementById("navLinks").classList.toggle("active");
+}
+</script>
 </html>
