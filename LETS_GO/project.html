@@ -78,14 +78,40 @@ nav a{
 /* HERO */
 
 .hero{
-    height: 70vh;
     width: 100%;
-    background:url("images/project_hero.png") no-repeat center center/cover;
-    color:white;
+    min-height: 70vh; /* Full screen height */
+    background: url("images/project_hero.png") no-repeat center center;
+    background-size: cover;
 
-    text-align:center;
-    padding:130px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    color: #fff;
+
+    padding: 20px;
+    box-sizing: border-box;
 }
+.hero{
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    /* background: rgba(0,0,0,.45); */
+}
+
+.hero > *{
+    position: relative;
+    z-index: 1;
+}
+/* ///////////// */
+
 
 .hero h1{
     font-size:4rem;
