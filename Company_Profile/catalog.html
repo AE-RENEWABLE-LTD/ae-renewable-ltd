@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Project Catalog</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:#f5f7fa;
+}
+
+.catalog-header{
+    background:#0b3d2e;
+    color:#fff;
+    text-align:center;
+    padding:120px 20px;
+}
+
+.catalog-header h1{
+    font-size:3rem;
+    margin-bottom:15px;
+}
+
+.catalog-header p{
+    max-width:700px;
+    margin:auto;
+    line-height:1.8;
+}
+
+.catalog{
+    width:90%;
+    max-width:1300px;
+    margin:60px auto;
+
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:30px;
+}
+
+.card{
+    background:#fff;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+}
+
+.card img{
+    width:100%;
+    height:250px;
+    object-fit:cover;
+    display:block;
+}
+
+.card-content{
+    padding:25px;
+}
+
+.card-content h3{
+    color:#0b3d2e;
+    margin-bottom:10px;
+}
+
+.card-content p{
+    color:#555;
+    line-height:1.7;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.catalog-header h1{
+    font-size:2rem;
+}
+
+.catalog{
+    grid-template-columns:1fr;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<header class="catalog-header">
+    <h1>Our Project Catalog</h1>
+    <p>
+        Explore some of our completed solar, inverter, CCTV and electrical engineering projects across Nigeria.
+    </p>
+</header>
+
+<section class="catalog">
+
+<div class="card">
+<img src="images/project1.jpg" alt="">
+<div class="card-content">
+<h3>Residential Solar Installation</h3>
+<p>5kW solar system with lithium battery backup.</p>
+</div>
+</div>
+
+<div class="card">
+<img src="images/project2.jpg" alt="">
+<div class="card-content">
+<h3>Commercial Solar Plant</h3>
+<p>50kW installation powering offices and production equipment.</p>
+</div>
+</div>
+
+<div class="card">
+<img src="images/project3.jpg" alt="">
+<div class="card-content">
+<h3>CCTV Security System</h3>
+<p>32-channel surveillance system with remote monitoring.</p>
+</div>
+</div>
+
+<div class="card">
+<img src="images/project4.jpg" alt="">
+<div class="card-content">
+<h3>Electrical Wiring</h3>
+<p>Complete electrical installation for a modern residential building.</p>
+</div>
+</div>
+
+<div class="card">
+<img src="images/project5.jpg" alt="">
+<div class="card-content">
+<h3>Inverter Installation</h3>
+<p>10kVA hybrid inverter with lithium battery bank.</p>
+</div>
+</div>
+
+<div class="card">
+<img src="images/project6.jpg" alt="">
+<div class="card-content">
+<h3>Street Solar Lighting</h3>
+<p>Installation of high-efficiency solar-powered street lights.</p>
+</div>
+</div>
+
+</section>
+
+</body>
+</html>

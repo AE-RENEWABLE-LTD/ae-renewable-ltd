@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Installer Tool Kit</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <header>
+
+        <div class="title-row">
+
+            <h1>Installer Tool Kit</h1>
+
+            <span class="badge">
+                100% Accuracy.
+            </span>
+
+        </div>
+
+        <p>
+            Complete Solar Design & Sizing Toolkit – from Load to Quotation.
+        </p>
+
+    </header>
+
+
+<section class="card">
+
+<div class="card-header">
+
+<h2>System Sizing</h2>
+
+<p>
+Enter your system parameters to calculate solar system requirements.
+</p>
+
+</div>
+
+
+
+<form id="sizingForm">
+
+<div class="grid">
+
+<div class="form-group">
+
+<label>Total Load Power (W)</label>
+
+<input
+type="number"
+placeholder="e.g. 1000"
+id="load">
+
+<small>
+
+📋 Scan devices or enter manually
+
+</small>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>Backup Time (hr/day)</label>
+
+<input
+type="number"
+value="8"
+id="backup">
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>Optional: Peak Sun Hours (PSH)</label>
+
+<input
+type="number"
+value="5"
+step="0.1">
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>Optional: Panel Factor (%)</label>
+
+<input
+type="number"
+value="1.3"
+step="0.1">
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>Optional: Depth of Discharge</label>
+
+<input
+type="number"
+value="0.8"
+step="0.1">
+
+</div>
+
+
+
+<div class="form-group">
+
+<label>Optional: System Losses</label>
+
+<input
+type="number"
+value="0.8"
+step="0.1">
+
+</div>
+
+</div>
+
+
+
+<div class="battery">
+
+<label>Percentage load % on battery</label>
+
+<input
+type="number"
+value="100"
+id="batteryInput">
+
+</div>
+
+
+
+<div class="percent-buttons">
+
+<button type="button" class="percent active">100%</button>
+
+<button type="button" class="percent">90%</button>
+
+<button type="button" class="percent">80%</button>
+
+<button type="button" class="percent">70%</button>
+
+<button type="button" class="percent">60%</button>
+
+<button type="button" class="percent">50%</button>
+
+<button type="button" class="percent">40%</button>
+
+<button type="button" class="percent">30%</button>
+
+<button type="button" class="percent">20%</button>
+
+<button type="button" class="percent">10%</button>
+
+</div>
+
+
+
+<div class="action-buttons">
+
+<button class="main-btn">
+
+⚡ Compute Array
+
+</button>
+
+<button
+type="reset"
+class="secondary-btn">
+
+Reset
+
+</button>
+
+<button
+type="button"
+class="secondary-btn">
+
+Quotation
+
+</button>
+
+</div>
+
+</form>
+
+</section>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
