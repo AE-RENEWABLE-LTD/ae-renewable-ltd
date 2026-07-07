@@ -198,16 +198,203 @@ Reset
 
 </button>
 
-<button
-type="button"
-class="secondary-btn">
-
-Quotation
-
+<button class="main-btn" id="showResultBtn">
+    📋 View System Report
 </button>
 
 </div>
 
+
+<div class="result-card" id="resultCard">
+
+    <h2>System Design Result</h2>
+
+    <!-- ================= SYSTEM SUMMARY ================= -->
+
+    <div class="result-section">
+
+        <h3>System Summary</h3>
+
+        <div class="result-grid">
+
+            <div class="result-item">
+                <span>Load Power</span>
+                <strong id="rLoad">-</strong>
+            </div>
+
+            <div class="result-item">
+                <span>Backup Time</span>
+                <strong id="rBackup">-</strong>
+            </div>
+
+            <div class="result-item">
+                <span>Daily Energy</span>
+                <strong id="rEnergy">-</strong>
+            </div>
+
+            <div class="result-item">
+                <span>Battery Size</span>
+                <strong id="rBattery">-</strong>
+            </div>
+
+            <div class="result-item">
+                <span>Solar PV Required</span>
+                <strong id="rPV">-</strong>
+            </div>
+
+            <div class="result-item">
+                <span>750W Panels</span>
+                <strong id="rPanels">-</strong>
+            </div>
+
+            <div class="result-item">
+                <span>Recommended Inverter</span>
+                <strong id="rInverter">-</strong>
+            </div>
+
+            <div class="result-item">
+                <span>Quantity</span>
+                <strong id="rQty">-</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= MATERIAL LIST ================= -->
+<!-- ================= MATERIAL REQUIREMENT ================= -->
+
+<div class="result-section">
+
+    <h3>Material Requirement</h3>
+
+    <div class="result-grid">
+
+        <div class="result-item">
+            <span>Solar Panel (750W)</span>
+            <strong id="mPanelQty">0 pcs</strong>
+            <small>₦<span id="mPanelPrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>Inverter</span>
+            <strong id="mInvQty">0</strong>
+            <small>₦<span id="mInvPrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>Lithium Battery</span>
+            <strong id="mBatteryQty">0</strong>
+            <small>₦<span id="mBatteryPrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>PV Combiner Box</span>
+            <strong id="mCombinerQty">0</strong>
+            <small>₦<span id="mCombinerPrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>MC4 Connector Pair</span>
+            <strong id="mMC4Qty">0 Pair</strong>
+            <small>₦<span id="mMC4Price">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>Solar Cable (6mm²)</span>
+            <strong id="mSolarCableQty">0 m</strong>
+            <small>₦<span id="mSolarCablePrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>AC Cable</span>
+            <strong id="mACCableQty">0 m</strong>
+            <small>₦<span id="mACCablePrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>AC Breaker</span>
+            <strong id="mACBreakerQty">0</strong>
+            <small>₦<span id="mACBreakerPrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>DC Breaker</span>
+            <strong id="mDCBreakerQty">0</strong>
+            <small>₦<span id="mDCBreakerPrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>SPD</span>
+            <strong id="mSPDQty">0</strong>
+            <small>₦<span id="mSPDPrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>Busbar</span>
+            <strong id="mBusbarQty">0</strong>
+            <small>₦<span id="mBusbarPrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>Cable Lug</span>
+            <strong id="mCableLugQty">0</strong>
+            <small>₦<span id="mCableLugPrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>Flexible Pipe</span>
+            <strong id="mFlexQty">0</strong>
+            <small>₦<span id="mFlexPrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>PVC Pipe</span>
+            <strong id="mPVCQty">0</strong>
+            <small>₦<span id="mPVCPrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>Trunking</span>
+            <strong id="mTrunkQty">0</strong>
+            <small>₦<span id="mTrunkPrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>Screw</span>
+            <strong id="mScrewQty">0 Pack</strong>
+            <small>₦<span id="mScrewPrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>Clip</span>
+            <strong id="mClipQty">0 Pack</strong>
+            <small>₦<span id="mClipPrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>Silicone</span>
+            <strong id="mSiliconeQty">0</strong>
+            <small>₦<span id="mSiliconePrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>Peg</span>
+            <strong id="mPegQty">0 Pack</strong>
+            <small>₦<span id="mPegPrice">0</span></small>
+        </div>
+
+        <div class="result-item">
+            <span>Bolt & Nut</span>
+            <strong id="mBoltQty">0 Pack</strong>
+            <small>₦<span id="mBoltPrice">0</span></small>
+        </div>
+
+    </div>
+
+</div>
+
+</div>
 </form>
 
 </section>

@@ -437,3 +437,58 @@ width:64px;
 }
 
 }
+
+
+
+
+/* /////////////////////////////// */
+
+.result-card{
+
+    margin-top:40px;
+    background:#101827;
+    border-radius:18px;
+    padding:30px;
+    border:1px solid rgba(255,255,255,.08);
+
+}
+
+.result-card h2{
+
+    margin-bottom:25px;
+    font-size:28px;
+
+}
+
+.result-grid{
+
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:18px;
+
+}
+
+.result-item{
+
+    background:#0b1220;
+    padding:18px;
+    border-radius:12px;
+
+}
+
+.result-item span{
+
+    display:block;
+    color:#94a3b8;
+    font-size:14px;
+
+}
+
+.result-item strong{
+
+    display:block;
+    margin-top:8px;
+    font-size:22px;
+    color:#fff;
+
+}
