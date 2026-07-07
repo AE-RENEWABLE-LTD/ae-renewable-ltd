@@ -98,7 +98,7 @@ ${batteryWh.toLocaleString()} Wh
 panel Number:
 ${panelsNumber.toLocaleString()} Wh
 
- Solar Array:
+ Solar Sizing:
 ${inverterChoose.toLocaleString()} pv W`
     );
 
