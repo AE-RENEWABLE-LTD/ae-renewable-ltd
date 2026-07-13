@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+ARDE V1.0 | AE Renewable Design Engine
+</title>
+
+<link
+rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="style.css">
+
+</head>
+
+<body>
+
+<!-- ========================================================= -->
+<!-- APPLICATION -->
+<!-- ========================================================= -->
+
+<div class="app">
+
+<!-- ========================================================= -->
+<!-- HEADER -->
+<!-- ========================================================= -->
+
+<header class="header">
+
+<div class="logo-area">
+
+<h1>
+
+AE Renewable
+
+<span>
+
+Design Engine
+
+</span>
+
+</h1>
+
+<p>
+
+ARDE Version 1.0
+
+</p>
+
+</div>
+
+<div class="header-right">
+
+<span class="status">
+
+Engineering Mode
+
+</span>
+
+</div>
+
+</header>
+
+<!-- ========================================================= -->
+<!-- NAVIGATION -->
+<!-- ========================================================= -->
+
+<nav class="navigation">
+
+<button>
+
+Dashboard
+
+</button>
+
+<button>
+
+Design
+
+</button>
+
+<button>
+
+Quotation
+
+</button>
+
+<button>
+
+Material
+
+</button>
+
+<button>
+
+Reports
+
+</button>
+
+</nav>
+
+<!-- ========================================================= -->
+<!-- MAIN -->
+<!-- ========================================================= -->
+
+<main class="main">
+
+<!-- ========================================================= -->
+<!-- SYSTEM INPUT -->
+<!-- ========================================================= -->
+
+<section class="card">
+
+<div class="card-header">
+
+<h2>
+
+System Input
+
+</h2>
+
+<p>
+
+Enter all required design information.
+
+</p>
+
+</div>
+
+<form id="designForm">
+
+<div class="grid">
+
+<!-- LOAD -->
+
+<div class="form-group">
+
+<label>
+
+Load Power (W)
+
+</label>
+
+<input
+
+type="number"
+
+id="load"
+
+placeholder="10000"
+
+required>
+
+</div>
+
+<!-- BACKUP -->
+
+<div class="form-group">
+
+<label>
+
+Backup Time (Hours)
+
+</label>
+
+<input
+
+type="number"
+
+id="backup"
+
+value="8"
+
+required>
+
+</div>
+
+<!-- PSH -->
+
+<div class="form-group">
+
+<label>
+
+Peak Sun Hours
+
+</label>
+
+<input
+
+type="number"
+
+id="psh"
+
+value="5"
+
+step="0.1">
+
+</div>
+
+<!-- PANEL FACTOR -->
+
+<div class="form-group">
+
+<label>
+
+Panel Factor
+
+</label>
+
+<input
+
+type="number"
+
+id="panelFactor"
+
+value="1.3"
+
+step="0.1">
+
+</div>
+
+<!-- DOD -->
+
+<div class="form-group">
+
+<label>
+
+Depth of Discharge
+
+</label>
+
+<input
+
+type="number"
+
+id="dod"
+
+value="0.8"
+
+step="0.1">
+
+</div>
+
+<!-- LOSSES -->
+
+<div class="form-group">
+
+<label>
+
+System Losses
+
+</label>
+
+<input
+
+type="number"
+
+id="losses"
+
+value="0.8"
+
+step="0.1">
+
+</div>
+
+<!-- BATTERY -->
+
+<div class="form-group">
+
+<label>
+
+Battery Percentage
+
+</label>
+
+<input
+
+type="number"
+
+id="batteryPercent"
+
+value="100">
+
+</div>
+
+</div>
+
+<!-- ACTION BUTTONS -->
+
+<div class="button-group">
+
+<button
+
+type="submit"
+
+class="primary">
+
+⚡ Compute Design
+
+</button>
+
+<button
+
+type="reset"
+
+class="secondary">
+
+Reset
+
+</button>
+
+<button
+
+type="button"
+
+id="generateQuotation">
+
+Quotation
+
+</button>
+
+<button
+
+type="button"
+
+id="generateBOQ">
+
+BOQ
+
+</button>
+
+<button
+
+type="button"
+
+id="printReport">
+
+Print
+
+</button>
+
+<button
+
+type="button"
+
+id="exportPDF">
+
+Export PDF
+
+</button>
+
+</div>
+
+</form>
+
+</section>
+
+
+<!-- ////////////////////////////// -->
+          <!-- PART 2 -->
+ <!-- /////////////////////////////  -->
+
+ <!-- ========================================================= -->
+<!-- SYSTEM DESIGN RESULT -->
+<!-- ========================================================= -->
+
+<section class="card">
+
+    <div class="card-header">
+
+        <h2>System Design Result</h2>
+
+        <p>
+            Calculated system sizing and equipment selection.
+        </p>
+
+    </div>
+
+    <div class="result-grid">
+
+        <div class="result-item">
+            <span>Load Power</span>
+            <strong id="resultLoadPower">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>Backup Time</span>
+            <strong id="resultBackupTime">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>Daily Energy</span>
+            <strong id="resultDailyEnergy">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>Battery Requirement</span>
+            <strong id="resultBatteryEnergy">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>Solar PV Required</span>
+            <strong id="resultSolarPV">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>Selected Panel</span>
+            <strong id="resultPanelModel">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>Panel Quantity</span>
+            <strong id="resultPanelQuantity">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>Selected Inverter</span>
+            <strong id="resultInverterModel">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>Inverter Quantity</span>
+            <strong id="resultInverterQuantity">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>Battery Model</span>
+            <strong id="resultBatteryModel">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>Battery Quantity</span>
+            <strong id="resultBatteryQuantity">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>Installed Battery</span>
+            <strong id="resultInstalledBattery">-</strong>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ========================================================= -->
+<!-- PROTECTION DESIGN -->
+<!-- ========================================================= -->
+
+<section class="card">
+
+    <div class="card-header">
+
+        <h2>Protection Design</h2>
+
+        <p>
+
+            Automatic breaker and protection sizing.
+
+        </p>
+
+    </div>
+
+    <div class="result-grid">
+
+        <div class="result-item">
+
+            <span>AC Output Current</span>
+
+            <strong id="resultOutputCurrent">-</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>Output Breaker</span>
+
+            <strong id="resultOutputBreaker">-</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>AC Input Current</span>
+
+            <strong id="resultInputCurrent">-</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>Input Breaker</span>
+
+            <strong id="resultInputBreaker">-</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>PV Current</span>
+
+            <strong id="resultPVCurrent">-</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>PV Breaker</span>
+
+            <strong id="resultPVBreaker">-</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>Battery Breaker</span>
+
+            <strong id="resultBatteryBreaker">-</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>DC SPD</span>
+
+            <strong id="resultDCSPD">-</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>AC SPD</span>
+
+            <strong id="resultACSPD">-</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>Earth Cable</span>
+
+            <strong id="resultEarthCable">-</strong>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ========================================================= -->
+<!-- PV STRING CONFIGURATION -->
+<!-- ========================================================= -->
+
+<!-- <section class="card">
+
+    <div class="card-header">
+
+        <h2>PV String Configuration</h2>
+
+        <p>
+
+            Automatic PV string calculation.
+
+        </p>
+
+    </div>
+
+    <div class="result-grid">
+
+        <div class="result-item">
+
+            <span>Panels Per String</span>
+
+            <strong id="resultPanelsPerString">-</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>Number of Strings</span>
+
+            <strong id="resultStringCount">-</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>MPPT</span>
+
+            <strong id="resultMPPT">-</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>Strings / MPPT</span>
+
+            <strong id="resultStringsPerMPPT">-</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>PV Combiner</span>
+
+            <strong id="resultCombiner">-</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>MC4 Connector Pair</span>
+
+            <strong id="resultMC4">-</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>Maximum PV Voltage</span>
+
+            <strong id="resultPVVoltage">-</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>String Voltage</span>
+
+            <strong id="resultStringVoltage">-</strong>
+
+        </div>
+
+    </div>
+
+</section> -->
+
+<!-- //////////////////////////////////// -->
+                
+<!-- ///////////////////////////////////// -->
+
+<div class="result-section">
+
+    <h3>PV String Configuration</h3>
+
+    <div class="result-grid">
+
+        <div class="result-item">
+            <span>Panels / String</span>
+            <strong id="resultPanelsPerString">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>Total Strings</span>
+            <strong id="resultTotalStrings">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>Strings / MPPT</span>
+            <strong id="resultStringsPerMPPT">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>Remaining Panels</span>
+            <strong id="resultRemainingPanels">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>PV Combiner</span>
+            <strong id="resultCombiner">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>MC4 Connector Pairs</span>
+            <strong id="resultMC4">-</strong>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ========================================================= -->
+<!-- BILL OF MATERIALS -->
+<!-- ========================================================= -->
+
+<section class="card">
+
+    <div class="card-header">
+
+        <h2>Bill of Materials (BOQ)</h2>
+
+        <p>
+            Complete material schedule generated automatically.
+        </p>
+
+    </div>
+
+    <div class="table-wrapper">
+
+        <table id="materialTable">
+
+            <thead>
+
+                <tr>
+
+                    <th>SN</th>
+
+                    <th>Material</th>
+
+                    <th>Unit</th>
+
+                    <th>Quantity</th>
+
+                    <th>Unit Price</th>
+
+                    <th>Total</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="materialTableBody">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- ========================================================= -->
+<!-- COST SUMMARY -->
+<!-- ========================================================= -->
+
+<section class="card">
+
+    <div class="card-header">
+
+        <h2>Cost Summary</h2>
+
+        <p>
+
+            Automatic project costing.
+
+        </p>
+
+    </div>
+
+    <div class="result-grid">
+
+        <div class="result-item">
+
+            <span>Material Cost</span>
+
+            <strong id="materialCost">₦0</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>Labour Cost</span>
+
+            <strong id="labourCost">₦0</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>Transportation</span>
+
+            <strong id="transportCost">₦0</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>Installation</span>
+
+            <strong id="installationCost">₦0</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>VAT</span>
+
+            <strong id="vatCost">₦0</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>Profit</span>
+
+            <strong id="profitCost">₦0</strong>
+
+        </div>
+
+        <div class="result-item">
+
+            <span>Grand Total</span>
+
+            <strong id="grandTotal">₦0</strong>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ========================================================= -->
+<!-- ENGINEERING NOTES -->
+<!-- ========================================================= -->
+
+<section class="card">
+
+    <div class="card-header">
+
+        <h2>Engineering Notes</h2>
+
+    </div>
+
+    <div id="engineeringNotes">
+
+        <ul>
+
+            <li>System calculations follow the selected design parameters.</li>
+
+            <li>Verify site conditions before installation.</li>
+
+            <li>Confirm cable routes and lengths during site survey.</li>
+
+            <li>Ensure PV strings remain within inverter voltage limits.</li>
+
+            <li>Verify protection devices comply with applicable electrical standards.</li>
+
+        </ul>
+
+    </div>
+
+</section>
+
+</main>
+
+<!-- ========================================================= -->
+<!-- FOOTER -->
+<!-- ========================================================= -->
+
+<footer class="footer">
+
+    <p>
+
+        AE Renewable Ltd • ARDE V1.0 • Professional Solar Engineering Design Software
+
+    </p>
+
+</footer>
+
+</div>
+
+<script type="module" src="script.js"></script>
+
+</body>
+
+</html>

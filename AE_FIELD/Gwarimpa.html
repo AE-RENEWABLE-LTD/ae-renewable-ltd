@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AE Renewable Ltd - Maintenance & Repair Quotation</title>
+    <style>
+        :root {
+            --primary-blue: #0A3C82;
+            --primary-green: #388E3C;
+            --light-blue-bg: #F0F4FA;
+            --text-dark: #222222;
+            --text-muted: #555555;
+            --border-color: #D3E0EA;
+        }
+
+        body {
+            background-color: #F4F6F9;
+        color: var(--text-dark);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        }
+
+        .quotation-container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgb(0 0 0 / 0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Header Section */
+        .header {
+          display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 40px 20px 40px;
+        }
+
+        .company-info h1 {
+            color: var(--primary-blue);
+            margin: 0 0 5px 0;
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .company-info p {
+            margin: 0;
+            color: var(--primary-green);
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .quote-title {
+            text-align: right;
+        }
+
+        .quote-title h2 {
+            margin: 0 0 8px 0;
+            color: var(--primary-blue);
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .quote-title p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Project Description */
+        .project-description {
+            background-color: var(--light-blue-bg);
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 5px solid var(--primary-blue);
+            margin-bottom: 35px;
+        }
+
+        .project-description h3 {
+            margin: 0 0 10px 0;
+            color: var(--primary-blue);
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .project-description p {
+            margin: 0;
+            font-size: 14.5px;
+            color: var(--text-dark);
+            text-align: justify;
+        }
+
+        /* Table Styling */
+        .table-title {
+            color: var(--primary-blue);
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .table-title::after {
+            content: '';
+            flex: 1;
+            margin-left: 15px;
+            height: 1px;
+            background-color: var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 35px;
+        }
+
+        th {
+            background-color: var(--primary-blue);
+            color: #ffffff;
+            text-align: left;
+            padding: 14px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        th:first-child { border-top-left-radius: 6px; }
+        th:last-child { border-top-right-radius: 6px; }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14.5px;
+            color: var(--text-dark);
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafbfc;
+        }
+
+        tr:last-child td {
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* Summary Boxes */
+        .summary-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        .summary-box {
+            border: 1px solid var(--border-color);
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .summary-box h4 {
+            margin: 0 0 15px 0;
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--light-blue-bg);
+            padding-bottom: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .summary-box ul {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .summary-box li {
+            margin-bottom: 8px;
+        }
+        
+        .summary-box li strong {
+            color: var(--primary-blue);
+        }
+
+        /* Cost Summary Block */
+        .cost-summary {
+            background-color: var(--light-blue-bg);
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .cost-label {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-transform: uppercase;
+            margin-right: 20px;
+        }
+
+        .cost-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary-green);
+        }
+
+        /* Footer / Contact */
+        .footer {
+            border-top: 1px solid var(--border-color);
+            padding-top: 25px;
+            text-align: center;
+            font-size: 13.5px;
+            color: var(--text-muted);
+        }
+
+        .footer p {
+            margin: 0 0 15px 0;
+            font-weight: 600;
+            color: var(--primary-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-details {
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .contact-details span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Print optimization */
+        @media print {
+            body {
+                background-color: #ffffff;
+                padding: 0;
+            }
+            .quotation-container {
+                box-shadow: none;
+                padding: 0;
+                border: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="quotation-container">
+        <header class="header">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <img src="WhatsApp Image 2026-06-10 at 09.47.00.jpeg" alt="AE Renewable Logo" style="width: 80px; height: 60px;">
+                </div>
+                <div class="logo-text">
+                    <h1>AE RENEWABLE LTD</h1>
+                    <p>Solar | Inverter | CCTV | Smart Energy Solutions</p>
+                </div>
+            </div>
+            <div class="meta-area">
+                <p class="date"><strong>Date:</strong> 12 july 2026</p>
+                <div class="badge">QUOTATION</div>
+            </div>
+        </header>
+
+    <div class="project-description">
+        <h3>Project Description</h3>
+        <p>Comprehensive solar system restoration and maintenance profile designed for residential applications. This targeted scope of work covers the complete diagnostic overhaul and repair of the existing 8kVA Felicity IVPS Inverter, professional battery bank balance and high-current recabling, alongside general system correction to guarantee optimized safety and efficient continuous power delivery.</p>
+    </div>
+
+    <div class="table-title">Scope of Supply</div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 8%; text-align: center;">S/N</th>
+                <th style="width: 62%;">Description</th>
+                <th style="width: 15%; text-align: center;">Unit</th>
+                <th style="width: 15%; text-align: center;">Qty</th>
+                <th style="width: 15%; text-align: center;">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="text-center">1</td>
+                <td>Inverter Component Repair & Diagnostics Service (8kVA Felicity IVPS)</td>
+                <td class="text-center">Service</td>
+                <td class="text-center">1</td>
+                <td class="text-center">---.--</td>
+            </tr>
+            <tr>
+                <td class="text-center">2</td>
+                <td>35mm² Flexible Copper Cable (For individual battery streams)</td>
+                <td class="text-center">Meters</td>
+                <td class="text-center">6</td>
+                <td class="text-center">---,---</td>
+            </tr>
+            <tr>
+                <td class="text-center">3</td>
+                <td>75mm² Flexible Copper Cable (Heavy-duty Inverter main feed)</td>
+                <td class="text-center">Meters</td>
+                <td class="text-center">8</td>
+                <td class="text-center">---,---</td>
+            </tr>
+            <tr>
+                <td class="text-center">4</td>
+                <td>35mm² Copper Cable Lugs (Battery structural terminations)</td>
+                <td class="text-center">Pieces</td>
+                <td class="text-center">12</td>
+                <td class="text-center">---,---</td>
+            </tr>
+            <tr>
+                <td class="text-center">5</td>
+                <td>75mm² Copper Cable Lugs (Inverter DC linkage input)</td>
+                <td class="text-center">Pieces</td>
+                <td class="text-center">4</td>
+                <td class="text-center">---,---</td>
+            </tr>
+            <tr>
+                <td class="text-center">6</td>
+                <td>High-Current Copper Busbar (200A Minimum / 400A Recommended)</td>
+                <td class="text-center">Unit</td>
+                <td class="text-center">1</td>
+                <td class="text-center">---,---</td>
+            </tr>
+            <tr>
+                <td class="text-center">7</td>
+                <td>Heavy-Duty Cable Clips & Fastening Screws</td>
+                <td class="text-center">Packets</td>
+                <td class="text-center">1</td>
+                <td class="text-center">---,---</td>
+            </tr>
+            <tr>
+                <td class="text-center">8</td>
+                <td>Insulating Electrical Tape (Red - Positive Phase)</td>
+                <td class="text-center">Pieces</td>
+                <td class="text-center">1</td>
+                <td class="text-center">---,---</td>
+            </tr>
+            <tr>
+                <td class="text-center">9</td>
+                <td>Insulating Electrical Tape (Black - Negative Phase)</td>
+                <td class="text-center">Pieces</td>
+                <td class="text-center">1</td>
+                <td class="text-center">---,---</td>
+            </tr>
+            <tr>
+                <td class="text-center">10</td>
+                <td>System Re-wiring and Balancing, Logistics, Testing & Commissioning</td>
+                <td class="text-center">Service</td>
+                <td class="text-center">1</td>
+                <td class="text-center">---,---</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="summary-section">
+        <div class="summary-box">
+            <h4>System Service Summary</h4>
+            <ul>
+                <li><strong>Inverter Unit:</strong> 8kVA Felicity IVPS (Serviced/Repaired)</li>
+                <li><strong>DC Cabling Run:</strong> Upgraded to 75mm² low-resistance architecture</li>
+                <li><strong>Battery Strings:</strong> Balanced 35mm² inter-links directly to busbars</li>
+            </ul>
+        </div>
+        <div class="summary-box">
+            <h4>Safety & Engineering Targets</h4>
+            <ul>
+                <li>Strict balancing of parallel battery line resistances</li>
+                <li>Heavy-gauge industrial lug crimping to negate micro-arcing</li>
+                <li>Clean phase insulation split (Red/Black) across DC routes</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="cost-summary">
+        <div class="cost-label">Total Estimated Cost:</div>
+        <div class="cost-value">---,---</div>
+    </div>
+
+    <div class="footer">
+        <p>Thank you for your business!</p>
+        <div class="contact-details">
+            <span>📞 08133615132</span>
+            <span>✉️ Aerenewablesolution@gmail.com</span>
+            <span>🌐 Aerenewablesolution.com</span>
+      
