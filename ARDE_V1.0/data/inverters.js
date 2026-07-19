@@ -7,6 +7,29 @@ export const inverters = [
 
 {
     id:1,
+    brand:"Firman",
+    model:"FIR-1K-SG04LP1",
+
+    inverterSize:3000,
+    phase:1,
+
+    maxPvWatt:4000,
+
+    inverterPvVoltage:500,
+    inverterAcVoltage:230,
+    // inverterSizeAcInput:6000 , // Convert to current (A)
+    maxACChargeCurrent:40,
+
+    mppt:2,
+    stringsPerMppt:1,
+
+    batteryVoltage:48,
+
+    price:950000
+},
+
+{
+    id:1,
     brand:"Deye",
     model:"SUN-6K-SG04LP1",
 
@@ -17,7 +40,8 @@ export const inverters = [
 
     inverterPvVoltage:500,
     inverterAcVoltage:230,
-    inverterSizeAcInput:6000,
+    // inverterSizeAcInput:6000,
+    maxACChargeCurrent:60,
 
     mppt:2,
     stringsPerMppt:1,
@@ -39,7 +63,8 @@ export const inverters = [
 
     inverterPvVoltage:500,
     inverterAcVoltage:230,
-    inverterSizeAcInput:8000,
+    // inverterSizeAcInput:8000,
+    maxACChargeCurrent:120,
 
     mppt:2,
     stringsPerMppt:1,
@@ -61,7 +86,8 @@ export const inverters = [
 
     inverterPvVoltage:650,
     inverterAcVoltage:400,
-    inverterSizeAcInput:10000,
+    // inverterSizeAcInput:10000,
+    maxACChargeCurrent:150,
 
     mppt:2,
     stringsPerMppt:2,
@@ -83,7 +109,8 @@ export const inverters = [
 
     inverterPvVoltage:650,
     inverterAcVoltage:400,
-    inverterSizeAcInput:12000,
+    // inverterSizeAcInput:12000,
+    maxACChargeCurrent:150,
 
     mppt:2,
     stringsPerMppt:2,
@@ -105,7 +132,8 @@ export const inverters = [
 
     inverterPvVoltage:800,
     inverterAcVoltage:400,
-    inverterSizeAcInput:16000,
+    // inverterSizeAcInput:16000,
+    maxACChargeCurrent:150,
 
     mppt:2,
     stringsPerMppt:2,

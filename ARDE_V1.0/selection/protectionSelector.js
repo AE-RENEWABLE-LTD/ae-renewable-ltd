@@ -21,7 +21,7 @@ export function chooseProtection(system){
     // OUTPUT CURRENT
     // =====================================
 
-    const outputCurrent =
+    const acOutputCurrent =
 
         inverter.phase === 1
 
@@ -37,7 +37,7 @@ export function chooseProtection(system){
 
     const outputBreaker =
 
-        chooseBreaker(outputCurrent);
+        chooseBreaker(acOutputCurrent);
 
     // =====================================
     // INPUT CURRENT
@@ -97,7 +97,7 @@ export function chooseProtection(system){
 
     return{
 
-        outputCurrent,
+        acOutputCurrent,
         outputBreaker,
 
         inputCurrent,

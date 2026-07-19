@@ -36,50 +36,50 @@ export const panels = [
 
 },
 
-{
-    id:2,
+// {
+//     id:2,
 
-    brand:"Jinko",
+//     brand:"Jinko",
 
-    model:"Tiger Neo 650W",
+//     model:"Tiger Neo 650W",
 
-    power:650,
+//     power:650,
 
-    voc:45.8,
+//     voc:45.8,
+B
+//     vmp:38.2,
 
-    vmp:38.2,
+//     isc:17.6,
 
-    isc:17.6,
+//     imp:17.0,
 
-    imp:17.0,
+//     efficiency:23,
 
-    efficiency:23,
+//     price:125000
 
-    price:125000
+// },
 
-},
+// {
+//     id:3,
 
-{
-    id:3,
+//     brand:"Jinko",
 
-    brand:"Jinko",
+//     model:"Tiger Neo 615W",
 
-    model:"Tiger Neo 615W",
+//     power:615,
 
-    power:615,
+//     voc:44.9,
 
-    voc:44.9,
+//     vmp:37.8,
 
-    vmp:37.8,
+//     isc:17.2,
 
-    isc:17.2,
+//     imp:16.8,
 
-    imp:16.8,
+//     efficiency:22.8,
 
-    efficiency:22.8,
+//     price:118000
 
-    price:118000
-
-}
+// }
 
 ];

@@ -10,24 +10,22 @@
 // Main Engineering Design Engine
 //
 // ======================================================
-import { choosePanel } from "../selection/panelSelector.js";
+
 import { calculateEnergy } from "./energy.js";
 import { calculateBattery } from "./battery.js";
 import { calculatePV } from "./solar.js";
+
+import { choosePanel } from "../selection/panelSelector.js";
+import { chooseInverter } from "../selection/inverterSelector.js";
 import { chooseBattery } from "../selection/batterySelector.js";
 import { choosePVString } from "../selection/pvStringSelector.js";
-
-// import { panels } from "../data/panels.js";
-
-import { chooseInverter } from "../selection/inverterSelector.js";
 import { chooseProtection } from "../selection/protectionSelector.js";
-
 
 export function designSystem(input){
 
-    // =====================================
+    //====================================
     // USER INPUT
-    // =====================================
+    //====================================
 
     const{
 
@@ -41,231 +39,130 @@ export function designSystem(input){
 
     } = input;
 
-
-    // =====================================
+    //====================================
     // DAILY ENERGY
-    // =====================================
+    //====================================
 
-    const dailyEnergy =
-        calculateEnergy(
-            load,
-            backup
-        );
+    const dailyEnergy = calculateEnergy(
 
+        load,
+        backup
 
-    // =====================================
+    );
+
+    //====================================
     // BATTERY REQUIREMENT
-    // =====================================
+    //====================================
 
-    const batteryWh =
-        calculateBattery(
+    const batteryWh = calculateBattery(
 
-            dailyEnergy,
+        dailyEnergy,
+        dod,
+        batteryPercent
 
-            dod,
+    );
 
-            batteryPercent
-
-        );
-
-
-    // =====================================
+    //====================================
     // SOLAR PV REQUIRED
-    // =====================================
+    //====================================
 
-    const solarPvRequired =
-        calculatePV(
+    const solarPvRequired = calculatePV(
 
-            load,
+        load,
+        losses,
+        psh,
+        batteryWh
 
-            losses,
+    );
 
-            psh,
-
-            batteryWh
-
-        );
-
-
-    // =====================================
+    //====================================
     // PANEL SELECTION
-    // =====================================
+    //====================================
 
-   const panelSelection =
-
-    choosePanel(
+    const panelSelection = choosePanel(
 
         solarPvRequired
 
     );
 
-const panel =
+    const panel = panelSelection.panel;
 
-    panelSelection.panel;
+    const panelQuantity = panelSelection.quantity;
 
-const panelQuantity =
-
-    panelSelection.quantity;
-
-
-    // =====================================
+    //====================================
     // INVERTER SELECTION
-    // =====================================
+    //====================================
 
-    const inverterSelection =
-        chooseInverter(
-            solarPvRequired
-        );
+    const inverterSelection = chooseInverter(
+
+        solarPvRequired
+
+    );
 
     if(!inverterSelection){
 
         throw new Error(
+
             "No suitable inverter found."
+
         );
 
     }
+
     const inverter = inverterSelection.inverter;
 
-// =====================================
-// BATTERY SELECTION
-// =====================================
+    //====================================
+    // BATTERY SELECTION
+    //====================================
 
-const batterySelection = chooseBattery(
+    const batterySelection = chooseBattery(
 
-    batteryWh,
+        batteryWh,
+        inverter
 
-    inverter
+    );
 
-);
-const protection = chooseProtection({
+    //====================================
+    // PROTECTION SELECTION
+    //====================================
 
-    inverter,
+    const protection = chooseProtection({
 
-    panel,
+        inverter,
 
-    panelQuantity,
+        panel,
 
-    solarPvRequired,
+        inverterQuantity:
+            inverterSelection.quantity,
 
-    batteryWh,
+        panelQuantity,
 
-    battery: batterySelection.battery,
+        pvPower:
+            solarPvRequired,
 
-    inverterQuantity:
-        inverterSelection.quantity
+        batteryVoltage:
+            batterySelection.battery.voltage
 
-});
+    });
 
+    //====================================
+    // PV STRING CONFIGURATION
+    //====================================
 
+    const pvString = choosePVString({
 
-const pvString = choosePVString({
+        panel,
 
-    panel,
+        panelQuantity,
 
-    panelQuantity,
+        inverter
 
-    inverter
+    });
 
-});
-
-    // =====================================
+    //====================================
     // RETURN COMPLETE SYSTEM
-    // =====================================
+    //====================================
 
-    return{
-
-    // INPUT
-
-    load,
-
-    backup,
-
-    psh,
-
-    losses,
-
-    dod,
-
-    batteryPercent,
-
-
-    // CALCULATIONS
-
-    dailyEnergy,
-
-    batteryWh,
-
-    solarPvRequired,
-
-
-    // PANEL
-
-    panel,
-
-panelQuantity,
-
-installedPvPower:
-
-panelSelection.installedPower,
-
-protection,
-    pvString,
-
-
-    // INVERTER
-
-    inverter,
-
-    inverterQuantity:
-        inverterSelection.quantity,
-
-
-    // BATTERY
-
-    battery:
-        batterySelection.battery,
-
-    batteryQuantity:
-        batterySelection.quantity,
-
-    installedBatteryWh:
-        batterySelection.installedWh,
-
-
-    // CURRENTS
-
-   outputCurrent:
-    protection.outputCurrent,
-
-inputCurrent:
-    protection.inputCurrent,
-
-pvCurrent:
-    protection.pvCurrent,
-
-batteryCurrent:
-    protection.batteryCurrent,
-
-outputBreaker:
-    protection.outputBreaker,
-
-inputBreaker:
-    protection.inputBreaker,
-
-pvBreaker:
-    protection.pvBreaker,
-
-batteryBreaker:
-    protection.batteryBreaker,
-
-acSPD:
-    protection.acSPD,
-
-dcSPD:
-    protection.dcSPD,
-
-   
-
-};
+    
 
 }

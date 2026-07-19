@@ -11,6 +11,9 @@
 //
 // ======================================================
 
+
+
+
 function setText(id, value){
 
     const element = document.getElementById(id);
@@ -27,9 +30,29 @@ function setText(id, value){
 
 }
 
+// export function updateProtectionCard(system){
+
+//     const protection = system.protection;
+
+//     console.log("SYSTEM", system);
+
+//     console.log("PROTECTION", protection);
+
+//     console.log("acOutputCurrent =", protection.acOutputCurrent);
+
+//     console.log("acInputCurrent =", protection.acInputCurrent);
+
+//     console.log("pvCurrent =", protection.pvCurrent);
+
+//     console.log("batteryCurrent =", protection.batteryCurrent);
+
+// }
+
 export function updateProtectionCard(system){
 
     const protection = system.protection;
+
+    console.log(protection);
 
     setText(
         "resultOutputCurrent",
@@ -44,7 +67,7 @@ export function updateProtectionCard(system){
     setText(
         "resultInputCurrent",
         `${protection.inputCurrent.toFixed(2)} A`
-    );
+    );      
 
     setText(
         "resultInputBreaker",
@@ -73,16 +96,15 @@ export function updateProtectionCard(system){
 
     setText(
         "resultACSPD",
-        protection.acSPD
+        `${protection.acSPD.poles} ${protection.acSPD.type} ${protection.acSPD.voltage}`
     );
 
     setText(
         "resultDCSPD",
-        protection.dcSPD
+        `${protection.dcSPD.poles} ${protection.dcSPD.type} ${protection.dcSPD.voltage}`
     );
 
-    // updateProtectionCard(system);
-    
-
 }
+
+
 

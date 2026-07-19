@@ -16,6 +16,23 @@ export const batteries = [
 {
     id:1,
 
+    brand:"Firman",
+
+    model:"FIR-G5.1 Pro",
+
+    voltage:51.2,
+
+    capacityWh:11000,
+
+    chemistry:"Lithium",
+
+    stackLimit:32,
+
+    price:650000
+},
+{
+    id:1,
+
     brand:"Deye",
 
     model:"SE-G5.1 Pro",

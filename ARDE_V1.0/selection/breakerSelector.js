@@ -1,14 +1,29 @@
+// ======================================================
+//
+// AE RENEWABLE LTD
+// ARDE V1.0
+//
+// FILE
+// breakerSelector.js
+//
+// PURPOSE
+// Automatic Breaker Selection
+//
+// ======================================================
+
 import { breakers } from "../data/breakers.js";
 
 export function chooseBreaker(current){
 
-    const maximum=current*1.5;
+    const maximum = current * 1.5;
 
-    return breakers.find(size=>{
+    const breaker = breakers.find(size =>
 
-        return size>=current &&
-               size<=maximum;
+        size >= current &&
+        size <= maximum
 
-    });
+    );
+
+    return breaker ?? breakers[breakers.length - 1];
 
 }
