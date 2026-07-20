@@ -1,117 +1,117 @@
-// ======================================================
-//
-// AE RENEWABLE LTD
-// ARDE V1.0
-//
-// FILE
-// protectionSelector.js
-//
-// PURPOSE
-// Complete Protection Engineering
-//
-// ======================================================
+// // ======================================================
+// //
+// // AE RENEWABLE LTD
+// // ARDE V1.0
+// //
+// // FILE
+// // protectionSelector.js
+// //
+// // PURPOSE
+// // Complete Protection Engineering
+// //
+// // ======================================================
 
-import { chooseBreaker } from "./breakerSelector.js";
+// import { chooseBreaker } from "./breakerSelector.js";
 
-export function chooseProtection(system){
+// export function chooseProtection(system){
 
-    const inverter = system.inverter;
+//     const inverter = system.inverter;
 
-    // =====================================
-    // OUTPUT CURRENT
-    // =====================================
+//     // =====================================
+//     // OUTPUT CURRENT
+//     // =====================================
 
-    const acOutputCurrent =
+//     const acOutputCurrent =
 
-        inverter.phase === 1
+//         inverter.phase === 1
 
-        ?
+//         ?
 
-        inverter.inverterSize /
-        inverter.inverterAcVoltage
+//         inverter.inverterSize /
+//         inverter.inverterAcVoltage
 
-        :
+//         :
 
-        inverter.inverterSize /
-        (1.732 * inverter.inverterAcVoltage);
+//         inverter.inverterSize /
+//         (1.732 * inverter.inverterAcVoltage);
 
-    const outputBreaker =
+//     const outputBreaker =
 
-        chooseBreaker(acOutputCurrent);
+//         chooseBreaker(acOutputCurrent);
 
-    // =====================================
-    // INPUT CURRENT
-    // =====================================
+//     // =====================================
+//     // INPUT CURRENT
+//     // =====================================
 
-    const inputCurrent =
+//     const inputCurrent =
 
-        inverter.phase === 1
+//         inverter.phase === 1
 
-        ?
+//         ?
 
-        inverter.inverterSizeAcInput /
-        inverter.inverterAcVoltage
+//         inverter.inverterSizeAcInput /
+//         inverter.inverterAcVoltage
 
-        :
+//         :
 
-        inverter.inverterSizeAcInput /
-        (1.732 * inverter.inverterAcVoltage);
+//         inverter.inverterSizeAcInput /
+//         (1.732 * inverter.inverterAcVoltage);
 
-    const inputBreaker =
+//     const inputBreaker =
 
-        chooseBreaker(inputCurrent);
+//         chooseBreaker(inputCurrent);
 
-    // =====================================
-    // PV CURRENT
-    // =====================================
+//     // =====================================
+//     // PV CURRENT
+//     // =====================================
 
-    const pvCurrent =
+//     const pvCurrent =
 
-        system.solarPvRequired /
-        inverter.inverterPvVoltage;
+//         system.solarPvRequired /
+//         inverter.inverterPvVoltage;
 
-    const pvBreaker =
+//     const pvBreaker =
 
-        chooseBreaker(pvCurrent);
+//         chooseBreaker(pvCurrent);
 
-    // =====================================
-    // BATTERY CURRENT
-    // =====================================
+//     // =====================================
+//     // BATTERY CURRENT
+//     // =====================================
 
-    const batteryCurrent =
+//     const batteryCurrent =
 
-        inverter.inverterSize /
-        inverter.batteryVoltage;
+//         inverter.inverterSize /
+//         inverter.batteryVoltage;
 
-    const batteryBreaker =
+//     const batteryBreaker =
 
-        chooseBreaker(batteryCurrent);
+//         chooseBreaker(batteryCurrent);
 
-    // =====================================
-    // SPD
-    // =====================================
+//     // =====================================
+//     // SPD
+//     // =====================================
 
-    const acSPD = "Type II";
+//     const acSPD = "Type II";
 
-    const dcSPD = "Type II";
+//     const dcSPD = "Type II";
 
-    return{
+//     return{
 
-        acOutputCurrent,
-        outputBreaker,
+//         acOutputCurrent,
+//         outputBreaker,
 
-        inputCurrent,
-        inputBreaker,
+//         inputCurrent,
+//         inputBreaker,
 
-        pvCurrent,
-        pvBreaker,
+//         pvCurrent,
+//         pvBreaker,
 
-        batteryCurrent,
-        batteryBreaker,
+//         batteryCurrent,
+//         batteryBreaker,
 
-        acSPD,
-        dcSPD
+//         acSPD,
+//         dcSPD
 
-    };
+//     };
 
-}
+// }

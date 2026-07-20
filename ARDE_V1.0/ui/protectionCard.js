@@ -56,23 +56,38 @@ export function updateProtectionCard(system){
 
     setText(
         "resultOutputCurrent",
-        `${protection.outputCurrent.toFixed(2)} A`
+        `${protection.acOutputCurrent.toFixed(2)} A`
     );
 
     setText(
         "resultOutputBreaker",
-        `${protection.outputBreaker} A`
+        `${protection.acOutputBreaker} A`
+    );
+
+    setText(
+        "phase",
+        `${protection.phase} Phase`
     );
 
     setText(
         "resultInputCurrent",
-        `${protection.inputCurrent.toFixed(2)} A`
+        `${protection.acInputCurrent.toFixed(2)} A`
     );      
 
     setText(
         "resultInputBreaker",
-        `${protection.inputBreaker} A`
+        `${protection.acInputBreaker} A`
     );
+
+     setText(
+        "Inputphase",
+        `${protection.phase} Phase`
+    );
+
+    //     setText(
+    //     "phase",
+    //     `${protection.phase} Phase`
+    // );
 
     setText(
         "resultPVCurrent",

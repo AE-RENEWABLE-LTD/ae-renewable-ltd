@@ -46,7 +46,7 @@ export const panels = [
 //     power:650,
 
 //     voc:45.8,
-B
+
 //     vmp:38.2,
 
 //     isc:17.6,

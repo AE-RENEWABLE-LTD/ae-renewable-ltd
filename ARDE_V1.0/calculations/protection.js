@@ -12,721 +12,519 @@
 // ======================================================
 
 import { breakers } from "../data/breakers.js";
-import { chooseBreaker } from "./breakerSelector.js";
+import { chooseBreaker } from "../selection/breakerSelector.js";
+// import { choosePhase } from "../data/inverters.js";
+
+
+
+
+
 
 export function chooseProtection(system){
+  const {
+
+    inverter,
+    panel,
+
+    inverterQuantity = 1,
+    panelQuantity = 0,
+
+    pvPower = 0,
+
+    batteryVoltage = 48
+
+} = system;
+
+const {
+
+    inverterSize,
+    inverterAcVoltage,
+    inverterPvVoltage,
+
+    maxPvWatt,
+    maxACChargeCurrent = 0,
+
+    phase,
+
+    mppt,
+    stringsPerMppt
+
+} = inverter;
+
+
+const {
+
+    isc,
+    power
+
+} = panel;
+
+//==================================================
+// PV STRING CONFIGURATION
+//==================================================
+
+const totalStrings =
+    mppt * stringsPerMppt;
+
+const panelsPerString =
+    Math.ceil(panelQuantity / totalStrings);
+
+const parallelStrings =
+    stringsPerMppt;
+
+
+//==================================================
+// AC OUTPUT CURRENT
+//==================================================
+
+const acOutputCurrent =
+    phase === 1
+        ? inverterSize / inverterAcVoltage
+        : inverterSize /
+          (Math.sqrt(3) * inverterAcVoltage);
+
+
+//==================================================
+// AC INPUT CURRENT
+//==================================================
+
+const acInputCurrent =
+    maxACChargeCurrent;
+
+
+//==================================================
+// BATTERY CURRENT
+//==================================================
+
+const batteryCurrent =
+    inverterSize /
+    batteryVoltage ;
+
+
+//==================================================
+// PV CURRENT
+//==================================================
+
+const pvCurrent =
+    isc *
+    parallelStrings;
 
     //==================================================
-    // INPUT
-    //==================================================
+// SAFETY FACTOR (125%)
+//==================================================
 
-    const{
+const acOutputCurrentWM =
+    acOutputCurrent * 1.25;
 
-        inverter,
-        panel,
+const acInputCurrentWM =
+    acInputCurrent * 1.25;
 
-        inverterQuantity = 1,
-        panelQuantity = 0,
+const batteryCurrentWM =
+    batteryCurrent * 1.25;
 
-        pvPower = 0,
-
-        batteryVoltage = 48
-
-    } = system;
-
-    console.log("Protection Input:", system);
+const pvCurrentWM =
+    pvCurrent ;
 
     //==================================================
-    // INVERTER DATA
-    //==================================================
+// BREAKERS
+//==================================================
 
-    const{
+const acOutputBreaker =
+    chooseBreaker(acOutputCurrentWM);
 
-        inverterSize,
-        inverterAcVoltage,
-        inverterPvVoltage,
+const acInputBreaker =
+    chooseBreaker(acInputCurrentWM);
 
-        maxPvWatt,
+const batteryBreaker =
+    chooseBreaker(batteryCurrentWM);
 
-        maxACChargeCurrent = 0,
-        maxPVInputCurrent = 0,
-
-        phase,
-
-        mppt,
-        stringsPerMppt
-
-    } = inverter;
+const pvBreaker =
+    chooseBreaker(pvCurrentWM);
 
     //==================================================
-    // PANEL DATA
-    //==================================================
-
-    const{
-
-        power,
-        voc,
-        vmp,
-        isc,
-        imp
-
-    } = panel;
-
-    //==================================================
-    // PV STRING CONFIGURATION
-    //==================================================
-
-    const totalStrings =
-        mppt * stringsPerMppt;
-
-    const panelsPerString =
-        Math.ceil(
-            panelQuantity /
-            totalStrings
-        );
-
-    const parallelStrings =
-        stringsPerMppt;
-
-    //==================================================
-    // AC INPUT CURRENT
-    //==================================================
-
-    const acInputCurrent =
-        maxACChargeCurrent ||
-        (inverterSize / inverterAcVoltage);
-
-    const acInputCurrentWM =
-
-        acInputCurrent * 1.25;
-
-    //==================================================
-    // AC INPUT BREAKER
-    //==================================================
-
-    const acInputBreaker =
-
-        chooseBreaker(
-
-            acInputCurrentWM
-
-        ) ??
-
-        breakers[
-
-            breakers.length - 1
-
-        ];
-
-    //==================================================
-    // AC OUTPUT CURRENT
-    //==================================================
-
-    let acOutputCurrent;
-
-    if(phase === 1){
-
-        acOutputCurrent =
-
-            inverterSize /
-
-            inverterAcVoltage;
-
-    }
-
-    else{
-
-        acOutputCurrent =
-
-            inverterSize /
-
-            (
-
-                Math.sqrt(3)
-
-                *
-
-                inverterAcVoltage
-
-            );
-
-    }
-
-    const acOutputCurrentWM =
-
-        acOutputCurrent * 1.25;
-
-    //==================================================
-    // AC OUTPUT BREAKER
-    //==================================================
-
-    const acOutputBreaker =
-
-        chooseBreaker(
-
-            acOutputCurrentWM
-
-        ) ??
-
-        breakers[
-
-            breakers.length - 1
-
-        ];
-
-    //==================================================
-    // BATTERY CURRENT
-    //==================================================
-
-    const batteryCurrent =
-
-        inverterSize /
-
-        batteryVoltage;
-
-    const batteryCurrentWM =
-
-        batteryCurrent * 1.25;
-
-    //==================================================
-    // BATTERY BREAKER
-    //==================================================
-
-    const batteryBreaker =
-
-        chooseBreaker(
-
-            batteryCurrentWM
-
-        ) ??
-
-        breakers[
-
-            breakers.length - 1
-
-        ];
-
-    //==================================================
-    // PV CURRENT
-    //==================================================
-
-    const pvCurrent =
-
-        isc *
-
-        parallelStrings;
-
-    const pvCurrentWM =
-
-        pvCurrent * 1.25;
-
-    //==================================================
-    // PV BREAKER
-    //==================================================
-
-    const pvBreaker =
-
-        chooseBreaker(
-
-            pvCurrentWM
-
-        ) ??
-
-        breakers[
-
-            breakers.length - 1
-
-        ];
-
-
-            //==================================================
-    // BATTERY CURRENT
-    //==================================================
-
-    const batteryCurrent =
-        inverterSize / batteryVoltage;
-
-    const batteryCurrentWM =
-        batteryCurrent * 1.25;
-
-    //==================================================
-    // BATTERY BREAKER
-    //==================================================
-
-    const batteryBreaker =
-        chooseBreaker(batteryCurrentWM)
-        ??
-        breakers[breakers.length - 1];
-
-    //==================================================
-    // PV CURRENT
-    //==================================================
-
-    const pvCurrent =
-        isc * stringsPerMppt;
-
-    const pvCurrentWM =
-        pvCurrent * 1.25;
-
-    //==================================================
-    // PV BREAKER
-    //==================================================
-
-    const pvBreaker =
-        chooseBreaker(pvCurrentWM)
-        ??
-        breakers[breakers.length - 1];
-
-    //==================================================
-    // AC SPD
-    //==================================================
-
-    let acSPD;
-
-    if (phase === 1) {
-
-        acSPD = {
-
+// AC SPD
+//==================================================
+
+const acSPD =
+    phase === 1
+        ? {
             poles: "2P",
-
             type: "Type II",
-
             voltage: "275VAC"
-
-        };
-
-    }
-
-    else {
-
-        acSPD = {
-
+        }
+        : {
             poles: "4P",
-
             type: "Type II",
-
             voltage: "385VAC"
-
         };
 
-    }
+//==================================================
+// DC SPD
+//==================================================
 
-    //==================================================
-    // DC SPD
-    //==================================================
+let dcSPD;
 
-    let dcSPD;
+if (inverterPvVoltage <= 600) {
 
-    if (inverterPvVoltage <= 600) {
+    dcSPD = {
 
-        dcSPD = {
+        poles: "2P",
 
-            poles: "2P",
+        type: "Type II",
 
-            type: "Type II",
-
-            voltage: "600VDC"
-
-        };
-
-    }
-
-    else if (inverterPvVoltage <= 1000) {
-
-        dcSPD = {
-
-            poles: "2P",
-
-            type: "Type II",
-
-            voltage: "1000VDC"
-
-        };
-
-    }
-
-    else {
-
-        dcSPD = {
-
-            poles: "2P",
-
-            type: "Type II",
-
-            voltage: "1500VDC"
-
-        };
-
-    }
-
-    //==================================================
-    // COMBINER BOX
-    //==================================================
-
-    let combinerBox = {
-
-        required: false,
-
-        quantity: 0,
-
-        ways: 0
+        voltage: "600VDC"
 
     };
 
-    const totalInputs =
-        mppt * stringsPerMppt;
+}
+else if (inverterPvVoltage <= 1000) {
 
-    if (
+    dcSPD = {
 
-        inverter.maxPvWatt >= 80000 ||
+        poles: "2P",
 
-        totalInputs >= 8
+        type: "Type II",
 
-    ) {
-
-        combinerBox.required = true;
-
-        combinerBox.quantity =
-            Math.ceil(totalInputs / 8);
-
-        combinerBox.ways =
-            totalInputs;
-
-    }
-
-    //==================================================
-    // CHANGEOVER SWITCH
-    //==================================================
-
-    const changeOver =
-        chooseBreaker(acOutputBreaker * 1.25)
-        ??
-        breakers[breakers.length - 1];
-
-    //==================================================
-    // AC ISOLATOR
-    //==================================================
-
-    const acIsolator = {
-
-        quantity: inverterQuantity,
-
-        rating: acOutputBreaker,
-
-        phase:
-            phase === 1
-            ? "Single Phase"
-            : "Three Phase"
+        voltage: "1000VDC"
 
     };
 
-    //==================================================
-    // DC ISOLATOR
-    //==================================================
+}
+else {
 
-    const dcIsolator = {
+    dcSPD = {
 
-        quantity: totalStrings,
+        poles: "2P",
 
-        current: pvBreaker,
+        type: "Type II",
 
-        voltage: inverterPvVoltage
+        voltage: "1500VDC"
 
     };
 
-    //==================================================
-    // CABLE LUG
-    //==================================================
-
-    let cableLug;
-
-    if (inverterSize <= 3000)
-
-        cableLug = "16mm²";
-
-    else if (inverterSize <= 6000)
-
-        cableLug = "25mm²";
-
-    else if (inverterSize <= 12000)
-
-        cableLug = "35mm²";
-
-    else if (inverterSize <= 20000)
-
-        cableLug = "50mm²";
-
-    else if (inverterSize <= 50000)
-
-        cableLug = "70mm²";
-
-    else
-
-        cableLug = "95mm²";
-
-    //==================================================
-    // MC4 CONNECTORS
-    //==================================================
-
-    const mc4Pair =
-        totalStrings * 2;
+}
 
 
-            //==================================================
-    // CABLE LUG
-    //==================================================
+//==================================================
+// AC ISOLATOR
+//==================================================
 
-    let cableLug;
+const acIsolator = {
 
-    if (inverterSize <= 3000) {
+    quantity: inverterQuantity,
 
-        cableLug = "16mm²";
+    rating: acOutputBreaker,
 
-    } else if (inverterSize <= 6000) {
+    phase: phase === 1
+        ? "Single Phase"
+        : "Three Phase"
 
-        cableLug = "25mm²";
+};
 
-    } else if (inverterSize <= 12000) {
+//==================================================
+// DC ISOLATOR
+//==================================================
 
-        cableLug = "35mm²";
+const dcIsolator = {
 
-    } else if (inverterSize <= 20000) {
+    quantity: totalStrings,
 
-        cableLug = "50mm²";
+    current: pvBreaker,
 
-    } else if (inverterSize <= 50000) {
+    voltage: inverterPvVoltage
 
-        cableLug = "70mm²";
+};
 
-    } else {
 
-        cableLug = "95mm²";
+//==================================================
+// COMBINER BOX
+//==================================================
 
-    }
+const combinerBox = {
 
-    //==================================================
-    // MC4 CONNECTORS
-    //==================================================
+    required: totalStrings > 4,
 
-    const mc4Pair = totalStrings * 2;
+    quantity: totalStrings > 4
+        ? Math.ceil(totalStrings / 8)
+        : 0,
 
-    //==================================================
-    // SOLAR CABLE
-    //==================================================
+    ways: totalStrings
 
-    let solarCableSize;
+};
 
-    if (inverter.maxPvWatt <= 6000) {
 
-        solarCableSize = "4mm²";
+//==================================================
+// CHANGEOVER SWITCH
+//==================================================
 
-    } else if (inverter.maxPvWatt <= 20000) {
+const changeOver = chooseBreaker(
 
-        solarCableSize = "6mm²";
+    acOutputBreaker * 1.25
 
-    } else {
+);
 
-        solarCableSize = "10mm²";
 
-    }
+//==================================================
+// CHANGEOVER SWITCH
+//==================================================
 
-    const solarCable = {
+// const changeOver = chooseBreaker(
 
-        specification: `${solarCableSize} PV Solar Cable`,
+//     acOutputBreaker * 1.25
 
-        strings: totalStrings,
+// );
+
+
+//==================================================
+// MC4 CONNECTORS
+//==================================================
+
+const mc4Pair = totalStrings * 2;
+
+//==================================================
+// CABLE LUG
+//==================================================
+
+let cableLug;
+
+if (inverterSize <= 8000)
+
+    cableLug = "35mm²";
+
+else if (inverterSize <= 20000)
+
+    cableLug = "50mm²";
+
+else if (inverterSize <= 50000)
+
+    cableLug = "70mm²";
+
+else if (inverterSize <= 120000)
+
+    cableLug = "90mm²";
+
+// else if (inverterSize <= 50000)
+
+//     cableLug = "70mm²";
+
+else
+
+    cableLug = "120mm²";
+
+
+
+//==================================================
+// SOLAR CABLE
+//==================================================
+
+let solarCableSize;
+
+if (maxPvWatt <= 6000)
+
+    solarCableSize = "4mm²";
+
+else if (maxPvWatt <= 20000)
+
+    solarCableSize = "6mm²";
+
+else
+
+    solarCableSize = "10mm²";
+
+const solarCable = {
+
+    specification: `${solarCableSize} PV Solar Cable`,
+
+    strings: totalStrings,
+
+    length: totalStrings * 20
+
+};
+
+
+//==================================================
+// AC CABLE
+//==================================================
+
+let acOutputCableSize;
+
+if (acOutputCurrentWM <= 25)
+
+    acOutputCableSize = "4mm²";
+
+else if (acOutputCurrentWM <= 40)
+
+    acOutputCableSize = "6mm²";
+
+else if (acOutputCurrentWM <= 63)
+
+    acOutputCableSize = "10mm²";
+
+else if (acOutputCurrentWM <= 100)
+
+    acOutputCableSize = "16mm²";
+else if (acOutputCurrentWM <= 150)
+    acOutputCableSize = "25mm²";
+
+else if (acOutputCurrentWM <= 200)
+    acOutputCableSize = "35mm²";
+
+else if (acOutputCurrentWM <= 300)
+    acOutputCableSize = "50mm²";
+else if (acOutputCurrentWM <= 400)
+    acOutputCableSize = "70mm²";
+else if (acOutputCurrentWM <= 600)
+    acOutputCableSize = "90mm²";
+// else if (acOutputCurrentWM <= 300)
+//     acOutputCableSize = "50mm²";
+
+// else if (acOutputCurrentWM <= 100)
+
+//     acOutputCableSize = "16mm²";
+// else if (acOutputCurrentWM <= 100)
+
+//     acOutputCableSize = "16mm²";
+// else if (acOutputCurrentWM <= 100)
+
+    // acOutputCableSize = "16mm²";
+
+// else if (acOutputCurrentWM <= 100)
+
+//     acOutputCableSize = "16mm²";
+// else if (acOutputCurrentWM <= 100)
+
+//     acOutputCableSize = "16mm²";
+// else if (acOutputCurrentWM <= 100)
+
+//     acOutputCableSize = "16mm²";
+// else if (acOutputCurrentWM <= 100)
+
+//     acOutputCableSize = "16mm²";
+
+else
+
+    acOutputCableSize = "120mm²";
+
+const acCable = {
+
+    input: {
+
+        specification: "4mm² PV Cable",
 
         length: totalStrings * 20
 
-    };
+    },
 
-    //==================================================
-    // AC OUTPUT CABLE SIZE
-    //==================================================
+    output: {
 
-    let acOutputCableSize;
+        specification:
+            `${acOutputCableSize} ${phase === 1 ? "3 Core Copper" : "4 Core Copper Armoured"}`,
 
-    if (phase === 1) {
-
-        if (acOutputCurrentWM <= 20)
-
-            acOutputCableSize = "2.5mm²";
-
-        else if (acOutputCurrentWM <= 28)
-
-            acOutputCableSize = "4mm²";
-
-        else if (acOutputCurrentWM <= 36)
-
-            acOutputCableSize = "6mm²";
-
-        else if (acOutputCurrentWM <= 50)
-
-            acOutputCableSize = "10mm²";
-
-        else if (acOutputCurrentWM <= 68)
-
-            acOutputCableSize = "16mm²";
-
-        else
-
-            acOutputCableSize = "25mm²";
-
-    } else {
-
-        if (acOutputCurrentWM <= 22)
-
-            acOutputCableSize = "2.5mm²";
-
-        else if (acOutputCurrentWM <= 30)
-
-            acOutputCableSize = "4mm²";
-
-        else if (acOutputCurrentWM <= 40)
-
-            acOutputCableSize = "6mm²";
-
-        else if (acOutputCurrentWM <= 55)
-
-            acOutputCableSize = "10mm²";
-
-        else if (acOutputCurrentWM <= 70)
-
-            acOutputCableSize = "16mm²";
-
-        else if (acOutputCurrentWM <= 95)
-
-            acOutputCableSize = "25mm²";
-
-        else
-
-            acOutputCableSize = "35mm²";
+        length: inverterQuantity * 10
 
     }
 
-    //==================================================
-    // AC CABLE
-    //==================================================
+};
 
-    const acCable = {
 
-        input: {
 
-            specification: "4mm² PV Cable",
+//==================================================
+// EARTHING
+//==================================================
 
-            length: totalStrings * 20
+let earthProject;
 
-        },
+let earthCable;
 
-        output: {
+let earthRod;
 
-            specification:
-                `${acOutputCableSize} ${phase === 1 ? "3 Core Copper" : "4 Core Copper Armoured"}`,
+if (inverterSize <= 16000) {
 
-            length: inverterQuantity * 10
+    earthProject = "Small";
 
-        }
+    earthCable = "4mm²";
 
-    };
+    earthRod = 1;
 
-    //==================================================
-    // EARTHING
-    //==================================================
+}
 
-    let earthProject;
+else if (inverterSize <= 60000) {
 
-    let earthCable;
+    earthProject = "Medium";
 
-    let earthRod;
+    earthCable = "10mm²";
 
-    if (inverterSize <= 16000) {
+    earthRod = 2;
 
-        earthProject = "Small";
+}
 
-        earthCable = "4mm²";
+else {
 
-        earthRod = 2;
+    earthProject = "Large";
 
-    } else if (inverterSize <= 60000) {
+    earthCable = "16mm²";
 
-        earthProject = "Medium";
+    earthRod = 3;
 
-        earthCable = "10mm²";
+}
 
-        earthRod = 4;
 
-    } else {
+// /////////////////////////////
 
-        earthProject = "Large";
+// const phase = phase;
 
-        earthCable = "16mm²";
 
-        earthRod = 6;
+//==================================================
+// RETURN
+//==================================================
 
-    }
+return {
 
-    //==================================================
-    // RETURN
-    //==================================================
+    // Currents
 
-    return {
+    acInputCurrent,
+    acOutputCurrent,
+    batteryCurrent,
+    pvCurrent,
 
-        // Currents
+    // Breakers
 
-        acInputCurrent,
+    acInputBreaker,
+     phase,
+    acOutputBreaker,
+     phase,
+    batteryBreaker,
+    pvBreaker,
 
-        acOutputCurrent,
+    // Protection
 
-        batteryCurrent,
+    acSPD,
+    dcSPD,
 
-        pvCurrent,
+    acIsolator,
+    dcIsolator,
 
-        // Breakers
+    // Switching
 
-        acInputBreaker,
+    changeOver,
+    combinerBox,
 
-        acOutputBreaker,
+    // Accessories
 
-        batteryBreaker,
+    cableLug,
+    mc4Pair,
 
-        pvBreaker,
+    // Cables
 
-        // Protection
+    solarCable,
+    acCable,
 
-        acSPD,
+    // Earthing
 
-        dcSPD,
+    earthProject,
+    earthCable,
+    earthRod
 
-        acIsolator,
-
-        dcIsolator,
-
-        // Switching
-
-        changeOver,
-
-        combinerBox,
-
-        // Accessories
-
-        cableLug,
-
-        mc4Pair,
-
-        // Cables
-
-        solarCable,
-
-        acCable,
-
-        // Earthing
-
-        earthProject,
-
-        earthCable,
-
-        earthRod
-
-    };
+};
 
 }

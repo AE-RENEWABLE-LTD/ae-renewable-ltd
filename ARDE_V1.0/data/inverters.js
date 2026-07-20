@@ -87,7 +87,7 @@ export const inverters = [
     inverterPvVoltage:650,
     inverterAcVoltage:400,
     // inverterSizeAcInput:10000,
-    maxACChargeCurrent:150,
+    maxACChargeCurrent:80,
 
     mppt:2,
     stringsPerMppt:2,
@@ -133,7 +133,7 @@ export const inverters = [
     inverterPvVoltage:800,
     inverterAcVoltage:400,
     // inverterSizeAcInput:16000,
-    maxACChargeCurrent:150,
+    maxACChargeCurrent:80,
 
     mppt:2,
     stringsPerMppt:2,

@@ -57,6 +57,7 @@ function computeDesign(event){
         const input = collectInput();
 
         const system = designSystem(input);
+        console.log("SYSTEM =", system);
 
         updateUI(system);
 

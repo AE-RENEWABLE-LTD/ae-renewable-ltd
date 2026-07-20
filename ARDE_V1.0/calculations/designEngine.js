@@ -19,7 +19,7 @@ import { choosePanel } from "../selection/panelSelector.js";
 import { chooseInverter } from "../selection/inverterSelector.js";
 import { chooseBattery } from "../selection/batterySelector.js";
 import { choosePVString } from "../selection/pvStringSelector.js";
-import { chooseProtection } from "../selection/protectionSelector.js";
+import { chooseProtection } from "./protection.js";
 
 export function designSystem(input){
 
@@ -163,6 +163,87 @@ export function designSystem(input){
     // RETURN COMPLETE SYSTEM
     //====================================
 
-    
+    //====================================
+// RETURN COMPLETE SYSTEM
+//====================================
+
+return {
+
+    //----------------------------------
+    // User Inputs
+    //----------------------------------
+
+    load,
+
+    backup,
+
+    psh,
+
+    panelFactor,
+
+    dod,
+
+    losses,
+
+    batteryPercent,
+
+    //----------------------------------
+    // Calculations
+    //----------------------------------
+
+    dailyEnergy,
+
+    batteryWh,
+
+    solarPvRequired,
+
+    //----------------------------------
+    // Panel
+    //----------------------------------
+
+    panel,
+
+    panelQuantity,
+
+    installedPvPower:
+        panelSelection.installedPower,
+
+    //----------------------------------
+    // Inverter
+    //----------------------------------
+
+    inverter,
+
+    inverterQuantity:
+        inverterSelection.quantity,
+
+    //----------------------------------
+    // Battery
+    //----------------------------------
+
+    battery:
+        batterySelection.battery,
+
+    batteryQuantity:
+        batterySelection.quantity,
+
+    installedBatteryWh:
+        batterySelection.installedWh,
+
+    //----------------------------------
+    // Protection
+    //----------------------------------
+
+    protection,
+
+    //----------------------------------
+    // PV String
+    //----------------------------------
+
+    pvString
+
+};
+
+
 
 }
