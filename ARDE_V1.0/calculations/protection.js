@@ -81,7 +81,7 @@ const acOutputCurrent =
     phase === 1
         ? inverterSize / inverterAcVoltage
         : inverterSize /
-          (Math.sqrt(3) * inverterAcVoltage);
+          (400 * inverterAcVoltage);
 
 
 //==================================================
