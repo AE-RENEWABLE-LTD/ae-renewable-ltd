@@ -78,20 +78,16 @@ const parallelStrings =
 //==================================================
 
 const acOutputCurrent = inverterSize / inverterAcVoltage
-    // phase === 1
-    //     ? inverterSize / inverterAcVoltage
-    //     : inverterSize /
-    //       (400 * inverterAcVoltage);
 
-
-//==================================================
+// ==================================================
 // AC INPUT CURRENT
 //==================================================
 
 const acInputCurrent =
     maxACChargeCurrent;
 
-    const inverterQuantity = inverterQuantity
+// const inverterQuantity =
+//      inverterQuantity;
 
 
 //==================================================
@@ -495,7 +491,7 @@ return {
 
     acInputBreaker,
      phase,
-     inverterQuantity,
+    //  inverterQuantity,
     acOutputBreaker,
      phase,
     batteryBreaker,

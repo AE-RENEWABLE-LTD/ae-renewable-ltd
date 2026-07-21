@@ -24,7 +24,7 @@ export const breakers=[
 
 40,
 
-50,
+// 50,
 
 63,
 
