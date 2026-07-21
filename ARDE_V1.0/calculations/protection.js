@@ -491,6 +491,7 @@ return {
 
     acInputBreaker,
      phase,
+     inverterQuantity,
     acOutputBreaker,
      phase,
     batteryBreaker,

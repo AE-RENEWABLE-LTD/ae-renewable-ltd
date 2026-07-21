@@ -84,6 +84,11 @@ export function updateProtectionCard(system){
         `${protection.phase} Phase`
     );
 
+     setText(
+        "resultBreakerQuantity",
+        `${protection.inverterQuantity} Phase`
+    );
+
     //     setText(
     //     "phase",
     //     `${protection.phase} Phase`
