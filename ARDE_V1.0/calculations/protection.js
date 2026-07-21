@@ -91,6 +91,8 @@ const acOutputCurrent = inverterSize / inverterAcVoltage
 const acInputCurrent =
     maxACChargeCurrent;
 
+    const inverterQuantity = inverterQuantity
+
 
 //==================================================
 // BATTERY CURRENT
@@ -467,6 +469,8 @@ else {
     earthRod = 3;
 
 }
+
+
 
 
 // /////////////////////////////
