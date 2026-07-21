@@ -77,11 +77,11 @@ const parallelStrings =
 // AC OUTPUT CURRENT
 //==================================================
 
-const acOutputCurrent =
-    phase === 1
-        ? inverterSize / inverterAcVoltage
-        : inverterSize /
-          (400 * inverterAcVoltage);
+const acOutputCurrent = inverterSize / inverterAcVoltage
+    // phase === 1
+    //     ? inverterSize / inverterAcVoltage
+    //     : inverterSize /
+    //       (400 * inverterAcVoltage);
 
 
 //==================================================
