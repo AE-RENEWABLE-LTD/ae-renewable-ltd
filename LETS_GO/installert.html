@@ -1,1012 +1,955 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<style>
-  :root{
-    --primary:#004AAD;
-    --secondary:#00B140;
-    --accent:#FFC300;
-    --navy:#0B1F3A;
-    --light:#F5F7FA;
-    --white:#FFFFFF;
-    --shadow:0 10px 30px rgba(0,0,0,.08);
-}
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
-body{
-    background:#fff;
-    color:#333;
-    overflow-x:hidden;
-}
-
-.container{
-    width:90%;
-    max-width:1200px;
-    margin:auto;
-}
-
-/* HEADER */
-
-header{
-    position:sticky;
-    top:0;
-    background:#fff;
-    z-index:999;
-    box-shadow:0 2px 15px rgba(0,0,0,.08);
-}
-
-.nav{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:18px 0;
-}
-
-.logo{
-    display:flex;
-    align-items:center;
-    text-decoration:none;
-    gap:15px;
-}
-
-.logo img{
-    width:65px;
-}
-
-.logo h2{
-    color:var(--primary);
-    font-size:28px;
-}
-
-.logo span{
-    color:var(--secondary);
-}
-
-nav ul{
-    display:flex;
-    list-style:none;
-    gap:30px;
-}
-
-nav a{
-    text-decoration:none;
-    color:var(--navy);
-    font-weight:600;
-    transition:.3s;
-}
-
-nav a:hover{
-    color:var(--secondary);
-}
-
-/* HERO */
-
-.hero{
-    background:linear-gradient(135deg,#004AAD,#00B140);
-    color:#fff;
-    padding:100px 0;
-}
-
-.hero-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:60px;
-    align-items:center;
-}
-
-.badge{
-    display:inline-block;
-    background:#FFC300;
-    color:#000;
-    padding:10px 20px;
-    border-radius:50px;
-    font-weight:700;
-    margin-bottom:20px;
-}
-
-.hero h1{
-    font-size:52px;
-    margin-bottom:20px;
-}
-
-.hero p{
-    line-height:1.9;
-    margin-bottom:35px;
-}
-
-.hero-buttons{
-    display:flex;
-    gap:20px;
-    flex-wrap:wrap;
-}
-
-.btn-primary{
-    background:#FFC300;
-    color:#000;
-    padding:15px 30px;
-    text-decoration:none;
-    border-radius:50px;
-    font-weight:700;
-}
-
-.btn-secondary{
-    border:2px solid #fff;
-    color:#fff;
-    padding:15px 30px;
-    text-decoration:none;
-    border-radius:50px;
-}
-
-.hero-image img{
-    width:100%;
-    border-radius:25px;
-    box-shadow:var(--shadow);
-}
-
-/* SECTION */
-
-section{
-    padding:90px 0;
-}
-
-.section-title{
-    text-align:center;
-    margin-bottom:60px;
-}
-
-.section-title h2{
-    font-size:42px;
-    color:var(--primary);
-    margin-bottom:15px;
-}
-
-/* PROFILE */
-
-.profile-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:50px;
-    align-items:center;
-}
-
-.profile-grid img{
-    width:100%;
-    border-radius:20px;
-    box-shadow:var(--shadow);
-}
-
-.profile-grid h3{
-    color:var(--navy);
-    font-size:32px;
-    margin-bottom:20px;
-}
-
-.profile-grid p{
-    line-height:1.9;
-    margin-bottom:20px;
-}
-
-.profile-grid ul{
-    margin-left:20px;
-}
-
-.profile-grid li{
-    margin-bottom:12px;
-}
-
-/* STATS */
-
-.stats{
-    background:var(--primary);
-    color:#fff;
-}
-
-.stats-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:30px;
-    text-align:center;
-}
-
-.stats h2{
-    font-size:55px;
-}
-
-.stats p{
-    margin-top:10px;
-}
-
-/* EXPERTISE */
-
-.expertise{
-    background:#F5F7FA;
-}
-
-.expertise-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:30px;
-}
-
-.card{
-    background:#fff;
-    padding:35px;
-    text-align:center;
-    border-radius:20px;
-    box-shadow:var(--shadow);
-    transition:.3s;
-}
-
-.card:hover{
-    transform:translateY(-8px);
-}
-
-.card i{
-    font-size:45px;
-    color:var(--secondary);
-    margin-bottom:20px;
-}
-
-.card h3{
-    margin-bottom:15px;
-    color:var(--primary);
-}
-
-.card p{
-    line-height:1.7;
-}
-
-/* PROCESS */
-
-.timeline{
-    display:grid;
-    grid-template-columns:repeat(6,1fr);
-    gap:20px;
-}
-
-.step{
-    background:#fff;
-    text-align:center;
-    padding:30px 20px;
-    border-radius:20px;
-    box-shadow:var(--shadow);
-}
-
-.step h3{
-    color:var(--secondary);
-    font-size:35px;
-    margin-bottom:10px;
-}
-
-/* GALLERY */
-
-.gallery{
-    background:#F5F7FA;
-}
-
-.gallery-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:20px;
-}
-
-.gallery-grid img{
-    width:100%;
-    height:260px;
-    object-fit:cover;
-    border-radius:20px;
-    transition:.4s;
-}
-
-.gallery-grid img:hover{
-    transform:scale(1.05);
-}
-
-/* CTA */
-
-.cta{
-    background:var(--navy);
-    color:#fff;
-    text-align:center;
-}
-
-.cta h2{
-    font-size:42px;
-    margin-bottom:20px;
-}
-
-.cta p{
-    max-width:700px;
-    margin:auto;
-    margin-bottom:35px;
-    line-height:1.8;
-}
-
-.cta a{
-    display:inline-block;
-    text-decoration:none;
-    background:#FFC300;
-    color:#000;
-    padding:18px 40px;
-    border-radius:50px;
-    font-weight:700;
-}
-
-/* FOOTER */
-
-footer{
-    background:#08172d;
-    color:#fff;
-    text-align:center;
-    padding:35px 20px;
-}
-
-footer h2{
-    margin-bottom:10px;
-}
-
-/* WHATSAPP */
-
-.whatsapp{
-    position:fixed;
-    right:25px;
-    bottom:25px;
-    width:65px;
-    height:65px;
-    background:#25D366;
-    color:#fff;
-    border-radius:50%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:34px;
-    text-decoration:none;
-    box-shadow:0 5px 20px rgba(0,0,0,.3);
-    z-index:9999;
-}
-
-.whatsapp:hover{
-    transform:scale(1.1);
-}
-
-/* RESPONSIVE */
-
-@media(max-width:992px){
-
-.hero-grid,
-.profile-grid{
-    grid-template-columns:1fr;
-}
-
-.expertise-grid{
-    grid-template-columns:repeat(2,1fr);
-}
-
-.stats-grid{
-    grid-template-columns:repeat(2,1fr);
-}
-
-.timeline{
-    grid-template-columns:repeat(3,1fr);
-}
-
-.gallery-grid{
-    grid-template-columns:repeat(2,1fr);
-}
-
-}
-
-@media(max-width:768px){
-
-.nav{
-    flex-direction:column;
-    gap:20px;
-}
-
-nav ul{
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:15px;
-}
-
-.hero{
-    text-align:center;
-}
-
-.hero h1{
-    font-size:38px;
-}
-
-.hero-buttons{
-    justify-content:center;
-}
-
-.section-title h2{
-    font-size:32px;
-}
-
-.expertise-grid{
-    grid-template-columns:1fr;
-}
-
-.stats-grid{
-    grid-template-columns:1fr;
-}
-
-.timeline{
-    grid-template-columns:1fr;
-}
-
-.gallery-grid{
-    grid-template-columns:1fr;
-}
-
-.profile-grid h3{
-    font-size:28px;
-}
-
-.logo h2{
-    font-size:22px;
-}
-
-.logo img{
-    width:55px;
-}
-
-.whatsapp{
-    width:60px;
-    height:60px;
-    font-size:30px;
-}
-
-}
-</style>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Lead Installer | AE Renewable Ltd</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="installer.css">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How We Work | AE Network Ltd</title>
+
+    <!-- Google Fonts & Lucide Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* ==========================================================================
+           PREMIUM BRAND DESIGN SYSTEM (PRIMARY BLUE, GREEN, ACCENT YELLOW)
+           ========================================================================== */
+        :root {
+            /* Your 3 Important Brand Colors */
+            --brand-blue: #004AAD;
+            --brand-green: #00B140;
+            --brand-yellow: #FFC300;
+
+            /* Variations & Glows */
+            --blue-glow: rgba(0, 74, 173, 0.35);
+            --green-glow: rgba(0, 177, 64, 0.35);
+            --yellow-glow: rgba(255, 195, 0, 0.35);
+            
+            /* Dark Glass Theme */
+            --navy-dark: #020C1A;
+            --navy-card: #07172E;
+            --light-bg: #F8FAFC;
+            --white: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
+
+        .container {
+            width: 90%;
+            max-width: 1240px;
+            margin: 0 auto;
+        }
+
+        /* Gradient Text utilizing your 3 Brand Colors */
+        .brand-gradient-text {
+            background: linear-gradient(120deg, var(--brand-yellow) 0%, var(--brand-green) 50%, var(--brand-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        /* ==========================================================================
+           PREMIUM HEADER (STYLED WITH THE 3 IMPORTANT COLORS)
+           ========================================================================== */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(2, 12, 26, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 2px solid;
+            border-image: linear-gradient(90deg, var(--brand-yellow), var(--brand-green), var(--brand-blue)) 1;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo .accent-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--brand-yellow);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--brand-yellow);
+        }
+
+        .logo span { color: var(--brand-green); }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #E2E8F0;
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+            padding: 6px 0;
+            transition: var(--transition);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--brand-green), var(--brand-yellow));
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        nav a:hover { color: var(--white); }
+        nav a:hover::after { width: 100%; }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--brand-green) 0%, #00802F 100%);
+            color: var(--white) !important;
+            padding: 10px 24px !important;
+            border-radius: 50px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px var(--green-glow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--green-glow);
+        }
+
+        .nav-cta::after { display: none !important; }
+
+        /* ==========================================================================
+           COMPONENTS (TITLES, PILLS)
+           ========================================================================== */
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            color: var(--navy-dark);
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 195, 0, 0.1);
+            border: 1px solid var(--brand-yellow);
+            color: var(--brand-yellow);
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        /* Services Pills */
+        .services-pills {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .pill {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--glass-border);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #E2E8F0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pill i { color: var(--brand-yellow); }
+
+        /* ==========================================================================
+           PAGE HERO SECTION
+           ========================================================================== */
+        .page-hero {
+            background: linear-gradient(135deg, var(--navy-dark) 0%, #081B38 100%);
+            color: var(--white);
+            padding: 100px 0 80px;
+            text-align: center;
+            position: relative;
+        }
+
+        .page-hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .page-hero p {
+            max-width: 750px;
+            margin: 0 auto;
+            color: #CBD5E1;
+            font-size: 1.15rem;
+        }
+
+        /* ==========================================================================
+           #HOW-WE-WORK (DETAILED WORKFLOW)
+           ========================================================================== */
+        .workflow-section {
+            padding: 100px 0;
+            background: var(--light-bg);
+        }
+
+        .workflow-step {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-bottom: 100px;
+        }
+
+        .workflow-step:nth-child(even) {
+            direction: rtl;
+        }
+
+        .workflow-step:nth-child(even) .workflow-text {
+            direction: ltr;
+        }
+
+        .workflow-num-tag {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--brand-blue);
+            color: var(--white);
+            font-size: 1.25rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px var(--blue-glow);
+        }
+
+        .workflow-step:nth-child(2) .workflow-num-tag {
+            background: var(--brand-yellow);
+            color: var(--navy-dark);
+            box-shadow: 0 8px 20px var(--yellow-glow);
+        }
+
+        .workflow-step:nth-child(3) .workflow-num-tag {
+            background: var(--brand-green);
+            box-shadow: 0 8px 20px var(--green-glow);
+        }
+
+        .workflow-step:nth-child(4) .workflow-num-tag {
+            background: var(--brand-blue);
+            box-shadow: 0 8px 20px var(--blue-glow);
+        }
+
+        .workflow-text h3 {
+            font-size: 2rem;
+            color: var(--navy-dark);
+            margin-bottom: 16px;
+        }
+
+        .workflow-text p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .workflow-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .workflow-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: var(--navy-dark);
+        }
+
+        .workflow-list i {
+            color: var(--brand-green);
+        }
+
+        .workflow-card-visual {
+            background: var(--navy-card);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            border: 1px solid var(--glass-border);
+            color: var(--white);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            position: relative;
+            direction: ltr;
+        }
+
+        .visual-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 16px;
+        }
+
+        .visual-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--brand-yellow);
+        }
+
+        /* ==========================================================================
+           #BENEFITS (INSTALLER BENEFITS - PREMIUM TECH STYLE)
+           ========================================================================== */
+        .benefits-section {
+            padding: 120px 0;
+            background: var(--light-bg);
+            border-top: 1px solid #E2E8F0;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .benefit-card {
+            background: var(--navy-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            color: var(--white);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        /* Ambient Glow Blobs for Benefits Cards */
+        .benefit-card::after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: var(--blue-glow);
+            filter: blur(70px);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .benefit-card:nth-child(1)::after { top: -50px; right: -50px; background: var(--yellow-glow); }
+        .benefit-card:nth-child(2)::after { bottom: -50px; left: -50px; background: var(--blue-glow); }
+        .benefit-card:nth-child(3)::after { top: -50px; left: -50px; background: var(--green-glow); }
+        .benefit-card:nth-child(4)::after { bottom: -50px; right: -50px; background: var(--yellow-glow); }
+
+        .benefit-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 30px 60px -15px rgba(0,0,0,0.5);
+        }
+
+        .benefit-card:hover::after {
+            opacity: 1;
+        }
+
+        .benefit-icon-box {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--brand-yellow);
+            margin-bottom: 25px;
+            transition: var(--transition);
+        }
+
+        .benefit-card:hover .benefit-icon-box {
+            background: var(--brand-yellow);
+            color: var(--navy-dark);
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .benefit-card:nth-child(2) .benefit-icon-box { color: #60A5FA; } /* Blue variant */
+        .benefit-card:nth-child(2):hover .benefit-icon-box { background: #60A5FA; color: var(--white); }
+
+        .benefit-card:nth-child(3) .benefit-icon-box { color: var(--brand-green); } /* Green variant */
+        .benefit-card:nth-child(3):hover .benefit-icon-box { background: var(--brand-green); color: var(--white); }
+
+        .benefit-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--white);
+        }
+
+        .benefit-card p {
+            color: #94A3B8;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* ==========================================================================
+           #PROCESS (ONBOARDING STEPS - STEPS LAYOUT)
+           ========================================================================== */
+        .process-section {
+            padding: 120px 0;
+            background: var(--white);
+            border-top: 1px solid #E2E8F0;
+        }
+
+        .process-steps-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Vertical Connector Line */
+        .process-steps-container::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            bottom: 20px;
+            left: 20px;
+            width: 2px;
+            background: #E2E8F0;
+            z-index: 1;
+        }
+
+        .process-step-item {
+            display: grid;
+            grid-template-columns: 40px 1fr;
+            gap: 25px;
+            align-items: flex-start;
+            margin-bottom: 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .process-step-item:last-child { margin-bottom: 0; }
+
+        .step-indicator {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: var(--white);
+            border: 2px solid #E2E8F0;
+            color: var(--brand-blue);
+            font-weight: 800;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 5px;
+            transition: var(--transition);
+        }
+
+        .process-step-item.active .step-indicator {
+            background: var(--brand-blue);
+            border-color: var(--brand-blue);
+            color: var(--white);
+            box-shadow: 0 0 15px var(--blue-glow);
+        }
+
+        .step-indicator i {
+            width: 20px;
+            height: 20px;
+            display: none;
+        }
+
+        .process-step-item.complete .step-indicator {
+            background: var(--brand-green);
+            border-color: var(--brand-green);
+            color: var(--white);
+            box-shadow: 0 0 15px var(--green-glow);
+        }
+
+        .process-step-item.complete .step-indicator span { display: none; }
+        .process-step-item.complete .step-indicator i { display: block; }
+
+        .step-content-box {
+            background: var(--white);
+            border: 1px solid #E2E8F0;
+            border-radius: var(--radius-md);
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            transition: var(--transition);
+        }
+
+        .process-step-item:hover .step-content-box {
+            border-color: #CBD5E1;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+            transform: translateX(10px);
+        }
+
+        .step-content-box h4 {
+            font-size: 1.3rem;
+            color: var(--navy-dark);
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-content-box p {
+            color: var(--text-muted);
+            font-size: 0.98rem;
+            line-height: 1.6;
+        }
+
+        .step-form-preview {
+            margin-top: 20px;
+            background: var(--light-bg);
+            border: 1px solid #E2E8F0;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* ==========================================================================
+           FOOTER
+           ========================================================================== */
+        footer {
+            background: var(--navy-dark);
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        footer strong { color: var(--white); }
+
+        @media (max-width: 900px) {
+            .workflow-step, .workflow-step:nth-child(even) {
+                grid-template-columns: 1fr;
+                direction: ltr;
+            }
+        }
+
+        /* INSTALLER REGISTRATION FORM */
+        .registration-form-wrap{max-width:1000px;margin:0 auto;background:var(--white);border:1px solid #E2E8F0;border-radius:24px;padding:35px;box-shadow:0 20px 50px rgba(2,12,26,.08)}
+        .form-progress{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:35px}
+        .form-progress-item{font-size:.78rem;font-weight:700;color:#94A3B8;text-align:center;padding:12px 6px;border-bottom:3px solid #E2E8F0;transition:var(--transition)}
+        .form-progress-item.active{color:var(--brand-blue);border-color:var(--brand-blue)}
+        .form-progress-item.complete{color:var(--brand-green);border-color:var(--brand-green)}
+        .form-step{display:none}.form-step.active{display:block;animation:formFade .3s ease}
+        @keyframes formFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+        .form-step h3{font-size:1.7rem;color:var(--navy-dark);margin-bottom:8px}.form-step-intro{color:var(--text-muted);margin-bottom:25px}
+        .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}.form-group{display:flex;flex-direction:column;gap:7px}.form-group.full{grid-column:1/-1}
+        .form-group label{font-size:.9rem;font-weight:700;color:var(--navy-dark)}.form-group label span{color:#DC2626}
+        .form-group input,.form-group select,.form-group textarea{width:100%;padding:13px 15px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;color:var(--text-main);font:inherit;outline:none;transition:var(--transition)}
+        .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--brand-blue);box-shadow:0 0 0 3px rgba(0,74,173,.1)}
+        .form-group textarea{min-height:110px;resize:vertical}.checkbox-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.check-card{display:flex;align-items:center;gap:10px;padding:14px;border:1px solid #E2E8F0;border-radius:10px;cursor:pointer}.check-card:hover{border-color:var(--brand-blue)}
+        .check-card input{accent-color:var(--brand-green);width:18px;height:18px}.upload-box{border:2px dashed #CBD5E1;border-radius:12px;padding:20px;background:#F8FAFC}.upload-box input{border:0;padding:5px 0}
+        .form-actions{display:flex;justify-content:space-between;gap:15px;margin-top:30px;padding-top:25px;border-top:1px solid #E2E8F0}.form-btn{border:0;border-radius:10px;padding:13px 24px;font:700 1rem inherit;cursor:pointer;transition:var(--transition)}.form-btn.primary{background:var(--brand-blue);color:#fff}.form-btn.primary:hover{transform:translateY(-2px);box-shadow:0 8px 20px var(--blue-glow)}.form-btn.secondary{background:#F1F5F9;color:var(--navy-dark)}
+        .form-message{display:none;margin-top:20px;padding:18px;border-radius:12px;background:rgba(0,177,64,.1);border:1px solid var(--brand-green);color:#087A35;font-weight:700}.form-message.show{display:block}
+        .agreement{display:flex;align-items:flex-start;gap:10px;margin-top:20px;color:var(--text-muted);font-size:.9rem}.agreement input{margin-top:4px;accent-color:var(--brand-green)}
+        @media(max-width:700px){.registration-form-wrap{padding:22px}.form-progress{grid-template-columns:repeat(3,1fr)}.form-grid,.checkbox-grid{grid-template-columns:1fr}.form-group.full{grid-column:auto}.form-progress-item{font-size:.68rem}.form-actions{flex-direction:column}.form-btn{width:100%}}
+    </style>
 </head>
-
 <body>
 
-<!-- HEADER -->
-
+<!-- PREMIUM BRAND HEADER -->
 <header>
+    <div class="container navbar">
+        <a href="#" class="logo">
+            <div class="accent-dot"></div>
+            AE <span>Network</span>
+        </a>
 
-<div class="container nav">
-
-<a href="index.html" class="logo">
-
-<img src="images/logo.jpeg" alt="AE Renewable Ltd">
-
-<h2>AE <span>Renewable Ltd</span></h2>
-
-</a>
-
-<!-- <nav>
-
-<ul>
-
-<li><a href="index.html">Home</a></li>
-
-<li><a href="about.html">About</a></li>
-
-<li><a href="services.html">Services</a></li>
-
-<li><a href="projects.html">Projects</a></li>
-
-<li><a href="contact.html">Contact</a></li>
-
-</ul>
-
-</nav> -->
-
-</div>
-
+        <nav>
+            <ul>
+                <li><a href="#how-we-work">How We Work</a></li>
+                <li><a href="#benefits">Installer Benefits</a></li>
+                <li><a href="#process">Onboarding</a></li>
+                <li><a href="#register" class="nav-cta">Register Now</a></li>
+            </ul>
+        </nav>
+    </div>
 </header>
 
-<!-- HERO -->
-
-<section class="hero">
-
-<div class="container hero-grid">
-
-<div class="hero-text">
-
-<span class="badge">
-
-Lead Installation Engineer
-
-</span>
-
-<h1>
-
-Meet Our Professional Installer
-
-</h1>
-
-<p>
-
-Every successful renewable energy project starts with
-proper engineering, quality workmanship and attention
-to detail.
-
-At AE Renewable Ltd, every installation is carried out
-to international engineering standards, ensuring
-maximum efficiency, safety and long-term reliability.
-
-</p>
-
-<div class="hero-buttons">
-
-<a href="consultation.html" class="btn-primary">
-
-Book Consultation
-
-</a>
-
-<a href="projects.html" class="btn-secondary">
-
-View Projects
-
-</a>
-
-</div>
-
-</div>
-
-<div class="hero-image">
-
-<img src="images/instaler.jpeg"alt="Installer">
-
-</div>
-
-</div>
-
+<!-- PAGE HERO SECTION -->
+<section class="page-hero">
+    <div class="container">
+        <div class="hero-badge">
+            <i data-lucide="cog" style="width: 16px; height: 16px;"></i> Operation Model
+        </div>
+        <h1>How The <span class="brand-gradient-text">AE Network Works</span></h1>
+        <p>A unified operational platform pairing installer partners with automated project assignments across Solar, Smart Home Automation, CCTV Security, and Electrical Systems.</p>
+        
+        <div class="services-pills">
+            <div class="pill"><i data-lucide="sun"></i> Solar & Battery</div>
+            <div class="pill"><i data-lucide="home"></i> Smart Automation</div>
+            <div class="pill"><i data-lucide="camera"></i> CCTV & Security</div>
+            <div class="pill"><i data-lucide="zap"></i> Electrical Systems</div>
+        </div>
+    </div>
 </section>
 
-<!-- PROFILE -->
+<!-- #HOW-WE-WORK DETAILED WORKFLOW -->
+<section class="workflow-section" id="how-we-work">
+    <div class="container">
+        
+        <!-- STEP 1 -->
+        <div class="workflow-step" id="dispatch">
+            <div class="workflow-text">
+                <div class="workflow-num-tag">01</div>
+                <h3>Geographic & Trade-Skill Matching</h3>
+                <p>When a Solar, Smart Home, CCTV, or Electrical job is booked in your region, our intelligent portal automatically routes the project to verified installers based on technical certifications, equipment readiness, and schedule availability.</p>
+                <ul class="workflow-list">
+                    <li><i data-lucide="check-circle-2"></i> Multi-trade job routing (Electrical, Security, Smart Home & PV)</li>
+                    <li><i data-lucide="check-circle-2"></i> Zero cost customer acquisition</li>
+                    <li><i data-lucide="check-circle-2"></i> Real-time mobile project alerts</li>
+                </ul>
+            </div>
+            <div class="workflow-card-visual">
+                <div class="visual-header">
+                    <div class="visual-icon"><i data-lucide="cpu"></i></div>
+                    <div>
+                        <h4>Smart Dispatch Engine</h4>
+                        <p style="font-size:0.85rem; color:#94A3B8;">Automated System Status: Active</p>
+                    </div>
+                </div>
+                <p style="color:#CBD5E1; font-size:0.95rem; margin-bottom:15px;">Project Type: Integrated CCTV, Smart Hub & Electrical Panel</p>
+                <div style="background:rgba(0,177,64,0.15); border:1px solid var(--brand-green); padding:12px; border-radius:10px; color:var(--brand-green); font-weight:700; font-size:0.9rem;">
+                    Certified Specialist Matched & Ready for Dispatch
+                </div>
+            </div>
+        </div>
 
-<section class="profile">
+        <!-- STEP 2 -->
+        <div class="workflow-step" id="diagrams">
+            <div class="workflow-text">
+                <div class="workflow-num-tag">02</div>
+                <h3>Instant Technical Diagrams & Schematics</h3>
+                <p>Immediately after accepting the project, your installer portal instantly unlocks comprehensive technical files—including electrical single-line diagrams (SLD), CCTV camera placement layouts, smart home wiring topologies, and equipment specifications.</p>
+                <ul class="workflow-list">
+                    <li><i data-lucide="check-circle-2"></i> Immediate digital access upon job acceptance</li>
+                    <li><i data-lucide="check-circle-2"></i> Wiring schematics & camera coverage blueprints</li>
+                    <li><i data-lucide="check-circle-2"></i> Smart protocol mapping & electrical distribution plans</li>
+                </ul>
+            </div>
+            <div class="workflow-card-visual">
+                <div class="visual-header">
+                    <div class="visual-icon" style="color:var(--brand-yellow);"><i data-lucide="file-text"></i></div>
+                    <div>
+                        <h4>Technical Blueprint Dispatch</h4>
+                        <p style="font-size:0.85rem; color:#94A3B8;">Instant Access Unlocked</p>
+                    </div>
+                </div>
+                <p style="color:#CBD5E1; font-size:0.95rem; margin-bottom:15px;">Schematic File: System_Electrical_Security_Layout.pdf</p>
+                <div style="background:rgba(255,195,0,0.15); border:1px solid var(--brand-yellow); padding:12px; border-radius:10px; color:var(--brand-yellow); font-weight:700; font-size:0.9rem;">
+                    Diagram Downloaded: Ready for Pre-Installation Briefing
+                </div>
+            </div>
+        </div>
 
-<div class="container">
+        <!-- STEP 3 -->
+        <div class="workflow-step">
+            <div class="workflow-text">
+                <div class="workflow-num-tag">03</div>
+                <h3>Direct-To-Site Equipment Sourcing</h3>
+                <p>Installers don't need to fund, store, or transport heavy gear. Whether it's distribution panels, IP cameras, smart automation hubs, or solar battery kits, our supply chain delivers all pre-configured hardware straight to the site.</p>
+                <ul class="workflow-list">
+                    <li><i data-lucide="check-circle-2"></i> Pre-configured installation hardware kits</li>
+                    <li><i data-lucide="check-circle-2"></i> On-site delivery prior to work commencement</li>
+                    <li><i data-lucide="check-circle-2"></i> Pre-linked manufacturer warranties</li>
+                </ul>
+            </div>
+            <div class="workflow-card-visual">
+                <div class="visual-header">
+                    <div class="visual-icon" style="color:var(--brand-green);"><i data-lucide="truck"></i></div>
+                    <div>
+                        <h4>Hardware Logistics</h4>
+                        <p style="font-size:0.85rem; color:#94A3B8;">Kit Delivery Tracking</p>
+                    </div>
+                </div>
+                <p style="color:#CBD5E1; font-size:0.95rem; margin-bottom:15px;">Hardware status: Delivered to Site Location</p>
+                <div style="background:rgba(0,74,173,0.2); border:1px solid var(--brand-blue); padding:12px; border-radius:10px; color:#60A5FA; font-weight:700; font-size:0.9rem;">
+                    Smart Hub, IP Cameras, Switchgear & Modules On-Site
+                </div>
+            </div>
+        </div>
 
-<div class="section-title">
+        <!-- STEP 4 -->
+        <div class="workflow-step" id="payouts">
+            <div class="workflow-text">
+                <div class="workflow-num-tag">04</div>
+                <h3>Audit & Automated Payouts</h3>
+                <p>Upon completing the physical setup, your field technicians execute the digital commissioning checklist (testing circuits, camera feeds, smart sync, or PV output). Once approved online, payment is directly transferred to your bank account.</p>
+                <ul class="workflow-list">
+                    <li><i data-lucide="check-circle-2"></i> Digital commissioning checklists for every trade</li>
+                    <li><i data-lucide="check-circle-2"></i> Guaranteed, fast electronic payout settlement</li>
+                    <li><i data-lucide="check-circle-2"></i> Transparent performance metrics & quality scores</li>
+                </ul>
+            </div>
+            <div class="workflow-card-visual">
+                <div class="visual-header">
+                    <div class="visual-icon" style="color:var(--brand-yellow);"><i data-lucide="wallet"></i></div>
+                    <div>
+                        <h4>Instant Settlement</h4>
+                        <p style="font-size:0.85rem; color:#94A3B8;">Job Completion Verified</p>
+                    </div>
+                </div>
+                <p style="color:#CBD5E1; font-size:0.95rem; margin-bottom:15px;">Sign-off status: Commissioning Certified</p>
+                <div style="background:rgba(0,177,64,0.15); border:1px solid var(--brand-green); padding:12px; border-radius:10px; color:var(--brand-green); font-weight:700; font-size:0.9rem;">
+                    Payout Approved & Processed
+                </div>
+            </div>
+        </div>
 
-<h2>Professional Profile</h2>
-
-<p>
-
-Engineering Excellence Through Practical Experience
-
-</p>
-
-</div>
-
-<div class="profile-grid">
-
-<div>
-
-<img src="images/installerface2.jpeg" alt="Engineer">
-
-</div>
-
-<div>
-
-<h3>
-
-Lead Renewable Energy Engineer
-
-</h3>
-
-<p>
-
-Specialized in the design, installation,
-testing and maintenance of solar energy systems,
-hybrid inverter systems,
-lithium battery storage,
-electrical engineering,
-CCTV security systems
-and preventive maintenance.
-
-</p>
-
-<p>
-
-Committed to delivering safe,
-efficient and reliable renewable energy
-solutions for residential,
-commercial and industrial clients.
-
-</p>
-
-<ul>
-
-<li>Solar Energy Specialist</li>
-
-<li>Hybrid Inverter Expert</li>
-
-<li>Lithium Battery Integration</li>
-
-<li>CCTV Installation</li>
-
-<li>Electrical Engineering</li>
-
-<li>Preventive Maintenance</li>
-
-<li>Testing & Commissioning</li>
-
-<li>Site Survey & Design</li>
-
-</ul>
-
-</div>
-
-</div>
-
-</div>
-
+    </div>
 </section>
 
-<!-- STATS -->
+<!-- #BENEFITS (INSTALLER BENEFITS) -->
+<section class="benefits-section" id="benefits">
+    <div class="container">
+        <div class="section-title">
+            <h2>Installer Network Benefits</h2>
+            <p>AE Renewable provides the logistical, technical, and financial infrastructure so you can focus solely on expert craftsmanship and efficient installations.</p>
+        </div>
 
-<section class="stats">
+        <div class="benefits-grid">
+            <!-- Benefit 1 -->
+            <div class="benefit-card">
+                <div class="benefit-icon-box"><i data-lucide="zap"></i></div>
+                <h3>Consistent Project Flow</h3>
+                <p>Maximize your team's billable hours. Gain access to a continuous queue of residential and commercial projects without spending a dime on marketing.</p>
+            </div>
 
-<div class="container stats-grid">
+            <!-- Benefit 2 -->
+            <div class="benefit-card">
+                <div class="benefit-icon-box"><i data-lucide="wallet"></i></div>
+                <h3>Guaranteed Payouts</h3>
+                <p>Eliminate accounts receivable lag. Get paid electronically and automatically within days of project commissioning and audit approval.</p>
+            </div>
 
-<div>
+            <!-- Benefit 3 -->
+            <div class="benefit-card">
+                <div class="benefit-icon-box"><i data-lucide="truck"></i></div>
+                <h3>Zero Hardware Logistics</h3>
+                <p>Forget storing and transporting equipment. Pre-configured Tier-1 hardware kits across all trades are delivered directly to the site location.</p>
+            </div>
 
-<h2>100+</h2>
-
-<p>Projects Completed</p>
-
-</div>
-
-<div>
-
-<h2>99%</h2>
-
-<p>Customer Satisfaction</p>
-
-</div>
-
-<div>
-
-<h2>24/7</h2>
-
-<p>Support</p>
-
-</div>
-
-<div>
-
-<h2>5+</h2>
-
-<p>Engineering Services</p>
-
-</div>
-
-</div>
-
+            <!-- Benefit 4 -->
+            <div class="benefit-card">
+                <div class="benefit-icon-box"><i data-lucide="headphones"></i></div>
+                <h3>Dedicated Field Support</h3>
+                <p>Direct line to senior AE electrical engineers and smart home system specialists for real-time troubleshooting on complex site challenges.</p>
+            </div>
+        </div>
+    </div>
 </section>
 
-<!-- EXPERTISE -->
-
-<section class="expertise">
-
-<div class="container">
-
-<div class="section-title">
-
-<h2>Core Expertise</h2>
-
-</div>
-
-<div class="expertise-grid">
-
-<div class="card">
-
-<i class="fa-solid fa-solar-panel"></i>
-
-<h3>
-
-Solar Energy
-
-</h3>
-
-<p>
-
-Residential and Commercial
-Solar Installation
-
-</p>
-
-</div>
-
-<div class="card">
-
-<i class="fa-solid fa-bolt"></i>
-
-<h3>
-
-Hybrid Inverters
-
-</h3>
-
-<p>
-
-Hybrid Power Systems
-Installation
-
-</p>
-
-</div>
-
-<div class="card">
-
-<i class="fa-solid fa-battery-full"></i>
-
-<h3>
-
-Lithium Batteries
-
-</h3>
-
-<p>
-
-Energy Storage Systems
-
-</p>
-
-</div>
-
-<div class="card">
-
-<i class="fa-solid fa-video"></i>
-
-<h3>
-
-CCTV Security
-
-</h3>
-
-<p>
-
-Professional Surveillance
-Installation
-
-</p>
-
-</div>
-
-<div class="card">
-
-<i class="fa-solid fa-plug-circle-bolt"></i>
-
-<h3>
-
-Electrical Engineering
-
-</h3>
-
-<p>
-
-Industrial & Commercial
-Electrical Systems
-
-</p>
-
-</div>
-
-<div class="card">
-
-<i class="fa-solid fa-screwdriver-wrench"></i>
-
-<h3>
-
-Maintenance
-
-</h3>
-
-<p>
-
-Testing,
-Commissioning
-and Repairs
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- INSTALLATION PROCESS -->
-
-<section class="process">
-
-<div class="container">
-
-<div class="section-title">
-
-<h2>
-
-Installation Process
-
-</h2>
-
-</div>
-
-<div class="timeline">
-
-<div class="step">
-
-<h3>01</h3>
-
-<p>Consultation</p>
-
-</div>
-
-<div class="step">
-
-<h3>02</h3>
-
-<p>Site Survey</p>
-
-</div>
-
-<div class="step">
-
-<h3>03</h3>
-
-<p>Engineering Design</p>
-
-</div>
-
-<div class="step">
-
-<h3>04</h3>
-
-<p>Installation</p>
-
-</div>
-
-<div class="step">
-
-<h3>05</h3>
-
-<p>Testing</p>
-
-</div>
-
-<div class="step">
-
-<h3>06</h3>
-
-<p>Maintenance</p>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- GALLERY -->
-
-<section class="gallery">
-
-<div class="container">
-
-<div class="section-title">
-
-<h2>
-
-Project Gallery
-
-</h2>
-
-</div>
-
-<div class="gallery-grid">
-
-<img src="images/WhatsApp Image 2026-06-13 at 19.51.26 (1).jpeg" alt="Project 1">
-
-<img src="images/WhatsApp Image 2026-06-13 at 19.51.26 (1).jpeg" alt="Project 2 ">
-
-<img src="images/WhatsApp Image 2026-06-13 at 19.51.26 (1).jpeg" alt="Project 3">
-
-<img src="images/WhatsApp Image 2026-06-13 at 19.51.26 (1).jpeg" alt="Project 4">
-
-<img src="images/WhatsApp Image 2026-06-13 at 19.51.26 (1).jpeg" alt="Project 5">
-
-<img src="images/WhatsApp Image 2026-06-13 at 19.51.26 (1).jpeg" alt="Project 6">
-
-</div>
-
-</div>
-
-</section>
-
-<!-- CTA -->
-
-<section class="cta">
-
-<div class="container">
-
-<h2>
-
-Let's Build Your Energy Future
-
-</h2>
-
-<p>
-
-Speak with our installation team
-today for a professional consultation.
-
-</p>
-
-<a href="consultation.html">
-
-Book Consultation
-
-</a>
-
-</div>
-
+<!-- #PROCESS (INSTALLER REGISTRATION) -->
+<section class="process-section" id="process">
+    <div class="container">
+        <div class="section-title">
+            <h2>Installer Partner Registration</h2>
+            <p>Complete your company, technical, contact, and payment information to apply for verification and join the AE Network installer ecosystem.</p>
+        </div>
+
+        <div class="registration-form-wrap" id="register">
+            <div class="form-progress">
+                <div class="form-progress-item active">1. Company</div><div class="form-progress-item">2. Contact</div><div class="form-progress-item">3. Services</div><div class="form-progress-item">4. Documents</div><div class="form-progress-item">5. Payment</div><div class="form-progress-item">6. Agreement</div>
+            </div>
+            <form id="installerRegistrationForm" novalidate>
+                <div class="form-step active">
+                    <h3>Company & CAC Information</h3><p class="form-step-intro">Tell us about your legally registered installation business.</p>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Registered Business / Company Name <span>*</span></label><input name="companyName" required></div>
+                        <div class="form-group"><label>CAC Registration Type <span>*</span></label><select name="registrationType" required><option value="">Select type</option><option>RC Number</option><option>BN Number</option></select></div>
+                        <div class="form-group"><label>RC / BN Number <span>*</span></label><input name="rcBnNumber" required></div>
+                        <div class="form-group"><label>Year Established</label><input type="number" name="yearEstablished" min="1900" max="2026"></div>
+                        <div class="form-group full"><label>Registered Business Address <span>*</span></label><textarea name="businessAddress" required></textarea></div>
+                        <div class="form-group"><label>State <span>*</span></label><input name="state" required></div>
+                        <div class="form-group"><label>City / LGA <span>*</span></label><input name="cityLga" required></div>
+                    </div>
+                </div>
+
+                <div class="form-step">
+                    <h3>Contact Information</h3><p class="form-step-intro">Provide the primary contact person who will manage your installer partnership.</p>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Contact Person Full Name <span>*</span></label><input name="contactName" required></div>
+                        <div class="form-group"><label>Position / Role <span>*</span></label><input name="role" required></div>
+                        <div class="form-group"><label>Phone Number <span>*</span></label><input type="tel" name="phone" required></div>
+                        <div class="form-group"><label>WhatsApp Number</label><input type="tel" name="whatsapp"></div>
+                        <div class="form-group"><label>Email Address <span>*</span></label><input type="email" name="email" required></div>
+                        <div class="form-group"><label>Preferred Contact Method</label><select name="contactMethod"><option>Phone Call</option><option>WhatsApp</option><option>Email</option></select></div>
+                    </div>
+                </div>
+
+                <div class="form-step">
+                    <h3>Trade Skills & Services</h3><p class="form-step-intro">Select every service your team is qualified and equipped to deliver.</p>
+                    <div class="checkbox-grid">
+                        <label class="check-card"><input type="checkbox" name="services" value="Solar & Battery"> Solar & Battery Systems</label>
+                        <label class="check-card"><input type="checkbox" name="services" value="Electrical Installation"> Electrical Installation</label>
+                        <label class="check-card"><input type="checkbox" name="services" value="CCTV & Security"> CCTV & Security</label>
+                        <label class="check-card"><input type="checkbox" name="services" value="Smart Home Automation"> Smart Home Automation</label>
+                    </div>
+                    <div class="form-grid" style="margin-top:20px"><div class="form-group"><label>Primary Trade <span>*</span></label><select name="primaryTrade" required><option value="">Select primary trade</option><option>Solar & Battery</option><option>Electrical Installation</option><option>CCTV & Security</option><option>Smart Home Automation</option></select></div><div class="form-group"><label>Team Size</label><input type="number" name="teamSize" min="1"></div><div class="form-group full"><label>Technical Experience / Project Portfolio</label><textarea name="experience" placeholder="Briefly describe your experience, major projects, or technical capabilities."></textarea></div></div>
+                </div>
+
+                <div class="form-step">
+                    <h3>Certifications & Documents</h3><p class="form-step-intro">Upload documents that support your corporate and technical verification. Required documents may vary by trade.</p>
+                    <div class="form-grid">
+                        <div class="form-group"><label>CAC Certificate <span>*</span></label><div class="upload-box"><input type="file" name="cacCertificate" accept=".pdf,.jpg,.jpeg,.png" required></div></div>
+                        <div class="form-group"><label>Government ID</label><div class="upload-box"><input type="file" name="governmentId" accept=".pdf,.jpg,.jpeg,.png"></div></div>
+                        <div class="form-group"><label>NEMSA Certificate</label><div class="upload-box"><input type="file" name="nemsaCertificate" accept=".pdf,.jpg,.jpeg,.png"></div></div>
+                        <div class="form-group"><label>COREN Certificate</label><div class="upload-box"><input type="file" name="corenCertificate" accept=".pdf,.jpg,.jpeg,.png"></div></div>
+                        <div class="form-group full"><label>Other Vendor / Technical Certifications</label><div class="upload-box"><input type="file" name="otherCertificates" accept=".pdf,.jpg,.jpeg,.png" multiple></div></div>
+                    </div>
+                </div>
+
+                <div class="form-step">
+                    <h3>Bank & Payment Information</h3><p class="form-step-intro">These details will be used for approved installer payouts. Ensure the account information is accurate.</p>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Account Name <span>*</span></label><input name="accountName" required></div>
+                        <div class="form-group"><label>Bank Name <span>*</span></label><input name="bankName" required></div>
+                        <div class="form-group"><label>Account Number <span>*</span></label><input name="accountNumber" inputmode="numeric" maxlength="10" required></div>
+                        <div class="form-group"><label>BVN (Optional)</label><input name="bvn" inputmode="numeric" maxlength="11"></div>
+                    </div>
+                </div>
+
+                <div class="form-step">
+                    <h3>Final Agreement & Submission</h3><p class="form-step-intro">Review your information and confirm your agreement before submitting your installer partner application.</p>
+                    <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:20px;color:var(--text-muted)"><strong style="color:var(--navy-dark)">Verification Notice</strong><br>Your application will be reviewed by the AE Network team. Submission does not automatically mean approval or CAC verification. You may be contacted for additional information or document verification.</div>
+                    <label class="agreement"><input type="checkbox" name="terms" required> I confirm that the information and documents provided are accurate and belong to the applying business.</label>
+                    <label class="agreement"><input type="checkbox" name="nda" required> I agree to comply with the AE Network's applicable confidentiality, NDA, service-level, safety, and quality requirements.</label>
+                </div>
+
+                <div class="form-actions"><button type="button" class="form-btn secondary" id="prevBtn" style="display:none">Back</button><button type="button" class="form-btn primary" id="nextBtn">Continue</button><button type="submit" class="form-btn primary" id="submitBtn" style="display:none">Submit Application</button></div>
+                <div class="form-message" id="formMessage">Application submitted successfully. Your installer partner profile is now <strong>Under Verification</strong>. Our team will review your details and contact you regarding the next step.</div>
+            </form>
+        </div>
+    </div>
 </section>
 
 <footer>
-
-<div class="container">
-
-<h2>
-
-AE Renewable Ltd
-
-</h2>
-
-<p>
-
-Powering A Sustainable Future.
-
-</p>
-
-</div>
-
+    <div class="container">
+        <p>© 2026 <strong>AE Network Ltd</strong>. Installer Partner Portal. All Rights Reserved.</p>
+    </div>
 </footer>
 
-<a href="https://wa.me/2348000000000" class="whatsapp">
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (typeof lucide !== 'undefined') lucide.createIcons();
 
-<i class="fab fa-whatsapp"></i>
+        const form = document.getElementById('installerRegistrationForm');
+        const steps = [...document.querySelectorAll('.form-step')];
+        const progress = [...document.querySelectorAll('.form-progress-item')];
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const message = document.getElementById('formMessage');
+        let current = 0;
 
-</a>
-
+        function showStep(index){
+            steps.forEach((step,i)=>step.classList.toggle('active',i===index));
+            progress.forEach((item,i)=>{item.classList.toggle('active',i===index);item.classList.toggle('complete',i<index)});
+            prevBtn.style.display=index===0?'none':'block';
+            nextBtn.style.display=index===steps.length-1?'none':'block';
+            submitBtn.style.display=index===steps.length-1?'block':'none';
+            window.scrollTo({top:document.getElementById('register').offsetTop-100,behavior:'smooth'});
+        }
+        function validateStep(){
+            const fields=[...steps[current].querySelectorAll('input,select,textarea')];
+            for(const field of fields){
+                if(!field.checkValidity()){field.reportValidity();return false;}
+            }
+            if(current===2 && !steps[current].querySelector('input[name="services"]:checked')){alert('Please select at least one service.');return false;}
+            return true;
+        }
+        nextBtn.addEventListener('click',()=>{if(validateStep()&&current<steps.length-1){current++;showStep(current);}});
+        prevBtn.addEventListener('click',()=>{if(current>0){current--;showStep(current);}});
+        form.addEventListener('submit',(e)=>{
+            e.preventDefault();
+            if(!validateStep()) return;
+            const data=new FormData(form);
+            console.log('Installer Registration Application:',Object.fromEntries(data.entries()));
+            form.querySelectorAll('input,select,textarea,button').forEach(el=>el.disabled=true);
+            message.classList.add('show');
+            message.scrollIntoView({behavior:'smooth',block:'center'});
+        });
+        showStep(0);
+    });
+</script>
 </body>
 </html>

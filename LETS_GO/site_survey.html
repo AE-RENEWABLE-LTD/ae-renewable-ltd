@@ -1,404 +1,598 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Site Survey | AE Renewable Ltd</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-<style>
-
-:root{
-    --primary:#004AAD;
-    --secondary:#00B140;
-    --accent:#FFC300;
-    --navy:#0B1F3A;
-    --light:#F5F7FA;
-    --white:#FFFFFF;
-}
-
-.whatsapp-float{
-    position:fixed;
-    width:65px;
-    height:65px;
-    bottom:25px;
-    right:25px;
-    background:#25D366;
-    color:#fff;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    box-shadow:0 8px 25px rgba(0,0,0,.25);
-    z-index:99999;
-    transition:.3s ease;
-    animation:whatsappPulse 2s infinite;
-}
-
-.whatsapp-float svg{
-    width:34px;
-    height:34px;
-}
-
-.whatsapp-float:hover{
-    transform:scale(1.1);
-}
-
-@keyframes whatsappPulse{
-
-    0%{
-        box-shadow:0 0 0 0 rgba(37,211,102,.7);
-    }
-
-    70%{
-        box-shadow:0 0 0 20px rgba(37,211,102,0);
-    }
-
-    100%{
-        box-shadow:0 0 0 0 rgba(37,211,102,0);
-    }
-
-}
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
-}
-
-body{
-    overflow-x:hidden;
-    background:#fff;
-}
-
-.container{
-    width:90%;
-    max-width:1200px;
-    margin:auto;
-}
-
-/* HEADER */
-
-header{
-    position:sticky;
-    top:0;
-    z-index:1000;
-    background:#fff;
-    box-shadow:0 2px 10px rgba(0,0,0,.08);
-}
-
-.navbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:20px 0;
-}
-
-.logo{
-    font-size:28px;
-    font-weight:800;
-    color:var(--primary);
-}
-
-.logo span{
-    color:var(--secondary);
-}
-
-nav ul{
-    display:flex;
-    list-style:none;
-    gap:25px;
-}
-
-nav a{
-    text-decoration:none;
-    color:var(--navy);
-    font-weight:600;
-}
-
-/* HERO */
-
-.hero{
-    position: relative;
-    overflow: hidden;
-    min-height: 50vh;
-    color: #fff;
-    text-align: center;
-    padding: 120px 20px;
-}
-
-.hero-bg{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -2;
-}
-
-.hero-overlay{
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    z-index: -1;
-}
-
-.hero .container{
-    position: relative;
-    z-index: 2;
-}
-
-.hero h1{
-    font-size:3.5rem;
-    margin-bottom:20px;
-}
-
-.hero p{
-    max-width:800px;
-    margin:auto;
-    line-height:1.8;
-    margin-bottom:30px;
-}
-
-.hero-btn{
-    display:inline-block;
-    background:var(--accent);
-    color:#000;
-    padding:15px 35px;
-    border-radius:50px;
-    text-decoration:none;
-    font-weight:700;
-}
-
-/* FORM SECTION */
-
-.survey-section{
-    padding:100px 0;
-}
-
-.section-title{
-    text-align:center;
-    margin-bottom:50px;
-}
-
-.section-title h2{
-    color:var(--navy);
-    margin-bottom:10px;
-}
-
-.section-title p{
-    color:#666;
-}
-
-.survey-form{
-    background:#fff;
-    padding:40px;
-    border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
-
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea{
-    width:100%;
-    padding:15px;
-    border:1px solid #ddd;
-    border-radius:10px;
-    font-size:15px;
-}
-
-.full-width{
-    grid-column:1 / 3;
-}
-
-.submit-btn{
-    grid-column:1 / 3;
-    border:none;
-    background:var(--accent);
-    padding:16px;
-    border-radius:10px;
-    font-weight:700;
-    cursor:pointer;
-}
-
-/* BENEFITS */
-
-.benefits{
-    background:var(--light);
-    padding:100px 0;
-}
-
-.benefit-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:25px;
-}
-
-.card{
-    background:#fff;
-    padding:30px;
-    border-radius:15px;
-    text-align:center;
-    box-shadow:0 5px 20px rgba(0,0,0,.06);
-}
-
-.card h3{
-    color:var(--primary);
-    margin-bottom:10px;
-}
-
-/* PROCESS */
-
-.process{
-    padding:100px 0;
-}
-
-.process-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:20px;
-}
-
-.step{
-    background:var(--primary);
-    color:white;
-    padding:25px;
-    border-radius:15px;
-    text-align:center;
-    font-weight:600;
-}
-
-/* CTA */
-
-.cta{
-    background:var(--navy);
-    color:white;
-    text-align:center;
-    padding:100px 20px;
-}
-
-.cta h2{
-    margin-bottom:15px;
-}
-
-.cta p{
-    max-width:700px;
-    margin:auto;
-    margin-bottom:25px;
-}
-
-.cta-btn{
-    display:inline-block;
-    background:var(--accent);
-    color:#000;
-    text-decoration:none;
-    padding:15px 35px;
-    border-radius:50px;
-    font-weight:700;
-}
-
-/* FOOTER */
-
-footer{
-    background:#08172d;
-    color:white;
-    text-align:center;
-    padding:30px;
-}
-
-/* TABLET */
-
-@media(max-width:992px){
-
-    .benefit-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .process-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-}
-
-/* MOBILE */
-
-@media(max-width:768px){
-
-    nav{
-        display:none;
-    }
-
-    .hero h1{
-        font-size:2rem;
-    }
-
-    .survey-form{
-        grid-template-columns:1fr;
-        padding:20px;
-    }
-
-    .full-width{
-        grid-column:auto;
-    }
-
-    .submit-btn{
-        grid-column:auto;
-    }
-
-    .benefit-grid,
-    .process-grid{
-        grid-template-columns:1fr;
-    }
-
-}
-
-/* SMALL DEVICES */
-
-@media(max-width:480px){
-
-    .hero{
-        padding:80px 15px;
-    }
-
-    .hero h1{
-        font-size:1.7rem;
-    }
-
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Site Survey | AE Renewable Ltd</title>
+
+    <!-- Google Fonts & Lucide Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* ==========================================================================
+           PREMIUM BRAND DESIGN SYSTEM
+           ========================================================================== */
+        :root {
+            /* Brand Identity Colors */
+            --primary: #004AAD;
+            --primary-glow: #1A62C6;
+            --secondary: #00B140;
+            --accent: #FFC300;
+            --accent-gradient: linear-gradient(135deg, #FFC300 0%, #FF9900 100%);
+            
+            /* Dark Glass & Surface Themes */
+            --navy-dark: #020C1A;
+            --navy-card: #07172E;
+            --slate: #0F233D;
+            
+            /* Surfaces & Typography */
+            --light-bg: #F8FAFC;
+            --white: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --input-bg: #F1F5F9;
+            
+            /* Radii, Depths & Smooth Transitions */
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            --shadow-subtle: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 25px 50px -12px rgba(0, 74, 173, 0.18);
+        }
+
+        /* Base Resets */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1240px;
+            margin: 0 auto;
+        }
+
+        /* ==========================================================================
+           HEADER & NAVIGATION (GLASSMORPHISM)
+           ========================================================================== */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--navy-dark);
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+            padding: 6px 0;
+            transition: var(--transition);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        nav a:hover::after, nav a.active::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--navy-dark);
+            cursor: pointer;
+        }
+
+        /* ==========================================================================
+           HERO SECTION WITH VIDEO & GRADIENT OVERLAY
+           ========================================================================== */
+        .hero {
+            position: relative;
+            overflow: hidden;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-align: center;
+            padding: 120px 20px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            transform: scale(1.05);
+            animation: heroZoom 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes heroZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(2, 12, 26, 0.75) 0%, rgba(11, 31, 58, 0.85) 100%);
+            z-index: -1;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.3rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            animation: fadeInDown 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, #FFFFFF 0%, #A5C9FF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            max-width: 780px;
+            margin: 0 auto 35px;
+            font-size: 1.15rem;
+            color: #CBD5E1;
+            line-height: 1.8;
+            animation: fadeInUp 1s 0.2s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+        }
+
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--accent-gradient);
+            color: var(--navy-dark);
+            padding: 16px 38px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 10px 25px rgba(255, 195, 0, 0.35);
+            transition: var(--transition);
+            animation: fadeInUp 1s 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 35px rgba(255, 195, 0, 0.5);
+        }
+
+        /* ==========================================================================
+           FORM SECTION (MODERN DYNAMICS)
+           ========================================================================== */
+        .survey-section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: var(--navy-dark);
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        .survey-card-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 50px;
+            box-shadow: var(--shadow-subtle);
+            border: 1px solid #E2E8F0;
+            transition: var(--transition);
+        }
+
+        .survey-card-wrapper:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .survey-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--navy-dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 16px 20px;
+            background: var(--input-bg);
+            border: 1.5px solid transparent;
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            color: var(--text-main);
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            background: var(--white);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 74, 173, 0.12);
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .submit-btn {
+            grid-column: 1 / -1;
+            border: none;
+            background: var(--accent-gradient);
+            color: var(--navy-dark);
+            padding: 18px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.05rem;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(255, 195, 0, 0.3);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(255, 195, 0, 0.45);
+        }
+
+        /* ==========================================================================
+           BENEFITS & PROCESS GRID
+           ========================================================================== */
+        .benefits {
+            background: #F1F5F9;
+            padding: 100px 0;
+        }
+
+        .benefit-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 35px 25px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            box-shadow: var(--shadow-subtle);
+            border: 1px solid #E2E8F0;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(0, 74, 173, 0.2);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 74, 173, 0.08);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            transition: var(--transition);
+        }
+
+        .card:hover .card-icon {
+            background: var(--primary);
+            color: var(--white);
+            transform: rotateY(180deg);
+        }
+
+        .card h3 {
+            color: var(--navy-dark);
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .process {
+            padding: 100px 0;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .step {
+            background: var(--white);
+            padding: 40px 30px;
+            border-radius: var(--radius-md);
+            border: 1px solid #E2E8F0;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .step:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .step-num {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: rgba(0, 74, 173, 0.15);
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .step h3 {
+            color: var(--navy-dark);
+            margin-bottom: 10px;
+            font-size: 1.25rem;
+        }
+
+        .step p {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+        }
+
+        /* ==========================================================================
+           CALL TO ACTION & FOOTER
+           ========================================================================== */
+        .cta {
+            background: linear-gradient(135deg, var(--navy-dark) 0%, var(--slate) 100%);
+            color: var(--white);
+            text-align: center;
+            padding: 100px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .cta p {
+            max-width: 650px;
+            margin: 0 auto 30px;
+            color: #CBD5E1;
+            font-size: 1.05rem;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--accent-gradient);
+            color: var(--navy-dark);
+            padding: 16px 36px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 10px 25px rgba(255, 195, 0, 0.4);
+            transition: var(--transition);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 18px 30px rgba(255, 195, 0, 0.5);
+        }
+
+        footer {
+            background: var(--navy-dark);
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            padding: 35px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.9rem;
+        }
+
+        /* ==========================================================================
+           WHATSAPP FLOATING BUTTON WITH PULSE
+           ========================================================================== */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+            z-index: 99999;
+            transition: var(--transition);
+            animation: whatsappPulse 2s infinite;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        @keyframes whatsappPulse {
+            0% { box-shadow: 0 0 0 0 rgba(37,211,102,.7); }
+            70% { box-shadow: 0 0 0 20px rgba(37,211,102,0); }
+            100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==========================================================================
+           RESPONSIVE BREAKPOINTS
+           ========================================================================== */
+        @media (max-width: 992px) {
+            .benefit-grid { grid-template-columns: repeat(2, 1fr); }
+            .process-grid { grid-template-columns: repeat(2, 1fr); }
+            .survey-card-wrapper { padding: 35px; }
+        }
+
+        @media (max-width: 768px) {
+            nav { display: none; }
+            .menu-toggle { display: block; }
+            .hero { padding: 90px 20px; }
+            .hero h1 { font-size: 2.2rem; }
+            .survey-form { grid-template-columns: 1fr; }
+            .benefit-grid, .process-grid { grid-template-columns: 1fr; }
+            .survey-card-wrapper { padding: 25px 20px; }
+        }
+    </style>
 </head>
 <body>
 
+<!-- HEADER NAVIGATION -->
 <header>
-<div class="container navbar">
+    <div class="container navbar">
+        <a href="#" class="logo">
+            AE <span>Renewable</span>
+        </a>
 
-<div class="logo">
-AE <span>Renewable</span>
-</div>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle Navigation">
+            <i data-lucide="menu"></i>
+        </button>
 
-<nav>
-<ul>
-<li><a href="#">Home</a></li>
-<li><a href="#">About</a></li>
-<li><a href="#">Services</a></li>
-<li><a href="#">Projects</a></li>
-<li><a href="#">Contact</a></li>
-</ul>
-</nav>
-
-</div>
+        <nav id="navMenu">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Projects</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
 </header>
 
+<!-- HERO SECTION -->
 <section class="hero">
-
     <video class="hero-bg" autoplay muted loop playsinline>
         <source src="images/field.mp4" type="video/mp4">
     </video>
@@ -406,91 +600,200 @@ AE <span>Renewable</span>
     <div class="hero-overlay"></div>
 
     <div class="container">
-        <h1>Professional Site Survey</h1>
-
-        <p>
-            Book a professional site assessment with AE Renewable engineers.
-            We evaluate your property, energy demand, installation conditions,
-            and provide the most efficient renewable energy solution.
-        </p>
+        <h1>Professional <span>Site Survey</span></h1>
+        <p>Book an expert site assessment with AE Renewable engineers. We analyze your structural conditions, energy load requirements, and property layout to engineer optimal clean energy solutions.</p>
 
         <a href="#survey-form" class="hero-btn">
-            Book Site Survey
+            Book Assessment <i data-lucide="arrow-down-circle"></i>
         </a>
     </div>
-
 </section>
 
+<!-- SURVEY FORM SECTION -->
 <section class="survey-section" id="survey-form">
+    <div class="container">
+        <div class="section-title">
+            <h2>Request Site Survey</h2>
+            <p>Provide your project details to schedule an engineering visit.</p>
+        </div>
 
-<div class="container">
+        <div class="survey-card-wrapper">
+            <form class="survey-form" action="#" method="POST">
+                
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" placeholder="Abdulrasaq Eniola" required>
+                </div>
 
-<div class="section-title">
-<h2>Request Site Survey</h2>
-<p>Fill in your project details below.</p>
-</div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" placeholder="+234 800 000 0000" required>
+                </div>
 
-<form class="survey-form">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="eniola@example.com" required>
+                </div>
 
-<div class="form-group">
-<input type="text" placeholder="Full Name">
-</div>
+                <div class="form-group">
+                    <label>Property Location / City</label>
+                    <input type="text" placeholder="e.g. Abuja, Nigeria" required>
+                </div>
 
-<div class="form-group">
-<input type="tel" placeholder="Phone Number">
-</div>
+                <div class="form-group">
+                    <label>Property Type</label>
+                    <select required>
+                        <option value="" disabled selected>Select Property Type</option>
+                        <option>Residential Home</option>
+                        <option>Commercial Office</option>
+                        <option>Industrial Facility</option>
+                        <option>Government / NGO</option>
+                    </select>
+                </div>
 
-<div class="form-group">
-<input type="email" placeholder="Email Address">
-</div>
+                <div class="form-group">
+                    <label>Survey Category</label>
+                    <select required>
+                        <option value="" disabled selected>Select Survey Type</option>
+                        <option>Solar PV Installation</option>
+                        <option>Hybrid Inverter Upgrade</option>
+                        <option>CCTV & Smart Security</option>
+                        <option>Complete Energy Audit</option>
+                    </select>
+                </div>
 
-<div class="form-group">
-<input type="text" placeholder="Property Location">
-</div>
+                            <div class="form-group full-width">
+                    <label>Project Details & Power Requirements</label>
+                    <textarea rows="6" placeholder="Tell us about your energy & installation needs:
 
-<div class="form-group">
-<select>
-<option>Select Property Type</option>
-<option>Residential</option>
-<option>Commercial</option>
-<option>Industrial</option>
-<option>Government Facility</option>
-</select>
-</div>
+                • Solar & Backup: Daily power consumption, battery backup hours, inverter size.
+                • Heavy Appliances: ACs, water pumps, freezers, industrial machinery, etc.
+                • Security Systems: CCTV cameras, smart automation, or perimeter protection.
+                • Electrical Works: House wiring, panel upgrades, or routine maintenance."></textarea>
+                </div>
 
-<div class="form-group">
-<select>
-<option>Select Survey Type</option>
-<option>Solar Survey</option>
-<option>Inverter Survey</option>
-<option>CCTV Survey</option>
-<option>Energy Audit</option>
-</select>
-</div>
+                <button type="submit" class="submit-btn">
+                    Schedule Site Assessment <i data-lucide="send"></i>
+                </button>
 
-<div class="form-group full-width">
-<textarea rows="6" placeholder="Describe your project"></textarea>
-</div>
-
-<button class="submit-btn">
-Schedule Site Survey
-</button>
-
-</form>
-
-</div>
+            </form>
+        </div>
+    </div>
 </section>
-<a href="https://wa.me/234XXXXXXXXXX"
-   class="whatsapp-float"
-   target="_blank">
 
-    <svg xmlns="http://www.w3.org/2000/svg"
-         viewBox="0 0 448 512"
-         fill="currentColor">
+<!-- BENEFITS SECTION -->
+<section class="benefits">
+    <div class="container">
+        <div class="section-title">
+            <h2>Why Request A Survey?</h2>
+            <p>Precise site evaluation guarantees maximum energy efficiency and safety.</p>
+        </div>
 
-        <path d="M380.9 97.1C339-6.1 224.5-33.3 127.8 18.7 31.1 70.7-11.6 185.2 18.7 288L0 384l98.7-18.7c96.8 52 211.3 24.8 263.3-72 52-96.7 24.8-211.2 18.9-196.2zM224 338c-31.7 0-62.2-8.5-89-24.6l-6.4-3.8-58.6 11.1 11.1-57.1-4.2-6.6C40.8 199.2 52.5 121.5 106.5 74.5c54-47 133.4-48.8 189.5-4.2 56.1 44.6 72.6 122.3 39.3 185.4-33.3 63.1-107.3 97.7-181.3 82.3zm101.4-75.7c-5.5-2.8-32.5-16-37.5-17.8-5-1.9-8.7-2.8-12.4 2.8-3.7 5.6-14.3 17.8-17.5 21.5-3.2 3.7-6.5 4.2-12 1.4-32.7-16.3-54.1-29.2-75.7-66.2-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.4-29.9-17-41-4.5-10.8-9.1-9.3-12.4-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.5-19.5 19.1-19.5 46.5s20 53.9 22.8 57.6c2.8 3.7 39.3 60 95.3 84.1 13.3 5.7 23.7 9.1 31.8 11.7 13.4 4.3 25.5 3.7 35.1 2.2 10.7-1.6 32.5-13.3 37.1-26.1 4.6-12.8 4.6-23.8 3.2-26.1-1.4-2.3-5.1-3.7-10.6-6.5z"/>
-    </svg>
+        <div class="benefit-grid">
+            <div class="card">
+                <div class="card-icon"><i data-lucide="zap"></i></div>
+                <h3>Exact Sizing</h3>
+                <p>Prevent overspending or underpowered setups with accurate energy load calculations.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i data-lucide="sun"></i></div>
+                <h3>Shading Analysis</h3>
+                <p>Maximize roof solar exposure using precise azimuth and tilt positioning metrics.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i data-lucide="shield-check"></i></div>
+                <h3>Safety First</h3>
+                <p>Thorough electrical wiring inspection ensures maximum system longevity and safety.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i data-lucide="file-text"></i></div>
+                <h3>Detailed ROI Plan</h3>
+                <p>Receive a clear cost estimate and long-term energy savings blueprint.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
+<!-- PROCESS SECTION -->
+<section class="process">
+    <div class="container">
+        <div class="section-title">
+            <h2>Our Survey Process</h2>
+            <p>From initial booking to full system installation recommendations.</p>
+        </div>
+
+        <div class="process-grid">
+            <div class="step">
+                <span class="step-num">01</span>
+                <h3>Book Online</h3>
+                <p>Fill out our quick assessment form with your site location and contact details.</p>
+            </div>
+            <div class="step">
+                <span class="step-num">02</span>
+                <h3>On-Site Audit</h3>
+                <p>Our certified engineers visit your site for full structural and load evaluation.</p>
+            </div>
+            <div class="step">
+                <span class="step-num">03</span>
+                <h3>Custom Proposal</h3>
+                <p>Receive an engineered system design and transparent quote tailored to your budget.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CALL TO ACTION -->
+<section class="cta">
+    <div class="container">
+        <h2>Need Immediate Technical Guidance?</h2>
+        <p>Chat directly with our lead renewable energy engineers for expert advice.</p>
+        <a href="https://wa.me/2348133615132" target="_blank" class="cta-btn">
+            Contact An Engineer <i data-lucide="message-square"></i>
+        </a>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <p>© 2026 AE Renewable Ltd. All Rights Reserved. Powering A Sustainable Future.</p>
+    </div>
+</footer>
+
+<!-- WHATSAPP FLOATING BUTTON -->
+<a href="https://wa.me/2348133615132" class="whatsapp-float" target="_blank" aria-label="Chat on WhatsApp">
+    <i data-lucide="message-circle" style="width: 32px; height: 32px;"></i>
 </a>
+
+<!-- LUCIDE ICONS & NAV SCRIPT -->
+<script>
+    // Initialize Vector Icons
+    lucide.createIcons();
+
+    // Mobile Navbar Handler
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    menuToggle.addEventListener('click', () => {
+        if (navMenu.style.display === 'block') {
+            navMenu.style.display = 'none';
+        } else {
+            navMenu.style.display = 'block';
+            navMenu.style.position = 'absolute';
+            navMenu.style.top = '100%';
+            navMenu.style.left = '0';
+            navMenu.style.width = '100%';
+            navMenu.style.background = '#FFFFFF';
+            navMenu.style.padding = '20px';
+            navMenu.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+            
+            const navUl = navMenu.querySelector('ul');
+            navUl.style.flexDirection = 'column';
+            navUl.style.gap = '15px';
+            navUl.style.alignItems = 'flex-start';
+        }
+    });
+</script>
+
 </body>
 </html>

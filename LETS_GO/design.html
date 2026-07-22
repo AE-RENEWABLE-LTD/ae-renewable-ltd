@@ -5,460 +5,841 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Engineering Design | AE Renewable Ltd</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Google Fonts & Lucide Icons -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
-
-:root{
-    --primary:#004AAD;
-    --secondary:#00B140;
-    --accent:#FFC300;
-    --navy:#0B1F3A;
-    --light:#F5F7FA;
-    --white:#FFFFFF;
+/* ==========================================================================
+   PREMIUM DESIGN SYSTEM & CSS VARIABLES
+   ========================================================================== */
+:root {
+    --primary: #004AAD;
+    --primary-light: #1A62C6;
+    --secondary: #00B140;
+    --secondary-glow: rgba(0, 177, 64, 0.4);
+    --accent: #FFC300;
+    --accent-glow: rgba(255, 195, 0, 0.4);
+    --navy: #020C1A;
+    --navy-card: #07172E;
+    --slate: #0F233D;
+    --light-bg: #F8FAFC;
+    --white: #FFFFFF;
+    --text-main: #1E293B;
+    --text-muted: #64748B;
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 10px;
+    --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --shadow-premium: 0 20px 40px -15px rgba(2, 12, 26, 0.07);
+    --shadow-hover: 0 30px 60px -12px rgba(0, 74, 173, 0.18);
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
+/* Base Reset */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-body{
-    overflow-x:hidden;
-    background:#fff;
+html {
+    scroll-behavior: smooth;
 }
 
-.container{
-    width:90%;
-    max-width:1200px;
-    margin:auto;
+body {
+    background-color: var(--light-bg);
+    color: var(--text-main);
+    overflow-x: hidden;
+    line-height: 1.6;
 }
 
-/* HEADER */
-
-header{
-    position:sticky;
-    top:0;
-    background:#fff;
-    box-shadow:0 2px 10px rgba(0,0,0,.08);
-    z-index:1000;
+h1, h2, h3, h4 {
+    font-family: 'Outfit', sans-serif;
 }
 
-.navbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:20px 0;
+.container {
+    width: 90%;
+    max-width: 1240px;
+    margin: 0 auto;
 }
 
-.logo{
-    font-size:28px;
-    font-weight:800;
-    color:var(--primary);
+/* ==========================================================================
+   NAVIGATION BAR
+   ========================================================================== */
+header {
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    z-index: 1000;
+    transition: var(--transition);
 }
 
-.logo span{
-    color:var(--secondary);
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 0;
 }
 
-nav ul{
-    display:flex;
-    list-style:none;
-    gap:25px;
+.logo {
+    font-family: 'Outfit', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--primary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: -0.5px;
 }
 
-nav a{
-    text-decoration:none;
-    color:var(--navy);
-    font-weight:600;
+.logo span {
+    color: var(--secondary);
 }
 
-/* HERO */
-
-.hero{
-    background-image:linear-gradient(rgba(20, 55, 102, 0.85),
-    rgba(1, 7, 15, 0.85)), url("images/designHero.jpeg");
-    background:linear-gradient(
-        135deg,
-        #004AAD,
-        #00B140,
-        
-    );
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    color:white;
-    text-align:center;
-    padding:120px 20px;
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 32px;
+    align-items: center;
 }
 
-.hero h1{
-    font-size:3.5rem;
-    margin-bottom:20px;
+nav a {
+    text-decoration: none;
+    color: var(--navy);
+    font-weight: 600;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 6px 0;
+    transition: var(--transition);
 }
 
-.hero p{
-    max-width:800px;
-    margin:auto;
-    line-height:1.8;
-    margin-bottom:35px;
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 2px;
+    transition: var(--transition);
 }
 
-.hero-btn{
-    display:inline-block;
-    padding:15px 35px;
-    background:var(--accent);
-    color:#000;
-    text-decoration:none;
-    border-radius:50px;
-    font-weight:700;
+nav a:hover::after, nav a.active::after {
+    width: 100%;
 }
 
-/* DESIGN SERVICES */
-
-.design-services{
-    padding:100px 0;
+.nav-cta {
+    background: var(--navy);
+    color: var(--white) !important;
+    padding: 10px 24px !important;
+    border-radius: 50px;
+    transition: var(--transition) !important;
 }
 
-.section-title{
-    text-align:center;
-    margin-bottom:60px;
+.nav-cta:hover {
+    background: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 74, 173, 0.2);
 }
 
-.section-title h2{
-    color:var(--navy);
-    margin-bottom:15px;
+.nav-cta::after { display: none !important; }
+
+/* Mobile Menu Toggle */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--navy);
+    cursor: pointer;
 }
 
-.section-title p{
-    color:#666;
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+.hero {
+    position: relative;
+    background: linear-gradient(135deg, rgba(2, 12, 26, 0.92) 0%, rgba(11, 31, 58, 0.88) 100%), 
+                url("images/designHero.jpeg") center/cover no-repeat;
+    color: var(--white);
+    padding: 140px 20px 160px;
+    text-align: center;
+    overflow: hidden;
 }
 
-.design-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:25px;
+/* Ambient Animated Glows */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--primary-light) 0%, rgba(0,0,0,0) 70%);
+    opacity: 0.4;
+    filter: blur(80px);
+    animation: floatGlow 12s infinite alternate ease-in-out;
 }
 
-.design-card{
-    /* background-image: url(/LETS_GO/images/installer1.jpeg); */
-    background:#fff;
-    padding:30px;
-    border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-    transition:.3s;
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: -20%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--secondary) 0%, rgba(0,0,0,0) 70%);
+    opacity: 0.3;
+    filter: blur(80px);
+    animation: floatGlow 10s infinite alternate-reverse ease-in-out;
 }
 
-.design-card:hover{
-    transform:translateY(-8px);
+@keyframes floatGlow {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(40px, 50px) scale(1.1); }
 }
 
-.design-card h3{
-    color:var(--primary);
-    margin-bottom:15px;
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
 }
 
-/* PROCESS */
-
-.process{
-    background:var(--light);
-    padding:100px 0;
+.hero h1 {
+    font-size: clamp(2.5rem, 5vw, 4.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 24px;
+    letter-spacing: -1px;
 }
 
-.process-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:20px;
+.hero h1 span {
+    background: linear-gradient(135deg, #FFFFFF 0%, #A5C9FF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.step{
-    background:#fff;
-    padding:25px;
-    border-radius:15px;
-    text-align:center;
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
+.hero p {
+    max-width: 760px;
+    margin: 0 auto 40px;
+    font-size: 1.15rem;
+    color: #94A3B8;
+    line-height: 1.8;
 }
 
-.step-number{
-    width:50px;
-    height:50px;
-    background:var(--primary);
-    color:white;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin:auto;
-    margin-bottom:15px;
-    font-weight:700;
+.hero-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 40px;
+    background: linear-gradient(135deg, var(--accent) 0%, #FF9900 100%);
+    color: var(--navy);
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 10px 25px var(--accent-glow);
+    transition: var(--transition);
 }
 
-/* DELIVERABLES */
-
-.deliverables{
-    padding:100px 0;
+.hero-btn:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 20px 35px var(--accent-glow);
 }
 
-.deliverables-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:20px;
+/* ==========================================================================
+   SECTION HEADINGS
+   ========================================================================== */
+.section-title {
+    text-align: center;
+    margin-bottom: 60px;
 }
 
-.deliverable{
-    background:white;
-    border-left:5px solid var(--secondary);
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 5px 20px rgba(0,0,0,.06);
+.section-title h2 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
 }
 
-/* CTA */
-
-.cta{
-    border-radius:20px 20px 0 0;
-    background-image:
-    linear-gradient(rgba(42, 43, 3, 0.85), rgba(0, 8, 19, 0.85)),
-    url("./images/logodark.png");
-    background-repeat: no-repeat; 
-    background-size: cover;
-    background-position: center;
-    /* /* width: 100%; */
-    color:white;
-    text-align:center;
-    padding:100px 20px;
+.section-title p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-.cta h2{
-    margin-bottom:15px;
+/* ==========================================================================
+   DESIGN SERVICES
+   ========================================================================== */
+.design-services {
+    padding: 120px 0;
+    background: var(--white);
 }
 
-.cta p{
-    max-width:700px;
-    margin:auto;
-    margin-bottom:25px;
+.design-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
 }
 
-.cta-btn{
-    display:inline-block;
-    background:var(--accent);
-    color:black;
-    text-decoration:none;
-    padding:15px 35px;
-    border-radius:50px;
-    font-weight:700;
+.design-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid #E2E8F0;
+    overflow: hidden;
+    box-shadow: var(--shadow-premium);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
 }
 
-/* FOOTER */
-
-footer{
-    background:#08172d;
-    color:white;
-    text-align:center;
-    padding:30px;
+.design-card-img {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
 }
 
-/* MOBILE */
+.design-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+}
 
-@media(max-width:768px){
+.design-card-body {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
 
-    nav{
-        display:none;
+.design-card h3 {
+    color: var(--navy);
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    transition: var(--transition);
+}
+
+.design-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.design-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-hover);
+    border-color: rgba(0, 74, 173, 0.2);
+}
+
+.design-card:hover .design-card-img img {
+    transform: scale(1.08);
+}
+
+.design-card:hover h3 {
+    color: var(--primary);
+}
+
+/* ==========================================================================
+   PROCESS SECTION (3D CARDS)
+   ========================================================================== */
+.process {
+    background: var(--navy);
+    color: var(--white);
+    padding: 120px 0;
+    position: relative;
+}
+
+.process .section-title h2 {
+    color: var(--white);
+}
+
+.process .section-title p {
+    color: #94A3B8;
+}
+
+.process-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 25px;
+}
+
+.step {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    padding: 35px 25px;
+    border-radius: var(--radius-md);
+    text-align: center;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.step::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.step-number {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-weight: 800;
+    font-size: 1.2rem;
+    box-shadow: 0 10px 20px rgba(0, 74, 173, 0.4);
+}
+
+.step h4 {
+    font-size: 1.1rem;
+    color: var(--white);
+    font-weight: 600;
+}
+
+.step:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.step:hover::before {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   DELIVERABLES SECTION
+   ========================================================================== */
+.deliverables {
+    padding: 120px 0;
+    background: var(--light-bg);
+}
+
+.deliverables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.deliverable {
+    background: var(--white);
+    padding: 24px 28px;
+    border-radius: var(--radius-md);
+    border: 1px solid #E2E8F0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-weight: 600;
+    color: var(--navy);
+    box-shadow: var(--shadow-premium);
+    transition: var(--transition);
+}
+
+.deliverable-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(0, 177, 64, 0.1);
+    color: var(--secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.deliverable:hover {
+    transform: translateX(8px);
+    border-color: var(--secondary);
+    box-shadow: 0 15px 30px rgba(0, 177, 64, 0.12);
+}
+
+/* ==========================================================================
+   CALL TO ACTION
+   ========================================================================== */
+.cta-wrapper {
+    padding: 0 0 100px;
+}
+
+.cta {
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, rgba(2, 12, 26, 0.95) 0%, rgba(15, 35, 61, 0.92) 100%), 
+                url("./images/logodark.png") center/cover no-repeat;
+    color: var(--white);
+    text-align: center;
+    padding: 90px 30px;
+    box-shadow: var(--shadow-hover);
+    border: 1px solid var(--glass-border);
+    position: relative;
+    overflow: hidden;
+}
+
+.cta h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 18px;
+}
+
+.cta p {
+    max-width: 650px;
+    margin: 0 auto 35px;
+    color: #94A3B8;
+    font-size: 1.1rem;
+}
+
+.cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--accent) 0%, #FF9900 100%);
+    color: var(--navy);
+    text-decoration: none;
+    padding: 18px 42px;
+    border-radius: 50px;
+    font-weight: 800;
+    box-shadow: 0 10px 25px var(--accent-glow);
+    transition: var(--transition);
+}
+
+.cta-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 20px 35px var(--accent-glow);
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+footer {
+    background: var(--navy);
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    padding: 40px 20px;
+    border-top: 1px solid var(--glass-border);
+    font-size: 0.95rem;
+}
+
+footer strong {
+    color: var(--white);
+}
+
+/* ==========================================================================
+   ANIMATIONS & SCROLL EFFECTS
+   ========================================================================== */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   RESPONSIVE MEDIA QUERIES
+   ========================================================================== */
+@media (max-width: 992px) {
+    .menu-toggle { display: block; }
+    
+    nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--white);
+        padding: 20px 0;
+        box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+        clip-path: circle(0% at 100% 0);
+        transition: clip-path 0.5s ease-in-out;
     }
 
-    .hero{
-        padding:80px 15px;
+    nav.open {
+        clip-path: circle(140% at 100% 0);
     }
 
-    .hero h1{
-        font-size:2rem;
+    nav ul {
+        flex-direction: column;
+        gap: 20px;
     }
-
 }
 
+@media (max-width: 768px) {
+    .hero { padding: 100px 20px 120px; }
+    .design-services, .process, .deliverables { padding: 80px 0; }
+    .deliverables-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 
 <body>
 
+<!-- NAVBAR -->
 <header>
-<div class="container navbar">
+    <div class="container navbar">
+        <a href="index.html" class="logo">
+            AE <span>Renewable</span>
+        </a>
 
-<div class="logo">
-AE <span>Renewable</span>
-</div>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle Navigation">
+            <i data-lucide="menu"></i>
+        </button>
 
-<nav>
-<ul>
-<li><a href="index.html">Home</a></li>
-<li><a href="about.html">About</a></li>
-<li><a href="services.html">Services</a></li>
-<li><a href="projects.html">Projects</a></li>
-<li><a href="contact.html">Contact</a></li>
-</ul>
-</nav>
-
-</div>
+        <nav id="navMenu">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html" class="active">Services</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="contact.html" class="nav-cta">Contact Us</a></li>
+            </ul>
+        </nav>
+    </div>
 </header>
 
+<!-- HERO SECTION -->
 <section class="hero">
-<div class="container">
-
-<h1>Engineering Design & System Planning</h1>
-
-<p>
-Every successful renewable energy project begins with precise engineering.
-Our design team develops efficient, scalable and reliable solar, inverter,
-battery and electrical systems tailored to your energy requirements.
-</p>
-
-<a href="consultation.html" class="hero-btn">
-Request Design Consultation
-</a>
-
-</div>
+    <div class="container">
+        <div class="hero-badge reveal">
+            <i data-lucide="zap" style="width: 16px; height: 16px;"></i> Precision Engineering
+        </div>
+        <h1 class="reveal">Engineering Design & <br><span>System Planning</span></h1>
+        <p class="reveal">
+            Every successful renewable energy project begins with precise engineering. 
+            Our expert team develops efficient, scalable, and ultra-reliable solar, inverter, 
+            battery, and electrical architectures tailored specifically to your load demands.
+        </p>
+        <a href="consultation.html" class="hero-btn reveal">
+            Request Design Consultation <i data-lucide="arrow-right"></i>
+        </a>
+    </div>
 </section>
 
+<!-- DESIGN SERVICES -->
 <section class="design-services">
-<div class="container">
+    <div class="container">
+        <div class="section-title reveal">
+            <h2>Our Design Services</h2>
+            <p>Comprehensive engineering solutions for residential, commercial, and industrial utility projects.</p>
+        </div>
 
-<div class="section-title">
-<h2>Our Design Services</h2>
-<p>Comprehensive engineering solutions for residential, commercial and industrial projects.</p>
-</div>
+        <div class="design-grid">
+            <div class="design-card reveal">
+                <div class="design-card-img">
+                    <img src="images/image00512.jpeg" alt="Solar PV Design">
+                </div>
+                <div class="design-card-body">
+                    <h3>Solar PV Design</h3>
+                    <p>Professional solar array sizing, shading analysis, and high-yield layout planning.</p>
+                </div>
+            </div>
 
-<div class="design-grid">
+            <div class="design-card reveal">
+                <div class="design-card-img">
+                    <img src="images/image00224.jpeg" alt="Battery Design">
+                </div>
+                <div class="design-card-body">
+                    <h3>Battery Storage Design</h3>
+                    <p>Accurate chemistry selection and storage capacity calculations for critical backups.</p>
+                </div>
+            </div>
 
-<div class="design-card">
-    <img src="images/image00512.jpeg" style="width:100%" alt="">
-<h3>Solar PV Design</h3>
-<p>Professional solar array sizing and layout planning.</p>
-</div>
+            <div class="design-card reveal">
+                <div class="design-card-img">
+                    <img src="images/image00221.jpeg" alt="Inverter Design">
+                </div>
+                <div class="design-card-body">
+                    <h3>Inverter Architecture</h3>
+                    <p>Optimized inverter topology sizing, stringing config, and phase distribution.</p>
+                </div>
+            </div>
 
-<div class="design-card">
-    <img src="images/image00224.jpeg" width="100%" alt="">
-<h3>Battery Design</h3>
-<p>Accurate battery bank calculations for backup requirements.</p>
-</div>
+            <div class="design-card reveal">
+                <div class="design-card-img">
+                    <img src="images/frontpageUi.jpeg" alt="Cable Sizing">
+                </div>
+                <div class="design-card-body">
+                    <h3>Cable & Conductor Sizing</h3>
+                    <p>Rigorous voltage drop calculations and conductor selection for maximum efficiency.</p>
+                </div>
+            </div>
 
-<div class="design-card">
-    <img src="images/image00221.jpeg" width="100%" alt="">
-<h3>Inverter Design</h3>
-<p>Correct inverter sizing and configuration.</p>
-</div>
-
-<!-- <div class="design-card">
-    <img src="images/frontpageUi.jpeg" width="100%"  height="100%" alt="">
-<h3>Load Analysis</h3>
-<p>Detailed power consumption and demand assessment.</p>
-</div> -->
-
-<!-- <div class="design-card">
-    <img src="images/frontpageUi.jpeg" width="100%" alt="">
-<h3>Cable Sizing</h3>
-<p>Proper conductor selection for safety and efficiency.</p>
-</div> -->
-<div class="design-card">
-    <img src="images/frontpageUi.jpeg" width="100%" alt="">
-<h3>Cable Sizing</h3>
-<p>Proper conductor selection for safety and efficiency.</p>
-</div>
-
-<div class="design-card">
-    <img src="images/image00644.jpeg" width="100%" alt="">
-<h3>Protection Design</h3>
-<p>Breaker, SPD and protection coordination design.</p>
-</div>
-
-</div>
-
-</div>
+            <div class="design-card reveal">
+                <div class="design-card-img">
+                    <img src="images/image00644.jpeg" alt="Protection Design">
+                </div>
+                <div class="design-card-body">
+                    <h3>Protection & Safety Design</h3>
+                    <p>Breakers, Surge Protective Devices (SPD), and grounding coordination layouts.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
+<!-- DESIGN PROCESS -->
 <section class="process">
-<div class="container">
+    <div class="container">
+        <div class="section-title reveal">
+            <h2>Our Engineering Process</h2>
+            <p>A systematic 6-step approach guaranteeing safety, compliance, and top performance.</p>
+        </div>
 
-<div class="section-title">
-<h2>Our Design Process</h2>
-</div>
+        <div class="process-grid">
+            <div class="step reveal">
+                <div class="step-number">1</div>
+                <h4>Requirement Analysis</h4>
+            </div>
 
-<div class="process-grid">
+            <div class="step reveal">
+                <div class="step-number">2</div>
+                <h4>Load Assessment</h4>
+            </div>
 
-<div class="step">
-<div class="step-number">1</div>
-Requirement Analysis
-</div>
+            <div class="step reveal">
+                <div class="step-number">3</div>
+                <h4>Energy Modeling</h4>
+            </div>
 
-<div class="step">
-<div class="step-number">2</div>
-Load Assessment
-</div>
+            <div class="step reveal">
+                <div class="step-number">4</div>
+                <h4>Equipment Selection</h4>
+            </div>
 
-<div class="step">
-<div class="step-number">3</div>
-Energy Modeling
-</div>
+            <div class="step reveal">
+                <div class="step-number">5</div>
+                <h4>Technical Drawings</h4>
+            </div>
 
-<div class="step">
-<div class="step-number">4</div>
-Equipment Selection
-</div>
-
-<div class="step">
-<div class="step-number">5</div>
-Technical Drawings
-</div>
-
-<div class="step">
-<div class="step-number">6</div>
-Final Design Package
-</div>
-
-</div>
-
-</div>
+            <div class="step reveal">
+                <div class="step-number">6</div>
+                <h4>Final Design Package</h4>
+            </div>
+        </div>
+    </div>
 </section>
 
+<!-- DELIVERABLES -->
 <section class="deliverables">
-<div class="container">
+    <div class="container">
+        <div class="section-title reveal">
+            <h2>Design Package Deliverables</h2>
+            <p>What you receive in your complete technical design documentation suite.</p>
+        </div>
 
-<div class="section-title">
-<h2>Design Deliverables</h2>
-</div>
-
-<div class="deliverables-grid">
-
-<div class="deliverable">✓ Single Line Diagrams</div>
-<div class="deliverable">✓ Solar Array Layout</div>
-<div class="deliverable">✓ Battery Calculations</div>
-<div class="deliverable">✓ Load Schedule</div>
-<div class="deliverable">✓ Cable Sizing Report</div>
-<div class="deliverable">✓ Protection Coordination</div>
-
-</div>
-
-</div>
+        <div class="deliverables-grid">
+            <div class="deliverable reveal">
+                <div class="deliverable-icon"><i data-lucide="check-circle-2"></i></div>
+                <span>Single Line Diagrams (SLD)</span>
+            </div>
+            <div class="deliverable reveal">
+                <div class="deliverable-icon"><i data-lucide="check-circle-2"></i></div>
+                <span>Solar Array Layout & Shading Maps</span>
+            </div>
+            <div class="deliverable reveal">
+                <div class="deliverable-icon"><i data-lucide="check-circle-2"></i></div>
+                <span>Battery Storage Sizing Reports</span>
+            </div>
+            <div class="deliverable reveal">
+                <div class="deliverable-icon"><i data-lucide="check-circle-2"></i></div>
+                <span>Load Profile & Consumption Schedules</span>
+            </div>
+            <div class="deliverable reveal">
+                <div class="deliverable-icon"><i data-lucide="check-circle-2"></i></div>
+                <span>Cable Sizing & Drop Calculation Reports</span>
+            </div>
+            <div class="deliverable reveal">
+                <div class="deliverable-icon"><i data-lucide="check-circle-2"></i></div>
+                <span>Protection Coordination Diagrams</span>
+            </div>
+        </div>
+    </div>
 </section>
 
-<section class="cta">
+<!-- CALL TO ACTION -->
+<div class="container cta-wrapper">
+    <section class="cta reveal">
+        <h2>Need a Professional System Design?</h2>
+        <p>
+            Get a complete engineering design before installation to maximize safety, compliance, 
+            efficiency, and secure your long-term return on investment.
+        </p>
+        <a href="https://aerenewablesolution.com/toolbox" class="cta-btn">
+            Start Your Project <i data-lucide="arrow-right"></i>
+        </a>
+    </section>
+</div>
 
-<h2>Need a Professional System Design?</h2>
-
-<p>
-Get a complete engineering design before installation and maximize safety, efficiency and return on investment.
-</p>
-
-<a href="https://aerenewablesolution.com/toolbox" class="cta-btn">
-Start Your Project
-</a>
-
-</section>
-
+<!-- FOOTER -->
 <footer>
-<p>© 2026 AE Renewable Ltd. All Rights Reserved.</p>
+    <div class="container">
+        <p>© 2026 <strong>AE Renewable Ltd</strong>. All Rights Reserved. | Powering A Sustainable Future</p>
+    </div>
 </footer>
+
+<!-- SCRIPTS FOR INTERACTIVITY AND REVEAL ANIMATIONS -->
+<script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Mobile Menu Toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    menuToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('open');
+    });
+
+    // Intersection Observer for Reveal-on-Scroll Animations
+    const observerOptions = {
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px"
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 
 </body>
 </html>

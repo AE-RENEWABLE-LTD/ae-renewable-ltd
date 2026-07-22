@@ -5,516 +5,975 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Installation Services | AE Renewable Ltd</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Google Fonts & Lucide Icons -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
-
-:root{
-    --primary:#004AAD;
-    --secondary:#00B140;
-    --accent:#FFC300;
-    --navy:#0B1F3A;
-    --light:#F5F7FA;
-    --white:#FFFFFF;
+/* ==========================================================================
+   PREMIUM DESIGN SYSTEM & CSS VARIABLES
+   ========================================================================== */
+:root {
+    --primary: #004AAD;
+    --primary-light: #1A62C6;
+    --secondary: #00B140;
+    --secondary-glow: rgba(0, 177, 64, 0.4);
+    --accent: #FFC300;
+    --accent-glow: rgba(255, 195, 0, 0.4);
+    --navy: #020C1A;
+    --navy-card: #07172E;
+    --slate: #0F233D;
+    --light-bg: #F8FAFC;
+    --white: #FFFFFF;
+    --text-main: #1E293B;
+    --text-muted: #64748B;
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+    --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --shadow-premium: 0 20px 40px -15px rgba(2, 12, 26, 0.07);
+    --shadow-hover: 0 30px 60px -12px rgba(0, 74, 173, 0.2);
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
+/* Base Reset */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-body{
-    overflow-x:hidden;
-    background:#fff;
-    color:#333;
+html {
+    scroll-behavior: smooth;
 }
 
-.container{
-    width:90%;
-    max-width:1200px;
-    margin:auto;
+body {
+    background-color: var(--light-bg);
+    color: var(--text-main);
+    overflow-x: hidden;
+    line-height: 1.6;
 }
 
-/* HEADER */
-
-header{
-    background:#fff;
-    position:sticky;
-    top:0;
-    z-index:1000;
-    box-shadow:0 2px 10px rgba(0,0,0,.08);
+h1, h2, h3, h4 {
+    font-family: 'Outfit', sans-serif;
 }
 
-.navbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:20px 0;
+.container {
+    width: 90%;
+    max-width: 1240px;
+    margin: 0 auto;
 }
 
-.logo{
-    font-size:28px;
-    font-weight:800;
-    color:var(--primary);
+/* Multi-Color Gradient Text Styling */
+.gradient-text-bold {
+    background: linear-gradient(
+        120deg, 
+        #FFC300 0%, 
+        #00B140 38%, 
+        #00E5FF 70%, 
+        #004AAD 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+    filter: drop-shadow(0 4px 20px rgba(0, 177, 64, 0.35));
+    animation: textShimmer 6s ease infinite alternate;
 }
 
-.logo span{
-    color:var(--secondary);
+@keyframes textShimmer {
+    0% { background-position: 0% center; }
+    100% { background-position: 100% center; }
 }
 
-nav ul{
-    display:flex;
-    list-style:none;
-    gap:25px;
+/* ==========================================================================
+   NAVIGATION BAR
+   ========================================================================== */
+header {
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    z-index: 1000;
+    transition: var(--transition);
 }
 
-nav a{
-    text-decoration:none;
-    color:var(--navy);
-    font-weight:600;
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 0;
 }
 
-/* HERO */
-
-.hero{
-
-        min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:120px 20px 80px;
-    background:
-    linear-gradient(rgba(1, 12, 27, 0.85),
-    rgba(8, 20, 36, 0.85)),
-    url('images/apo.jpeg') center/cover;
-    color:white;
-
+.logo {
+    font-family: 'Outfit', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--primary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: -0.5px;
 }
 
-.hero h1{
-    font-size:3.5rem;
-    margin-bottom:20px;
+.logo span {
+    color: var(--secondary);
 }
 
-.hero p{
-    max-width:800px;
-    margin:auto;
-    line-height:1.8;
-    margin-bottom:30px;
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 32px;
+    align-items: center;
 }
 
-.hero-btn{
-    display:inline-block;
-    background:var(--accent);
-    color:#000;
-    text-decoration:none;
-    padding:15px 35px;
-    border-radius:50px;
-    font-weight:700;
+nav a {
+    text-decoration: none;
+    color: var(--navy);
+    font-weight: 600;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 6px 0;
+    transition: var(--transition);
 }
 
-/* SECTION TITLE */
-
-.section-title{
-    text-align:center;
-    margin-bottom:60px;
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 2px;
+    transition: var(--transition);
 }
 
-.section-title h2{
-    color:var(--navy);
-    margin-bottom:10px;
+nav a:hover::after, nav a.active::after {
+    width: 100%;
 }
 
-/* SERVICES */
-
-.services{
-    padding:100px 0;
+.nav-cta {
+    background: var(--navy);
+    color: var(--white) !important;
+    padding: 10px 24px !important;
+    border-radius: 50px;
+    transition: var(--transition) !important;
 }
 
-.service-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:25px;
+.nav-cta:hover {
+    background: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 74, 173, 0.2);
 }
 
-.service-card{
-    background:white;
-    padding:30px;
-    border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-    transition:.3s;
+.nav-cta::after { display: none !important; }
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--navy);
+    cursor: pointer;
 }
 
-.service-card:hover{
-    transform:translateY(-8px);
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+.hero {
+    position: relative;
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(2, 12, 26, 0.92) 0%, rgba(11, 31, 58, 0.88) 100%), 
+                url('images/apo.jpeg') center/cover no-repeat;
+    color: var(--white);
+    padding: 140px 20px 100px;
+    text-align: center;
+    overflow: hidden;
 }
 
-.service-card h3{
-    color:var(--primary);
-    margin-bottom:15px;
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--primary-light) 0%, rgba(0,0,0,0) 70%);
+    opacity: 0.4;
+    filter: blur(80px);
+    animation: floatGlow 12s infinite alternate ease-in-out;
 }
 
-/* PROCESS */
-
-.process{
-    background:var(--light);
-    padding:100px 0;
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: -20%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--secondary) 0%, rgba(0,0,0,0) 70%);
+    opacity: 0.3;
+    filter: blur(80px);
+    animation: floatGlow 10s infinite alternate-reverse ease-in-out;
 }
 
-.process-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:20px;
+@keyframes floatGlow {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(40px, 50px) scale(1.1); }
 }
 
-.step{
-    background:white;
-    padding:25px;
-    border-radius:15px;
-    text-align:center;
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
 }
 
-.step-number{
-    width:50px;
-    height:50px;
-    background:var(--primary);
-    color:white;
-    border-radius:50%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    margin:auto;
-    margin-bottom:15px;
-    font-weight:700;
+.hero h1 {
+    font-size: clamp(2.5rem, 5.5vw, 4.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 24px;
+    letter-spacing: -1px;
 }
 
-/* WHY US */
-
-.why-us{
-    padding:100px 0;
+.hero p {
+    max-width: 780px;
+    margin: 0 auto 40px;
+    font-size: 1.15rem;
+    color: #CBD5E1;
+    line-height: 1.8;
 }
 
-.benefit-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:25px;
+.hero-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 40px;
+    background: linear-gradient(135deg, var(--accent) 0%, #FF9900 100%);
+    color: var(--navy);
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 1rem;
+    box-shadow: 0 10px 25px var(--accent-glow);
+    transition: var(--transition);
 }
 
-.benefit-card{
-    background:white;
-    padding:30px;
-    border-radius:15px;
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
+.hero-btn:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 20px 35px var(--accent-glow);
 }
 
-.benefit-card h3{
-    color:var(--secondary);
-    margin-bottom:10px;
+/* ==========================================================================
+   SECTION HEADINGS
+   ========================================================================== */
+.section-title {
+    text-align: center;
+    margin-bottom: 60px;
 }
 
-/* STATS */
-
-.stats{
-       background:
-    linear-gradient(rgba(42, 43, 3, 0.85),
-    rgba(0, 8, 19, 0.85)),
-    url('images/logodark.png') center/cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    color:white;
-    padding:100px 0;
+.section-title h2 {
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -1px;
+    margin-bottom: 12px;
 }
 
-.stats-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:25px;
+.section-title p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    max-width: 620px;
+    margin: 0 auto;
 }
 
-.stat-card{
-    text-align:center;
+/* ==========================================================================
+   SERVICES SECTION
+   ========================================================================== */
+.services {
+    padding: 120px 0;
+    background: var(--white);
 }
 
-.stat-card h2{
-    font-size:3rem;
-    color:var(--accent);
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
 }
 
-/* CTA */
-
-.cta{
-    padding:100px 20px;
-    text-align:center;
+.service-card {
+    background: var(--white);
+    padding: 40px 30px;
+    border-radius: var(--radius-lg);
+    border: 1px solid #E2E8F0;
+    box-shadow: var(--shadow-premium);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
 }
 
-.cta h2{
-    color:var(--navy);
-    margin-bottom:15px;
+.service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    opacity: 0;
+    transition: var(--transition);
 }
 
-.cta p{
-    max-width:700px;
-    margin:auto;
-    margin-bottom:25px;
+.service-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    background: rgba(0, 74, 173, 0.08);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    transition: var(--transition);
 }
 
-.cta-btn{
-    display:inline-block;
-    background:var(--accent);
-    color:black;
-    text-decoration:none;
-    padding:15px 35px;
-    border-radius:50px;
-    font-weight:700;
+.service-card h3 {
+    font-size: 1.35rem;
+    color: var(--navy);
+    margin-bottom: 12px;
+    font-weight: 700;
 }
 
-/* FOOTER */
-
-footer{
-    background:#08172d;
-    color:white;
-    text-align:center;
-    padding:40px 20px;
+.service-card p {
+    color: var(--text-muted);
+    font-size: 0.98rem;
+    line-height: 1.6;
 }
 
-/* MOBILE */
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-hover);
+    border-color: rgba(0, 74, 173, 0.2);
+}
 
-@media(max-width:768px){
+.service-card:hover::before {
+    opacity: 1;
+}
 
-    nav{
-        display:none;
+.service-card:hover .service-icon {
+    background: var(--primary);
+    color: var(--white);
+    transform: scale(1.1);
+}
+
+/* ==========================================================================
+   PROCESS SECTION (DARK GLASS)
+   ========================================================================== */
+.process {
+    background: var(--navy);
+    color: var(--white);
+    padding: 120px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.process .section-title h2 {
+    color: var(--white);
+}
+
+.process .section-title p {
+    color: #94A3B8;
+}
+
+.process-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+.step {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    padding: 35px 25px;
+    border-radius: var(--radius-md);
+    text-align: center;
+    transition: var(--transition);
+    position: relative;
+}
+
+.step-number {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-weight: 800;
+    font-size: 1.25rem;
+    box-shadow: 0 10px 20px rgba(0, 74, 173, 0.4);
+}
+
+.step h4 {
+    font-size: 1.1rem;
+    color: var(--white);
+    font-weight: 600;
+}
+
+.step:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ==========================================================================
+   WHY CHOOSE US
+   ========================================================================== */
+.why-us {
+    padding: 120px 0;
+    background: var(--light-bg);
+}
+
+.benefit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 28px;
+}
+
+.benefit-card {
+    background: var(--white);
+    padding: 38px 30px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-premium);
+    border: 1px solid #E2E8F0;
+    transition: var(--transition);
+}
+
+.benefit-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    background: rgba(0, 177, 64, 0.1);
+    color: var(--secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.benefit-card h3 {
+    color: var(--navy);
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.benefit-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.benefit-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 177, 64, 0.12);
+    border-color: var(--secondary);
+}
+
+/* ==========================================================================
+   STATS SECTION
+   ========================================================================== */
+.stats {
+    position: relative;
+    background: linear-gradient(135deg, rgba(2, 12, 26, 0.94) 0%, rgba(7, 23, 46, 0.92) 100%),
+                url('images/logodark.png') center/cover no-repeat;
+    color: var(--white);
+    padding: 100px 0;
+    overflow: hidden;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 20px;
+}
+
+.stat-card h2 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.stat-card p {
+    color: #94A3B8;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   PREMIUM BOLD MULTI-COLOR CTA
+   ========================================================================== */
+.cta-wrapper {
+    padding: 100px 0;
+    background: var(--light-bg);
+}
+
+.cta {
+    position: relative;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #020C1A 0%, #081B38 50%, #020C1A 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--white);
+    text-align: center;
+    padding: 90px 30px;
+    box-shadow: 0 30px 60px -15px rgba(0, 74, 173, 0.35);
+    overflow: hidden;
+    z-index: 1;
+}
+
+.cta-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.glow-1 {
+    top: -20%;
+    left: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+    opacity: 0.6;
+}
+
+.glow-2 {
+    bottom: -20%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+    opacity: 0.5;
+}
+
+.glow-3 {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, var(--accent) 0%, transparent 80%);
+    opacity: 0.25;
+}
+
+.cta-content {
+    position: relative;
+    z-index: 2;
+    max-width: 820px;
+    margin: 0 auto;
+}
+
+.aesthetic-header {
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 22px;
+    letter-spacing: -1.5px;
+    color: #FFFFFF;
+}
+
+.cta p {
+    max-width: 660px;
+    margin: 0 auto 40px;
+    color: #CBD5E1;
+    font-size: 1.18rem;
+    font-weight: 500;
+    line-height: 1.7;
+}
+
+.cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #FFC300 0%, #FF9900 100%);
+    color: #020C1A;
+    text-decoration: none;
+    padding: 20px 48px;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    box-shadow: 0 12px 30px rgba(255, 195, 0, 0.4);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cta-btn:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 22px 40px rgba(255, 195, 0, 0.6);
+    background: linear-gradient(135deg, #FFE066 0%, #FF9900 100%);
+}
+
+.cta-btn i {
+    transition: transform 0.3s ease;
+}
+
+.cta-btn:hover i {
+    transform: translateX(6px);
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+footer {
+    background: var(--navy);
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    padding: 40px 20px;
+    border-top: 1px solid var(--glass-border);
+    font-size: 0.95rem;
+}
+
+footer strong {
+    color: var(--white);
+}
+
+/* ==========================================================================
+   ANIMATIONS & SCROLL EFFECTS
+   ========================================================================== */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Mobile Responsive */
+@media (max-width: 992px) {
+    .menu-toggle { display: block; }
+    
+    nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--white);
+        padding: 20px 0;
+        box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+        clip-path: circle(0% at 100% 0);
+        transition: clip-path 0.5s ease-in-out;
     }
 
-    .hero{
-        padding:80px 15px;
+    nav.open {
+        clip-path: circle(140% at 100% 0);
     }
 
-    .hero h1{
-        font-size:2rem;
-    }
-
-    .container{
-        width:95%;
+    nav ul {
+        flex-direction: column;
+        gap: 20px;
     }
 }
 
+@media (max-width: 768px) {
+    .hero { padding: 120px 20px 80px; }
+    .services, .process, .why-us, .stats { padding: 80px 0; }
+    .cta { padding: 60px 20px; }
+}
 </style>
 </head>
 
 <body>
 
+<!-- NAVBAR -->
 <header>
-<div class="container navbar">
+    <div class="container navbar">
+        <a href="index.html" class="logo">
+            AE <span>Renewable</span>
+        </a>
 
-<div class="logo">
-AE <span>Renewable</span>
-</div>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle Navigation">
+            <i data-lucide="menu"></i>
+        </button>
 
-<nav>
-<ul>
-<li><a href="index.html">Home</a></li>
-<li><a href="about.html">About</a></li>
-<li><a href="services.html">Services</a></li>
-<li><a href="projects.html">Projects</a></li>
-<li><a href="contact.html">Contact</a></li>
-</ul>
-</nav>
-
-</div>
+        <nav id="navMenu">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html" class="active">Services</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="contact.html" class="nav-cta">Contact Us</a></li>
+            </ul>
+        </nav>
+    </div>
 </header>
 
+<!-- HERO SECTION -->
 <section class="hero">
-<div class="container">
-
-<h1>Professional Installation Services</h1>
-
-<p>
-From residential solar systems to commercial and industrial power projects,
-AE Renewable delivers safe, efficient and reliable installations that meet
-the highest engineering standards.
-</p>
-
-<a href="installert.html" class="hero-btn">
-Book Installation Consultation
-</a>
-
-</div>
+    <div class="container">
+        <div class="hero-badge reveal">
+            <i data-lucide="shield-check" style="width: 16px; height: 16px;"></i> Certified Engineering Standards
+        </div>
+        <h1 class="reveal">
+            Professional <br><span class="gradient-text-bold">Installation Services</span>
+        </h1>
+        <p class="reveal">
+            From residential solar arrays to heavy commercial and industrial microgrids, 
+            AE Renewable delivers safe, high-efficiency, and long-lasting energy solutions.
+        </p>
+        <a href="installert.html" class="hero-btn reveal">
+            Book Installation Consultation <i data-lucide="arrow-right"></i>
+        </a>
+    </div>
 </section>
 
+<!-- SERVICES SECTION -->
 <section class="services">
-<div class="container">
+    <div class="container">
+        <div class="section-title reveal">
+            <h2>What We Install</h2>
+            <p>End-to-end installation services backed by precision engineering and quality components.</p>
+        </div>
 
-<div class="section-title">
-<h2>What We Install</h2>
-</div>
+        <div class="service-grid">
+            <div class="service-card reveal">
+                <div class="service-icon"><i data-lucide="sun"></i></div>
+                <h3>Solar PV Systems</h3>
+                <p>Grid-tied, hybrid, and off-grid solar deployments configured for maximum energy yield.</p>
+            </div>
 
-<div class="service-grid">
+            <div class="service-card reveal">
+                <div class="service-icon"><i data-lucide="zap"></i></div>
+                <h3>Hybrid Inverters</h3>
+                <p>Advanced multi-mode inverter installations for seamless power switching.</p>
+            </div>
 
-<div class="service-card">
-<h3>Solar PV Systems</h3>
-<p>Grid-tied, hybrid and off-grid solar installations.</p>
-</div>
+            <div class="service-card reveal">
+                <div class="service-icon"><i data-lucide="battery-charging"></i></div>
+                <h3>Lithium Storage</h3>
+                <p>High-density lithium battery installations engineered for reliable backup power.</p>
+            </div>
 
-<div class="service-card">
-<h3>Hybrid Inverters</h3>
-<p>Professional inverter installation and configuration.</p>
-</div>
+            <div class="service-card reveal">
+                <div class="service-icon"><i data-lucide="camera"></i></div>
+                <h3>CCTV Security</h3>
+                <p>Integrated solar-powered security and surveillance systems for total coverage.</p>
+            </div>
 
-<div class="service-card">
-<h3>Lithium Batteries</h3>
-<p>Reliable energy storage solutions and backup systems.</p>
-</div>
+            <div class="service-card reveal">
+                <div class="service-icon"><i data-lucide="cpu"></i></div>
+                <h3>Smart Energy Controls</h3>
+                <p>Automated load management, remote monitoring, and energy optimization systems.</p>
+            </div>
 
-<div class="service-card">
-<h3>CCTV Systems</h3>
-<p>Residential and commercial security installations.</p>
-</div>
-
-<div class="service-card">
-<h3>Smart Homes</h3>
-<p>Automation, monitoring and intelligent control systems.</p>
-</div>
-
-<div class="service-card">
-<h3>Electrical Works</h3>
-<p>Distribution upgrades, protection systems and wiring.</p>
-</div>
-
-</div>
-</div>
+            <div class="service-card reveal">
+                <div class="service-icon"><i data-lucide="activity"></i></div>
+                <h3>Electrical Engineering</h3>
+                <p>Main distribution panel upgrades, surge protection, grounding, and infrastructure wiring.</p>
+            </div>
+        </div>
+    </div>
 </section>
 
+<!-- PROCESS SECTION -->
 <section class="process">
-<div class="container">
+    <div class="container">
+        <div class="section-title reveal">
+            <h2>Our Installation Process</h2>
+            <p>Our structured step-by-step workflow guarantees safety, compliance, and top performance.</p>
+        </div>
 
-<div class="section-title">
-<h2>Our Installation Process</h2>
-</div>
+        <div class="process-grid">
+            <div class="step reveal">
+                <div class="step-number">1</div>
+                <h4>Site Survey</h4>
+            </div>
 
-<div class="process-grid">
+            <div class="step reveal">
+                <div class="step-number">2</div>
+                <h4>System Design</h4>
+            </div>
 
-<div class="step">
-<div class="step-number">1</div>
-Site Survey
-</div>
+            <div class="step reveal">
+                <div class="step-number">3</div>
+                <h4>Procurement</h4>
+            </div>
 
-<div class="step">
-<div class="step-number">2</div>
-System Design
-</div>
+            <div class="step reveal">
+                <div class="step-number">4</div>
+                <h4>Installation</h4>
+            </div>
 
-<div class="step">
-<div class="step-number">3</div>
-Equipment Procurement
-</div>
+            <div class="step reveal">
+                <div class="step-number">5</div>
+                <h4>System Testing</h4>
+            </div>
 
-<div class="step">
-<div class="step-number">4</div>
-Installation
-</div>
-
-<div class="step">
-<div class="step-number">5</div>
-Testing
-</div>
-
-<div class="step">
-<div class="step-number">6</div>
-Commissioning
-</div>
-
-</div>
-
-</div>
+            <div class="step reveal">
+                <div class="step-number">6</div>
+                <h4>Commissioning</h4>
+            </div>
+        </div>
+    </div>
 </section>
 
+<!-- WHY CHOOSE US -->
 <section class="why-us">
-<div class="container">
+    <div class="container">
+        <div class="section-title reveal">
+            <h2>Why Choose AE Renewable</h2>
+            <p>Building energy independence with quality components and expert craftsmanship.</p>
+        </div>
 
-<div class="section-title">
-<h2>Why Choose AE Renewable</h2>
-</div>
+        <div class="benefit-grid">
+            <div class="benefit-card reveal">
+                <div class="benefit-icon"><i data-lucide="award"></i></div>
+                <h3>Certified Engineers</h3>
+                <p>Experienced renewable energy engineers adhering to international electrical codes.</p>
+            </div>
 
-<div class="benefit-grid">
+            <div class="benefit-card reveal">
+                <div class="benefit-icon"><i data-lucide="shield-glass"></i></div>
+                <h3>Tier-1 Equipment</h3>
+                <p>Only premium-grade solar panels, inverters, and lithium storage units from trusted global brands.</p>
+            </div>
 
-<div class="benefit-card">
-<h3>Certified Engineers</h3>
-<p>Experienced renewable energy professionals.</p>
-</div>
+            <div class="benefit-card reveal">
+                <div class="benefit-icon"><i data-lucide="check-check"></i></div>
+                <h3>Strict Safety Standards</h3>
+                <p>Comprehensive surge protection, proper grounding, and thermal management safety built-in.</p>
+            </div>
 
-<div class="benefit-card">
-<h3>Quality Equipment</h3>
-<p>Trusted products from leading manufacturers.</p>
-</div>
-
-<div class="benefit-card">
-<h3>Safety Standards</h3>
-<p>Strict compliance with engineering best practices.</p>
-</div>
-
-<div class="benefit-card">
-<h3>After-Sales Support</h3>
-<p>Long-term maintenance and technical assistance.</p>
-</div>
-
-</div>
-
-</div>
+            <div class="benefit-card reveal">
+                <div class="benefit-icon"><i data-lucide="headphones"></i></div>
+                <h3>After-Sales Support</h3>
+                <p>Proactive maintenance plans, remote monitoring, and rapid technical assistance whenever needed.</p>
+            </div>
+        </div>
+    </div>
 </section>
 
+<!-- STATS SECTION -->
 <section class="stats">
-<div class="container">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card reveal">
+                <h2 class="gradient-text-bold">500+</h2>
+                <p>Projects Completed</p>
+            </div>
 
-<div class="stats-grid">
+            <div class="stat-card reveal">
+                <h2 class="gradient-text-bold">99%</h2>
+                <p>Client Satisfaction</p>
+            </div>
 
-<div class="stat-card">
-<h2>500+</h2>
-<p>Projects Completed</p>
-</div>
+            <div class="stat-card reveal">
+                <h2 class="gradient-text-bold">24/7</h2>
+                <p>Support Line</p>
+            </div>
 
-<div class="stat-card">
-<h2>99%</h2>
-<p>Client Satisfaction</p>
-</div>
-
-<div class="stat-card">
-<h2>24/7</h2>
-<p>Support</p>
-</div>
-
-<div class="stat-card">
-<h2>100%</h2>
-<p>Quality Commitment</p>
-</div>
-
-</div>
-
-</div>
+            <div class="stat-card reveal">
+                <h2 class="gradient-text-bold">100%</h2>
+                <p>Quality Guarantee</p>
+            </div>
+        </div>
+    </div>
 </section>
 
-<section class="cta">
+<!-- CALL TO ACTION -->
+<div class="container cta-wrapper">
+    <section class="cta reveal">
+        <div class="cta-glow glow-1"></div>
+        <div class="cta-glow glow-2"></div>
+        <div class="cta-glow glow-3"></div>
 
-<h2>Ready To Power Your Future?</h2>
+        <div class="cta-content">
+            <h2 class="aesthetic-header">
+                Ready To <span class="gradient-text-bold">Power Your Future?</span>
+            </h2>
+            
+            <p>
+                Partner with AE Renewable Ltd today for professional installation services 
+                engineered for supreme efficiency, safety, and long-term sustainability.
+            </p>
 
-<p>
-Partner with AE Renewable for professional installation services
-built on quality, reliability and innovation.
-</p>
+            <a href="consultation.html" class="cta-btn">
+                <span>Get Started Today</span>
+                <i data-lucide="arrow-right"></i>
+            </a>
+        </div>
+    </section>
+</div>
 
-<a href="consultation.html" class="cta-btn">
-Get Started Today
-</a>
-
-</section>
-
+<!-- FOOTER -->
 <footer>
-<p>© 2026 AE Renewable Ltd. All Rights Reserved.</p>
+    <div class="container">
+        <p>© 2026 <strong>AE Renewable Ltd</strong>. All Rights Reserved. | Powering A Sustainable Future</p>
+    </div>
 </footer>
+
+<!-- SCRIPTS FOR INTERACTIVITY AND REVEAL ANIMATIONS -->
+<script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Mobile Menu Toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    menuToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('open');
+    });
+
+    // Intersection Observer for Reveal-on-Scroll Animations
+    const observerOptions = {
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px"
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 
 </body>
 </html>

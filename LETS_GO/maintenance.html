@@ -1,603 +1,1304 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maintenance & Support | AE Renewable Ltd</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-<style>
-
-:root{
-    --primary:#004AAD;
-    --secondary:#00B140;
-    --accent:#FFC300;
-    --navy:#0B1F3A;
-    --light:#F5F7FA;
-    --white:#FFFFFF;
-}
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
-body{
-    overflow-x:hidden;
-    background:#fff;
-    color:#333;
-}
-
-.container{
-    width:90%;
-    max-width:1200px;
-    margin:auto;
-}
-
-/* HEADER */
-
-header{
-    position:sticky;
-    top:0;
-    z-index:1000;
-    background:#fff;
-    box-shadow:0 2px 15px rgba(0,0,0,.08);
-}
-
-.navbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:20px 0;
-}
-
-.logo{
-    font-size:28px;
-    font-weight:800;
-    color:var(--primary);
-}
-
-.logo span{
-    color:var(--secondary);
-}
-
-nav ul{
-    display:flex;
-    list-style:none;
-    gap:25px;
-}
-
-nav a{
-    text-decoration:none;
-    color:var(--navy);
-    font-weight:600;
-}
-
-/* HERO */
-
-.hero{
-    background:linear-gradient(135deg,#004AAD,#00B140);
-    color:white;
-    text-align:center;
-    padding:120px 20px;
-}
-
-.hero h1{
-    font-size:3.5rem;
-    margin-bottom:20px;
-}
-
-.hero p{
-    max-width:850px;
-    margin:auto;
-    line-height:1.8;
-    margin-bottom:30px;
-}
-
-.hero-btn{
-    display:inline-block;
-    padding:15px 35px;
-    background:var(--accent);
-    color:black;
-    text-decoration:none;
-    border-radius:50px;
-    font-weight:700;
-}
-
-/* SECTION */
-
-.section{
-    padding:100px 0;
-}
-
-.section-title{
-    text-align:center;
-    margin-bottom:60px;
-}
-
-.section-title h2{
-    color:var(--navy);
-    margin-bottom:10px;
-}
-
-/* OVERVIEW */
-
-.overview-box{
-    background:white;
-    padding:40px;
-    border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
-    text-align:center;
-    line-height:1.8;
-}
-
-/* SERVICES */
-
-.services{
-    background:var(--light);
-}
-
-.service-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:25px;
-}
-
-.service-card{
-    background:white;
-    padding:30px;
-    border-radius:18px;
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
-    transition:.3s;
-}
-
-.service-card:hover{
-    transform:translateY(-8px);
-}
-
-.service-card h3{
-    color:var(--primary);
-    margin-bottom:12px;
-}
-
-/* PLANS */
-
-.plan-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:25px;
-}
-
-.plan-card{
-    background:white;
-    border-radius:20px;
-    padding:35px;
-    text-align:center;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-}
-
-.plan-card h3{
-    color:var(--primary);
-    margin-bottom:15px;
-}
-
-.plan-card ul{
-    list-style:none;
-    margin-top:20px;
-}
-
-.plan-card ul li{
-    padding:10px 0;
-    border-bottom:1px solid #eee;
-}
-
-/* CHECKLIST */
-
-.checklist{
-    background:var(--light);
-}
-
-.checklist-box{
-    background:white;
-    padding:40px;
-    border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-}
-
-.checklist ul{
-    list-style:none;
-}
-
-.checklist li{
-    padding:15px 0;
-    border-bottom:1px solid #eee;
-}
-
-/* SUPPORT */
-
-.support{
-    background:linear-gradient(135deg,#004AAD,#0B1F3A);
-    color:white;
-    text-align:center;
-}
-
-.support h2{
-    margin-bottom:20px;
-}
-
-.support p{
-    max-width:700px;
-    margin:auto;
-    line-height:1.8;
-}
-
-/* BENEFITS */
-
-.benefit-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:25px;
-}
-
-.benefit-card{
-    background:white;
-    padding:30px;
-    text-align:center;
-    border-radius:18px;
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
-    font-weight:600;
-}
-
-/* CTA */
-
-.cta{
-    text-align:center;
-}
-
-.cta h2{
-    color:var(--navy);
-    margin-bottom:15px;
-}
-
-.cta p{
-    max-width:700px;
-    margin:auto;
-    margin-bottom:25px;
-}
-
-.cta-btn{
-    display:inline-block;
-    padding:15px 35px;
-    background:var(--accent);
-    color:black;
-    text-decoration:none;
-    border-radius:50px;
-    font-weight:700;
-}
-
-/* WHATSAPP */
-
-.whatsapp-float{
-    position:fixed;
-    width:65px;
-    height:65px;
-    bottom:25px;
-    right:25px;
-    background:#25D366;
-    color:#fff;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-decoration:none;
-    box-shadow:0 8px 25px rgba(0,0,0,.25);
-    z-index:9999;
-}
-
-.whatsapp-float svg{
-    width:32px;
-    height:32px;
-}
-
-/* FOOTER */
-
-footer{
-    background:#08172d;
-    color:white;
-    text-align:center;
-    padding:40px 20px;
-}
-
-/* MOBILE */
-
-@media(max-width:768px){
-
-    nav{
-        display:none;
-    }
-
-    .hero{
-        padding:80px 20px;
-    }
-
-    .hero h1{
-        font-size:2rem;
-    }
-
-    .section{
-        padding:70px 0;
-    }
-
-    .container{
-        width:95%;
-    }
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance & Support | AE Renewable Ltd</title>
+
+    <!-- Google Fonts & Lucide Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* ==========================================================================
+           PREMIUM BRAND DESIGN SYSTEM (PRIMARY BLUE, GREEN, ACCENT YELLOW)
+           ========================================================================== */
+        :root {
+            /* Your 3 Primary Brand Colors */
+            --brand-blue: #004AAD;
+            --brand-green: #00B140;
+            --brand-yellow: #FFC300;
+
+            /* Glows & Accent Transparencies */
+            --blue-glow: rgba(0, 74, 173, 0.35);
+            --green-glow: rgba(0, 177, 64, 0.35);
+            --yellow-glow: rgba(255, 195, 0, 0.35);
+            
+            /* Modern Dark Glass Aesthetic */
+            --navy-dark: #020C1A;
+            --navy-card: #07172E;
+            --light-bg: #F8FAFC;
+            --white: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
+
+        .container {
+            width: 90%;
+            max-width: 1240px;
+            margin: 0 auto;
+        }
+
+        /* Gradient Text */
+        .brand-gradient-text {
+            background: linear-gradient(120deg, var(--brand-yellow) 0%, var(--brand-green) 50%, #60A5FA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        /* Animations */
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* ==========================================================================
+           HEADER & NAVIGATION
+           ========================================================================== */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(2, 12, 26, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 2px solid;
+            border-image: linear-gradient(90deg, var(--brand-yellow), var(--brand-green), var(--brand-blue)) 1;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo .accent-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--brand-yellow);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--brand-yellow);
+        }
+
+        .logo span { color: var(--brand-green); }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 28px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #E2E8F0;
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+            padding: 6px 0;
+            transition: var(--transition);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--brand-green), var(--brand-yellow));
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        nav a:hover { color: var(--white); }
+        nav a:hover::after { width: 100%; }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--brand-green) 0%, #00802F 100%);
+            color: var(--white) !important;
+            padding: 10px 22px !important;
+            border-radius: 50px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px var(--green-glow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--green-glow);
+        }
+
+        .nav-cta::after { display: none !important; }
+
+        /* ==========================================================================
+           HERO SECTION
+           ========================================================================== */
+        .hero {
+            background: linear-gradient(135deg, var(--navy-dark) 0%, #081B38 100%);
+            color: var(--white);
+            padding: 110px 0 90px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--blue-glow) 0%, transparent 70%);
+            z-index: 0;
+            animation: pulseGlow 8s infinite alternate;
+        }
+
+        .hero .container { position: relative; z-index: 1; }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 195, 0, 0.1);
+            border: 1px solid var(--brand-yellow);
+            color: var(--brand-yellow);
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.15;
+        }
+
+        .hero p {
+            max-width: 800px;
+            margin: 0 auto 35px;
+            color: #CBD5E1;
+            font-size: 1.15rem;
+            line-height: 1.8;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 36px;
+            background: linear-gradient(135deg, var(--brand-yellow) 0%, #E6B000 100%);
+            color: var(--navy-dark);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 800;
+            box-shadow: 0 8px 25px var(--yellow-glow);
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px var(--yellow-glow);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 36px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--glass-border);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        /* ==========================================================================
+           SECTION TITLES & GENERAL LAYOUTS
+           ========================================================================== */
+        .section { padding: 100px 0; }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: clamp(2.2rem, 4vw, 3rem);
+            font-weight: 800;
+            color: var(--navy-dark);
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* OVERVIEW CARD */
+        .overview-box {
+            background: var(--navy-card);
+            color: var(--white);
+            padding: 48px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .overview-box::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: var(--green-glow);
+            filter: blur(80px);
+            z-index: 0;
+        }
+
+        .overview-box p {
+            position: relative;
+            z-index: 1;
+            font-size: 1.2rem;
+            line-height: 1.9;
+            color: #E2E8F0;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* ==========================================================================
+           MAINTENANCE SERVICES GRID
+           ========================================================================== */
+        .services-section { background: var(--light-bg); }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: var(--white);
+            border: 1px solid #E2E8F0;
+            border-radius: var(--radius-lg);
+            padding: 36px;
+            transition: var(--transition);
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--brand-blue);
+            box-shadow: 0 20px 40px rgba(0, 74, 173, 0.12);
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 14px;
+            background: rgba(0, 74, 173, 0.08);
+            color: var(--brand-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            transition: var(--transition);
+        }
+
+        .service-card:hover .service-icon {
+            background: var(--brand-blue);
+            color: var(--white);
+            transform: scale(1.08) rotate(3deg);
+        }
+
+        .service-card h3 {
+            font-size: 1.4rem;
+            color: var(--navy-dark);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .service-card p {
+            color: var(--text-muted);
+            font-size: 0.98rem;
+            line-height: 1.7;
+        }
+
+        /* ==========================================================================
+           MAINTENANCE PLANS
+           ========================================================================== */
+        .plans-section { background: var(--white); }
+
+        .plan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            align-items: center;
+        }
+
+        .plan-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            border: 2px solid #E2E8F0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .plan-card.featured {
+            background: var(--navy-card);
+            color: var(--white);
+            border-color: var(--brand-yellow);
+            transform: scale(1.03);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        .plan-card.featured .plan-badge {
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--brand-yellow);
+            color: var(--navy-dark);
+            font-size: 0.8rem;
+            font-weight: 800;
+            padding: 6px 18px;
+            border-radius: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .plan-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+            color: var(--navy-dark);
+        }
+
+        .plan-card.featured h3 { color: var(--white); }
+
+        .plan-frequency {
+            font-size: 0.95rem;
+            color: var(--brand-green);
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .plan-card ul {
+            list-style: none;
+            margin: 24px 0 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .plan-card ul li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.98rem;
+            color: var(--text-main);
+        }
+
+        .plan-card.featured ul li { color: #CBD5E1; }
+
+        .plan-card ul i {
+            color: var(--brand-green);
+            flex-shrink: 0;
+        }
+
+        .plan-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 50px;
+            border: 2px solid var(--brand-blue);
+            background: transparent;
+            color: var(--brand-blue);
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+
+        .plan-btn:hover {
+            background: var(--brand-blue);
+            color: var(--white);
+        }
+
+        .plan-card.featured .plan-btn {
+            background: var(--brand-yellow);
+            border-color: var(--brand-yellow);
+            color: var(--navy-dark);
+        }
+
+        .plan-card.featured .plan-btn:hover {
+            background: #E6B000;
+            border-color: #E6B000;
+        }
+
+        /* ==========================================================================
+           CHECKLIST & BENEFITS TOGGLE / DUAL SECTION
+           ========================================================================== */
+        .dual-section { background: var(--light-bg); }
+
+        .dual-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .checklist-card, .benefits-card-container {
+            background: var(--white);
+            border: 1px solid #E2E8F0;
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+
+        .checklist-card h3, .benefits-card-container h3 {
+            font-size: 1.6rem;
+            color: var(--navy-dark);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .checklist-ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .checklist-ul li {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            padding-bottom: 12px;
+            border-bottom: 1px solid #F1F5F9;
+        }
+
+        .checklist-ul li i {
+            color: var(--brand-green);
+            background: rgba(0, 177, 64, 0.1);
+            padding: 6px;
+            border-radius: 50%;
+        }
+
+        .benefits-mini-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .benefit-item {
+            background: var(--light-bg);
+            border: 1px solid #E2E8F0;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .benefit-item:hover {
+            transform: translateY(-4px);
+            border-color: var(--brand-green);
+            background: var(--white);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .benefit-item i {
+            color: var(--brand-green);
+            margin-bottom: 10px;
+        }
+
+        .benefit-item h4 {
+            font-size: 0.95rem;
+            color: var(--navy-dark);
+            font-weight: 700;
+        }
+
+        /* ==========================================================================
+           SYSTEM MANUAL CATALOG & DOWNLOAD SECTION (NEW COMPONENT)
+           ========================================================================== */
+        .catalog-section {
+            background: var(--navy-dark);
+            color: var(--white);
+            position: relative;
+        }
+
+        .catalog-section .section-title h2 { color: var(--white); }
+        .catalog-section .section-title p { color: #94A3B8; }
+
+        .catalog-filter-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 40px;
+            background: var(--navy-card);
+            padding: 20px 28px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--glass-border);
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 18px 12px 46px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--white);
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            border-color: var(--brand-yellow);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94A3B8;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 18px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.05);
+            color: #CBD5E1;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--brand-blue);
+            color: var(--white);
+            border-color: var(--brand-blue);
+        }
+
+        .manuals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .manual-card {
+            background: var(--navy-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 26px;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .manual-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--brand-yellow);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+
+        .manual-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .file-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: rgba(255, 195, 0, 0.1);
+            color: var(--brand-yellow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .file-size {
+            font-size: 0.78rem;
+            background: rgba(255,255,255,0.08);
+            padding: 4px 10px;
+            border-radius: 20px;
+            color: #94A3B8;
+            font-weight: 600;
+        }
+
+        .manual-card h4 {
+            font-size: 1.15rem;
+            color: var(--white);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .manual-card p {
+            color: #94A3B8;
+            font-size: 0.88rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.88rem;
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+        }
+
+        .download-btn:hover {
+            background: var(--brand-green);
+            border-color: var(--brand-green);
+            color: var(--white);
+        }
+
+        /* ==========================================================================
+           EMERGENCY SUPPORT & BANNER
+           ========================================================================== */
+        .support-banner {
+            background: linear-gradient(135deg, var(--brand-blue) 0%, var(--navy-dark) 100%);
+            color: var(--white);
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .support-banner h2 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            color: var(--white);
+        }
+
+        .support-banner p {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: #CBD5E1;
+            font-size: 1.1rem;
+        }
+
+        .support-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--brand-yellow);
+        }
+
+        /* ==========================================================================
+           CTA SECTION
+           ========================================================================== */
+        .cta-section {
+            text-align: center;
+            background: var(--white);
+            padding: 100px 0;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            color: var(--navy-dark);
+            margin-bottom: 16px;
+        }
+
+        .cta-section p {
+            max-width: 650px;
+            margin: 0 auto 30px;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* ==========================================================================
+           WHATSAPP & FOOTER
+           ========================================================================== */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+            z-index: 9999;
+            transition: var(--transition);
+            animation: float 3s infinite ease-in-out;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 30px rgba(37, 211, 102, 0.6);
+        }
+
+        footer {
+            background: var(--navy-dark);
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            padding: 50px 20px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        footer strong { color: var(--white); }
+
+        /* ==========================================================================
+           RESPONSIVE DESIGN
+           ========================================================================== */
+        @media (max-width: 900px) {
+            .dual-grid { grid-template-columns: 1fr; }
+            .plan-card.featured { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            nav { display: none; }
+            .hero h1 { font-size: 2.2rem; }
+            .section { padding: 70px 0; }
+            .catalog-filter-bar { flex-direction: column; align-items: stretch; }
+            .benefits-mini-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
 <header>
-<div class="container navbar">
+    <div class="container navbar">
+        <a href="index.html" class="logo">
+            <div class="accent-dot"></div>
+            AE <span>Renewable</span>
+        </a>
 
-<div class="logo">
-AE <span>Renewable</span>
-</div>
-
-<nav>
-<ul>
-<li><a href="index.html">Home</a></li>
-<li><a href="about.html">About</a></li>
-<li><a href="services.html">Services</a></li>
-<li><a href="projects.html">Projects</a></li>
-<li><a href="contact.html">Contact</a></li>
-</ul>
-</nav>
-
-</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="consultation.html" class="nav-cta">Book Service</a></li>
+            </ul>
+        </nav>
+    </div>
 </header>
 
+<!-- HERO SECTION -->
 <section class="hero">
-<div class="container">
-
-<h1>Maintenance & Support Services</h1>
-
-<p>
-Protect your solar, inverter, battery, CCTV and electrical investments with professional maintenance, diagnostics, repairs and long-term technical support from AE Renewable Ltd.
-</p>
-
-<a href="consultation.html" class="hero-btn">
-Request Maintenance Service
-</a>
-
-</div>
+    <div class="container">
+        <div class="hero-badge">
+            <i data-lucide="shield-check" style="width: 16px; height: 16px;"></i> Technical Asset Protection
+        </div>
+        <h1>Maintenance & <span class="brand-gradient-text">Support Services</span></h1>
+        <p>Protect your solar PV, battery storage, high-capacity inverters, CCTV security, and smart automation systems with expert diagnostics, scheduled servicing, and long-term technical care.</p>
+        
+        <div class="btn-group">
+            <a href="consultation.html" class="btn-primary">
+                <i data-lucide="wrench"></i> Request Maintenance
+            </a>
+            <a href="#catalog" class="btn-secondary">
+                <i data-lucide="book-open"></i> System Manuals
+            </a>
+        </div>
+    </div>
 </section>
 
+<!-- OVERVIEW SECTION -->
 <section class="section">
-<div class="container">
+    <div class="container">
+        <div class="section-title">
+            <h2>System Care Overview</h2>
+            <p>Reliable performance demands continuous oversight and preventive upkeep.</p>
+        </div>
 
-<div class="section-title">
-<h2>Maintenance Overview</h2>
-</div>
-
-<div class="overview-box">
-Regular maintenance ensures your energy system operates safely, efficiently and reliably. Our engineers perform inspections, diagnostics, performance optimization and preventive maintenance to maximize equipment lifespan and minimize downtime.
-</div>
-
-</div>
+        <div class="overview-box">
+            <p>Regular maintenance ensures your renewable energy and electrical infrastructure operates at peak efficiency. Our team of certified engineers carries out rigorous multi-point inspections, system diagnostics, performance tuning, and thermal imaging to prevent downtime and extend equipment life.</p>
+        </div>
+    </div>
 </section>
 
-<section class="section services">
-<div class="container">
+<!-- MAINTENANCE SERVICES -->
+<section class="section services-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Comprehensive Support Offerings</h2>
+            <p>Targeted upkeep programs engineered across all clean-energy and smart tech categories.</p>
+        </div>
 
-<div class="section-title">
-<h2>Our Maintenance Services</h2>
-</div>
+        <div class="service-grid">
+            <div class="service-card">
+                <div>
+                    <div class="service-icon"><i data-lucide="sun"></i></div>
+                    <h3>Solar Array Optimization</h3>
+                    <p>De-dusting, panel string voltage checks, and module thermal scans to maximize total yield and clean power production.</p>
+                </div>
+            </div>
 
-<div class="service-grid">
+            <div class="service-card">
+                <div>
+                    <div class="service-icon"><i data-lucide="battery-charging"></i></div>
+                    <h3>Battery Bank Health Audit</h3>
+                    <p>Cell balancing checks, state-of-health (SOH) diagnostics, and charge controller calibration for Lithium and Gel systems.</p>
+                </div>
+            </div>
 
-<div class="service-card">
-<h3>Solar Panel Cleaning</h3>
-<p>Restore maximum energy production and efficiency.</p>
-</div>
+            <div class="service-card">
+                <div>
+                    <div class="service-icon"><i data-lucide="cpu"></i></div>
+                    <h3>Inverter & Hybrid Diagnostics</h3>
+                    <p>Firmware upgrades, internal dust extraction, load analysis, and thermal testing to prevent inverter faults.</p>
+                </div>
+            </div>
 
-<div class="service-card">
-<h3>Battery Health Inspection</h3>
-<p>Monitor battery condition and performance.</p>
-</div>
+            <div class="service-card">
+                <div>
+                    <div class="service-icon"><i data-lucide="zap"></i></div>
+                    <h3>Electrical Safety Check</h3>
+                    <p>Inspection of surge protection devices (SPDs), circuit breakers, cable integrity, and earthing ground resistance tests.</p>
+                </div>
+            </div>
 
-<div class="service-card">
-<h3>Inverter Diagnostics</h3>
-<p>Detect faults and improve reliability.</p>
-</div>
+            <div class="service-card">
+                <div>
+                    <div class="service-icon"><i data-lucide="camera"></i></div>
+                    <h3>CCTV & Security Servicing</h3>
+                    <p>Camera lens cleaning, NVR storage formatting, network connection re-syncing, and night-vision IR testing.</p>
+                </div>
+            </div>
 
-<div class="service-card">
-<h3>Electrical Inspection</h3>
-<p>Check wiring, protection and safety systems.</p>
-</div>
-
-<div class="service-card">
-<h3>CCTV Maintenance</h3>
-<p>Ensure surveillance systems remain operational.</p>
-</div>
-
-<div class="service-card">
-<h3>Smart Home Support</h3>
-<p>Optimize automation and monitoring systems.</p>
-</div>
-
-</div>
-
-</div>
+            <div class="service-card">
+                <div>
+                    <div class="service-icon"><i data-lucide="sliders"></i></div>
+                    <h3>Smart Home Automation Calibration</h3>
+                    <p>Zigbee/Z-Wave mesh re-indexing, smart hub firmware updates, and automated scenario triggers fine-tuning.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
-<section class="section">
-<div class="container">
+<!-- MAINTENANCE PLANS -->
+<section class="section plans-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Maintenance Contracts</h2>
+            <p>Flexible service-level agreements tailored for residential and commercial sites.</p>
+        </div>
 
-<div class="section-title">
-<h2>Maintenance Plans</h2>
-</div>
+        <div class="plan-grid">
+            <!-- Basic Plan -->
+            <div class="plan-card">
+                <h3>Standard Care</h3>
+                <div class="plan-frequency">Quarterly Inspections</div>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Ideal for residential solar and energy storage systems.</p>
 
-<div class="plan-grid">
+                <ul>
+                    <li><i data-lucide="check"></i> 4x Quarterly Site Visits</li>
+                    <li><i data-lucide="check"></i> Solar Panel & Inverter Audit</li>
+                    <li><i data-lucide="check"></i> Battery SOH Report</li>
+                    <li><i data-lucide="check"></i> Standard Email Support</li>
+                </ul>
 
-<div class="plan-card">
-<h3>Basic Plan</h3>
-<p>Quarterly Inspection</p>
+                <a href="consultation.html" class="plan-btn">Select Standard</a>
+            </div>
 
-<ul>
-<li>System Inspection</li>
-<li>Performance Check</li>
-<li>Basic Diagnostics</li>
-<li>Email Support</li>
-</ul>
-</div>
+            <!-- Professional Plan (Featured) -->
+            <div class="plan-card featured">
+                <div class="plan-badge">Most Popular</div>
+                <h3>Pro Protection</h3>
+                <div class="plan-frequency" style="color: var(--brand-yellow);">Bi-Monthly Maintenance</div>
+                <p style="color: #94A3B8; font-size: 0.9rem;">Comprehensive coverage for large homes & commercial setups.</p>
 
-<div class="plan-card">
-<h3>Professional Plan</h3>
-<p>Monthly Maintenance</p>
+                <ul>
+                    <li><i data-lucide="check"></i> 6x Scheduled Inspections</li>
+                    <li><i data-lucide="check"></i> Solar Panel Deep Cleaning</li>
+                    <li><i data-lucide="check"></i> Thermal Imaging Diagnostics</li>
+                    <li><i data-lucide="check"></i> Priority Emergency Dispatch</li>
+                    <li><i data-lucide="check"></i> Detailed Performance Analytics</li>
+                </ul>
 
-<ul>
-<li>Detailed Inspection</li>
-<li>Performance Report</li>
-<li>Priority Support</li>
-<li>Preventive Maintenance</li>
-</ul>
-</div>
+                <a href="consultation.html" class="plan-btn">Select Pro Protection</a>
+            </div>
 
-<div class="plan-card">
-<h3>Enterprise Plan</h3>
-<p>Full Service Contract</p>
+            <!-- Enterprise Plan -->
+            <div class="plan-card">
+                <h3>Enterprise SLA</h3>
+                <div class="plan-frequency">Monthly Full Service</div>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">24/7 critical facility and hybrid energy management.</p>
 
-<ul>
-<li>Scheduled Visits</li>
-<li>Emergency Response</li>
-<li>System Optimization</li>
-<li>Dedicated Support</li>
-</ul>
-</div>
+                <ul>
+                    <li><i data-lucide="check"></i> 12x Monthly Site Audits</li>
+                    <li><i data-lucide="check"></i> 24/7 Monitoring & Support</li>
+                    <li><i data-lucide="check"></i> Zero-Labor Repair Guarantee</li>
+                    <li><i data-lucide="check"></i> Dedicated Field Specialist</li>
+                </ul>
 
-</div>
-
-</div>
+                <a href="consultation.html" class="plan-btn">Select Enterprise</a>
+            </div>
+        </div>
+    </div>
 </section>
 
-<section class="section checklist">
-<div class="container">
+<!-- CHECKLIST & BENEFITS (DUAL SECTION) -->
+<section class="section dual-section">
+    <div class="container">
+        <div class="dual-grid">
+            <!-- Checklist Card -->
+            <div class="checklist-card">
+                <h3><i data-lucide="clipboard-check" style="color: var(--brand-blue);"></i> Audit Inspection Checklist</h3>
+                <ul class="checklist-ul">
+                    <li><i data-lucide="check"></i> Solar PV array structural and electrical test</li>
+                    <li><i data-lucide="check"></i> Battery storage charge & discharge balance review</li>
+                    <li><i data-lucide="check"></i> Inverter DC/AC conversion efficiency scan</li>
+                    <li><i data-lucide="check"></i> Tightening torque check on all main electrical lugs</li>
+                    <li><i data-lucide="check"></i> Surge protector & circuit breaker functional test</li>
+                    <li><i data-lucide="check"></i> Grounding resistance and earthing verification</li>
+                </ul>
+            </div>
 
-<div class="section-title">
-<h2>Inspection Checklist</h2>
-</div>
+            <!-- Benefits Container -->
+            <div class="benefits-card-container">
+                <h3><i data-lucide="trending-up" style="color: var(--brand-green);"></i> Why Routine Maintenance Matters</h3>
+                <div class="benefits-mini-grid">
+                    <div class="benefit-item">
+                        <i data-lucide="clock"></i>
+                        <h4>Extends Lifespan</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Prevents premature battery & inverter aging.</p>
+                    </div>
 
-<div class="checklist-box">
+                    <div class="benefit-item">
+                        <i data-lucide="zap"></i>
+                        <h4>Maximized Output</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Clean panels yield up to 25% more power.</p>
+                    </div>
 
-<ul>
-<li>✓ Solar Panel Inspection</li>
-<li>✓ Battery Health Assessment</li>
-<li>✓ Inverter Performance Review</li>
-<li>✓ Cable & Connection Inspection</li>
-<li>✓ Protection Device Testing</li>
-<li>✓ Grounding Verification</li>
-<li>✓ System Performance Analysis</li>
-</ul>
+                    <div class="benefit-item">
+                        <i data-lucide="shield"></i>
+                        <h4>Risk Mitigation</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Detects electrical hotspots before failure.</p>
+                    </div>
 
-</div>
-
-</div>
+                    <div class="benefit-item">
+                        <i data-lucide="award"></i>
+                        <h4>Warranty Protection</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Keeps manufacturer coverage valid.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
-<section class="section support">
+<!-- SYSTEM MANUAL CATALOG & DOWNLOAD SECTION -->
+<section class="section catalog-section" id="catalog">
+    <div class="container">
+        <div class="section-title">
+            <h2>System Manuals & Technical Catalog</h2>
+            <p>Download original user manuals, warranty specs, and maintenance guides for your installed hardware.</p>
+        </div>
 
-<div class="container">
+        <!-- Filter & Search Bar -->
+        <div class="catalog-filter-bar">
+            <div class="search-box">
+                <i data-lucide="search"></i>
+                <input type="text" id="manualSearch" placeholder="Search manual by keyword (e.g., Inverter, Lithium)..." onkeyup="filterManuals()">
+            </div>
 
-<h2>Emergency Technical Support</h2>
+            <div class="filter-tabs">
+                <button class="filter-btn active" onclick="filterCategory('all')">All Files</button>
+                <button class="filter-btn" onclick="filterCategory('solar')">Solar & Inverters</button>
+                <button class="filter-btn" onclick="filterCategory('battery')">Batteries</button>
+                <button class="filter-btn" onclick="filterCategory('security')">Security & Smart</button>
+            </div>
+        </div>
 
-<p>
-Our engineers are available to diagnose and resolve critical system faults quickly, helping minimize downtime and protect your investment.
-</p>
+        <!-- Manual Cards Grid -->
+        <div class="manuals-grid" id="manualsGrid">
+            <!-- Manual Item 1 -->
+            <div class="manual-card" data-category="solar" data-title="hybrid inverter operating manual user guide">
+                <div>
+                    <div class="manual-header">
+                        <div class="file-icon"><i data-lucide="file-text"></i></div>
+                        <span class="file-size">PDF • 3.4 MB</span>
+                    </div>
+                    <h4>5kW - 10kW Hybrid Inverter Manual</h4>
+                    <p>Operating guide, error codes, display interface settings, and preventive care instructions.</p>
+                </div>
+                <a href="#" class="download-btn" onclick="downloadNotice('5kW - 10kW Hybrid Inverter Manual')"><i data-lucide="download"></i> Download Manual</a>
+            </div>
 
-</div>
+            <!-- Manual Item 2 -->
+            <div class="manual-card" data-category="battery" data-title="lithium ion battery pack maintenance guide">
+                <div>
+                    <div class="manual-header">
+                        <div class="file-icon"><i data-lucide="file-text"></i></div>
+                        <span class="file-size">PDF • 2.1 MB</span>
+                    </div>
+                    <h4>Lithium-Ion (LFP) Storage Guide</h4>
+                    <p>BMS configuration guide, depth-of-discharge parameters, and temperature limits.</p>
+                </div>
+                <a href="#" class="download-btn" onclick="downloadNotice('Lithium-Ion Storage Guide')"><i data-lucide="download"></i> Download Manual</a>
+            </div>
 
+            <!-- Manual Item 3 -->
+            <div class="manual-card" data-category="solar" data-title="solar panel mono perc cleaning installation">
+                <div>
+                    <div class="manual-header">
+                        <div class="file-icon"><i data-lucide="file-text"></i></div>
+                        <span class="file-size">PDF • 1.8 MB</span>
+                    </div>
+                    <h4>Mono-PERC Solar Module Care</h4>
+                    <p>Surface washing procedures, glass protection rules, and array inspection guidelines.</p>
+                </div>
+                <a href="#" class="download-btn" onclick="downloadNotice('Mono-PERC Solar Module Care')"><i data-lucide="download"></i> Download Manual</a>
+            </div>
+
+            <!-- Manual Item 4 -->
+            <div class="manual-card" data-category="security" data-title="cctv ip camera nvr setup user guide">
+                <div>
+                    <div class="manual-header">
+                        <div class="file-icon"><i data-lucide="file-text"></i></div>
+                        <span class="file-size">PDF • 4.2 MB</span>
+                    </div>
+                    <h4>4K IP Camera & NVR Setup Guide</h4>
+                    <p>Network IP configuration, motion detection setup, and storage drive maintenance.</p>
+                </div>
+                <a href="#" class="download-btn" onclick="downloadNotice('4K IP Camera Setup Guide')"><i data-lucide="download"></i> Download Manual</a>
+            </div>
+
+            <!-- Manual Item 5 -->
+            <div class="manual-card" data-category="security" data-title="smart home hub zigbee automation user guide">
+                <div>
+                    <div class="manual-header">
+                        <div class="file-icon"><i data-lucide="file-text"></i></div>
+                        <span class="file-size">PDF • 2.9 MB</span>
+                    </div>
+                    <h4>Smart Home Hub & Automation Manual</h4>
+                    <p>Mesh network syncing, app pair instructions, and scenario automation troubleshooting.</p>
+                </div>
+                <a href="#" class="download-btn" onclick="downloadNotice('Smart Home Hub Manual')"><i data-lucide="download"></i> Download Manual</a>
+            </div>
+
+            <!-- Manual Item 6 -->
+            <div class="manual-card" data-category="solar" data-title="electrical protection spd surge breaker wiring schematic">
+                <div>
+                    <div class="manual-header">
+                        <div class="file-icon"><i data-lucide="file-text"></i></div>
+                        <span class="file-size">PDF • 1.5 MB</span>
+                    </div>
+                    <h4>Electrical Protection & SPD Guide</h4>
+                    <p>Diagrams and testing procedures for surge protection devices and grounding systems.</p>
+                </div>
+                <a href="#" class="download-btn" onclick="downloadNotice('Electrical Protection Guide')"><i data-lucide="download"></i> Download Manual</a>
+            </div>
+        </div>
+    </div>
 </section>
 
-<section class="section">
-
-<div class="container">
-
-<div class="section-title">
-<h2>Why Maintenance Matters</h2>
-</div>
-
-<div class="benefit-grid">
-
-<div class="benefit-card">
-Increase Equipment Lifespan
-</div>
-
-<div class="benefit-card">
-Improve Energy Production
-</div>
-
-<div class="benefit-card">
-Prevent Unexpected Failures
-</div>
-
-<div class="benefit-card">
-Protect Your Investment
-</div>
-
-</div>
-
-</div>
-
+<!-- EMERGENCY SUPPORT BANNER -->
+<section class="support-banner">
+    <div class="container">
+        <h2>Emergency Technical Response</h2>
+        <p>Experiencing an unexpected power fault or system shutdown? Our field technicians are on standby for urgent diagnostic dispatch.</p>
+        <div class="support-pill">
+            <i data-lucide="phone-call"></i> Emergency Hotline: +234 813 361 5132
+        </div>
+    </div>
 </section>
 
-<section class="section cta">
-
-<div class="container">
-
-<h2>Keep Your System Performing At Its Best</h2>
-
-<p>
-Schedule professional maintenance today and maximize reliability, efficiency and long-term value.
-</p>
-
-<a href="consultation.html" class="cta-btn">
-Book Maintenance Service
-</a>
-
-</div>
-
+<!-- CTA SECTION -->
+<section class="cta-section">
+    <div class="container">
+        <h2>Protect Your Energy Investments Today</h2>
+        <p>Schedule a professional maintenance visit or sign up for an annual service agreement.</p>
+        <a href="consultation.html" class="btn-primary" style="padding: 16px 40px;">
+            Book Maintenance Service
+        </a>
+    </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
-
-<h3>AE Renewable Ltd</h3>
-
-<p>
-Powering a Sustainable Future Through Renewable Energy
-</p>
-
-<p style="margin-top:10px;">
-© 2026 AE Renewable Ltd. All Rights Reserved.
-</p>
-
+    <div class="container">
+        <h3>AE Renewable Ltd</h3>
+        <p style="margin: 10px 0;">Powering a Sustainable Future Through Smart Energy Solutions</p>
+        <p>© 2026 <strong>AE Renewable Ltd</strong>. All Rights Reserved.</p>
+    </div>
 </footer>
 
-<a href="https://wa.me/2348012345678" class="whatsapp-float" target="_blank">
-
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor">
-<path d="M380.9 97.1C339-6.1 224.5-33.3 127.8 18.7 31.1 70.7-11.6 185.2 18.7 288L0 384l98.7-18.7c96.8 52 211.3 24.8 263.3-72 52-96.7 24.8-211.2 18.9-196.2z"/>
-</svg>
-
+<!-- WHATSAPP FLOATING BUTTON -->
+<a href="https://wa.me/2348012345678" class="whatsapp-float" target="_blank" aria-label="WhatsApp Support">
+    <i data-lucide="message-circle" style="width: 32px; height: 32px;"></i>
 </a>
+
+<!-- JAVASCRIPT FOR Lucide Icons & Manual Catalog Filtering -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    });
+
+    // Catalog Filter Logic
+    function filterCategory(category) {
+        const buttons = document.querySelectorAll('.filter-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        
+        event.target.classList.add('active');
+
+        const cards = document.querySelectorAll('.manual-card');
+        cards.forEach(card => {
+            if (category === 'all' || card.getAttribute('data-category') === category) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Catalog Search Logic
+    function filterManuals() {
+        const query = document.getElementById('manualSearch').value.toLowerCase();
+        const cards = document.querySelectorAll('.manual-card');
+
+        cards.forEach(card => {
+            const title = card.getAttribute('data-title');
+            if (title.includes(query)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Download Notice Simulation
+    function downloadNotice(manualName) {
+        alert("Downloading manual: " + manualName + "\nFile transfer initiated.");
+    }
+</script>
 
 </body>
 </html>

@@ -351,467 +351,322 @@ header{
     width: 100%;
   }
 }
-/* VISION */
-
-.vision-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:30px;
+/* VISION & MISSION */
+.vision-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
 }
 
-.vision-card{
-    background:url("images/Receiption.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    color:white;
-    font-weight:600;
-    text-shadow: 1px 1px 2px rgba(0,0,0,.5);
-    padding:40px;
-    border-radius:20px;
-    box-shadow:0 15px 40px rgba(0,74,173,.25);
+.vision-card {
+  position: relative;
+  min-height: 280px;
+  padding: 40px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  box-shadow: var(--shadow-subtle);
+  transition: var(--transition);
 }
 
-.vision-card h3{
-    color:#FFC300;
-    margin-bottom:15px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,.5);
+.vision-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hover);
 }
 
-.mission-card{
-    background:url("images/Gemini_Generated_Image_vv7ds3vv7ds3vv7d.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    color:white;
-    text-shadow: 1px 1px 2px rgba(0,0,0,.5);
-    font-weight:600;
-    padding:40px;
-    border-radius:20px;
-    box-shadow:0 15px 40px rgba(0,177,64,.25);
+.vision-bg {
+  background: url("images/Receiption.png") center/cover no-repeat;
 }
 
-.mission-card h3{
-    color:var(--secondary);
-    margin-bottom:15px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,.5);
-}
-/* a{
-    text-decoration:none;
-} */
-.card{
-    background:#fff;
-    padding:40px;
-    border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
-    transition:.4s;
+.mission-bg {
+  background: url("images/Gemini_Generated_Image_vv7ds3vv7ds3vv7d.png") center/cover no-repeat;
 }
 
-.card:hover{
-    transform:translateY(-10px);
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(2, 12, 26, 0.3) 0%, rgba(2, 12, 26, 0.85) 100%);
+  z-index: 1;
 }
 
-.card h3{
-    color:var(--primary);
-    margin-bottom:15px;
+.card-body {
+  position: relative;
+  z-index: 2;
+  color: #ffffff;
 }
 
-/* SERVICES */
-
-.services{
-    background:var(--light);
+.vision-card h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 12px;
 }
 
-.service-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:25px;
+.vision-card p {
+  font-size: 1rem;
+  line-height: 1.6;
+  opacity: 0.95;
 }
 
-.service-card{
-    background:url("images/Gemini_Generated_Image_fnbv0nfnbv0nfnbv.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    padding:35px;
-    text-align:center;
-    border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-    transition:.4s;
+/* SERVICES SECTION */
+.services {
+  background-color: var(--bg-light);
+  padding: 20px 0;
 }
 
-.service-card:hover{
-    transform:translateY(-10px);
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
 }
 
-.service-card h4{
-    color:rgba(255, 255, 255, 0.904);
-    font-weight:600;
-    font-size:1.5rem;
-    text-shadow: 1px 1px 2px rgba(141, 126, 126, 0.5);
-    margin-bottom:15px;
-    text-decoration:none;
+.service-card {
+  position: relative;
+  height: 320px;
+  padding: 30px;
+  border-radius: var(--radius-lg);
+  background-image: var(--bg-img);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  box-shadow: var(--shadow-subtle);
+  transition: var(--transition);
 }
 
-.service-card p{
-    color: #f2f3f5; 
-  
-  /* Premium gradient mixing primary blue, secondary green, and accent gold */
-  background: linear-gradient(135deg, #004AAD 0%, hsl(140, 30%, 96%) 60%, #FFC300 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-    font-weight:600;
-    margin-bottom:15px;
-    /* text-decoration:none; */
+.service-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hover);
 }
 
-/*  */
-.service-card1{
-    background:url("images/Gemini_Generated_Image_ckbs95ckbs95ckbs.png");
-   background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    padding:35px;
-    text-align:center;
-    border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-    transition:.4s;
+.service-card .card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(20, 55, 102, 0.2) 0%, rgba(2, 12, 26, 0.88) 85%);
+  transition: var(--transition);
 }
 
-.service-card1:hover{
-    transform:translateY(-10px);
+.service-card:hover .card-overlay {
+  background: linear-gradient(180deg, rgba(20, 55, 102, 0.4) 0%, rgba(2, 12, 26, 0.95) 100%);
 }
 
-.service-card1 h4 {
-    color:rgb(255, 255, 255);
-    font-weight:600;
-    font-size:1.5rem;
-    text-shadow: 1px 1px 2px rgba(221, 175, 175, 0.5);
-    margin-bottom:15px;
-    text-decoration:none;
-}
-.service-card1 p{
-    color: orange; 
-  
-  /* Premium gradient mixing primary blue, secondary green, and accent gold */
-  background: linear-gradient(135deg, #FFC300 0%, hsl(140, 30%, 96%) 60%, hsl(240, 33%, 99%) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-    font-weight:600;
-    margin-bottom:15px;
-    text-decoration:none;
-    text-shadow: 1px 1px 2px rgba(238, 14, 14, 0.5);
-    /* text-decoration:none; */
+.service-card .card-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
 }
 
-/* .service-card a{
-    text-decoration: none;
-} */
-.service-card11{
-    background:url("images/image00224.jpeg");
-   background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    padding:35px;
-    text-align:center;
-    border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-    transition:.4s;
+.service-card h4 {
+  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  transition: var(--transition);
 }
 
-.service-card11:hover{
-    transform:translateY(-10px);
+.service-card p {
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
-.service-card11 h4 {
-    color:rgb(255, 255, 255);
-    font-weight:600;
-    font-size:1.5rem;
-    text-shadow: 1px 1px 2px rgba(221, 175, 175, 0.5);
-    margin-bottom:15px;
-    text-decoration:none;
-}
-.service-card11 p{
-    color: orange; 
-  
-  /* Premium gradient mixing primary blue, secondary green, and accent gold */
-  background: linear-gradient(135deg, #FFC300 0%, hsl(140, 30%, 96%) 60%, hsl(240, 33%, 99%) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-    font-weight:600;
-    margin-bottom:15px;
-    text-decoration:none;
-    text-shadow: 1px 1px 2px rgba(238, 14, 14, 0.5);
-    /* text-decoration:none; */
-}
-.service-card111{
-    background:url("images/CCTV-cameras-article-2.webp");
-   background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    padding:35px;
-    text-align:center;
-    border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-    transition:.4s;
+/* STATS SECTION */
+.stats {
+  position: relative;
+  background: url("images/logodark.png") center/cover no-repeat;
+  color: #ffffff;
+  padding: 80px 20px;
 }
 
-.service-card111:hover{
-    transform:translateY(-10px);
+.stats-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(20, 55, 102, 0.92) 0%, rgba(2, 12, 26, 0.95) 100%);
 }
 
-.service-card111 h4 {
-    color:rgb(255, 255, 255);
-    font-weight:600;
-    font-size:1.5rem;
-    text-shadow: 1px 1px 2px rgba(221, 175, 175, 0.5);
-    margin-bottom:15px;
-    text-decoration:none;
-}
-.service-card111 p{
-    color: orange; 
-  
-  /* Premium gradient mixing primary blue, secondary green, and accent gold */
-  background: linear-gradient(135deg, #FFC300 0%, hsl(140, 30%, 96%) 60%, hsl(240, 33%, 99%) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-    font-weight:600;
-    margin-bottom:15px;
-    text-decoration:none;
-    text-shadow: 1px 1px 2px rgba(238, 14, 14, 0.5);
-    /* text-decoration:none; */
+.stats-container {
+  position: relative;
+  z-index: 2;
+  padding: 0;
 }
 
-.service-card1111{
-    background:url("images/smart2.png");
-   background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    padding:35px;
-    text-align:center;
-    border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-    transition:.4s;
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
+  text-align: center;
 }
 
-.service-card1111:hover{
-    transform:translateY(-10px);
+.stat h2 {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 8px;
 }
 
-.service-card1111 h4 {
-    color:rgb(255, 255, 255);
-    font-weight:600;
-    font-size:1.5rem;
-    text-shadow: 1px 1px 2px rgba(221, 175, 175, 0.5);
-    margin-bottom:15px;
-    text-decoration:none;
-}
-.service-card1111 p{
-    color: orange; 
-  
-  /* Premium gradient mixing primary blue, secondary green, and accent gold */
-  background: linear-gradient(135deg, #FFC300 0%, hsl(140, 30%, 96%) 60%, hsl(240, 33%, 99%) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-    font-weight:600;
-    margin-bottom:15px;
-    text-decoration:none;
-    text-shadow: 1px 1px 2px rgba(238, 14, 14, 0.5);
-    /* text-decoration:none; */
-}
-.service-card111 h4 {
-    color:rgb(255, 255, 255);
-    font-weight:600;
-    font-size:1.5rem;
-    text-shadow: 1px 1px 2px rgba(221, 175, 175, 0.5);
-    margin-bottom:15px;
-    text-decoration:none;
-}
-.service-card111 p{
-    color: orange; 
-  
-  /* Premium gradient mixing primary blue, secondary green, and accent gold */
-  background: linear-gradient(135deg, #FFC300 0%, hsl(140, 30%, 96%) 60%, hsl(240, 33%, 99%) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-    font-weight:600;
-    margin-bottom:15px;
-    text-decoration:none;
-    text-shadow: 1px 1px 2px rgba(238, 14, 14, 0.5);
-    /* text-decoration:none; */
+.stat p {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
 }
 
-.service-card11111{
-    background:url("images/electrical.png");
-   background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    padding:35px;
-    text-align:center;
-    border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-    transition:.4s;
+/* PROCESS SECTION */
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 25px;
 }
 
-.service-card11111:hover{
-    transform:translateY(-10px);
+.process-card {
+  text-align: center;
+  background: #ffffff;
+  padding: 35px 20px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-subtle);
+  text-decoration: none;
+  display: block;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: var(--transition);
 }
 
-.service-card11111 h4 {
-    color:rgb(255, 255, 255);
-    font-weight:600;
-    font-size:1.5rem;
-    text-shadow: 1px 1px 2px rgba(221, 175, 175, 0.5);
-    margin-bottom:15px;
-    text-decoration:none;
-}
-.service-card11111 p{
-    color: orange; 
-  
-  /* Premium gradient mixing primary blue, secondary green, and accent gold */
-  background: linear-gradient(135deg, #FFC300 0%, hsl(140, 30%, 96%) 60%, hsl(240, 33%, 99%) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-    font-weight:600;
-    margin-bottom:15px;
-    text-decoration:none;
-    text-shadow: 1px 1px 2px rgba(238, 14, 14, 0.5);
-    /* text-decoration:none; */
+.process-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(0, 168, 89, 0.3);
 }
 
-/* .service-card a{
-    text-decoration: none;
-} */
-
-/* STATS */
-
-.stats{
-  background-image:
-    linear-gradient(rgba(42, 43, 3, 0.85), rgba(0, 8, 19, 0.85)),
-    url("./images/logodark.png");
-
-background-position: center;
-background-size: cover;
-background-repeat: no-repeat;
-color: white;
+.process-number {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 20px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.2rem;
+  box-shadow: 0 6px 15px rgba(0, 168, 89, 0.25);
 }
 
-.stats-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:30px;
-    text-align:center;
+.process-card h4 {
+  color: var(--navy);
+  font-size: 1.1rem;
+  font-weight: 700;
 }
 
-.stat h2{
-    font-size:3rem;
-    color:var(--accent);
+/* CALL TO ACTION (CTA) */
+.cta {
+  background:linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("images/consultationImage.png");
+  color: #ffffff;
+  text-align: center;
+  padding: 100px 20px;
 }
 
-.stat p{
-    margin-top:10px;
+.cta h2 {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 20px;
 }
 
-/* PROCESS */
-
-.process-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:20px;
+.cta p {
+  max-width: 680px;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin: 0 auto 35px;
+  opacity: 0.9;
 }
 
-.process-card{
-    text-align:center;
-    background:white;
-    padding:30px;
-    border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+/* FOOTER SYSTEM */
+.footer {
+  background: var(--navy, #020C1A);
+  color: #ffffff;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.process-number{
-    width:60px;
-    height:60px;
-    margin:auto;
-    border-radius:50%;
-    background:var(--primary);
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:bold;
-    margin-bottom:20px;
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  text-align: center;
 }
 
-/* CTA */
-
-.cta{
-    background:linear-gradient(135deg,#004AAD,#00B140);
-    color:white;
-    text-align:center;
+/* 3D POP-OUT LOGO STYLING */
+.footer-logo {
+  width: 42px;
+  height: auto;
+  display: block;
+  /* Blend mode ensures transparent blending over dark navy background */
+  mix-blend-mode: screen; 
+  /* 3D Shadow Stack: Creates depth, elevation, and ambient lighting */
+  filter: 
+    drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.8))
+    drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.5))
+    drop-shadow(0px 0px 15px rgba(0, 168, 89, 0.25)); /* Subtle brand green ambient glow */
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
 }
 
-.cta h2{
-    font-size:3rem;
-    margin-bottom:20px;
+/* Interactive Hover Lift Effect */
+.footer-logo:hover {
+  transform: translateY(-4px) scale(1.08);
+  filter: 
+    drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.9))
+    drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.6))
+    drop-shadow(0px 0px 20px rgba(255, 193, 7, 0.4)); /* Transitions to warm gold glow on hover */
 }
 
-.cta p{
-    max-width:700px;
-    margin:auto auto 30px;
+/* FOOTER TEXT */
+.copyright {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  letter-spacing: 0.3px;
 }
 
-/* FOOTER */
-
-footer{
-    background:var(--navy);
-    color:white;
-    text-align:center;
-    padding:30px;
+.copyright span {
+  color: var(--accent, #FFC107);
+  font-weight: 600;
 }
 
-/* MOBILE */
-
-@media(max-width:991px){
-
-.hero h1{
-    font-size:3rem;
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 600px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 10px;
+  }
 }
 
-.about-grid{
-    grid-template-columns:1fr;
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+  .process-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .service-card {
+    height: 260px;
+  }
 }
 
-}
-
-@media(max-width:768px){
-
-.nav-links{
-    display:none;
-}
-
-.hero h1{
-    font-size:2.2rem;
-}
-
-.hero p{
-    font-size:1rem;
-}
-
-.section-title h2{
-    font-size:2rem;
-}
-
-.cta h2{
-    font-size:2rem;
-}
-
+@media (max-width: 480px) {
+  .process-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 </style>
@@ -886,196 +741,178 @@ footer{
   </div>
 </section>
 
+<!-- VISION & MISSION SECTION -->
 <section class="container">
+  <div class="section-title">
+    <h2>Vision & Mission</h2>
+    <p>Guiding Our Energy Revolution</p>
+  </div>
 
-<div class="section-title">
-<h2>Vision & Mission</h2>
-</div>
-
-<div class="vision-grid">
-
-<div class="vision-card">
-    <h3>Our Vision</h3>
-    <p>
-        To become Africa's most trusted renewable energy company delivering sustainable solutions that transform communities and businesses.
-    </p>
-</div>
-
-<div class="mission-card">
-    <h3>Our Mission</h3>
-    <p>
-        To provide innovative, reliable and cost-effective renewable energy solutions while maintaining the highest standards of quality and customer satisfaction.
-    </p>
-</div>
-
-</div>
-
-</section>
-
-<section class="services">
-
-<div class="container">
-
-<div class="section-title">
-<h2>Our Core Services</h2>
-</div>
-
-<div class="service-grid">
-
-<a style="text-decoration: none;" href="project.html" >
-    <div class="service-card">
-<h4>Solar Energy Systems</h4>
-<p>Residential and commercial solar solutions.</p>
-</div>
-</a>
-
-<a style="text-decoration: none;" href="project.html" >
-    <div class="service-card1">
-<h4>Hybrid Inverters Systems</h4>
-<p>Advanced power backup systems. </p>
-</div>
-</a>
-
-<a style="text-decoration: none;" href="project.html" >
-    <div class="service-card11">
-<h4>Lithium Batteries</h4>
-<p>Reliable energy storage technologies.</p>
-</div>
-</a>
-
-<a href="">
-    <div class="service-card111">
-<h4>CCTV Security</h4>
-<p>Smart surveillance and monitoring.</p>
-</div>
-</a>
-
-<a href="">
-    <div class="service-card1111">
-<h4>Smart Homes</h4>
-<p>Automation and intelligent control.</p>
-</div>
-</a>
-
-<a href="">
-    <div class="service-card11111">
-<h4>Electrical Engineering</h4>
-<p>Professional electrical infrastructure.</p>
-</div>
-</a>
-
-</div>
-
-</div>
-
-</section>
-
-<section class="stats">
-
-<div class="container">
-
-<div class="stats-grid">
-
-<div class="stat">
-<h2>980+</h2>
-<p>Solar Panels Installed</p>
-</div>
-
-<div class="stat">
-<h2>100+</h2>
-<p>Completed Projects</p>
-</div>
-
-<div class="stat">
-<h2>70+</h2>
-<p>Satisfied Clients</p>
-</div>
-
-<div class="stat">
-<h2>24/7</h2>
-<p>Technical Support</p>
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<section class="container">
-
-<div class="section-title">
-    <h2>Our Process</h2>
-</div>
-
-<div class="process-grid">
-
-<a href="consultation.html" class="process-link">
-    <div class="process-card">
-        <div class="process-number">1</div>
-        <h4>Consultation</h4>
+  <div class="vision-grid">
+    <div class="vision-card vision-bg">
+      <div class="card-overlay"></div>
+      <div class="card-body">
+        <h3>Our Vision</h3>
+        <p>To become Africa's most trusted renewable energy company delivering sustainable solutions that transform communities and businesses.</p>
+      </div>
     </div>
-</a>
 
-    <a href="site_survey.html" class="process-link">
-        <div class="process-card">
-            <div class="process-number">2</div>
-            <h4>Site Survey</h4>
-        </div>
-    </a>
-
-    <a href="design.html" class="process-link">
-        <div class="process-card">
-            <div class="process-number">3</div>
-            <h4>Design</h4>
-        </div>
-    </a>
-
-    <a href="installation.html" class="process-link">
-        <div class="process-card">
-            <div class="process-number">4</div>
-            <h4>Installation</h4>
-        </div>
-    </a>
-
-    <a href="Testing.html" class="process-link">
-        <div class="process-card">
-            <div class="process-number">5</div>
-            <h4>Testing</h4>
-        </div>
-    </a>
-
-    <a href="maintenance.html" class="process-link">
-        <div class="process-card">
-            <div class="process-number">6</div>
-            <h4>Maintenance</h4>
-        </div>
-    </a>
-
-</div>
-
+    <div class="vision-card mission-bg">
+      <div class="card-overlay"></div>
+      <div class="card-body">
+        <h3>Our Mission</h3>
+        <p>To provide innovative, reliable and cost-effective renewable energy solutions while maintaining the highest standards of quality and customer satisfaction.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
+<!-- SERVICES SECTION -->
+<section class="services">
+  <div class="container">
+    <div class="section-title">
+      <h2>Our Core Services</h2>
+      <p>Custom Clean Energy & Automation Technologies</p>
+    </div>
+
+    <div class="service-grid">
+      <a href="project.html" class="service-card" style="--bg-img: url('images/Gemini_Generated_Image_fnbv0nfnbv0nfnbv.png');">
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h4>Solar Energy Systems</h4>
+          <p>Residential and commercial solar solutions.</p>
+        </div>
+      </a>
+
+      <a href="project.html" class="service-card" style="--bg-img: url('images/Gemini_Generated_Image_ckbs95ckbs95ckbs.png');">
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h4>Hybrid Inverters Systems</h4>
+          <p>Advanced power backup systems.</p>
+        </div>
+      </a>
+
+      <a href="project.html" class="service-card" style="--bg-img: url('images/image00224.jpeg');">
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h4>Lithium Batteries</h4>
+          <p>Reliable energy storage technologies.</p>
+        </div>
+      </a>
+
+      <a href="project.html" class="service-card" style="--bg-img: url('images/CCTV-cameras-article-2.webp');">
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h4>CCTV Security</h4>
+          <p>Smart surveillance and monitoring.</p>
+        </div>
+      </a>
+
+      <a href="project.html" class="service-card" style="--bg-img: url('images/smart2.png');">
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h4>Smart Homes</h4>
+          <p>Automation and intelligent control.</p>
+        </div>
+      </a>
+
+      <a href="project.html" class="service-card" style="--bg-img: url('images/electrical.png');">
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h4>Electrical Engineering</h4>
+          <p>Professional electrical infrastructure.</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS SECTION -->
+<section class="stats">
+  <div class="stats-overlay"></div>
+  <div class="container stats-container">
+    <div class="stats-grid">
+      <div class="stat">
+        <h2>980+</h2>
+        <p>Solar Panels Installed</p>
+      </div>
+      <div class="stat">
+        <h2>100+</h2>
+        <p>Completed Projects</p>
+      </div>
+      <div class="stat">
+        <h2>70+</h2>
+        <p>Satisfied Clients</p>
+      </div>
+      <div class="stat">
+        <h2>24/7</h2>
+        <p>Technical Support</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS SECTION -->
+<section class="container">
+  <div class="section-title">
+    <h2>Our Process</h2>
+    <p>How We Deliver Excellence</p>
+  </div>
+
+  <div class="process-grid">
+    <a href="consultation.html" class="process-card">
+      <div class="process-number">1</div>
+      <h4>Consultation</h4>
+    </a>
+
+    <a href="site_survey.html" class="process-card">
+      <div class="process-number">2</div>
+      <h4>Site Survey</h4>
+    </a>
+
+    <a href="design.html" class="process-card">
+      <div class="process-number">3</div>
+      <h4>Design</h4>
+    </a>
+
+    <a href="installation.html" class="process-card">
+      <div class="process-number">4</div>
+      <h4>Installation</h4>
+    </a>
+
+    <a href="Testing.html" class="process-card">
+      <div class="process-number">5</div>
+      <h4>Testing</h4>
+    </a>
+
+    <a href="maintenance.html" class="process-card">
+      <div class="process-number">6</div>
+      <h4>Maintenance</h4>
+    </a>
+  </div>
+</section>
+
+<!-- CALL TO ACTION (CTA) SECTION -->
 <section class="cta">
-
-<div class="container">
-
-<h2>Ready To Switch To Reliable Energy?</h2>
-
-<p>
-Partner with AE Renewable Ltd and experience innovative solar and smart energy solutions built for the future.
-</p>
-
-<a href="consultation.html" class="btn btn-primary">
-Get Free Consultation
-</a>
-
-</div>
-
+  <div class="container">
+    <h2>Ready To Switch To Reliable Energy?</h2>
+    <p>Partner with AE Renewable Ltd and experience innovative solar and smart energy solutions built for the future.</p>
+    <a href="consultation.html" class="btn btn-primary">Get Free Consultation</a>
+  </div>
 </section>
 
-<footer>
-© 2026 AE Renewable Ltd | Powering A Sustainable Future
+<footer class="footer">
+  <div class="footer-content">
+    <img 
+      src="images/logo3D.png" 
+      alt="AE Renewable Ltd Logo" 
+      class="footer-logo"
+      loading="lazy"
+    >
+    <p class="copyright">
+      © 2026 AE Renewable Ltd | <span>Powering A Sustainable Future</span>
+    </p>
+  </div>
 </footer>
 
 </body>
