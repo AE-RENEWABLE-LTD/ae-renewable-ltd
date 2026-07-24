@@ -4,143 +4,346 @@
 // =========================================
 
 export const inverters = [
+  // -----------------------------------------
+  // FELICITY SOLAR INVERTERS (3.5kVA - 12kVA)
+  // -----------------------------------------
+  // -----------------------------------------
+  {
+    id: 1,
+    brand: "Felicity",
+    model: "FL-IVPS3524 3kva",
+    inverterSize: 3500,
+    phase: 1,
+    maxPvWatt: 4500,
+    inverterPvVoltage: 500,
+    inverterAcVoltage: 230,
+    maxACChargeCurrent: 60,
+    mppt: 1,
+    stringsPerMppt: 1,
+    batteryVoltage: 24,
+    price: 450000
+  },
+  {
+    id: 2,
+    brand: "Felicity",
+    model: "FL-IVEM5048 5kva",
+    inverterSize: 5000,
+    phase: 1,
+    maxPvWatt: 6000,
+    inverterPvVoltage: 500,
+    inverterAcVoltage: 230,
+    maxACChargeCurrent: 80,
+    mppt: 1,
+    stringsPerMppt: 2,
+    batteryVoltage: 48,
+    price: 750000
+  },
+//   {
+//     id: 3,
+//     brand: "Felicity",
+//     model: "FL-IVHP7548 ",
+//     inverterSize: 7500,
+//     phase: 1,
+//     maxPvWatt: 9000,
+//     inverterPvVoltage: 500,
+//     inverterAcVoltage: 230,
+//     maxACChargeCurrent: 100,
+//     mppt: 2,
+//     stringsPerMppt: 1,
+//     batteryVoltage: 48,
+//     price: 1100000
+//   },
+  {
+    id: 4,
+    brand: "Felicity",
+    model: "FL-IVHP8548 8kva",
+    inverterSize: 8000,
+    phase: 1,
+    maxPvWatt: 10500,
+    inverterPvVoltage: 500,
+    inverterAcVoltage: 230,
+    maxACChargeCurrent: 120,
+    mppt: 2,
+    stringsPerMppt: 1,
+    batteryVoltage: 48,
+    price: 1350000
+  },
+//   {
+//     id: 5,
+//     brand: "Felicity",
+//     model: "FL-IVHP10048",
+//     inverterSize: 10000,
+//     phase: 1,
+//     maxPvWatt: 12000,
+//     inverterPvVoltage: 500,
+//     inverterAcVoltage: 230,
+//     maxACChargeCurrent: 140,
+//     mppt: 2,
+//     stringsPerMppt: 2,
+//     batteryVoltage: 48,
+//     price: 1650000
+//   },
+  {
+    id: 6,
+    brand: "Felicity",
+    model: "FL-IVP12048-3P",
+    inverterSize: 12000,
+    phase: 1,
+    maxPvWatt: 15000,
+    inverterPvVoltage: 600,
+    inverterAcVoltage: 400,
+    maxACChargeCurrent: 160,
+    mppt: 2,
+    stringsPerMppt: 2,
+    batteryVoltage: 48,
+    price: 2100000
+  },
 
-{
-    id:1,
-    brand:"Firman",
-    model:"FIR-1K-SG04LP1",
+  // -----------------------------------------
+  // FIRMAN INVERTERS / GENERATOR SOURCES (1kVA - 11kVA)
+  // -----------------------------------------
+  {
+    id: 7,
+    brand: "Firman",
+    model: "FIR-1K-SG01LP1",
+    inverterSize: 1000,
+    phase: 1,
+    maxPvWatt: 1500,
+    inverterPvVoltage: 150,
+    inverterAcVoltage: 230,
+    maxACChargeCurrent: 20,
+    mppt: 1,
+    stringsPerMppt: 1,
+    batteryVoltage: 12,
+    price: 180000
+  },
+  {
+    id: 8,
+    brand: "Firman",
+    model: "FIR-2K-SG02LP1",
+    inverterSize: 2000,
+    phase: 1,
+    maxPvWatt: 2500,
+    inverterPvVoltage: 300,
+    inverterAcVoltage: 230,
+    maxACChargeCurrent: 30,
+    mppt: 1,
+    stringsPerMppt: 1,
+    batteryVoltage: 24,
+    price: 320000
+  },
+  {
+    id: 9,
+    brand: "Firman",
+    model: "FIR-3K-SG04LP1",
+    inverterSize: 3000,
+    phase: 1,
+    maxPvWatt: 4000,
+    inverterPvVoltage: 500,
+    inverterAcVoltage: 230,
+    maxACChargeCurrent: 40,
+    mppt: 2,
+    stringsPerMppt: 1,
+    batteryVoltage: 24,
+    price: 520000
+  },
+  {
+    id: 10,
+    brand: "Firman",
+    model: "FIR-5K-SG04LP1",
+    inverterSize: 5000,
+    phase: 1,
+    maxPvWatt: 6500,
+    inverterPvVoltage: 500,
+    inverterAcVoltage: 230,
+    maxACChargeCurrent: 60,
+    mppt: 2,
+    stringsPerMppt: 1,
+    batteryVoltage: 48,
+    price: 780000
+  },
+  {
+    id: 11,
+    brand: "Firman",
+    model: "FIR-7.5K-SG04LP1",
+    inverterSize: 7500,
+    phase: 1,
+    maxPvWatt: 9500,
+    inverterPvVoltage: 500,
+    inverterAcVoltage: 230,
+    maxACChargeCurrent: 80,
+    mppt: 2,
+    stringsPerMppt: 1,
+    batteryVoltage: 48,
+    price: 1150000
+  },
+//   {
+//     id: 12,
+//     brand: "Firman",
+//     model: "FIR-9K-SG04LP1",
+//     inverterSize: 9000,
+//     phase: 1,
+//     maxPvWatt: 11500,
+//     inverterPvVoltage: 500,
+//     inverterAcVoltage: 230,
+//     maxACChargeCurrent: 100,
+//     mppt: 2,
+//     stringsPerMppt: 2,
+//     batteryVoltage: 48,
+//     price: 1420000
+//   },
+  {
+    id: 13,
+    brand: "Firman",
+    model: "FIR-11K-SG04LP3",
+    inverterSize: 11000,
+    phase: 3,
+    maxPvWatt: 14000,
+    inverterPvVoltage: 650,
+    inverterAcVoltage: 400,
+    maxACChargeCurrent: 120,
+    mppt: 2,
+    stringsPerMppt: 2,
+    batteryVoltage: 48,
+    price: 1850000
+  },
 
-    inverterSize:3000,
-    phase:1,
-
-    maxPvWatt:4000,
-
-    inverterPvVoltage:500,
-    inverterAcVoltage:230,
-    // inverterSizeAcInput:6000 , // Convert to current (A)
-    maxACChargeCurrent:40,
-
-    mppt:2,
-    stringsPerMppt:1,
-
-    batteryVoltage:48,
-
-    price:950000
-},
-
-{
-    id:1,
-    brand:"Deye",
-    model:"SUN-6K-SG04LP1",
-
-    inverterSize:6000,
-    phase:1,
-
-    maxPvWatt:7800,
-
-    inverterPvVoltage:500,
-    inverterAcVoltage:230,
-    // inverterSizeAcInput:6000,
-    maxACChargeCurrent:60,
-
-    mppt:2,
-    stringsPerMppt:1,
-
-    batteryVoltage:48,
-
-    price:950000
-},
-
-{
-    id:2,
-    brand:"Deye",
-    model:"SUN-8K-SG01LP1",
-
-    inverterSize:8000,
-    phase:1,
-
-    maxPvWatt:10400,
-
-    inverterPvVoltage:500,
-    inverterAcVoltage:230,
-    // inverterSizeAcInput:8000,
-    maxACChargeCurrent:120,
-
-    mppt:2,
-    stringsPerMppt:1,
-
-    batteryVoltage:48,
-
-    price:1700000
-},
-
-{
-    id:3,
-    brand:"Deye",
-    model:"SUN-10K-SG04LP3",
-
-    inverterSize:10000,
-    phase:3,
-
-    maxPvWatt:13000,
-
-    inverterPvVoltage:650,
-    inverterAcVoltage:400,
-    // inverterSizeAcInput:10000,
-    maxACChargeCurrent:80,
-
-    mppt:2,
-    stringsPerMppt:2,
-
-    batteryVoltage:48,
-
-    price:2100000
-},
-
-{
-    id:4,
-    brand:"Deye",
-    model:"SUN-12K-SG04LP3",
-
-    inverterSize:12000,
-    phase:3,
-
-    maxPvWatt:15600,
-
-    inverterPvVoltage:650,
-    inverterAcVoltage:400,
-    // inverterSizeAcInput:12000,
-    maxACChargeCurrent:150,
-
-    mppt:2,
-    stringsPerMppt:2,
-
-    batteryVoltage:48,
-
-    price:2500000
-},
-
-{
-    id:5,
-    brand:"Deye",
-    model:"SUN-16K-SG01HP3",
-
-    inverterSize:16000,
-    phase:3,
-
-    maxPvWatt:20800,
-
-    inverterPvVoltage:800,
-    inverterAcVoltage:400,
-    // inverterSizeAcInput:16000,
-    maxACChargeCurrent:80,
-
-    mppt:2,
-    stringsPerMppt:2,
-
-    batteryVoltage:160,
-
-    price:3600000
-}
-
+  // -----------------------------------------
+  // DEYE HYBRID INVERTERS (6kVA - 80kVA)
+  // -----------------------------------------
+  {
+    id: 14,
+    brand: "Deye",
+    model: "SUN-6K-SG04LP1",
+    inverterSize: 6000,
+    phase: 1,
+    maxPvWatt: 7800,
+    inverterPvVoltage: 500,
+    inverterAcVoltage: 230,
+    maxACChargeCurrent: 60,
+    mppt: 2,
+    stringsPerMppt: 1,
+    batteryVoltage: 48,
+    price: 950000
+  },
+  {
+    id: 15,
+    brand: "Deye",
+    model: "SUN-8K-SG01LP1",
+    inverterSize: 8000,
+    phase: 1,
+    maxPvWatt: 10400,
+    inverterPvVoltage: 500,
+    inverterAcVoltage: 230,
+    maxACChargeCurrent: 120,
+    mppt: 2,
+    stringsPerMppt: 1,
+    batteryVoltage: 48,
+    price: 1700000
+  },
+  {
+    id: 16,
+    brand: "Deye",
+    model: "SUN-10K-SG04LP3",
+    inverterSize: 10000,
+    phase: 3,
+    maxPvWatt: 13000,
+    inverterPvVoltage: 650,
+    inverterAcVoltage: 400,
+    maxACChargeCurrent: 80,
+    mppt: 2,
+    stringsPerMppt: 2,
+    batteryVoltage: 48,
+    price: 2100000
+  },
+  {
+    id: 17,
+    brand: "Deye",
+    model: "SUN-12K-SG04LP3",
+    inverterSize: 12000,
+    phase: 3,
+    maxPvWatt: 15600,
+    inverterPvVoltage: 650,
+    inverterAcVoltage: 400,
+    maxACChargeCurrent: 150,
+    mppt: 2,
+    stringsPerMppt: 2,
+    batteryVoltage: 48,
+    price: 2500000
+  },
+  {
+    id: 18,
+    brand: "Deye",
+    model: "SUN-16K-SG01HP3",
+    inverterSize: 16000,
+    phase: 3,
+    maxPvWatt: 20800,
+    inverterPvVoltage: 800,
+    inverterAcVoltage: 400,
+    maxACChargeCurrent: 80,
+    mppt: 2,
+    stringsPerMppt: 2,
+    batteryVoltage: 160,
+    price: 3600000
+  },
+  {
+    id: 19,
+    brand: "Deye",
+    model: "SUN-20K-SG01HP3",
+    inverterSize: 20000,
+    phase: 3,
+    maxPvWatt: 26000,
+    inverterPvVoltage: 800,
+    inverterAcVoltage: 400,
+    maxACChargeCurrent: 100,
+    mppt: 2,
+    stringsPerMppt: 2,
+    batteryVoltage: 48,
+    price: 4300000
+  },
+  {
+    id: 20,
+    brand: "Deye",
+    model: "SUN-30K-SG01HP3",
+    inverterSize: 30000,
+    phase: 3,
+    maxPvWatt: 39000,
+    inverterPvVoltage: 1000,
+    inverterAcVoltage: 400,
+    maxACChargeCurrent: 120,
+    mppt: 3,
+    stringsPerMppt: 2,
+    batteryVoltage: 300,
+    price: 5800000
+  },
+  {
+    id: 21,
+    brand: "Deye",
+    model: "SUN-50K-SG01HP3",
+    inverterSize: 50000,
+    phase: 3,
+    maxPvWatt: 65000,
+    inverterPvVoltage: 1000,
+    inverterAcVoltage: 400,
+    maxACChargeCurrent: 160,
+    mppt: 4,
+    stringsPerMppt: 2,
+    batteryVoltage: 500,
+    price: 8500000
+  },
+  {
+    id: 22,
+    brand: "Deye",
+    model: "SUN-80K-SG01HP3",
+    inverterSize: 80000,
+    phase: 3,
+    maxPvWatt: 104000,
+    inverterPvVoltage: 1000,
+    inverterAcVoltage: 400,
+    maxACChargeCurrent: 200,
+    mppt: 6,
+    stringsPerMppt: 2,
+    batteryVoltage: 600,
+    price: 12800000
+  }
 ];

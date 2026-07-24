@@ -47,6 +47,7 @@ const {
     phase,
 
     mppt,
+    voc,
     stringsPerMppt
 
 } = inverter;
@@ -64,20 +65,20 @@ const {
 //==================================================
 
 const totalStrings =
-    mppt * stringsPerMppt;
+    panelQuantity / mppt  ;
 
 const panelsPerString =
-    Math.ceil(panelQuantity / totalStrings);
+    Math.ceil(totalStrings);
 
 const parallelStrings =
-    stringsPerMppt;
+    voc / inverterPvVoltage;
 
 
 //==================================================
 // AC OUTPUT CURRENT
 //==================================================
 
-const acOutputCurrent = inverterSize / inverterAcVoltage
+const acOutputCurrent = inverterSize / inverterAcVoltage;
 
 // ==================================================
 // AC INPUT CURRENT
@@ -95,8 +96,8 @@ const acInputCurrent =
 //==================================================
 
 const batteryCurrent =
-    inverterSize /
-    batteryVoltage ;
+    (inverterSize /
+    batteryVoltage)  ;
 
 
 //==================================================
@@ -104,8 +105,8 @@ const batteryCurrent =
 //==================================================
 
 const pvCurrent =
-    isc *
-    parallelStrings;
+    isc
+    ;
 
     //==================================================
 // SAFETY FACTOR (125%)
@@ -118,10 +119,10 @@ const acInputCurrentWM =
     acInputCurrent * 1.25;
 
 const batteryCurrentWM =
-    batteryCurrent * 1.25;
+    batteryCurrent * 1.25 ;
 
 const pvCurrentWM =
-    pvCurrent ;
+    pvCurrent * 1.25 ;
 
     //==================================================
 // BREAKERS
@@ -257,7 +258,7 @@ const combinerBox = {
 
 const changeOver = chooseBreaker(
 
-    acOutputBreaker * 1.25
+    acInputBreaker * 1.25
 
 );
 
@@ -471,7 +472,7 @@ else {
 
 // /////////////////////////////
 
-// const phase = phase;
+const inputPhase = phase;
 
 
 //==================================================
@@ -485,17 +486,20 @@ return {
     acInputCurrent,
     acOutputCurrent,
     batteryCurrent,
+    batteryCurrentWM,
     pvCurrent,
 
     // Breakers
 
     acInputBreaker,
      phase,
-    //  inverterQuantity,
+     inverterQuantity,
     acOutputBreaker,
-     phase,
-    batteryBreaker,
+     inputPhase,
+    //  inverterQuantity,
+    // batteryBreaker,
     pvBreaker,
+    
 
     // Protection
 

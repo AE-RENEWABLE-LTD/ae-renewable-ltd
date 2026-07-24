@@ -15,7 +15,7 @@ export function choosePVString(system){
 
     const panel = system.panel;
 
-    const panelQuantity = system.panelQuantity;
+    const panelQuantity = Math.ceil(system.panelQuantity);
 
     const inverter = system.inverter;
 

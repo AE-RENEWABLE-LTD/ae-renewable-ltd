@@ -68,6 +68,10 @@ export function updateProtectionCard(system){
         "phase",
         `${protection.phase} Phase`
     );
+    setText(
+        "resultOutputBreakerQuantity",
+        `${protection.inverterQuantity}Nos`
+    );
 
     setText(
         "resultInputCurrent",
@@ -79,15 +83,15 @@ export function updateProtectionCard(system){
         `${protection.acInputBreaker} A`
     );
 
-     setText(
-        "Inputphase",
-        `${protection.phase} Phase`
-    );
+//    setText(
+//         "inputPhase",
+//         `${protection.inputPhase} Phase`
+//     );
 
-     setText(
-        "resultOutputBreakerQuantity",
-        `${protection.inverterQuantity}`
-    );
+    //  setText(
+    //     "resultOutputBreakerQuantity",
+    //     `${protection.inverterQuantity}Nos`
+    // );
 
     //     setText(
     //     "phase",
@@ -103,6 +107,10 @@ export function updateProtectionCard(system){
         "resultPVBreaker",
         `${protection.pvBreaker} A`
     );
+    // setText(
+    //     "resultPVBreakerQuantity",
+    //     `${protection.pvBreaker} A`
+    // );
 
     setText(
         "resultBatteryCurrent",
@@ -111,8 +119,13 @@ export function updateProtectionCard(system){
 
     setText(
         "resultBatteryBreaker",
-        `${protection.batteryBreaker} A`
+        `${protection.batteryCurrentWM.toFixed(2)} A`
     );
+
+    // setText(
+    //     "resultBatteryCurrent",
+    //     `${protection.batteryBreaker} A`
+    // );
 
     setText(
         "resultACSPD",

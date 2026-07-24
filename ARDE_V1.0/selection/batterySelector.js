@@ -81,7 +81,7 @@ export function chooseBattery(
 
         quantity *
 
-        battery.capacityWh;
+        battery.capacityWh ;
 
     return{
 
