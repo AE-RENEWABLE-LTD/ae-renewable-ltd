@@ -12,132 +12,326 @@
 // ======================================================
 
 
+// ======================================================
+// SET TEXT HELPER
+// ======================================================
 
+function setText(id, value) {
 
-function setText(id, value){
+    const element =
+        document.getElementById(id);
 
-    const element = document.getElementById(id);
+    if (!element) {
 
-    if(!element){
-
-        console.warn(`Missing element: ${id}`);
+        console.warn(
+            `Missing element: ${id}`
+        );
 
         return;
 
     }
 
-    element.textContent = value;
+    element.textContent =
+        value !== undefined &&
+        value !== null
+            ? value
+            : "-";
 
 }
 
-// export function updateProtectionCard(system){
 
-//     const protection = system.protection;
+// ======================================================
+// UPDATE PROTECTION CARD
+// ======================================================
 
-//     console.log("SYSTEM", system);
+export function updateProtectionCard(system) {
 
-//     console.log("PROTECTION", protection);
 
-//     console.log("acOutputCurrent =", protection.acOutputCurrent);
+    // ==================================================
+    // GET PROTECTION DATA
+    // ==================================================
 
-//     console.log("acInputCurrent =", protection.acInputCurrent);
+    const protection =
+        system?.protection;
 
-//     console.log("pvCurrent =", protection.pvCurrent);
 
-//     console.log("batteryCurrent =", protection.batteryCurrent);
+    // ==================================================
+    // SAFETY CHECK
+    // ==================================================
 
-// }
+    if (!protection) {
 
-export function updateProtectionCard(system){
+        console.warn(
+            "Protection data not found."
+        );
 
-    const protection = system.protection;
+        return;
 
-    console.log(protection);
+    }
 
-    setText(
-        "resultOutputCurrent",
-        `${protection.acOutputCurrent.toFixed(2)} A`
+
+    console.log(
+        "PROTECTION OUTPUT:",
+        protection
     );
 
-    setText(
-        "resultOutputBreaker",
-        `${protection.acOutputBreaker} A`
-    );
+
+    // ==================================================
+    // PHASE
+    // ==================================================
 
     setText(
         "phase",
-        `${protection.phase} Phase`
+        protection.phase != null
+            ? `${protection.phase} Phase`
+            : "-"
     );
+
+
+    // ==================================================
+    // AC OUTPUT CURRENT
+    // ==================================================
+
+    setText(
+        "resultOutputCurrent",
+        protection.acOutputCurrent != null
+            ? `${Number(protection.acOutputCurrent).toFixed(2)} A`
+            : "-"
+    );
+
+
+    // ==================================================
+    // AC OUTPUT BREAKER
+    // ==================================================
+
+    setText(
+        "resultOutputBreaker",
+        protection.acOutputBreaker?.rating != null
+            ? `${protection.acOutputBreaker.rating} A`
+            : "-"
+    );
+
+
+    // ==================================================
+    // AC OUTPUT BREAKER QUANTITY
+    // ==================================================
+
     setText(
         "resultOutputBreakerQuantity",
-        `${protection.inverterQuantity}Nos`
+        protection.acOutputBreaker?.quantity != null
+            ? `${protection.acOutputBreaker.quantity} Nos`
+            : "-"
     );
+
+
+    // ==================================================
+    // AC INPUT CURRENT
+    // ==================================================
 
     setText(
         "resultInputCurrent",
-        `${protection.acInputCurrent.toFixed(2)} A`
-    );      
+        protection.acInputCurrent != null
+            ? `${Number(protection.acInputCurrent).toFixed(2)} A`
+            : "-"
+    );
+
+
+    // ==================================================
+    // AC INPUT BREAKER
+    // ==================================================
 
     setText(
         "resultInputBreaker",
-        `${protection.acInputBreaker} A`
+        protection.acInputBreaker?.rating != null
+            ? `${protection.acInputBreaker.rating} A`
+            : "-"
     );
 
-//    setText(
-//         "inputPhase",
-//         `${protection.inputPhase} Phase`
-//     );
 
-    //  setText(
-    //     "resultOutputBreakerQuantity",
-    //     `${protection.inverterQuantity}Nos`
-    // );
+    // ==================================================
+    // AC INPUT BREAKER QUANTITY
+    // ==================================================
 
-    //     setText(
-    //     "phase",
-    //     `${protection.phase} Phase`
-    // );
+    setText(
+        "resultInputBreakerQuantity",
+        protection.acInputBreaker?.quantity != null
+            ? `${protection.acInputBreaker.quantity} Nos`
+            : "-"
+    );
+
+
+    // ==================================================
+    // CHANGEOVER SWITCH
+    // ==================================================
+
+    setText(
+        "resultChangeover",
+        protection.changeover?.rating != null
+            ? `${protection.changeover.rating} A`
+            : "-"
+    );
+
+
+    // ==================================================
+    // CHANGEOVER SWITCH QUANTITY
+    // ==================================================
+
+    setText(
+        "resultChangeoverQuantity",
+        protection.changeover?.quantity != null
+            ? `${protection.changeover.quantity} Nos`
+            : "-"
+    );
+
+
+    // ==================================================
+    // PV CURRENT
+    // ==================================================
 
     setText(
         "resultPVCurrent",
-        `${protection.pvCurrent.toFixed(2)} A`
+        protection.pvCurrent != null
+            ? `${Number(protection.pvCurrent).toFixed(2)} A`
+            : "-"
     );
+
+
+    // ==================================================
+    // PV BREAKER
+    // ==================================================
 
     setText(
         "resultPVBreaker",
-        `${protection.pvBreaker} A`
+        protection.pvBreaker?.rating != null
+            ? `${protection.pvBreaker.rating} A`
+            : "-"
     );
-    // setText(
-    //     "resultPVBreakerQuantity",
-    //     `${protection.pvBreaker} A`
-    // );
+
+
+    // ==================================================
+    // PV BREAKER QUANTITY
+    // ==================================================
+
+    setText(
+        "resultPVBreakerQuantity",
+        protection.pvBreaker?.quantity != null
+            ? `${protection.pvBreaker.quantity} Nos`
+            : "-"
+    );
+
+
+    // ==================================================
+    // BATTERY CURRENT
+    // ==================================================
 
     setText(
         "resultBatteryCurrent",
-        `${protection.batteryCurrent.toFixed(2)} A`
+        protection.batteryCurrent != null
+            ? `${Number(protection.batteryCurrent).toFixed(2)} A`
+            : "-"
     );
+
+
+    // ==================================================
+    // BATTERY BREAKER
+    // ==================================================
 
     setText(
         "resultBatteryBreaker",
-        `${protection.batteryCurrentWM.toFixed(2)} A`
+        protection.batteryBreaker?.rating != null
+            ? `${protection.batteryBreaker.rating} A`
+            : "-"
     );
 
-    // setText(
-    //     "resultBatteryCurrent",
-    //     `${protection.batteryBreaker} A`
-    // );
+
+    // ==================================================
+// BATTERY BREAKER QUANTITY
+// ==================================================
+
+setText(
+    "resultBatteryBreakerQuantity",
+    protection.batteryBreaker?.quantity != null
+        ? `${protection.batteryBreaker.quantity} Nos`
+        : "-"
+);
+
+
+    // ==================================================
+    // BATTERY BREAKER QUANTITY
+    // ==================================================
+
+    setText(
+        "resultBatteryBreakerQuantity",
+        protection.batteryBreaker?.quantity != null
+            ? `${protection.batteryBreaker.quantity} Nos`
+            : "-"
+    );
+
+
+    // ==================================================
+    // AC SURGE PROTECTION
+    // ==================================================
 
     setText(
         "resultACSPD",
-        `${protection.acSPD.poles} ${protection.acSPD.type} ${protection.acSPD.voltage}`
+        protection.acSPD
+            ? `${protection.acSPD.poles} ${protection.acSPD.type} ${protection.acSPD.voltage}`
+            : "-"
     );
+
+
+    // ==================================================
+    // AC SURGE PROTECTION QUANTITY
+    // ==================================================
+
+    setText(
+        "resultACSPDQuantity",
+        protection.acSPD?.quantity != null
+            ? `${protection.acSPD.quantity} Nos`
+            : "-"
+    );
+
+
+    // ==================================================
+    // DC SURGE PROTECTION
+    // ==================================================
 
     setText(
         "resultDCSPD",
-        `${protection.dcSPD.poles} ${protection.dcSPD.type} ${protection.dcSPD.voltage}`
+        protection.dcSPD
+            ? `${protection.dcSPD.poles} ${protection.dcSPD.type} ${protection.dcSPD.voltage}`
+            : "-"
+    );
+
+
+    // ==================================================
+    // DC SURGE PROTECTION QUANTITY
+    // ==================================================
+
+    setText(
+        "resultDCSPDQuantity",
+        protection.dcSPD?.quantity != null
+            ? `${protection.dcSPD.quantity} Nos`
+            : "-"
+    );
+
+
+    // ==================================================
+    // EARTH CABLE
+    // ==================================================
+
+    setText(
+        "ear",
+        protection.earthCable ?? "-"
+    );
+
+
+    // ==================================================
+    // COMPLETE
+    // ==================================================
+
+    console.log(
+        "Protection card updated successfully."
     );
 
 }
-
-
-

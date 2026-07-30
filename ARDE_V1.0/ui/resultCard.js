@@ -1,87 +1,205 @@
-// ==========================================
-// Update System Result Card
-// ==========================================
+// ======================================================
+//
+// AE RENEWABLE LTD
+// ARDE V1.0
+//
+// FILE
+// resultCard.js
+//
+// PURPOSE
+// Update System Design Result UI
+//
+// ======================================================
 
-function setText(id, value){
+export function updateResultCard(system) {
 
-    const element = document.getElementById(id);
+    console.log("Updating System Design Result:", system);
 
-    if(element){
+    // ==================================================
+    // HELPER
+    // ==================================================
 
-        element.textContent = value;
+    function setResult(id, value) {
 
-    }else{
+        const element = document.getElementById(id);
 
-        console.warn(`Missing element: ${id}`);
+        if (!element) {
+
+            console.error(
+                `Missing element: ${id}`
+            );
+
+            return;
+
+        }
+
+        element.textContent =
+            value !== undefined &&
+            value !== null
+                ? value
+                : "-";
 
     }
 
-}
 
-export function updateResultCard(result){
+    // ==================================================
+    // SYSTEM INPUT
+    // ==================================================
 
-    // =========================
-    // SYSTEM SUMMARY
-    // =========================
+    setResult(
 
-    setText(
         "resultLoadPower",
-        `${result.load.toLocaleString()} W`
+
+        `${system.load ?? "-"} W`
+
     );
 
-    setText(
+
+    setResult(
+
         "resultBackupTime",
-        `${result.backup} Hours`
+
+        `${system.backup ?? "-"} Hours`
+
     );
 
-    setText(
+
+    // ==================================================
+    // ENERGY
+    // ==================================================
+
+    setResult(
+
         "resultDailyEnergy",
-        `${result.dailyEnergy.toLocaleString()} Wh`
+
+        `${system.dailyEnergy ?? "-"} Wh`
+
     );
 
-    setText(
+
+    // ==================================================
+    // BATTERY REQUIREMENT
+    // ==================================================
+
+    setResult(
+
         "resultBatteryEnergy",
-        `${result.batteryWh.toLocaleString()} Wh`
+
+        `${system.batteryWh ?? "-"} Wh`
+
     );
 
-    setText(
+
+    // ==================================================
+    // SOLAR PV
+    // ==================================================
+
+    setResult(
+
         "resultSolarPV",
-        `${result.solarPvRequired.toLocaleString()} W`
+
+        `${system.solarPvRequired ?? "-"} W`
+
     );
 
-    setText(
+
+    // ==================================================
+    // PANEL
+    // ==================================================
+
+    setResult(
+
         "resultPanelModel",
-        `${result.panel.brand} ${result.panel.model}`
+
+        system.panel?.model ??
+        system.panel?.name ??
+        "-"
+
     );
 
-    setText(
+
+    setResult(
+
         "resultPanelQuantity",
-        `${result.panelQuantity} Panels`
+
+        system.panelQuantity ?? "-"
+
     );
 
-    setText(
+
+    // ==================================================
+    // INVERTER
+    // ==================================================
+
+    setResult(
+
         "resultInverterModel",
-        `${result.inverter.brand} ${result.inverter.model}`
+
+        system.inverter?.model ??
+        system.inverter?.name ??
+        "-"
+
     );
 
-    setText(
+
+    setResult(
+
         "resultInverterQuantity",
-        `${result.inverterQuantity} Unit`
+
+        system.inverterQuantity ?? "-"
+
     );
 
-    setText(
+
+    // ==================================================
+    // BATTERY
+    // ==================================================
+
+    setResult(
+
         "resultBatteryModel",
-        `${result.battery.brand} ${result.battery.model}`
+
+        system.battery?.model ??
+        system.battery?.name ??
+        "-"
+
     );
 
-    setText(
+
+    setResult(
+
         "resultBatteryQuantity",
-        `${result.batteryQuantity} Unit`
+
+        system.batteryQuantity ?? "-"
+
     );
 
-    setText(
+
+    // ==================================================
+    // INSTALLED BATTERY
+    // ==================================================
+
+    setResult(
+
         "resultInstalledBattery",
-        `${result.installedBatteryWh.toLocaleString()} Wh`
+
+        system.installedBatteryWh !== undefined
+
+            ? `${system.installedBatteryWh} Wh`
+
+            : "-"
+
+    );
+
+
+    // ==================================================
+    // COMPLETE
+    // ==================================================
+
+    console.log(
+
+        "System Design Result UI updated successfully."
+
     );
 
 }

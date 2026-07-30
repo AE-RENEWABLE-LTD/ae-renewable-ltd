@@ -1,75 +1,138 @@
+// ======================================================
+//
+// AE RENEWABLE LTD
+// ARDE V1.0
+//
+// FILE
+// inverterSelector.js
+//
+// PURPOSE
+// Automatic Inverter Selection
+//
+// ======================================================
+
 import { inverters } from "../data/inverters.js";
 
-export function chooseInverter(solarPvRequired){
 
-    const minimum = solarPvRequired;
-    const maximum = solarPvRequired * 1.5;
+export function chooseInverter(solarPvRequired) {
 
-    // One inverter
-    const single = inverters
-        .filter(inv =>
-            inv.maxPvWatt >= minimum &&
-            inv.maxPvWatt <= maximum
-        )
-        .sort((a,b)=>a.maxPvWatt-b.maxPvWatt);
+    // ==============================================
+    // MINIMUM PV REQUIREMENT
+    // ==============================================
 
-    if(single.length){
+    const minimum =
+        solarPvRequired;
 
-        return{
-            quantity:1,
-            inverter:single[0],
-            totalPv:single[0].maxPvWatt
+
+    // ==============================================
+    // MAXIMUM PV ALLOWED
+    // 150% OF REQUIRED PV
+    // ==============================================
+
+    const maximum =
+        solarPvRequired * 1.5;
+
+
+    // ==============================================
+    // FIND ONE SUITABLE INVERTER
+    // ==============================================
+
+    const singleInverter =
+        inverters
+            .filter(inverter =>
+
+                inverter.maxPvWatt >= minimum &&
+
+                inverter.maxPvWatt <= maximum
+
+            )
+            .sort(
+                (a, b) =>
+                    a.maxPvWatt -
+                    b.maxPvWatt
+            )[0];
+
+
+    if (singleInverter) {
+
+        return {
+
+            inverter:
+                singleInverter,
+
+            quantity: 1
+
         };
 
     }
 
-    // Two identical inverters
-    let best = null;
 
-    for(const inv of inverters){
+    // ==============================================
+    // FIND TWO IDENTICAL INVERTERS
+    // ==============================================
 
-        const totalPv = inv.maxPvWatt * 2;
+    for (const inverter of inverters) {
 
-        if(totalPv >= minimum && totalPv <= maximum){
+        const totalPv =
+            inverter.maxPvWatt * 2;
 
-            if(!best || totalPv < best.totalPv){
 
-                best = {
-                    quantity:2,
-                    inverter:inv,
-                    totalPv
-                };
+        if (
 
-            }
+            totalPv >= minimum &&
 
-        }
+            totalPv <= maximum
 
-    }
+        ) {
 
-    if(best) return best;
+            return {
 
-    // Three identical inverters
-    best = null;
+                inverter,
 
-    for(const inv of inverters){
+                quantity: 2
 
-        const totalPv = inv.maxPvWatt * 3;
-
-        if(totalPv >= minimum && totalPv <= maximum){
-
-            if(!best || totalPv < best.totalPv){
-
-                best = {
-                    quantity:3,
-                    inverter:inv,
-                    totalPv
-                };
-
-            }
+            };
 
         }
 
     }
 
-    return best;
+
+    // ==============================================
+    // FIND THREE IDENTICAL INVERTERS
+    // ==============================================
+
+    for (const inverter of inverters) {
+
+        const totalPv =
+            inverter.maxPvWatt * 3;
+
+
+        if (
+
+            totalPv >= minimum &&
+
+            totalPv <= maximum
+
+        ) {
+
+            return {
+
+                inverter,
+
+                quantity: 3
+
+            };
+
+        }
+
+    }
+
+
+    // ==============================================
+    // NO SUITABLE INVERTER
+    // ==============================================
+
+    return null;
+
 }

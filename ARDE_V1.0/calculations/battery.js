@@ -1,5 +1,8 @@
 export function calculateBattery(dailyEnergy,dod,batteryPercent){
 
-    return (dailyEnergy*(batteryPercent/100));
+    return ((dailyEnergy / 0.8)*(batteryPercent/100));
 
 }
+
+
+// BATTERY.JS

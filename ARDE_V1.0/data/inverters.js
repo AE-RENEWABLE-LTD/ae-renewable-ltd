@@ -1,12 +1,13 @@
 // =========================================
 // AE Renewable Solar Design Engine
 // Inverter Database
+//
+// inverter.JS
 // =========================================
 
 export const inverters = [
   // -----------------------------------------
   // FELICITY SOLAR INVERTERS (3.5kVA - 12kVA)
-  // -----------------------------------------
   // -----------------------------------------
   {
     id: 1,
@@ -38,21 +39,21 @@ export const inverters = [
     batteryVoltage: 48,
     price: 750000
   },
-//   {
-//     id: 3,
-//     brand: "Felicity",
-//     model: "FL-IVHP7548 ",
-//     inverterSize: 7500,
-//     phase: 1,
-//     maxPvWatt: 9000,
-//     inverterPvVoltage: 500,
-//     inverterAcVoltage: 230,
-//     maxACChargeCurrent: 100,
-//     mppt: 2,
-//     stringsPerMppt: 1,
-//     batteryVoltage: 48,
-//     price: 1100000
-//   },
+  {
+    id: 3,
+    brand: "Felicity",
+    model: "FL-IVHP7548",
+    inverterSize: 7500,
+    phase: 1,
+    maxPvWatt: 9000,
+    inverterPvVoltage: 500,
+    inverterAcVoltage: 230,
+    maxACChargeCurrent: 100,
+    mppt: 2,
+    stringsPerMppt: 1,
+    batteryVoltage: 48,
+    price: 1100000
+  },
   {
     id: 4,
     brand: "Felicity",
@@ -68,21 +69,21 @@ export const inverters = [
     batteryVoltage: 48,
     price: 1350000
   },
-//   {
-//     id: 5,
-//     brand: "Felicity",
-//     model: "FL-IVHP10048",
-//     inverterSize: 10000,
-//     phase: 1,
-//     maxPvWatt: 12000,
-//     inverterPvVoltage: 500,
-//     inverterAcVoltage: 230,
-//     maxACChargeCurrent: 140,
-//     mppt: 2,
-//     stringsPerMppt: 2,
-//     batteryVoltage: 48,
-//     price: 1650000
-//   },
+  {
+    id: 5,
+    brand: "Felicity",
+    model: "FL-IVHP10048",
+    inverterSize: 10000,
+    phase: 1,
+    maxPvWatt: 12000,
+    inverterPvVoltage: 500,
+    inverterAcVoltage: 230,
+    maxACChargeCurrent: 140,
+    mppt: 2,
+    stringsPerMppt: 2,
+    batteryVoltage: 48,
+    price: 1650000
+  },
   {
     id: 6,
     brand: "Felicity",
@@ -177,21 +178,21 @@ export const inverters = [
     batteryVoltage: 48,
     price: 1150000
   },
-//   {
-//     id: 12,
-//     brand: "Firman",
-//     model: "FIR-9K-SG04LP1",
-//     inverterSize: 9000,
-//     phase: 1,
-//     maxPvWatt: 11500,
-//     inverterPvVoltage: 500,
-//     inverterAcVoltage: 230,
-//     maxACChargeCurrent: 100,
-//     mppt: 2,
-//     stringsPerMppt: 2,
-//     batteryVoltage: 48,
-//     price: 1420000
-//   },
+  {
+    id: 12,
+    brand: "Firman",
+    model: "FIR-9K-SG04LP1",
+    inverterSize: 9000,
+    phase: 1,
+    maxPvWatt: 11500,
+    inverterPvVoltage: 500,
+    inverterAcVoltage: 230,
+    maxACChargeCurrent: 100,
+    mppt: 2,
+    stringsPerMppt: 2,
+    batteryVoltage: 48,
+    price: 1420000
+  },
   {
     id: 13,
     brand: "Firman",

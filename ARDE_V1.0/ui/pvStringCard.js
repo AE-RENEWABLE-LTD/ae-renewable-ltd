@@ -1,86 +1,188 @@
 // ======================================================
 //
-// Update PV String Configuration
+// AE RENEWABLE LTD
+// ARDE V1.0
+//
+// FILE
+// pvStringCard.js
+//
+// PURPOSE
+// Update PV String Configuration Section
 //
 // ======================================================
 
-function setText(id,value){
 
-    const element = document.getElementById(id);
+// ======================================================
+// SET TEXT HELPER
+// ======================================================
 
-    if(element){
+function setText(id, value) {
 
-        element.textContent = value;
+    const element =
+        document.getElementById(id);
+
+
+    if (!element) {
+
+        console.warn(
+            `Missing element: ${id}`
+        );
+
+        return;
 
     }
 
-}
 
-function updateUI(system){
+    element.textContent =
 
-    updateResultCard(system);
+        value !== undefined &&
+        value !== null
 
-    const materials = buildMaterialList(system);
+            ? value
 
-    updateMaterialTable(materials);
-
-    updateProtectionCard(system);
-
-    // THIS MUST BE HERE
-    updatePVStringCard(system);
+            : "-";
 
 }
 
-export function updatePVStringCard(system){
 
-    const pv = system.pvString;
+// ======================================================
+// UPDATE PV STRING CARD
+// ======================================================
+
+export function updatePVStringCard(system) {
+
+
+    // ==================================================
+    // GET PV STRING DATA
+    // ==================================================
+
+    const pvString =
+        system?.pvString;
+
+
+    // ==================================================
+    // SAFETY CHECK
+    // ==================================================
+
+    if (!pvString) {
+
+        console.warn(
+            "PV String Configuration data not found."
+        );
+
+        return;
+
+    }
+
+
+    // ==================================================
+    // DEBUG
+    // ==================================================
+
+    console.log(
+        "PV STRING OUTPUT:",
+        pvString
+    );
+
+
+    // ==================================================
+    // PANELS PER STRING
+    // ==================================================
 
     setText(
 
         "resultPanelsPerString",
 
-        pv.panelsPerString
+        pvString.panelsPerString != null
+
+            ? `${pvString.panelsPerString}`
+
+            : "-"
 
     );
+
+
+    // ==================================================
+    // TOTAL STRINGS
+    // ==================================================
 
     setText(
 
         "resultTotalStrings",
 
-        pv.totalStrings
+        pvString.totalStrings != null
+
+            ? `${pvString.totalStrings}`
+
+            : "-"
 
     );
+
+
+    // ==================================================
+    // STRINGS PER MPPT
+    // ==================================================
 
     setText(
 
         "resultStringsPerMPPT",
 
-        pv.stringsPerMPPT
+        pvString.stringsPerMppt != null
+
+            ? `${pvString.stringsPerMppt}`
+
+            : "-"
 
     );
+
+
+    // ==================================================
+    // REMAINING PANELS
+    // ==================================================
 
     setText(
 
         "resultRemainingPanels",
 
-        pv.remainingPanels
+        pvString.remainingPanels != null
+
+            ? `${pvString.remainingPanels}`
+
+            : "-"
 
     );
 
-    setText(
+// ==================================================
+// PV COMBINER
+// ==================================================
 
-        "resultCombiner",
+setText(
 
-        pv.combinerQuantity
+    "resultCombiner",
 
-    );
+    pvString.combinerRequired
 
-    setText(
+        ? `${pvString.combinerQuantity} × ${pvString.combinerWays}-Way Combiner`
 
-        "resultMC4",
+        : "Not Required"
 
-        pv.mc4Pairs
+);
 
-    );
+
+// ==================================================
+// MC4 CONNECTOR PAIRS
+// ==================================================
+
+setText(
+
+    "resultMC4",
+
+    pvString.mc4PairsWithMargin != null
+
+        ? `${pvString.mc4PairsWithMargin} Pairs`
+
+        : "-"
+
+);
 
 }

@@ -9,97 +9,236 @@
 // PURPOSE
 // Main Engineering Design Engine
 //
+// ENGINE FLOW
+//
+// 1. Calculate Daily Energy
+// 2. Calculate Battery Requirement
+// 3. Calculate Solar PV Requirement
+// 4. Select Solar Panel
+// 5. Select Inverter
+// 6. Select Battery
+// 7. Configure PV Strings
+// 8. Calculate Protection Design
+// 9. Return Complete Engineering System
+//
 // ======================================================
 
+
 import { calculateEnergy } from "./energy.js";
+
 import { calculateBattery } from "./battery.js";
+
 import { calculatePV } from "./solar.js";
 
+
 import { choosePanel } from "../selection/panelSelector.js";
+
 import { chooseInverter } from "../selection/inverterSelector.js";
+
 import { chooseBattery } from "../selection/batterySelector.js";
+
 import { choosePVString } from "../selection/pvStringSelector.js";
+
 import { chooseProtection } from "./protection.js";
 
-export function designSystem(input){
 
-    //====================================
+// ======================================================
+// MAIN DESIGN ENGINE
+// ======================================================
+
+export function designSystem(input) {
+
+
+    // ==================================================
     // USER INPUT
-    //====================================
+    // ==================================================
 
-    const{
+    const {
 
         load,
+
         backup,
+
         psh,
+
         panelFactor,
+
         dod,
+
         losses,
+
         batteryPercent
 
     } = input;
 
-    //====================================
-    // DAILY ENERGY
-    //====================================
 
-    const dailyEnergy = calculateEnergy(
+    // ==================================================
+    // VALIDATE USER INPUT
+    // ==================================================
 
-        load,
-        backup
+    if (
+        load === undefined ||
+        load === null ||
+        load <= 0
+    ) {
 
-    );
+        throw new Error(
+            "Load must be greater than zero."
+        );
 
-    //====================================
+    }
+
+
+    if (
+        backup === undefined ||
+        backup === null ||
+        backup <= 0
+    ) {
+
+        throw new Error(
+            "Backup duration must be greater than zero."
+        );
+
+    }
+
+
+    if (
+        psh === undefined ||
+        psh === null ||
+        psh <= 0
+    ) {
+
+        throw new Error(
+            "Peak Sun Hours must be greater than zero."
+        );
+
+    }
+
+
+    // ==================================================
+    // DAILY ENERGY CALCULATION
+    // ==================================================
+
+    const dailyEnergy =
+
+        calculateEnergy(
+
+            load,
+
+            backup
+
+        );
+
+
+    // ==================================================
     // BATTERY REQUIREMENT
-    //====================================
+    // ==================================================
 
-    const batteryWh = calculateBattery(
+    const batteryWh =
 
-        dailyEnergy,
-        dod,
-        batteryPercent
+        calculateBattery(
 
-    );
+            dailyEnergy,
 
-    //====================================
-    // SOLAR PV REQUIRED
-    //====================================
+            dod,
 
-    const solarPvRequired = calculatePV(
+            batteryPercent
 
-        load,
-        losses,
-        psh,
-        batteryWh
+        );
 
-    );
 
-    //====================================
+    // ==================================================
+    // SOLAR PV REQUIREMENT
+    // ==================================================
+
+    const solarPvRequired =
+
+        calculatePV(
+
+            load,
+
+            losses,
+
+            psh,
+
+            batteryWh
+
+        );
+
+
+    // ==================================================
     // PANEL SELECTION
-    //====================================
+    // ==================================================
 
-    const panelSelection = choosePanel(
+    const panelSelection =
 
-        solarPvRequired
+        choosePanel(
 
-    );
+            solarPvRequired
 
-    const panel = panelSelection.panel;
+        );
 
-    const panelQuantity = panelSelection.quantity;
 
-    //====================================
+    // ==================================================
+    // VALIDATE PANEL SELECTION
+    // ==================================================
+
+    if (!panelSelection) {
+
+        throw new Error(
+
+            "No suitable solar panel found."
+
+        );
+
+    }
+
+
+    // ==================================================
+    // SELECT PANEL
+    // ==================================================
+
+    const panel =
+
+        panelSelection.panel;
+
+
+    // ==================================================
+    // SELECT PANEL QUANTITY
+    // ==================================================
+
+    const panelQuantity =
+
+        panelSelection.quantity;
+
+
+    // ==================================================
+    // INSTALLED PV POWER
+    // ==================================================
+
+    const installedPvPower =
+
+        panelSelection.installedPower;
+
+
+    // ==================================================
     // INVERTER SELECTION
-    //====================================
+    // ==================================================
 
-    const inverterSelection = chooseInverter(
+    const inverterSelection =
 
-        solarPvRequired
+        chooseInverter(
 
-    );
+            solarPvRequired
 
-    if(!inverterSelection){
+        );
+
+
+    // ==================================================
+    // VALIDATE INVERTER SELECTION
+    // ==================================================
+
+    if (!inverterSelection) {
 
         throw new Error(
 
@@ -109,141 +248,393 @@ export function designSystem(input){
 
     }
 
-    const inverter = inverterSelection.inverter;
 
-    //====================================
+    // ==================================================
+    // SELECT INVERTER
+    // ==================================================
+
+    const inverter =
+
+        inverterSelection.inverter;
+
+
+    // ==================================================
+    // INVERTER QUANTITY
+    // ==================================================
+
+    const inverterQuantity =
+
+        inverterSelection.quantity;
+
+
+    // ==================================================
     // BATTERY SELECTION
-    //====================================
+    // ==================================================
 
-    const batterySelection = chooseBattery(
+    const batterySelection =
+
+        chooseBattery(
+
+            batteryWh,
+
+            inverter
+
+        );
+
+
+    // ==================================================
+    // VALIDATE BATTERY SELECTION
+    // ==================================================
+
+    if (!batterySelection) {
+
+        throw new Error(
+
+            "No suitable battery found."
+
+        );
+
+    }
+
+
+    // ==================================================
+    // SELECT BATTERY
+    // ==================================================
+
+    const battery =
+
+        batterySelection.battery;
+
+
+    // ==================================================
+    // BATTERY QUANTITY
+    // ==================================================
+
+    const batteryQuantity =
+
+        batterySelection.quantity;
+
+
+    // ==================================================
+    // INSTALLED BATTERY CAPACITY
+    // ==================================================
+
+    const installedBatteryWh =
+
+        batterySelection.installedWh;
+
+
+    // ==================================================
+    // PV STRING CONFIGURATION
+    //
+    // IMPORTANT
+    //
+    // The PV String Engine is calculated BEFORE
+    // Protection Design.
+    //
+    // This allows the Protection Engine to use the
+    // exact same PV string configuration for:
+    //
+    // - Total PV Strings
+    // - Panels per String
+    // - MPPT Distribution
+    // - MC4 Quantity
+    // - PV Combiner
+    //
+    // ==================================================
+
+    const pvString =
+
+        choosePVString({
+
+            panel,
+
+            panelQuantity,
+
+            inverter
+
+        });
+
+
+    // ==================================================
+    // PROTECTION DESIGN
+    //
+    // The PV String result is passed directly into
+    // Protection Design.
+    //
+    // This prevents protection.js from calculating
+    // a different PV string configuration.
+    //
+    // ==================================================
+
+    const protection =
+
+        chooseProtection({
+
+            inverter,
+
+            panel,
+
+            inverterQuantity,
+
+            panelQuantity,
+
+            pvPower:
+                solarPvRequired,
+
+            batteryVoltage:
+
+                battery.voltage,
+
+            pvString
+
+        });
+
+
+    // ==================================================
+    // COMPLETE ENGINEERING SYSTEM
+    // ==================================================
+
+    const result = {
+
+
+        // ==============================================
+        // USER INPUT
+        // ==============================================
+
+        load,
+
+        backup,
+
+        psh,
+
+        panelFactor,
+
+        dod,
+
+        losses,
+
+        batteryPercent,
+
+
+        // ==============================================
+        // ENERGY CALCULATIONS
+        // ==============================================
+
+        dailyEnergy,
 
         batteryWh,
+
+        solarPvRequired,
+
+
+        // ==============================================
+        // SOLAR PANEL
+        // ==============================================
+
+        panel,
+
+        panelQuantity,
+
+        installedPvPower,
+
+
+        // ==============================================
+        // INVERTER
+        // ==============================================
+
+        inverter,
+
+        inverterQuantity,
+
+
+        // ==============================================
+        // BATTERY
+        // ==============================================
+
+        battery,
+
+        batteryQuantity,
+
+        installedBatteryWh,
+
+
+        // ==============================================
+        // PV STRING CONFIGURATION
+        // ==============================================
+
+        pvString,
+
+
+        // ==============================================
+        // PROTECTION DESIGN
+        // ==============================================
+
+        protection
+
+    };
+
+
+    // ==================================================
+    // ENGINEERING CONSOLE OUTPUT
+    // ==================================================
+
+    console.log(
+
+        "=============================================="
+
+    );
+
+
+    console.log(
+
+        "AE RENEWABLE LTD - ARDE V1.0"
+
+    );
+
+
+    console.log(
+
+        "COMPLETE ENGINEERING DESIGN RESULT"
+
+    );
+
+
+    console.log(
+
+        "=============================================="
+
+    );
+
+
+    console.log(
+
+        "DAILY ENERGY:",
+
+        dailyEnergy
+
+    );
+
+
+    console.log(
+
+        "BATTERY REQUIREMENT:",
+
+        batteryWh
+
+    );
+
+
+    console.log(
+
+        "SOLAR PV REQUIRED:",
+
+        solarPvRequired
+
+    );
+
+
+    console.log(
+
+        "SELECTED PANEL:",
+
+        panel
+
+    );
+
+
+    console.log(
+
+        "PANEL QUANTITY:",
+
+        panelQuantity
+
+    );
+
+
+    console.log(
+
+        "INSTALLED PV POWER:",
+
+        installedPvPower
+
+    );
+
+
+    console.log(
+
+        "SELECTED INVERTER:",
+
         inverter
 
     );
 
-    //====================================
-    // PROTECTION SELECTION
-    //====================================
 
-    const protection = chooseProtection({
+    console.log(
 
-        inverter,
+        "INVERTER QUANTITY:",
 
-        panel,
+        inverterQuantity
 
-        inverterQuantity:
-            inverterSelection.quantity,
-
-        panelQuantity,
-
-        pvPower:
-            solarPvRequired,
-
-        batteryVoltage:
-            batterySelection.battery.voltage
-
-    });
-
-    //====================================
-    // PV STRING CONFIGURATION
-    //====================================
-
-    const pvString = choosePVString({
-
-        panel,
-
-        panelQuantity,
-
-        inverter
-
-    });
-
-    //====================================
-    // RETURN COMPLETE SYSTEM
-    //====================================
-
-    //====================================
-// RETURN COMPLETE SYSTEM
-//====================================
-
-return {
-
-    //----------------------------------
-    // User Inputs
-    //----------------------------------
-
-    load,
-
-    backup,
-
-    psh,
-
-    panelFactor,
-
-    dod,
-
-    losses,
-
-    batteryPercent,
-
-    //----------------------------------
-    // Calculations
-    //----------------------------------
-
-    dailyEnergy,
-
-    batteryWh,
-
-    solarPvRequired,
-
-    //----------------------------------
-    // Panel
-    //----------------------------------
-
-    panel,
-
-    panelQuantity,
-
-    installedPvPower:
-        panelSelection.installedPower,
-
-    //----------------------------------
-    // Inverter
-    //----------------------------------
-
-    inverter,
-
-    inverterQuantity:
-        inverterSelection.quantity,
-
-    //----------------------------------
-    // Battery
-    //----------------------------------
-
-    battery:
-        batterySelection.battery,
-
-    batteryQuantity:
-        batterySelection.quantity,
-
-    installedBatteryWh:
-        batterySelection.installedWh,
-
-    //----------------------------------
-    // Protection
-    //----------------------------------
-
-    protection,
-
-    //----------------------------------
-    // PV String
-    //----------------------------------
-
-    pvString
-
-};
+    );
 
 
+    console.log(
+
+        "SELECTED BATTERY:",
+
+        battery
+
+    );
+
+
+    console.log(
+
+        "BATTERY QUANTITY:",
+
+        batteryQuantity
+
+    );
+
+
+    console.log(
+
+        "INSTALLED BATTERY CAPACITY:",
+
+        installedBatteryWh
+
+    );
+
+
+    console.log(
+
+        "PV STRING CONFIGURATION:",
+
+        pvString
+
+    );
+
+
+    console.log(
+
+        "PROTECTION DESIGN:",
+
+        protection
+
+    );
+
+
+    console.log(
+
+        "=============================================="
+
+    );
+
+
+    // ==================================================
+    // RETURN COMPLETE RESULT
+    // ==================================================
+
+    return result;
 
 }

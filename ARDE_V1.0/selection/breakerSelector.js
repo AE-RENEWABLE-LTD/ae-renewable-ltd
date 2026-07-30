@@ -13,17 +13,24 @@
 
 import { breakers } from "../data/breakers.js";
 
-export function chooseBreaker(current){
 
-    const maximum = current * 1.5;
+export function chooseBreaker(current) {
 
-    const breaker = breakers.find(size =>
+    const sortedBreakers =
+        [...breakers].sort(
+            (a, b) => a - b
+        );
 
-        size >= current &&
-        size <= maximum
 
-    );
+    const breaker =
+        sortedBreakers.find(
+            size => size >= current
+        );
 
-    return breaker ?? breakers[breakers.length - 1];
+
+    return breaker ??
+        sortedBreakers[
+            sortedBreakers.length - 1
+        ];
 
 }

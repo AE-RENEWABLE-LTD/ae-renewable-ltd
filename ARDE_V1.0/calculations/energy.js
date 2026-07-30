@@ -1,5 +1,5 @@
-export function calculateEnergy(load,backup){
+export function calculateEnergy(load, backup) {
 
-    return load*backup;
+    return load * backup;
 
 }

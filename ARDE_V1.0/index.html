@@ -465,6 +465,10 @@ Export PDF
 <!-- PROTECTION DESIGN -->
 <!-- ========================================================= -->
 
+<!-- ========================================================= -->
+<!-- PROTECTION DESIGN -->
+<!-- ========================================================= -->
+
 <section class="card">
 
     <div class="card-header">
@@ -472,134 +476,227 @@ Export PDF
         <h2>Protection Design</h2>
 
         <p>
-
             Automatic breaker and protection sizing.
-
         </p>
 
     </div>
 
+
     <div class="result-grid">
 
-        <div class="result-item">
 
-            <span>AC Output Current</span>
-
-            <strong id="resultOutputCurrent">OutputCurrent</strong>
-
-        </div>
+        <!-- ================================================= -->
+        <!-- AC OUTPUT CURRENT -->
+        <!-- ================================================= -->
 
         <div class="result-item">
 
-            <span>Output Breaker</span>
+            <span>
+                AC Output Current
+            </span>
 
-            <strong id="resultOutputBreaker">OutputBreaker</strong>
-            <strong id="phase">phase</strong>
-            
+            <strong id="resultOutputCurrent">
+                -
+            </strong>
 
         </div>
+
+
+        <!-- ================================================= -->
+        <!-- OUTPUT BREAKER -->
+        <!-- ================================================= -->
+
+       <!-- AC OUTPUT BREAKER -->
+        <div class="result-item">
+            <span>AC Output Breaker</span>
+            <strong id="resultOutputBreaker">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>AC Output Breaker Quantity</span>
+            <strong id="resultOutputBreakerQuantity">-</strong>
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- PHASE -->
+        <!-- ================================================= -->
+
+        <div class="result-item">
+
+            <span>
+                Phase
+            </span>
+
+            <strong id="phase">
+                -
+            </strong>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- AC INPUT CURRENT -->
+        <!-- ================================================= -->
+
+        <div class="result-item">
+
+            <span>
+                AC Input Current
+            </span>
+
+            <strong id="resultInputCurrent">
+                -
+            </strong>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- INPUT BREAKER -->
+        <!-- ================================================= -->
+
+        <!-- AC INPUT BREAKER -->
+        <div class="result-item">
+            <span>AC Input Breaker</span>
+            <strong id="resultInputBreaker">-</strong>
+        </div>
+
+        <div class="result-item">
+            <span>AC Input Breaker Quantity</span>
+            <strong id="resultInputBreakerQuantity">-</strong>
+        </div>  
+
+        <!-- ========================================= -->
+            <div class="result-item">
+        <span>Changeover</span>
+        <strong id="resultChangeover">-</strong>
+    </div>
+
+    <div class="result-item">
+        <span>Changeover Quantity</span>
+        <strong id="resultChangeoverQuantity">-</strong>
+    </div>
+
+        <!-- 
+        ================================================= -->
+        <!-- PV CURRENT -->
+        <!-- ================================================= -->
+
+        <div class="result-item">
+
+            <span>
+                PV Current
+            </span>
+
+            <strong id="resultPVCurrent">
+                -
+            </strong>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- PV BREAKER -->
+        <!-- ================================================= -->
+
+  <!-- PV BREAKER -->
+    <div class="result-item">
+        <span>PV Breaker</span>
+        <strong id="resultPVBreaker">-</strong>
+    </div>
+
+    <div class="result-item">
+        <span>PV Breaker Quantity</span>
+        <strong id="resultPVBreakerQuantity">-</strong>
+    </div>
+
+
+        <!-- ================================================= -->
+        <!-- BATTERY CURRENT -->
+        <!-- ================================================= -->
+
+        <div class="result-item">
+
+            <span>
+                Battery Current
+            </span>
+
+            <strong id="resultBatteryCurrent">
+                -
+            </strong>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- BATTERY BREAKER -->
+        <!-- ================================================= -->
+
+        <div class="result-item">
+
+            <span>
+                Battery Breaker
+            </span>
+
+            <strong id="resultBatteryBreaker">
+                -
+            </strong>
+            <span id="resultBatteryBreakerQuantity">-</span>
+
+        </div>
+
         
-        <div class="result-item">
-
-            <span>Output Breaker Quantity</span>
-
-            <strong id="resultOutputBreakerQuantity">OutputBreakerQuantity</strong>
 
 
-        </div>
+        <!-- ================================================= -->
+        <!-- DC SPD -->
+        <!-- ================================================= -->
 
-        <div class="result-item">
+    <!-- DC SURGE PROTECTION -->
+    <div class="result-item">
+        <span>DC Surge Protection</span>
+        <strong id="resultDCSPD">-</strong>
+    </div>
 
-            <span>AC Input Current</span>
+    <div class="result-item">
+        <span>DC Surge Quantity</span>
+        <strong id="resultDCSPDQuantity">-</strong>
+    </div>
 
-            <strong id="resultInputCurrent">resultInputCurrent</strong>
-            
 
-        </div>
+        <!-- ================================================= -->
+        <!-- AC SPD -->
+        <!-- ================================================= -->
 
-        <div class="result-item">
+     <!-- AC SURGE PROTECTION -->
+    <div class="result-item">
+        <span>AC Surge Protection</span>
+        <strong id="resultACSPD">-</strong>
+    </div>
 
-            <span>Input Breaker</span>
+    <div class="result-item">
+        <span>AC Surge Quantity</span>
+        <strong id="resultACSPDQuantity">-</strong>
+    </div>
 
-            <strong id="resultInputBreaker">InputBreaker</strong>
 
-            <strong id="phase">phase</strong>
-            
-
-        </div>
-
-        <!-- <div class="result-item">
-
-            <span>Input Breaker Phase</span>
-            
-
-        </div> -->
-
-        <div class="result-item">
-
-            <span>Input Breaker Quantity</span>
-
-            <strong id="resultOutputBreakerQuantity">OutputBreakerQuantity</strong>
-            
-
-        </div>
+        <!-- ================================================= -->
+        <!-- EARTH CABLE -->
+        <!-- ================================================= -->
 
         <div class="result-item">
 
-            <span>PV Current</span>
+            <span>
+                Earth Cable
+            </span>
 
-            <strong id="resultPVCurrent">PVCurrent</strong>
-
-        </div>
-
-        <div class="result-item">
-
-            <span>PV Breaker</span>
-
-            <strong id="resultPVBreaker">PVBreaker</strong>
-
-            <strong id="resultPVBreakerQuantity">PVBreakerQuantity</strong>
+            <strong id="ear">
+                -
+            </strong>
 
         </div>
 
-        <div class="result-item">
-
-            <span>Battery Current</span>
-
-            <strong id="resultBatteryCurrent">BatteryCurrent</strong>
-
-        </div>
-        <div class="result-item">
-
-            <span>Battery Breaker</span>
-
-            <strong id="resultBatteryBreaker">BatteryCurrentBreaker</strong>
-
-        </div>
-
-        <div class="result-item">
-
-            <span>DC SPD</span>
-
-            <strong id="resultDCSPD">DCSPD</strong>
-
-        </div>
-
-        <div class="result-item">
-
-            <span>AC SPD</span>
-
-            <strong id="resultACSPD">ACSPD</strong>
-
-        </div>
-
-        <div class="result-item">
-
-            <span>Earth Cable</span>
-
-            <strong id="ear">Earth</strong>
-
-        </div>
 
     </div>
 
