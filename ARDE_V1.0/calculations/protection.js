@@ -15,6 +15,8 @@ import {
     chooseBreaker
 } from "../selection/breakerSelector.js";
 
+import {inverters} from "../data/inverters.js";
+
 
 // ======================================================
 // PROTECTION DESIGN ENGINE
@@ -369,7 +371,7 @@ export function chooseProtection(system) {
 
 
     if (
-        inverterPvVoltage <= 600
+        inverterPvVoltage <= 500
     ) {
 
         dcSPD = {
@@ -384,7 +386,7 @@ export function chooseProtection(system) {
                 "600VDC",
 
             quantity:
-                inverterQuantity
+                totalStrings
 
         };
 
@@ -400,13 +402,13 @@ export function chooseProtection(system) {
                 "2P",
 
             type:
-                "Type II",
+                "Type III",
 
             voltage:
                 "1000VDC",
 
             quantity:
-                inverterQuantity
+                totalStrings
 
         };
 
@@ -426,7 +428,7 @@ export function chooseProtection(system) {
                 "1500VDC",
 
             quantity:
-                inverterQuantity
+                totalStrings
 
         };
 
@@ -489,7 +491,7 @@ export function chooseProtection(system) {
     // ==================================================
 
     const combinerRequired =
-        totalStrings >= 10;
+        totalStrings >= 8;
 
 
     // ==================================================
@@ -730,7 +732,7 @@ export function chooseProtection(system) {
     }
 
     else if (
-        maxPvWatt <= 20000
+        maxPvWatt <= 40000
     ) {
 
         solarCableSize =
@@ -773,15 +775,6 @@ export function chooseProtection(system) {
     ) {
 
         acOutputCableSize =
-            "4mm²";
-
-    }
-
-    else if (
-        acOutputCurrentWM <= 40
-    ) {
-
-        acOutputCableSize =
             "6mm²";
 
     }
@@ -795,6 +788,15 @@ export function chooseProtection(system) {
 
     }
 
+    // else if (
+    //     acOutputCurrentWM <= 63
+    // ) {
+
+    //     acOutputCableSize =
+    //         "10mm²";
+
+    // }
+
     else if (
         acOutputCurrentWM <= 100
     ) {
@@ -804,8 +806,17 @@ export function chooseProtection(system) {
 
     }
 
+    // else if (
+    //     acOutputCurrentWM <= 150
+    // ) {
+
+    //     acOutputCableSize =
+    //         "25mm²";
+
+    // }
+
     else if (
-        acOutputCurrentWM <= 150
+        acOutputCurrentWM <= 200
     ) {
 
         acOutputCableSize =
@@ -814,7 +825,7 @@ export function chooseProtection(system) {
     }
 
     else if (
-        acOutputCurrentWM <= 200
+        acOutputCurrentWM <= 300
     ) {
 
         acOutputCableSize =
@@ -823,7 +834,7 @@ export function chooseProtection(system) {
     }
 
     else if (
-        acOutputCurrentWM <= 300
+        acOutputCurrentWM <= 400
     ) {
 
         acOutputCableSize =
@@ -832,20 +843,11 @@ export function chooseProtection(system) {
     }
 
     else if (
-        acOutputCurrentWM <= 400
-    ) {
-
-        acOutputCableSize =
-            "70mm²";
-
-    }
-
-    else if (
         acOutputCurrentWM <= 600
     ) {
 
         acOutputCableSize =
-            "90mm²";
+            "95mm²";
 
     }
 
@@ -888,7 +890,7 @@ export function chooseProtection(system) {
 
             length:
                 inverterQuantity *
-                10
+                15
 
         }
 
@@ -907,7 +909,7 @@ export function chooseProtection(system) {
 
 
     if (
-        inverterSize <= 16000
+        inverterSize <= 24000
     ) {
 
         earthProject =
@@ -922,17 +924,17 @@ export function chooseProtection(system) {
     }
 
     else if (
-        inverterSize <= 60000
+        inverterSize <= 80000
     ) {
 
         earthProject =
             "Medium";
 
         earthCable =
-            "10mm²";
+            "6mm²";
 
         earthRod =
-            2;
+            1;
 
     }
 
@@ -942,7 +944,7 @@ export function chooseProtection(system) {
             "Large";
 
         earthCable =
-            "16mm²";
+            "10mm²";
 
         earthRod =
             3;

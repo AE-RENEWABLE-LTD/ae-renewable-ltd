@@ -19,9 +19,29 @@ export const batteries = [
   {
     id: 1,
     brand: "Firman",
-    model: "FIR-G5.1 Pro",
+    model: "B5110002 (PentaWall / ZF-5)",
     voltage: 51.2,
     capacityWh: 5120,
+    chemistry: "Lithium",
+    stackLimit: 3,
+    price: 650000
+  },
+  {
+    id: 2,
+    brand: "Firman",
+    model: "Model B5120001 (TenWall / PentaWall / 10WALL)",
+    voltage: 51.2,
+    capacityWh: 10200,
+    chemistry: "Lithium",
+    stackLimit: 3,
+    price: 650000
+  },
+  {
+    id: 3,
+    brand: "Firman",
+    model: "B5128001 (Zero F / PentaWall):",
+    voltage: 51.2,
+    capacityWh: 15000,
     chemistry: "Lithium",
     stackLimit: 3,
     price: 650000
@@ -31,31 +51,41 @@ export const batteries = [
   // DEYE BATTERIES
   // -----------------------------------------
   {
-    id: 2,
+    id: 4,
     brand: "Deye",
-    model: "SE-G5.1 Pro",
+    model: "SE-F5 Pro",
     voltage: 51.2,
     capacityWh: 5120,
     chemistry: "Lithium",
-    stackLimit: 12,
+    stackLimit: 6,
     price: 650000
   },
-//   {
-//     id: 3,
-//     brand: "Deye",
-//     model: "GB-L",
-//     voltage: 52.2,
-//     capacityWh: 20480,
-//     chemistry: "HV Lithium",
-//     stackLimit: 3,
-//     price: 2200000
-//   },
+  {
+    id: 5,
+    brand: "Deye",
+    model: "SE-F12",
+    voltage: 52.2,
+    capacityWh: 12000,
+    chemistry: " Lithium",
+    stackLimit: 6,
+    price: 2200000
+  },
+  {
+    id: 6,
+    brand: "Deye",
+    model: "SE-F16",
+    voltage: 52.2,
+    capacityWh: 16000,
+    chemistry: " Lithium",
+    stackLimit: 6,
+    price: 2200000
+  },
 
   // -----------------------------------------
   // FELICITY SOLAR BATTERIES
   // -----------------------------------------
   {
-    id: 4,
+    id: 7,
     brand: "Felicity",
     model: "FLA4850 5kwh",
     voltage: 51.2,
@@ -65,7 +95,7 @@ export const batteries = [
     price: 500000
   },
   {
-    id: 5,
+    id: 8,
     brand: "Felicity",
     model: "LPBF48200-H 10240kwh",
     voltage: 51.2,
@@ -75,7 +105,7 @@ export const batteries = [
     price: 1150000
   },
   {
-    id: 6,
+    id: 9,
     brand: "Felicity",
     model: "LUX-E-48200LG04 15kwh",
     voltage: 51.2,

@@ -1,253 +1,1282 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
-
-body{
-    background:#f5f5f5;
-    padding:30px;
-}
-
-.rfq-container{
-    background:#fff;
-    max-width:1100px;
-    margin:auto;
-    padding:30px;
-    border:1px solid #ccc;
-}
-
-.top-header{
-    display:flex;
-    gap:20px;
-    align-items:center;
-    border-bottom:2px solid #ddd;
-    padding-bottom:15px;
-}
-
-.logo{
-    font-size:34px;
-    font-weight:bold;
-    color:#1c355e;
-}
-
-.company-info{
-    flex:1;
-    text-align:center;
-}
-
-.company-info h3{
-    margin-bottom:8px;
-}
-
-.company-info p{
-    font-size:13px;
-    margin:3px 0;
-}
-
-.title{
-    background:#222;
-    color:white;
-    text-align:center;
-    font-size:30px;
-    padding:12px;
-    margin:25px 0;
-}
-
-.details{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:25px;
-}
-
-.details p{
-    margin:8px 0;
-    font-size:14px;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:10px;
-}
-
-table th,
-table td{
-    border:1px solid #999;
-    padding:10px;
-    font-size:14px;
-}
-
-table th{
-    background:#efefef;
-}
-
-.total-label{
-    text-align:right;
-    font-weight:bold;
-}
-
-.total{
-    font-weight:bold;
-}
-
-.conditions{
-    margin-top:25px;
-}
-
-.conditions p{
-    margin-bottom:10px;
-    font-size:13px;
-}
-
-.footer-section{
-    margin-top:25px;
-}
-
-.row{
-    margin-bottom:15px;
-}
-
-.row strong{
-    display:inline-block;
-    width:220px;
-}
-
-.signature{
-    margin-top:50px;
-    /* border-top:2px solid #000; */
-    width:350px;
-    padding-top:10px;
-    font-weight:bold;
-}
-    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Request For Quotation</title>
-    <link rel="stylesheet" href="style.css">
+
+    <title>AE Renewable Ltd | Apprentice Acceptance Form</title>
+
+    <style>
+
+        /* =====================================================
+           AE RENEWABLE LTD
+           APPRENTICE ACCEPTANCE FORM
+           ===================================================== */
+
+        :root {
+            --gold: #f4a600;
+            --green: #008000;
+            --blue: #044381;
+            --navy: #010a1d;
+            --light: #f5f7fa;
+            --white: #ffffff;
+            --text: #243447;
+            --border: #dfe5ec;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #e9edf2;
+            color: var(--text);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        /* ===============================
+           MAIN DOCUMENT
+           =============================== */
+
+        .document {
+            width: 100%;
+            max-width: 900px;
+            margin: auto;
+            background: var(--white);
+            box-shadow: 0 20px 60px rgba(1, 10, 29, 0.15);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        /* ===============================
+           HEADER
+           =============================== */
+
+        .header {
+            position: relative;
+            background: var(--navy);
+            color: var(--white);
+            padding: 35px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(244, 166, 0, 0.08);
+            right: -70px;
+            top: -100px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            width: 75px;
+            height: 75px;
+            background: var(--white);
+            border-radius: 10px;
+            object-fit: contain;
+            padding: 7px;
+        }
+
+        .company-name {
+            font-size: 27px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .company-tagline {
+            color: var(--gold);
+            font-size: 12px;
+            letter-spacing: 2px;
+            font-weight: 600;
+            margin-top: 3px;
+        }
+
+        .document-label {
+            position: relative;
+            z-index: 2;
+            text-align: right;
+        }
+
+        .document-label span {
+            display: block;
+            font-size: 11px;
+            color: #b9c4d1;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .document-label strong {
+            display: block;
+            font-size: 15px;
+            color: var(--white);
+            margin-top: 4px;
+        }
+
+        /* ===============================
+           GOLD LINE
+           =============================== */
+
+        .gold-line {
+            height: 5px;
+            background: linear-gradient(
+                90deg,
+                var(--gold),
+                var(--green),
+                var(--blue)
+            );
+        }
+
+        /* ===============================
+           CONTENT
+           =============================== */
+
+        .content {
+            padding: 45px 50px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .intro h1 {
+            color: var(--navy);
+            font-size: 26px;
+            margin-bottom: 10px;
+        }
+
+        .intro p {
+            max-width: 700px;
+            margin: auto;
+            font-size: 14px;
+            color: #5c6875;
+        }
+
+        /* ===============================
+           SECTION
+           =============================== */
+
+        .section {
+            margin-top: 32px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .section-number {
+            width: 32px;
+            height: 32px;
+            background: var(--blue);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .section-title h2 {
+            font-size: 18px;
+            color: var(--navy);
+            letter-spacing: 0.3px;
+        }
+
+        /* ===============================
+           PAYMENT CARD
+           =============================== */
+
+        .payment-card {
+            background: linear-gradient(
+                135deg,
+                var(--navy),
+                var(--blue)
+            );
+            color: var(--white);
+            border-radius: 12px;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .payment-card::after {
+            content: "₦";
+            position: absolute;
+            right: 30px;
+            top: -25px;
+            font-size: 150px;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.04);
+        }
+
+        .payment-title {
+            color: var(--gold);
+            font-size: 12px;
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .total-fee {
+            font-size: 34px;
+            font-weight: 800;
+            margin: 5px 0 20px;
+        }
+
+        .payment-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .payment-item {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 16px;
+            border-radius: 8px;
+        }
+
+        .payment-item span {
+            display: block;
+            font-size: 11px;
+            color: #cbd5e1;
+            margin-bottom: 4px;
+        }
+
+        .payment-item strong {
+            font-size: 20px;
+            color: var(--white);
+        }
+
+        .payment-note {
+            margin-top: 18px;
+            font-size: 12px;
+            color: #dce5ef;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ===============================
+           REQUIREMENTS
+           =============================== */
+
+        .requirements {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .requirement {
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--gold);
+            padding: 20px;
+            border-radius: 8px;
+            background: #fbfcfd;
+        }
+
+        .requirement h3 {
+            color: var(--blue);
+            font-size: 14px;
+            margin-bottom: 7px;
+        }
+
+        .requirement p {
+            font-size: 13px;
+            color: #596674;
+        }
+
+        /* ===============================
+           TOOLS
+           =============================== */
+
+        .tools-box {
+            background: #f7f9fb;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 18px;
+        }
+
+        .tools-box h3 {
+            color: var(--navy);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .tools-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .tool {
+            background: var(--white);
+            border: 1px solid var(--border);
+            padding: 12px 8px;
+            text-align: center;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--blue);
+        }
+
+        /* ===============================
+           TRANSPORT
+           =============================== */
+
+        .transport {
+            background: rgba(0, 128, 0, 0.06);
+            border: 1px solid rgba(0, 128, 0, 0.2);
+            border-left: 5px solid var(--green);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .transport h3 {
+            color: var(--green);
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .transport p {
+            font-size: 13px;
+            color: #52605a;
+        }
+
+        /* ===============================
+           FORM FIELDS
+           =============================== */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .form-group {
+            margin-top: 10px;
+        }
+
+        .form-group.full {
+            grid-column: span 2;
+        }
+
+        label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 7px;
+        }
+
+        input {
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid #aeb8c2;
+            padding: 10px 3px;
+            font-size: 14px;
+            outline: none;
+            background: transparent;
+        }
+
+        input:focus {
+            border-bottom-color: var(--gold);
+        }
+
+        /* ===============================
+           DECLARATION
+           =============================== */
+
+        .declaration {
+            background: #f7f9fb;
+            border-radius: 8px;
+            padding: 22px;
+            margin-top: 25px;
+            border: 1px solid var(--border);
+        }
+
+        .declaration p {
+            font-size: 13px;
+            color: #4d5b68;
+        }
+
+        /* ===============================
+           SIGNATURES
+           =============================== */
+
+        .signatures {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-top: 45px;
+        }
+
+        .signature-line {
+            border-bottom: 1px solid var(--navy);
+            height: 35px;
+            margin-bottom: 8px;
+        }
+
+        .signature-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--blue);
+            text-transform: uppercase;
+        }
+
+ /* =====================================================
+   PREMIUM AE RENEWABLE LTD FOOTER
+   ===================================================== */
+
+.footer {
+    width: 100%;
+    min-height: 100px;
+
+    background: var(--navy);
+
+    padding: 22px 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 40px;
+
+    border-top: 4px solid var(--gold);
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   COMPANY BRAND
+   ===================================================== */
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    flex-shrink: 0;
+}
+
+
+/* =====================================================
+   LOGO
+   ===================================================== */
+
+.footer-logo {
+    width: 52px;
+    height: 52px;
+
+    object-fit: contain;
+
+    background: var(--white);
+
+    padding: 5px;
+
+    border-radius: 7px;
+
+    display: block;
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   COMPANY NAME
+   ===================================================== */
+
+.footer-company-name {
+    font-size: 15px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.7px;
+
+    line-height: 1.2;
+
+    color: var(--green);
+
+    white-space: nowrap;
+}
+
+
+/* LTD
+   GOLD BRAND ACCENT
+*/
+
+.footer-company-name span {
+    color: var(--gold);
+}
+
+
+/* =====================================================
+   TAGLINE
+   ===================================================== */
+
+.footer-tagline {
+    margin-top: 5px;
+
+    font-size: 8px;
+
+    letter-spacing: 1.5px;
+
+    color: #aebdce;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* =====================================================
+   CONTACT INFORMATION
+   ===================================================== */
+
+.contact {
+    display: flex;
+
+    align-items: center;
+
+    gap: 30px;
+
+    text-align: left;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+    color: #c5cfda;
+}
+
+
+/* Each contact block */
+
+.contact div {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+/* Contact label */
+
+.contact strong {
+    color: var(--gold);
+
+    font-size: 8px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    font-weight: 700;
+}
+
+
+/* Contact value */
+
+.contact div {
+    color: #d5dee8;
+
+    white-space: nowrap;
+}
+
+
+/* =====================================================
+   RESPONSIVE MOBILE
+   ===================================================== */
+
+@media (max-width: 700px) {
+
+    .footer {
+        padding: 25px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 25px;
+    }
+
+
+    .footer-brand {
+        width: 100%;
+    }
+
+
+    .contact {
+        width: 100%;
+
+        display: grid;
+
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+
+        text-align: left;
+    }
+
+
+    .contact div {
+        white-space: normal;
+    }
+
+}
+
+        /* ===============================
+           PRINT
+           =============================== */
+
+        @media print {
+
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .document {
+                max-width: 100%;
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            .header,
+            .payment-card,
+            .footer {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+        }
+
+        /* ===============================
+           RESPONSIVE
+           =============================== */
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 0;
+            }
+
+            .header {
+                padding: 25px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .document-label {
+                text-align: left;
+            }
+
+            .content {
+                padding: 30px 25px;
+            }
+
+            .requirements,
+            .form-grid,
+            .payment-grid,
+            .signatures {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: span 1;
+            }
+
+            .tools-list {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .footer {
+                padding: 25px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .contact {
+                text-align: left;
+            }
+
+        }
+
+    </style>
 </head>
+
+
 <body>
 
-<div class="rfq-container">
+<div class="document">
 
-    <div class="top-header">
-        <div class="logo">INTERSOS</div>
+    <!-- ===============================
+         HEADER
+         =============================== -->
 
-        <div class="company-info">
-            <h3>INTERSOS - Humanitarian Organization</h3>
-            <p>882 Olu Awotesu Street, Off Idris Ibrahim Street, Jabi, Abuja Nigeria</p>
-            <p>Phone: +234 (0) 9024200060 | Email: nigeria@intersos.org | www.intersos.org</p>
-        </div>
-    </div>
+    <header class="header">
 
-    <div class="title">
-        Request for Quotation
-    </div>
+        <div class="brand">
 
-    <div class="details">
+            <!-- Replace logo.png with your actual logo -->
+            <img
+                src="/ae-renewable-dashboard/assets/logo.jpeg"
+                alt="AE Renewable Ltd Logo"
+                class="logo"
+            >
 
-        <div class="left">
-            <p><strong>PR Code:</strong> 49-18/06/2026 432720</p>
-            <p><strong>Currency:</strong> NGN</p>
-        </div>
-
-        <div class="right">
-            <p><strong>Intersos Office:</strong> Borno State - Central Borno</p>
-            <p><strong>Office:</strong> INTERSOS Office Maiduguri</p>
-            <p><strong>Deadline:</strong> 25/06/2026</p>
-            <p><strong>Contact Person:</strong> OPETO, TONNY</p>
-            <p><strong>Job Title:</strong> Logistics Manager</p>
-            <p><strong>Email:</strong> log.manager.nigeria@intersos.org</p>
-        </div>
-
-    </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Description (Technical Specifications)</th>
-                <th>Unit</th>
-                <th>Qty</th>
-                <th>Cost/Unit</th>
-                <th>Cost</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>
-                    <strong>Samsung Galaxy A17 (256GB Storage, 8GB RAM)</strong> is a mid-range smartphone that features
-                    6.7" inch Super AMOLED 90Hz display, a  50MP OIS main camera, and a 5,000mAh Battery powered by Octa-Core
-                    Processor (Exynos 1330 for, Helio G99 for 4G), it offers expandable storage and Android 15 ( <strong>With Good Quality Screen Guard and an Excellent pouch including a charging brick  and a 65W or more</strong> ).
-                </td>
-                <td>PCS</td>
-                <td>11</td>
-                <td>550,000</td>
-                <td>6,050,000</td>
-            </tr>
-
-            <tr>
-                <td colspan="5" class="total-label">
-                    TOTAL COST
-                </td>
-                <td class="total">
-                    6,050,000
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="conditions">
-        <p>
-            <strong>Purchase Order - General Conditions:</strong>
-            https://docs.google.com
-        </p>
-
-        <p>
-            The supplier awarded this request must receive and sign
-            the Purchase Order (PO) before making any delivery.
-        </p>
-    </div>
-
-    <div class="footer-section">
-
-        <div class="row">
-            <strong>DELIVERY TIME:</strong>
-            <span>13 Days</span>
-        </div>
-
-        <div class="row">
-            <strong>PAYMENT CONDITIONS:</strong>
-            <span>100% Payment</span>
-        </div>
-
-        <div class="row">
-            <strong>DATE:</strong>
-            <span>25/06/2026</span>
-        </div>
-
-        <div class="row">
-            <strong>VALIDITY OF QUOTATION:</strong>
-            <span>2 Months</span>
-        </div>
-
-        <div class="signature"> 
-            <div class="sign">𝓔𝓷𝓲𝓸𝓵𝓪 𝓐𝓫𝓭𝓾𝓵𝓻𝓪𝓼𝓪𝓺</div>
-            <div class="line">-------------------------------------------------------------
-            </div>
             <div>
-                STAMP AND SIGNATURE OF THE COMPANY
+                <div class="company-name">
+                    AE RENEWABLE LTD
+                </div>
+
+                <div class="company-tagline">
+                    POWERING YOUR FUTURE WITH SUN
+                </div>
             </div>
+
+        </div>
+
+
+        <div class="document-label">
+
+            <span>Official Document</span>
+
+            <strong>
+                Apprentice Acceptance
+            </strong>
+
+        </div>
+
+    </header>
+
+
+    <div class="gold-line"></div>
+
+
+    <!-- ===============================
+         MAIN CONTENT
+         =============================== -->
+
+    <main class="content">
+
+
+        <!-- INTRODUCTION -->
+
+        <section class="intro">
+
+            <h1>
+                Apprentice Acceptance &amp;
+                Professional Conduct Form
+            </h1>
+
+            <p>
+                Welcome to AE RENEWABLE LTD. Our apprenticeship
+                programme is designed to provide practical,
+                hands-on exposure to renewable energy systems,
+                solar installation, electrical works, system
+                design, and professional project execution.
+            </p>
+
+        </section>
+
+
+
+        <!-- PAYMENT -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    01
+                </div>
+
+                <h2>
+                    Apprenticeship Programme Fee
+                </h2>
+
+            </div>
+
+
+            <div class="payment-card">
+
+                <div class="payment-title">
+                    Total Programme Fee
+                </div>
+
+                <div class="total-fee">
+                    ₦150,000
+                </div>
+
+                <div class="payment-grid">
+
+                    <div class="payment-item">
+
+                        <span>
+                            Initial Payment
+                        </span>
+
+                        <strong>
+                            ₦100,000
+                        </strong>
+
+                    </div>
+
+
+                    <div class="payment-item">
+
+                        <span>
+                            Balance After One Week
+                        </span>
+
+                        <strong>
+                            ₦50,000
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <p class="payment-note">
+
+                    The ₦50,000 balance is payable after
+                    one (1) week of learning and practical
+                    training with AE RENEWABLE LTD.
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- SITE REQUIREMENTS -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    02
+                </div>
+
+                <h2>
+                    Professional Site Requirements
+                </h2>
+
+            </div>
+
+
+            <div class="requirements">
+
+
+                <div class="requirement">
+
+                    <h3>
+                        Professional Appearance
+                    </h3>
+
+                    <p>
+                        Always arrive at the project site
+                        clean, neat, and properly dressed.
+                        Proper footwear or safety shoes
+                        must be worn at all times.
+                    </p>
+
+                </div>
+
+
+                <div class="requirement">
+
+                    <h3>
+                        Professional Conduct
+                    </h3>
+
+                    <p>
+                        Maintain discipline, punctuality,
+                        respect, teamwork, and a positive
+                        attitude toward learning and work.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="tools-box">
+
+                <h3>
+                    Mandatory Personal Tool Bag
+                </h3>
+
+                <div class="tools-list">
+
+                    <div class="tool">
+                        Flat Screwdriver
+                    </div>
+
+                    <div class="tool">
+                        Star Screwdriver
+                    </div>
+
+                    <div class="tool">
+                        Tester Screwdriver
+                    </div>
+
+                    <div class="tool">
+                        Digital Multimeter
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- TRANSPORT -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    03
+                </div>
+
+                <h2>
+                    Transportation Support
+                </h2>
+
+            </div>
+
+
+            <div class="transport">
+
+                <h3>
+                    Company-Sponsored Site Transportation
+                </h3>
+
+                <p>
+                    For approved company site assignments,
+                    AE RENEWABLE LTD will sponsor the
+                    apprentice's transportation to and from
+                    the assigned project site, in accordance
+                    with the company's approved arrangements.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- APPRENTICE INFORMATION -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    04
+                </div>
+
+                <h2>
+                    Apprentice Information
+                </h2>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Location
+                    </label>
+
+                    <input
+                        type="text"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="tel"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                     Birth Date
+                    </label>
+
+                    <input
+                        type="date"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- PAYMENT ACKNOWLEDGEMENT -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    05
+                </div>
+
+                <h2>
+                    Payment Acknowledgement
+                </h2>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        Total Programme Fee
+                    </label>
+
+                    <input
+                        type="text"
+                        value="₦150,000"
+                        readonly
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Amount Paid
+                    </label>
+
+                    <input
+                        type="text"
+                        value="₦100,000"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Balance Due
+                    </label>
+
+                    <input
+                        type="text"
+                        value="₦50,000"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Balance Payment Date
+                    </label>
+
+                    <input
+                        type="date"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- DECLARATION -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    06
+                </div>
+
+                <h2>
+                    Declaration &amp; Acceptance
+                </h2>
+
+            </div>
+
+
+            <div class="declaration">
+
+                <p>
+
+                    I hereby confirm that I have read,
+                    understood, and accepted the terms and
+                    requirements of the AE RENEWABLE LTD
+                    Apprenticeship Programme. I agree to
+                    comply with the company's professional
+                    standards, safety requirements, site
+                    conduct, training expectations, and
+                    payment terms.
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- SIGNATURES -->
+
+        <div class="signatures">
+
+            <div>
+
+                <div class="signature-line"></div>
+
+                <div class="signature-label">
+                    Apprentice Signature
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <div class="signature-line"></div>
+
+                <div class="signature-label">
+                    Authorized Signature — AE Renewable Ltd
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+
+<footer class="footer">
+
+    <!-- COMPANY BRAND -->
+    <div class="footer-brand">
+
+        <img 
+            src="/ae-renewable-dashboard/assets/logo.jpeg" 
+            alt="AE Renewable Ltd Logo"
+            class="footer-logo"
+        >
+
+        <div class="footer-brand-text">
+
+            <div class="footer-company-name">
+                AE RENEWABLE <span>LTD</span>
+            </div>
+
+            <div class="footer-tagline">
+                POWERING YOUR FUTURE WITH SUN
+            </div>
+
         </div>
 
     </div>
+
+
+    <!-- CONTACT INFORMATION -->
+    <div class="contact">
+
+        <div>
+            <strong>Website</strong>
+            <span>AERenewablesolution.com</span>
+        </div>
+
+        <div>
+            <strong>Email</strong>
+            <span>AERenewablesolution@gmail.com</span>
+        </div>
+
+        <div>
+            <strong>Phone</strong>
+            <span>+234 813 361 5132</span>
+        </div>
+
+    </div>
+
+</footer>
 
 </div>
 

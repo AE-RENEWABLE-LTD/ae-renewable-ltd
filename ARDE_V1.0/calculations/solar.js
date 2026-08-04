@@ -5,3 +5,7 @@ export function calculatePV(load,losses,psh,batteryWh){
     return (batteryWh/psh)+loadEff;
 
 }
+
+
+
+// /////////////   SOLAR.JS   ////////////////
