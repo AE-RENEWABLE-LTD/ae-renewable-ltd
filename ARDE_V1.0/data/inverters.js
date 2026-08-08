@@ -305,7 +305,7 @@ export const inverters = [
     inverterSize: 30000,
     phase: 3,
     maxPvWatt: 48000,
-    inverterPvVoltage: 1000,
+    inverterPvVoltage: 800,
     inverterAcVoltage: 400,
     maxACChargeCurrent: 120,
     mppt: 3,
