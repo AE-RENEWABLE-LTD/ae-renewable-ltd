@@ -864,17 +864,32 @@
                         <label class="check-card"><input type="checkbox" name="services" value="CCTV & Security"> CCTV & Security</label>
                         <label class="check-card"><input type="checkbox" name="services" value="Smart Home Automation"> Smart Home Automation</label>
                     </div>
-                    <div class="form-grid" style="margin-top:20px"><div class="form-group"><label>Primary Trade <span>*</span></label><select name="primaryTrade" required><option value="">Select primary trade</option><option>Solar & Battery</option><option>Electrical Installation</option><option>CCTV & Security</option><option>Smart Home Automation</option></select></div><div class="form-group"><label>Team Size</label><input type="number" name="teamSize" min="1"></div><div class="form-group full"><label>Technical Experience / Project Portfolio</label><textarea name="experience" placeholder="Briefly describe your experience, major projects, or technical capabilities."></textarea></div></div>
+                    <div class="form-grid" style="margin-top:20px">
+                        <!-- <div class="form-group">
+                            <label>Primary Trade <span>*</span></label>
+                            <select name="primaryTrade" required><option value="">Select primary trade</option>
+                                <option>Solar & Battery</option>
+                                <option>Electrical Installation</option>
+                                <option>CCTV & Security</option>
+                                <option>Smart Home Automation</option>
+                            </select>
+                        </div> -->
+                        <div class="form-group">
+                            <label>Team Size</label>
+                            <input type="number" name="teamSize" min="1">
+                        </div><div class="form-group full">
+                            <label>Technical Experience / Project Portfolio</label>
+                            <textarea name="experience" placeholder="Briefly describe your experience, major projects, or technical capabilities."></textarea></div></div>
                 </div>
 
                 <div class="form-step">
                     <h3>Certifications & Documents</h3><p class="form-step-intro">Upload documents that support your corporate and technical verification. Required documents may vary by trade.</p>
                     <div class="form-grid">
                         <div class="form-group"><label>CAC Certificate <span>*</span></label><div class="upload-box"><input type="file" name="cacCertificate" accept=".pdf,.jpg,.jpeg,.png" required></div></div>
-                        <div class="form-group"><label>Government ID</label><div class="upload-box"><input type="file" name="governmentId" accept=".pdf,.jpg,.jpeg,.png"></div></div>
-                        <div class="form-group"><label>NEMSA Certificate</label><div class="upload-box"><input type="file" name="nemsaCertificate" accept=".pdf,.jpg,.jpeg,.png"></div></div>
-                        <div class="form-group"><label>COREN Certificate</label><div class="upload-box"><input type="file" name="corenCertificate" accept=".pdf,.jpg,.jpeg,.png"></div></div>
-                        <div class="form-group full"><label>Other Vendor / Technical Certifications</label><div class="upload-box"><input type="file" name="otherCertificates" accept=".pdf,.jpg,.jpeg,.png" multiple></div></div>
+                        <div class="form-group"><label>Government ID </label><div class="upload-box"><input type="file" name="governmentId" accept=".pdf,.jpg,.jpeg,.png"></div></div>
+                        <div class="form-group"><label>NEMSA Certificate <small>(optional)</small></label><div class="upload-box"><input type="file" name="nemsaCertificate" accept=".pdf,.jpg,.jpeg,.png"></div></div>
+                        <div class="form-group"><label>COREN Certificate <small>(optional)</small></label><div class="upload-box"><input type="file" name="corenCertificate" accept=".pdf,.jpg,.jpeg,.png"></div></div>
+                        <div class="form-group full"><label>Other Vendor / Technical Certifications <small>(optional)</small></label><div class="upload-box"><input type="file" name="otherCertificates" accept=".pdf,.jpg,.jpeg,.png" multiple></div></div>
                     </div>
                 </div>
 
