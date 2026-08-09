@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AE Renewable Ltd | Operations Backend</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="backend.css">
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">AE</div>
+      <div><strong>AE RENEWABLE</strong><span>POWERING YOUR FUTURE WITH SUN</span></div>
+    </div>
+
+    <div class="nav-label">WORKSPACE</div>
+    <nav>
+      <button class="nav-item active" data-page="dashboard"><span>⌂</span> Dashboard</button>
+      <button class="nav-item" data-page="consultations"><span>◌</span> Consultations <b>08</b></button>
+      <button class="nav-item" data-page="customers"><span>♙</span> Customers</button>
+      <button class="nav-item" data-page="sites"><span>⌖</span> Sites</button>
+      <button class="nav-item" data-page="projects"><span>▣</span> Projects</button>
+    </nav>
+
+    <div class="nav-label">COMMERCIAL</div>
+    <nav>
+      <button class="nav-item" data-page="quotations"><span>▤</span> Quotations</button>
+      <button class="nav-item" data-page="invoices"><span>▧</span> Invoices</button>
+      <button class="nav-item" data-page="reports"><span>◫</span> Reports</button>
+    </nav>
+
+    <div class="nav-label">ENGINEERING</div>
+    <nav>
+      <button class="nav-item" data-page="monitoring"><span>◉</span> Monitoring</button>
+      <button class="nav-item" data-page="equipment"><span>◇</span> Equipment</button>
+      <button class="nav-item" data-page="installers"><span>♙</span> Installers</button>
+    </nav>
+
+    <div class="nav-label">SYSTEM</div>
+    <nav>
+      <button class="nav-item" data-page="settings"><span>⚙</span> Settings</button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="online"><span></span> Platform operational</div>
+      <div class="user-mini">
+        <div class="avatar">EA</div>
+        <div><strong>Eniola Abdulrasaq</strong><small>Administrator</small></div>
+        <span>⋮</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="mobile-brand">AE RENEWABLE</div>
+      <div class="breadcrumbs">Operations <span>/</span> <strong id="breadcrumb">Dashboard</strong></div>
+      <div class="top-actions">
+        <button class="icon-btn" title="Notifications">♧<em>3</em></button>
+        <button class="icon-btn" title="Messages">□</button>
+        <button class="profile">EA <span>Eniola</span>⌄</button>
+      </div>
+    </header>
+
+    <!-- DASHBOARD -->
+    <section class="page active" id="page-dashboard">
+      <div class="page-head">
+        <div><div class="overline">SUNDAY, 09 AUGUST 2026</div><h1>Good afternoon, Eniola.</h1><p>Here is the current overview of your engineering and commercial operations.</p></div>
+        <button class="primary" onclick="showPage('consultations')">+ New Consultation</button>
+      </div>
+      <div class="stats">
+        <div class="stat-card"><div class="stat-icon blue">◌</div><div><span>Active Consultations</span><strong>24</strong><small class="up">↑ 12.5% <i>vs last month</i></small></div></div>
+        <div class="stat-card"><div class="stat-icon gold">▤</div><div><span>Open Quotations</span><strong>08</strong><small class="up">↑ 8.2% <i>vs last month</i></small></div></div>
+        <div class="stat-card"><div class="stat-icon green">▣</div><div><span>Active Projects</span><strong>12</strong><small class="up">↑ 20.0% <i>vs last month</i></small></div></div>
+        <div class="stat-card"><div class="stat-icon navy">◉</div><div><span>Live Systems</span><strong>06</strong><small class="online-text">● All systems reporting</small></div></div>
+      </div>
+      <div class="grid-two">
+        <div class="panel">
+          <div class="panel-head"><div><h2>Project Pipeline</h2><p>Current workload by engineering stage</p></div><button class="text-btn" onclick="showToast('Pipeline view will be connected later.')">View pipeline →</button></div>
+          <div class="pipeline">
+            <div><strong>08</strong><span>Consultation</span><div class="bar"><i style="width:80%"></i></div></div>
+            <div><strong>05</strong><span>Site Survey</span><div class="bar"><i style="width:50%"></i></div></div>
+            <div><strong>07</strong><span>System Design</span><div class="bar"><i style="width:70%"></i></div></div>
+            <div><strong>08</strong><span>Quotation</span><div class="bar"><i style="width:80%"></i></div></div>
+            <div><strong>04</strong><span>Installation</span><div class="bar"><i style="width:40%"></i></div></div>
+          </div>
+        </div>
+        <div class="panel monitoring-card">
+          <div class="panel-head"><div><h2>Live Energy Overview</h2><p>Connected systems</p></div><button class="live-pill" onclick="showPage('monitoring')"><i></i> LIVE</button></div>
+          <div class="energy-number"><strong>42.8</strong><span>kW solar generation</span></div>
+          <div class="energy-chart"><div class="chart-line"></div><div class="chart-fill"></div></div>
+          <div class="energy-row"><span>Current Load <b>26.4 kW</b></span><span>Battery <b>78%</b></span><span>Grid <b>0.0 kW</b></span></div>
+        </div>
+      </div>
+      <div class="grid-two lower">
+        <div class="panel">
+          <div class="panel-head"><div><h2>Recent Consultations</h2><p>Latest client requirements</p></div><button class="text-btn" onclick="showPage('consultations')">View all →</button></div>
+          <table><thead><tr><th>REFERENCE</th><th>CLIENT</th><th>SERVICE</th><th>STATUS</th></tr></thead><tbody>
+            <tr><td class="ref">CON-2026-0024</td><td><strong>AbdulRasaq Eniola</strong><small>Maitama, Abuja</small></td><td>Solar & Hybrid</td><td><label class="badge blue-b">New</label></td></tr>
+            <tr><td class="ref">CON-2026-0023</td><td><strong>Greenfield Residence</strong><small>Guzape, Abuja</small></td><td>Solar System</td><td><label class="badge amber-b">Under Review</label></td></tr>
+            <tr><td class="ref">CON-2026-0022</td><td><strong>Al-Hayat Properties</strong><small>Wuse 2, Abuja</small></td><td>Electrical</td><td><label class="badge purple-b">Site Survey</label></td></tr>
+          </tbody></table>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><h2>System Health</h2><p>Last communication status</p></div><button class="text-btn" onclick="showPage('monitoring')">Monitoring →</button></div>
+          <div class="health-list">
+            <div><span class="health-dot"></span><div><strong>Maitama Residence</strong><small>DEYE 16kVA • 32kWh</small></div><b>Online</b></div>
+            <div><span class="health-dot"></span><div><strong>Guzape Apartment</strong><small>DEYE 120kVA • 120kWh</small></div><b>Online</b></div>
+            <div><span class="health-dot warning"></span><div><strong>Wuse Commercial</strong><small>Felicity 12kVA • 15kWh</small></div><b class="warning-text">Attention</b></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONSULTATIONS -->
+    <section class="page" id="page-consultations">
+      <div class="page-head"><div><div class="overline">CLIENT INTAKE</div><h1>Consultations</h1><p>Manage enquiries and move clients into engineering workflow.</p></div><button class="primary" onclick="showToast('New consultation form will be connected later.')">+ New Consultation</button></div>
+      <div class="filter-row"><div class="search">⌕ <input id="consultationSearch" placeholder="Search client, reference, location..."></div><select id="consultationStatus"><option>All Statuses</option><option>New</option><option>Under Review</option><option>Site Survey</option><option>Quotation</option></select><select id="consultationService"><option>All Services</option><option>Solar & Hybrid Power</option><option>Electrical Engineering</option><option>CCTV Surveillance</option></select></div>
+      <div class="panel table-panel"><table class="full-table"><thead><tr><th>REFERENCE</th><th>CLIENT</th><th>LOCATION</th><th>SERVICE</th><th>PROPERTY</th><th>STATUS</th><th>RECEIVED</th><th></th></tr></thead><tbody>
+        <tr><td class="ref">CON-2026-0024</td><td><strong>AbdulRasaq Eniola</strong><small>+234 813 361 5132</small></td><td>Maitama, Abuja</td><td>Solar & Hybrid Power</td><td>Residential</td><td><label class="badge blue-b">New</label></td><td>09 Aug 2026</td><td><button class="row-action" onclick="openDetail('CON-2026-0024')">Open →</button></td></tr>
+        <tr><td class="ref">CON-2026-0023</td><td><strong>Greenfield Residence</strong><small>+234 802 444 1088</small></td><td>Guzape, Abuja</td><td>Solar & Hybrid Power</td><td>Apartment</td><td><label class="badge amber-b">Under Review</label></td><td>08 Aug 2026</td><td><button class="row-action" onclick="openDetail('CON-2026-0023')">Open →</button></td></tr>
+        <tr><td class="ref">CON-2026-0022</td><td><strong>Al-Hayat Properties</strong><small>+234 809 222 7744</small></td><td>Wuse 2, Abuja</td><td>Electrical Engineering</td><td>Commercial</td><td><label class="badge purple-b">Site Survey</label></td><td>07 Aug 2026</td><td><button class="row-action" onclick="openDetail('CON-2026-0022')">Open →</button></td></tr>
+        <tr><td class="ref">CON-2026-0021</td><td><strong>Oakview Estate</strong><small>+234 816 101 2200</small></td><td>Katampe, Abuja</td><td>CCTV Surveillance</td><td>Residential</td><td><label class="badge green-b">Quotation</label></td><td>06 Aug 2026</td><td><button class="row-action" onclick="openDetail('CON-2026-0021')">Open →</button></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <!-- DETAIL -->
+    <section class="page" id="page-detail">
+      <div class="page-head"><div><button class="back" onclick="showPage('consultations')">← Back to Consultations</button><div class="overline">CONSULTATION DETAIL</div><h1 id="detailTitle">CON-2026-0024</h1><p>Client requirement and engineering intake record.</p></div><button class="primary" onclick="showPage('quotations')">Create Quotation</button></div>
+      <div class="detail-grid">
+        <div class="panel detail-main">
+          <div class="detail-head"><div class="avatar large">AE</div><div><h2>AbdulRasaq Eniola</h2><p>Individual Client • Maitama, Abuja</p></div><label class="badge blue-b">New Request</label></div>
+          <div class="section-title">CONTACT INFORMATION</div>
+          <div class="info-grid"><div><small>Phone</small><strong>+234 813 361 5132</strong></div><div><small>Email</small><strong>AERenewablesolution@gmail.com</strong></div><div><small>Project Location</small><strong>Maitama, Abuja</strong></div><div><small>Property Type</small><strong>Residential</strong></div></div>
+          <div class="section-title">PROJECT REQUIREMENT</div>
+          <div class="requirement"><span>Primary Service</span><strong>Solar & Hybrid Power System</strong><p>Client requires reliable backup power with solar generation, lithium storage and intelligent inverter control for a residential property.</p></div>
+          <div class="section-title">ENERGY NOTES</div>
+          <div class="note-box">Requested minimum 16kVA inverter capacity, lithium battery storage and approximately 12kWp solar generation. Final sizing subject to load assessment and site survey.</div>
+        </div>
+        <aside class="panel timeline-panel"><div class="panel-head"><div><h2>Workflow</h2><p>Project progression</p></div></div><div class="timeline">
+          <div class="step current"><i></i><div><strong>Consultation Received</strong><small>09 Aug 2026 • 10:42 AM</small></div></div>
+          <div class="step"><i></i><div><strong>Technical Review</strong><small>Pending assignment</small></div></div>
+          <div class="step"><i></i><div><strong>Site Survey</strong><small>Pending</small></div></div>
+          <div class="step"><i></i><div><strong>System Design</strong><small>Pending</small></div></div>
+          <div class="step"><i></i><div><strong>Quotation</strong><small>Pending</small></div></div>
+        </div></aside>
+      </div>
+    </section>
+
+    <!-- QUOTATIONS -->
+    <section class="page" id="page-quotations">
+      <div class="page-head"><div><div class="overline">COMMERCIAL CONTROL</div><h1>Quotations</h1><p>Prepare, review and issue professional project quotations.</p></div><button class="primary" onclick="showToast('Quotation builder will be connected later.')">+ Create Quotation</button></div>
+      <div class="stats compact"><div class="stat-card"><div class="stat-icon blue">▤</div><div><span>This Month</span><strong>18</strong><small>Quotations issued</small></div></div><div class="stat-card"><div class="stat-icon green">✓</div><div><span>Accepted</span><strong>11</strong><small class="up">61.1% conversion</small></div></div><div class="stat-card"><div class="stat-icon gold">₦</div><div><span>Pipeline Value</span><strong>₦48.6m</strong><small>Open quotations</small></div></div></div>
+      <div class="panel table-panel"><table class="full-table"><thead><tr><th>QUOTATION</th><th>CLIENT / PROJECT</th><th>SYSTEM</th><th>VALUE</th><th>STATUS</th><th>DATE</th><th></th></tr></thead><tbody>
+        <tr><td class="ref">QUO-2026-0048</td><td><strong>AbdulRasaq Eniola</strong><small>Maitama Residence</small></td><td>16kVA DEYE / 32kWh</td><td><strong>₦18,450,000</strong></td><td><label class="badge amber-b">Draft</label></td><td>09 Aug 2026</td><td><button class="row-action">Open →</button></td></tr>
+        <tr><td class="ref">QUO-2026-0047</td><td><strong>Greenfield Residence</strong><small>Guzape Apartment</small></td><td>120kVA / 120kWh</td><td><strong>₦86,200,000</strong></td><td><label class="badge green-b">Issued</label></td><td>08 Aug 2026</td><td><button class="row-action">Open →</button></td></tr>
+        <tr><td class="ref">QUO-2026-0046</td><td><strong>Oakview Estate</strong><small>Katampe</small></td><td>CCTV / Security</td><td><strong>₦4,850,000</strong></td><td><label class="badge blue-b">Under Review</label></td><td>06 Aug 2026</td><td><button class="row-action">Open →</button></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <!-- MONITORING -->
+    <section class="page" id="page-monitoring">
+      <div class="page-head"><div><div class="overline">ENGINEERING TELEMETRY</div><h1>Live Monitoring</h1><p>Example view of connected renewable energy systems.</p></div><div class="connection"><i></i> 6 SYSTEMS ONLINE</div></div>
+      <div class="monitor-hero panel"><div><span class="live-pill"><i></i> SYSTEM ONLINE</span><h2>Maitama Residence</h2><p>DEYE 16kVA Hybrid • 32kWh Lithium • 12kWp Solar Array</p></div><div class="updated">Last update<br><strong id="monitorUpdated">12 seconds ago</strong></div></div>
+      <div class="monitor-stats"><div><span>☀ Solar Generation</span><strong>18.6 <small>kW</small></strong><em>↑ 4.2% today</em></div><div><span>⌂ Current Load</span><strong>11.4 <small>kW</small></strong><em>61% of solar</em></div><div><span>◉ Battery State</span><strong>82 <small>%</small></strong><em>+6.4kW charging</em></div><div><span>▣ Grid Power</span><strong>0.0 <small>kW</small></strong><em>Solar + battery</em></div></div>
+      <div class="grid-two"><div class="panel chart-panel"><div class="panel-head"><div><h2>Power Flow</h2><p>Last 24 hours</p></div><select><option>24 Hours</option><option>7 Days</option></select></div><div class="big-chart"><div class="chart-axis"><span>20kW</span><span>15kW</span><span>10kW</span><span>5kW</span><span>0</span></div><div class="bars"><i style="height:35%"></i><i style="height:48%"></i><i style="height:42%"></i><i style="height:62%"></i><i style="height:78%"></i><i style="height:92%"></i><i style="height:74%"></i><i style="height:65%"></i><i style="height:52%"></i><i style="height:58%"></i><i style="height:40%"></i><i style="height:28%"></i></div></div><div class="legend"><span><i class="solar"></i> Solar</span><span><i class="load"></i> Load</span><span><i class="battery"></i> Battery</span></div></div>
+      <div class="panel"><div class="panel-head"><div><h2>Equipment Health</h2><p>Connected components</p></div></div><div class="equipment"><div><span>✓</span><strong>Inverter</strong><small>DEYE 16kVA</small><b>Healthy</b></div><div><span>✓</span><strong>Battery Bank</strong><small>32kWh Lithium</small><b>Healthy</b></div><div><span>✓</span><strong>PV Array</strong><small>16 × 750W</small><b>Healthy</b></div><div><span class="warn">!</span><strong>Grid Sensor</strong><small>Communication</small><b class="warning-text">Check</b></div></div></div></div>
+    </section>
+
+    <!-- INSTALLER DIRECTORY -->
+    <section class="page" id="page-installers">
+      <div class="page-head">
+        <div>
+          <div class="overline">FIELD OPERATIONS • INSTALLER MANAGEMENT</div>
+          <h1>Installer Directory</h1>
+          <p>Manage approved installation personnel, compliance records, availability and field assignments.</p>
+        </div>
+        <button class="primary" onclick="openInstallerRegistration()">+ Register Installer</button>
+      </div>
+
+      <div class="stats installer-stats">
+        <div class="stat-card"><div class="stat-icon blue">♙</div><div><span>Total Installers</span><strong id="totalInstallers">18</strong><small>Registered installers</small></div></div>
+        <div class="stat-card"><div class="stat-icon green">✓</div><div><span>Active</span><strong id="activeInstallers">12</strong><small class="online-text">● Available / active</small></div></div>
+        <div class="stat-card"><div class="stat-icon gold">▣</div><div><span>On Project</span><strong id="projectInstallers">06</strong><small>Currently assigned</small></div></div>
+        <div class="stat-card"><div class="stat-icon navy">◫</div><div><span>Projects Handled</span><strong id="installerProjects">47</strong><small>Completed assignments</small></div></div>
+      </div>
+
+      <div class="installer-command panel">
+        <div class="installer-command-top">
+          <div>
+            <div class="overline">DIRECTORY CONTROL</div>
+            <h2>Search & Filter Installers</h2>
+            <p>Search by installer, registration number, specialization or field assignment.</p>
+          </div>
+          <button class="secondary-btn" onclick="clearInstallerFilters()">Reset Filters</button>
+        </div>
+        <div class="filter-row installer-filter-row">
+          <div class="search">⌕ <input type="text" id="installerSearch" placeholder="Search installer, ID, RC/BN, specialization..."></div>
+          <select id="installerStateFilter"><option value="">All States</option><option>Abuja</option><option>Kaduna</option><option>Kano</option><option>Nasarawa</option><option>Niger</option></select>
+          <select id="installerPositionFilter"><option value="">All Positions</option><option>Lead Installer</option><option>Solar Technician</option><option>Electrical Technician</option><option>CCTV Technician</option><option>Smart Home Technician</option></select>
+          <select id="installerStatusFilter"><option value="">All Status</option><option value="active">Active</option><option value="project">On Project</option><option value="inactive">Not Active</option></select>
+          <select id="installerSpecializationFilter"><option value="">All Specializations</option><option>Solar & Hybrid</option><option>Solar PV</option><option>Electrical</option><option>CCTV & Security</option><option>Smart Home</option></select>
+        </div>
+      </div>
+
+      <div class="panel table-panel installer-directory-panel">
+        <div class="panel-head">
+          <div><h2>Installer Directory</h2><p>Registered installation personnel and field teams.</p></div>
+          <button class="text-btn" onclick="exportInstallers()">Export Directory →</button>
+        </div>
+        <div class="directory-summary"><span id="installerResultCount">3 installers displayed</span><span>Last directory sync: <b>09 Aug 2026</b></span></div>
+        <div class="table-scroll">
+          <table class="full-table installer-table">
+            <thead><tr><th>INSTALLER</th><th>STATE</th><th>LGA</th><th>RC / BN NO.</th><th>POSITION</th><th>SPECIALIZATION</th><th>GROUP NO.</th><th>REGISTERED</th><th>STATUS</th><th>PROJECTS</th><th>LAST Q.NO.</th><th></th></tr></thead>
+            <tbody id="installerTableBody"></tbody>
+          </table>
+        </div>
+        <div class="table-empty" id="installerEmptyState" hidden>
+          <div class="empty-icon">⌕</div><h3>No installers found</h3><p>Try changing the search term or filters.</p><button class="secondary-btn" onclick="clearInstallerFilters()">Clear filters</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- INSTALLER PROFILE -->
+    <section class="page" id="page-installer-profile">
+      <div class="installer-profile-head">
+        <div>
+          <button class="back" onclick="showPage('installers')">← Back to Installers</button>
+          <div class="overline">INSTALLER RECORD</div>
+          <h1 id="installerProfileName">Abdulrasaq Eniola</h1>
+          <p>Complete installer identity, compliance, verification and project history.</p>
+        </div>
+        <div class="profile-actions"><button class="secondary-btn" onclick="editInstaller()">Edit Installer</button><button class="primary" onclick="assignInstallerProject()">Assign Project</button></div>
+      </div>
+
+      <div class="installer-profile-hero panel">
+        <div class="installer-profile-image" id="installerProfileImage">EA</div>
+        <div class="installer-profile-main">
+          <div class="profile-title-row"><div><span class="overline">INSTALLER ID</span><h2 id="installerProfileId">INS-0001</h2></div><label class="badge green-b" id="installerProfileStatus">● ACTIVE</label></div>
+          <p id="installerProfileRole">Lead Installer • Solar & Hybrid Power</p>
+          <div class="profile-meta">
+            <span><small>State</small><b id="profileState">Abuja</b></span>
+            <span><small>LGA</small><b id="profileLga">AMAC</b></span>
+            <span><small>Group</small><b id="profileGroup">GRP-001</b></span>
+            <span><small>Registered</small><b id="profileRegistered">09 Aug 2026</b></span>
+          </div>
+        </div>
+        <div class="profile-quick-status"><span>FIELD STATUS</span><strong id="profileQuickStatus">Available</strong><small id="profileQuickText">Ready for assignment</small></div>
+      </div>
+
+      <div class="installer-profile-grid">
+        <div>
+          <div class="panel profile-panel">
+            <div class="panel-head"><div><h2>Identity</h2><p>Installer personal and operational information.</p></div></div>
+            <div class="info-grid" id="identityGrid"></div>
+          </div>
+
+          <div class="panel profile-panel">
+            <div class="panel-head"><div><h2>Business Registration</h2><p>CAC and professional compliance records.</p></div><label class="badge green-b">Verified</label></div>
+            <div class="info-grid" id="businessGrid"></div>
+            <div class="document-list" id="documentList"></div>
+          </div>
+
+          <div class="panel profile-panel">
+            <div class="panel-head"><div><h2>Professional Certificates</h2><p>Approved technical qualifications and supporting documents.</p></div><button class="text-btn" onclick="showToast('Certificate upload will be connected to document storage later.')">+ Add Certificate</button></div>
+            <div class="certificate-grid" id="certificateGrid"></div>
+          </div>
+
+          <div class="panel profile-panel">
+            <div class="panel-head"><div><h2>Project History</h2><p>Projects assigned and completed by this installer.</p></div><strong id="profileProjectCount">12 Projects</strong></div>
+            <div class="project-history" id="projectHistory"></div>
+          </div>
+        </div>
+
+        <aside>
+          <div class="panel profile-panel">
+            <div class="panel-head"><div><h2>Banking & Verification</h2><p>Restricted financial information.</p></div><span class="secure-label">SECURE</span></div>
+            <div class="secure-info" id="secureInfo"></div>
+            <button class="secondary-btn full" onclick="revealBankDetails()">View Protected Details</button>
+          </div>
+
+          <div class="panel profile-panel">
+            <div class="panel-head"><div><h2>Current Status</h2><p>Field availability and assignment.</p></div></div>
+            <div class="status-display" id="statusDisplay"></div>
+          </div>
+
+          <div class="panel profile-panel">
+            <div class="panel-head"><div><h2>Specializations</h2><p>Approved technical areas.</p></div></div>
+            <div class="tag-list" id="specializationTags"></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- GENERIC -->
+    <section class="page" id="page-customers"><div class="page-head"><div><div class="overline">CLIENT MANAGEMENT</div><h1>Customers</h1><p>Central customer records and relationship history.</p></div><button class="primary" onclick="showToast('Customer form will be connected later.')">+ Add Customer</button></div><div class="empty-page panel"><div>♙</div><h2>Customer Management</h2><p>Customer profiles, contact history, quotations and projects will appear here.</p></div></section>
+    <section class="page" id="page-sites"><div class="page-head"><div><div class="overline">FIELD OPERATIONS</div><h1>Sites</h1><p>Project locations, surveys and site records.</p></div><button class="primary" onclick="showToast('Site form will be connected later.')">+ Add Site</button></div><div class="empty-page panel"><div>⌖</div><h2>Site Management</h2><p>Site survey records and property information will appear here.</p></div></section>
+    <section class="page" id="page-projects"><div class="page-head"><div><div class="overline">PROJECT DELIVERY</div><h1>Projects</h1><p>Track engineering, procurement and installation activities.</p></div><button class="primary" onclick="showToast('Project form will be connected later.')">+ New Project</button></div><div class="empty-page panel"><div>▣</div><h2>Project Management</h2><p>Project schedules, milestones, installation records and commissioning will appear here.</p></div></section>
+    <section class="page" id="page-invoices"><div class="page-head"><div><div class="overline">FINANCE</div><h1>Invoices</h1><p>Commercial billing and payment records.</p></div></div><div class="empty-page panel"><div>▧</div><h2>Invoice Centre</h2><p>Invoices and payment tracking will appear here.</p></div></section>
+    <section class="page" id="page-reports"><div class="page-head"><div><div class="overline">BUSINESS INTELLIGENCE</div><h1>Reports</h1><p>Commercial, project and engineering performance.</p></div></div><div class="empty-page panel"><div>◫</div><h2>Reporting Centre</h2><p>Management reports and operational analytics will appear here.</p></div></section>
+    <section class="page" id="page-equipment"><div class="page-head"><div><div class="overline">ENGINEERING ASSETS</div><h1>Equipment</h1><p>Solar, inverter, battery and protection equipment library.</p></div><button class="primary" onclick="showToast('Equipment form will be connected later.')">+ Add Equipment</button></div><div class="empty-page panel"><div>◇</div><h2>Equipment Library</h2><p>Equipment specifications and approved brands will appear here.</p></div></section>
+    <section class="page" id="page-settings"><div class="page-head"><div><div class="overline">SYSTEM CONTROL</div><h1>Settings</h1><p>Company, users, workflow and platform preferences.</p></div></div><div class="empty-page panel"><div>⚙</div><h2>Platform Settings</h2><p>Configuration controls will appear here.</p></div></section>
+
+  </main>
+</div>
+
+<!-- INSTALLER REGISTRATION MODAL -->
+<div class="modal-overlay" id="installerRegistrationModal" aria-hidden="true">
+  <div class="installer-modal" role="dialog" aria-modal="true" aria-labelledby="installerModalTitle">
+    <div class="installer-modal-head">
+      <div><div class="overline">FIELD PERSONNEL • REGISTRATION</div><h2 id="installerModalTitle">Register Installer</h2><p>Create a verified installer record for project assignment and compliance tracking.</p></div>
+      <button class="modal-close" type="button" onclick="closeInstallerRegistration()" aria-label="Close">×</button>
+    </div>
+
+    <form id="installerRegistrationForm">
+      <div class="form-section">
+        <div class="form-section-title"><span>01</span> Identity & Contact</div>
+        <div class="installer-photo-area">
+          <div class="installer-photo-preview" id="installerPhotoPreview">EA</div>
+          <div><strong>Installer Profile Photo</strong><p>Use a clear professional headshot. JPG or PNG, up to 5MB.</p><label class="upload-btn">Upload Photo<input type="file" id="installerPhoto" accept="image/*" hidden></label></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field"><label>Full Name *</label><input id="regFullName" required placeholder="e.g. Abdulrasaq Eniola"></div>
+          <div class="form-field"><label>Phone Number *</label><input id="regPhone" required placeholder="+234 800 000 0000"></div>
+          <div class="form-field"><label>Email Address</label><input id="regEmail" type="email" placeholder="installer@example.com"></div>
+          <div class="form-field"><label>Installer ID</label><input id="regInstallerId" readonly value="Auto-generated"></div>
+          <div class="form-field"><label>State *</label><select id="regState" required><option value="">Select state</option><option>Abuja</option><option>Kaduna</option><option>Kano</option><option>Nasarawa</option><option>Niger</option></select></div>
+          <div class="form-field"><label>LGA *</label><input id="regLga" required placeholder="e.g. AMAC"></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title"><span>02</span> Professional Profile</div>
+        <div class="form-grid">
+          <div class="form-field"><label>Position *</label><select id="regPosition" required><option value="">Select position</option><option>Lead Installer</option><option>Solar Technician</option><option>Electrical Technician</option><option>CCTV Technician</option><option>Smart Home Technician</option></select></div>
+          <div class="form-field"><label>Primary Specialization *</label><select id="regSpecialization" required><option value="">Select specialization</option><option>Solar & Hybrid</option><option>Solar PV</option><option>Electrical</option><option>CCTV & Security</option><option>Smart Home</option></select></div>
+          <div class="form-field"><label>Group Number</label><input id="regGroup" placeholder="GRP-001"></div>
+          <div class="form-field"><label>Experience</label><select id="regExperience"><option>1–2 Years</option><option>3–5 Years</option><option>6–10 Years</option><option>10+ Years</option></select></div>
+          <div class="form-field full"><label>Additional Specializations</label><input id="regAdditionalSpecs" placeholder="e.g. Battery Storage, Inverter Systems, Electrical Protection"></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title"><span>03</span> Business Registration</div>
+        <div class="form-grid">
+          <div class="form-field"><label>RC / BN Number *</label><input id="regRcBn" required placeholder="RC-2026-00000 or BN-2026-00000"></div>
+          <div class="form-field"><label>CAC Registration Date</label><input id="regCacDate" type="date"></div>
+          <div class="form-field full"><label>CAC Certificate</label><label class="document-upload"><span>PDF</span><div><strong>Upload CAC Certificate</strong><small>PDF, JPG or PNG • Maximum 10MB</small></div><input type="file" id="regCacFile" accept=".pdf,image/*" hidden></label></div>
+          <div class="form-field full"><label>Professional Certificates</label><label class="document-upload"><span>DOC</span><div><strong>Upload professional certificates</strong><small>Multiple PDF or image files supported</small></div><input type="file" id="regProfessionalFiles" accept=".pdf,image/*" multiple hidden></label></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title"><span>04</span> Banking & Verification</div>
+        <div class="form-grid">
+          <div class="form-field"><label>Bank Name</label><input id="regBankName" placeholder="Bank name"></div>
+          <div class="form-field"><label>Account Name</label><input id="regAccountName" placeholder="Account holder name"></div>
+          <div class="form-field"><label>Account Number</label><input id="regAccountNumber" inputmode="numeric" maxlength="10" placeholder="10-digit account number"></div>
+          <div class="form-field"><label>BVN</label><input id="regBvn" inputmode="numeric" maxlength="11" placeholder="11-digit BVN"></div>
+        </div>
+        <div class="verification-note"><span>✓</span><div><strong>Verification required</strong><small>Banking information is restricted and should only be visible to authorised administrators.</small></div></div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title"><span>05</span> Availability & Notes</div>
+        <div class="form-grid">
+          <div class="form-field full">
+            <div class="status-control"><label class="toggle"><input id="regActive" type="checkbox" checked><span></span></label><div><strong>Installer is active</strong><small>Active installers can be considered for project assignment.</small></div></div>
+          </div>
+          <div class="form-field full"><label>Internal Notes</label><textarea id="regNotes" placeholder="Add operational notes, preferred project types, restrictions or verification remarks..."></textarea></div>
+        </div>
+      </div>
+
+      <div class="installer-modal-footer">
+        <button class="secondary-btn" type="button" onclick="closeInstallerRegistration()">Cancel</button>
+        <button class="primary" type="submit">Register Installer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="backend.js"></script>
+</body>
+</html>
