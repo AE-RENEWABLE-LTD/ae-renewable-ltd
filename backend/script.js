@@ -1,57 +1,74 @@
-"use strict";
+
 
 /* =========================================================
    AE RENEWABLE LTD
-   BACKEND UI — STATIC FRONTEND CONTROLLER
-   INSTALLER DIRECTORY + REGISTRATION + SECURE VITAL ACCESS
-   ========================================================= */
+   ARDE V1.0
+   BACKEND UI CONTROLLER
+   ---------------------------------------------------------
+   Installer Directory
+   Installer Registration
+   Installer Profile
+   Vital Information Security
+   Search / Filters
+   CSV Export
+   Navigation
+   Monitoring Demo
+   Toast Notifications
+   Responsive Support
+========================================================= */
 
 
 /* =========================================================
-   GLOBAL ELEMENTS
-   ========================================================= */
+   1. GLOBAL STATE
+========================================================= */
 
-const pages = Array.from(document.querySelectorAll(".page"));
-const navItems = Array.from(document.querySelectorAll(".nav-item"));
-
-const breadcrumb = document.getElementById("breadcrumb");
-const toast = document.getElementById("toast");
-
-let toastTimer = null;
-let monitoringInterval = null;
-
-let currentInstaller = null;
-let vitalInformationUnlocked = false;
+const AE = {
+    installers: [],
+    currentInstallerId: null,
+    vitalUnlocked: false,
+    vitalTimer: null,
+    monitoringTimer: null,
+    toastTimer: null,
+    mobileBreakpoint: 720,
+    vitalPasscode: "12345"
+};
 
 
 /* =========================================================
-   INSTALLER DATA
-   ========================================================= */
+   2. SAMPLE INSTALLER DATA
+========================================================= */
 
-let installers = [
+AE.installers = [
+
     {
         id: "INS-0001",
         name: "Abdulrasaq Eniola",
-        initials: "AE",
         phone: "08133615132",
         email: "AERenewablesolution@gmail.com",
+
         state: "FCT Abuja",
+        lga: "AMAC",
+
         position: "Lead Installer",
         specialization: "Solar & Hybrid Systems",
         group: "AE Renewable Core",
         experience: "8 Years",
+
         rcNumber: "RC 1234567",
         cacDate: "14 March 2023",
+
         status: "Active",
         availability: "Available",
+
         projects: 24,
         lastQuotation: "AE-20260806-001",
-        registrationDate: "06 August 2026",
 
-        bvn: "********321",
+        registrationDate: "06 Aug 2026",
+
         bank: "GTBank",
         accountName: "Abdulrasaq Eniola Abdulquodry",
         accountNumber: "********9012",
+        bvn: "********321",
 
         notes:
             "Lead technical installer and system commissioning specialist.",
@@ -62,6 +79,7 @@ let installers = [
         ],
 
         projectsHistory: [
+
             {
                 reference: "PRJ-2026-001",
                 client: "Residential Client",
@@ -73,6 +91,7 @@ let installers = [
                 images: 18,
                 workImages: 12
             },
+
             {
                 reference: "PRJ-2026-002",
                 client: "Commercial Client",
@@ -84,34 +103,42 @@ let installers = [
                 images: 24,
                 workImages: 17
             }
+
         ],
 
         photo: null
     },
 
+
     {
         id: "INS-0002",
         name: "Ibrahim Musa",
-        initials: "IM",
         phone: "08000000001",
         email: "ibrahim@example.com",
+
         state: "Nasarawa",
+        lga: "Keffi",
+
         position: "Solar Installer",
         specialization: "Solar PV Installation",
         group: "Field Team A",
         experience: "5 Years",
+
         rcNumber: "RC 2456812",
         cacDate: "22 May 2024",
+
         status: "Active",
         availability: "On Project",
+
         projects: 17,
         lastQuotation: "AE-20260729-003",
-        registrationDate: "29 July 2026",
 
-        bvn: "********782",
+        registrationDate: "29 Jul 2026",
+
         bank: "Access Bank",
         accountName: "Ibrahim Musa",
         accountNumber: "********4421",
+        bvn: "********782",
 
         notes:
             "Experienced residential PV installer.",
@@ -125,29 +152,36 @@ let installers = [
         photo: null
     },
 
+
     {
         id: "INS-0003",
         name: "David John",
-        initials: "DJ",
         phone: "08000000002",
         email: "david@example.com",
+
         state: "FCT Abuja",
+        lga: "AMAC",
+
         position: "Electrical Installer",
         specialization: "Electrical Engineering",
         group: "Field Team B",
         experience: "6 Years",
+
         rcNumber: "BN 5567821",
         cacDate: "12 January 2024",
+
         status: "Active",
         availability: "Available",
+
         projects: 12,
         lastQuotation: "AE-20260722-002",
-        registrationDate: "22 July 2026",
 
-        bvn: "********451",
+        registrationDate: "22 Jul 2026",
+
         bank: "UBA",
         accountName: "David John",
         accountNumber: "********7761",
+        bvn: "********451",
 
         notes:
             "Electrical installation and protection systems specialist.",
@@ -160,487 +194,34 @@ let installers = [
 
         photo: null
     }
+
 ];
 
 
 /* =========================================================
-   PAGE NAVIGATION
-   ========================================================= */
+   3. DOM HELPERS
+========================================================= */
 
-function showPage(pageName) {
+const $ = (selector, parent = document) =>
+    parent.querySelector(selector);
 
-    pages.forEach((page) => {
-        page.classList.remove("active");
-    });
+const $$ = (selector, parent = document) =>
+    Array.from(parent.querySelectorAll(selector));
 
-    const targetPage =
-        document.getElementById(`page-${pageName}`);
 
-    if (!targetPage) {
-        console.warn(`Page "${pageName}" was not found.`);
-        return;
-    }
+function byId(id) {
+    return document.getElementById(id);
+}
 
-    targetPage.classList.add("active");
 
-    navItems.forEach((item) => {
-        item.classList.remove("active");
-
-        if (item.dataset.page === pageName) {
-            item.classList.add("active");
-        }
-    });
-
-    updateBreadcrumb(pageName);
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
+function exists(element) {
+    return element !== null && element !== undefined;
 }
 
 
 /* =========================================================
-   BREADCRUMB
-   ========================================================= */
-
-function updateBreadcrumb(pageName) {
-
-    if (!breadcrumb) return;
-
-    const pageNames = {
-        dashboard: "Dashboard",
-        consultations: "Consultations",
-        detail: "Consultation Detail",
-        customers: "Customers",
-        sites: "Sites",
-        projects: "Projects",
-        quotations: "Quotations",
-        invoices: "Invoices",
-        reports: "Reports",
-        monitoring: "Live Monitoring",
-        equipment: "Equipment",
-        installers: "Installers",
-        installerProfile: "Installer Profile",
-        settings: "Settings"
-    };
-
-    breadcrumb.textContent =
-        pageNames[pageName] ||
-        pageName.charAt(0).toUpperCase() +
-        pageName.slice(1);
-}
-
-
-/* =========================================================
-   SIDEBAR NAVIGATION
-   ========================================================= */
-
-navItems.forEach((item) => {
-
-    item.addEventListener("click", () => {
-
-        const page = item.dataset.page;
-
-        if (!page) return;
-
-        showPage(page);
-    });
-
-});
-
-
-/* =========================================================
-   CONSULTATION DETAILS
-   ========================================================= */
-
-function openDetail(reference) {
-
-    const title =
-        document.getElementById("detailTitle");
-
-    if (title && reference) {
-        title.textContent = reference;
-    }
-
-    showPage("detail");
-}
-
-
-/* =========================================================
-   TOAST
-   ========================================================= */
-
-function showToast(message, type = "normal") {
-
-    if (!toast) return;
-
-    toast.textContent = message;
-
-    toast.classList.remove(
-        "success",
-        "error",
-        "warning",
-        "show"
-    );
-
-    if (type === "success") {
-        toast.classList.add("success");
-    }
-
-    if (type === "error") {
-        toast.classList.add("error");
-    }
-
-    if (type === "warning") {
-        toast.classList.add("warning");
-    }
-
-    requestAnimationFrame(() => {
-        toast.classList.add("show");
-    });
-
-    clearTimeout(toastTimer);
-
-    toastTimer = setTimeout(() => {
-        toast.classList.remove("show");
-    }, 2800);
-}
-
-
-/* =========================================================
-   RANDOM NUMBER
-   ========================================================= */
-
-function randomNumber(min, max, decimals = 1) {
-
-    const value =
-        Math.random() * (max - min) + min;
-
-    return Number(value).toFixed(decimals);
-}
-
-
-/* =========================================================
-   MONITORING DEMO
-   ========================================================= */
-
-function startMonitoringDemo() {
-
-    if (monitoringInterval) {
-        clearInterval(monitoringInterval);
-    }
-
-    updateMonitoringValues();
-
-    monitoringInterval =
-        setInterval(updateMonitoringValues, 3000);
-}
-
-
-function updateMonitoringValues() {
-
-    const dashboardSolar =
-        document.querySelector(
-            "#page-dashboard .energy-number strong"
-        );
-
-    if (dashboardSolar) {
-
-        dashboardSolar.textContent =
-            randomNumber(41.5, 44.8);
-    }
-
-
-    const monitoringStats =
-        document.querySelectorAll(
-            "#page-monitoring .monitor-stats strong"
-        );
-
-    if (monitoringStats.length >= 4) {
-
-        monitoringStats[0].innerHTML =
-            `${randomNumber(17.5, 19.8)} <small>kW</small>`;
-
-        monitoringStats[1].innerHTML =
-            `${randomNumber(10.4, 12.8)} <small>kW</small>`;
-
-        monitoringStats[2].innerHTML =
-            `${randomNumber(79, 86, 0)} <small>%</small>`;
-
-        monitoringStats[3].innerHTML =
-            `0.0 <small>kW</small>`;
-    }
-}
-
-
-/* =========================================================
-   SYSTEM STATUS
-   ========================================================= */
-
-function setSystemStatus(status) {
-
-    const statusElement =
-        document.querySelector(
-            "#page-monitoring .live-pill"
-        );
-
-    if (!statusElement) return;
-
-
-    if (status === "online") {
-
-        statusElement.innerHTML =
-            "<i></i> SYSTEM ONLINE";
-
-        statusElement.style.background =
-            "#eaf8f0";
-
-        statusElement.style.color =
-            "#008000";
-
-        return;
-    }
-
-
-    if (status === "warning") {
-
-        statusElement.innerHTML =
-            "<i></i> SYSTEM ATTENTION";
-
-        statusElement.style.background =
-            "#fff5db";
-
-        statusElement.style.color =
-            "#996500";
-
-        return;
-    }
-
-
-    if (status === "offline") {
-
-        statusElement.innerHTML =
-            "<i></i> SYSTEM OFFLINE";
-
-        statusElement.style.background =
-            "#fdecec";
-
-        statusElement.style.color =
-            "#b42318";
-    }
-}
-
-
-/* =========================================================
-   CONSULTATION SEARCH
-   ========================================================= */
-
-const consultationSearch =
-    document.querySelector(
-        "#page-consultations .search input"
-    );
-
-if (consultationSearch) {
-
-    consultationSearch.addEventListener(
-        "input",
-        applyConsultationFilters
-    );
-}
-
-
-function applyConsultationFilters() {
-
-    const searchInput =
-        document.querySelector(
-            "#page-consultations .search input"
-        );
-
-    const searchValue =
-        searchInput
-            ? searchInput.value.toLowerCase().trim()
-            : "";
-
-
-    const selects =
-        document.querySelectorAll(
-            "#page-consultations .filter-row select"
-        );
-
-
-    const statusValue =
-        selects[0]
-            ? selects[0].value.toLowerCase()
-            : "all statuses";
-
-
-    const serviceValue =
-        selects[1]
-            ? selects[1].value.toLowerCase()
-            : "all services";
-
-
-    const rows =
-        document.querySelectorAll(
-            "#page-consultations tbody tr"
-        );
-
-
-    rows.forEach((row) => {
-
-        const text =
-            row.textContent.toLowerCase();
-
-
-        const matchesSearch =
-            !searchValue ||
-            text.includes(searchValue);
-
-
-        const matchesStatus =
-            statusValue === "all statuses" ||
-            text.includes(statusValue);
-
-
-        const matchesService =
-            serviceValue === "all services" ||
-            text.includes(serviceValue);
-
-
-        row.style.display =
-            matchesSearch &&
-            matchesStatus &&
-            matchesService
-                ? ""
-                : "none";
-    });
-}
-
-
-/* =========================================================
-   CONSULTATION FILTERS
-   ========================================================= */
-
-document
-    .querySelectorAll(
-        "#page-consultations .filter-row select"
-    )
-    .forEach((select) => {
-
-        select.addEventListener(
-            "change",
-            applyConsultationFilters
-        );
-
-    });
-
-
-/* =========================================================
-   QUOTATION ACTIONS
-   ========================================================= */
-
-const quotationPage =
-    document.getElementById("page-quotations");
-
-if (quotationPage) {
-
-    quotationPage
-        .querySelectorAll(".row-action")
-        .forEach((button) => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    showToast(
-                        "Quotation detail interface will open here.",
-                        "normal"
-                    );
-
-                }
-            );
-
-        });
-}
-
-
-/* =========================================================
-   NOTIFICATIONS
-   ========================================================= */
-
-const notificationButton =
-    document.querySelector(
-        ".icon-btn[title='Notifications']"
-    );
-
-if (notificationButton) {
-
-    notificationButton.addEventListener(
-        "click",
-        () => {
-
-            showToast(
-                "3 notifications — static demonstration.",
-                "normal"
-            );
-
-        }
-    );
-}
-
-
-/* =========================================================
-   MESSAGES
-   ========================================================= */
-
-const messageButton =
-    document.querySelector(
-        ".icon-btn[title='Messages']"
-    );
-
-if (messageButton) {
-
-    messageButton.addEventListener(
-        "click",
-        () => {
-
-            showToast(
-                "No new messages in this prototype.",
-                "normal"
-            );
-
-        }
-    );
-}
-
-
-/* =========================================================
-   PROFILE
-   ========================================================= */
-
-const profileButton =
-    document.querySelector(".profile");
-
-if (profileButton) {
-
-    profileButton.addEventListener(
-        "click",
-        () => {
-
-            showToast(
-                "Administrator profile menu.",
-                "normal"
-            );
-
-        }
-    );
-}
-
-
-/* =========================================================
-   INSTALLER HELPERS
-   ========================================================= */
+   4. HTML SECURITY
+========================================================= */
 
 function escapeHTML(value) {
 
@@ -661,17 +242,262 @@ function getInitials(name) {
         .trim()
         .split(/\s+/)
         .slice(0, 2)
-        .map((word) => word.charAt(0))
+        .map(word => word.charAt(0))
         .join("")
         .toUpperCase();
 }
 
 
+/* =========================================================
+   5. TOAST
+========================================================= */
+
+function showToast(message, type = "normal") {
+
+    const toast = byId("toast");
+
+    if (!toast) {
+        console.log(`[${type}] ${message}`);
+        return;
+    }
+
+    clearTimeout(AE.toastTimer);
+
+    toast.className = "toast";
+
+    if (type === "success") {
+        toast.classList.add("success");
+    }
+
+    if (type === "error") {
+        toast.classList.add("error");
+    }
+
+    if (type === "warning") {
+        toast.classList.add("warning");
+    }
+
+    toast.textContent = message;
+
+    requestAnimationFrame(() => {
+        toast.classList.add("show");
+    });
+
+    AE.toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000);
+}
+
+
+/* =========================================================
+   6. PAGE NAVIGATION
+========================================================= */
+
+const PAGE_NAMES = {
+
+    dashboard: "Dashboard",
+    consultations: "Consultations",
+    detail: "Consultation Detail",
+    customers: "Customers",
+    sites: "Sites",
+    projects: "Projects",
+    quotations: "Quotations",
+    invoices: "Invoices",
+    reports: "Reports",
+    monitoring: "Live Monitoring",
+    equipment: "Equipment",
+    installers: "Installers",
+    installerProfile: "Installer Profile",
+    settings: "Settings"
+
+};
+
+
+function showPage(pageName) {
+
+    const pages = $$(".page");
+    const navItems = $$(".nav-item");
+
+    const target = byId(`page-${pageName}`);
+
+    if (!target) {
+
+        console.warn(
+            `AE Backend: page-${pageName} does not exist.`
+        );
+
+        return;
+    }
+
+    pages.forEach(page => {
+        page.classList.remove("active");
+    });
+
+    target.classList.add("active");
+
+    navItems.forEach(item => {
+
+        item.classList.remove("active");
+
+        if (item.dataset.page === pageName) {
+            item.classList.add("active");
+        }
+
+    });
+
+    updateBreadcrumb(pageName);
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+function updateBreadcrumb(pageName) {
+
+    const breadcrumb = byId("breadcrumb");
+
+    if (!breadcrumb) return;
+
+    breadcrumb.textContent =
+        PAGE_NAMES[pageName] ||
+        pageName
+            .replace(/([A-Z])/g, " $1")
+            .replace(/^./, letter => letter.toUpperCase());
+}
+
+
+function setupNavigation() {
+
+    $$(".nav-item").forEach(item => {
+
+        item.addEventListener("click", () => {
+
+            const page =
+                item.dataset.page;
+
+            if (!page) return;
+
+            showPage(page);
+
+        });
+
+    });
+
+}
+
+
+/* =========================================================
+   7. CONSULTATION
+========================================================= */
+
+function openDetail(reference) {
+
+    const title = byId("detailTitle");
+
+    if (title && reference) {
+        title.textContent = reference;
+    }
+
+    showPage("detail");
+}
+
+
+function applyConsultationFilters() {
+
+    const page = byId("page-consultations");
+
+    if (!page) return;
+
+    const input =
+        $("#search input", page);
+
+    const search =
+        input
+            ? input.value.toLowerCase().trim()
+            : "";
+
+    const selects =
+        $$(".filter-row select", page);
+
+    const status =
+        selects[0]
+            ? selects[0].value.toLowerCase()
+            : "all statuses";
+
+    const service =
+        selects[1]
+            ? selects[1].value.toLowerCase()
+            : "all services";
+
+    $$("tbody tr", page).forEach(row => {
+
+        const text =
+            row.textContent.toLowerCase();
+
+        const searchMatch =
+            !search ||
+            text.includes(search);
+
+        const statusMatch =
+            status === "all statuses" ||
+            text.includes(status);
+
+        const serviceMatch =
+            service === "all services" ||
+            text.includes(service);
+
+        row.style.display =
+            searchMatch &&
+            statusMatch &&
+            serviceMatch
+                ? ""
+                : "none";
+
+    });
+}
+
+
+function setupConsultations() {
+
+    const page =
+        byId("page-consultations");
+
+    if (!page) return;
+
+    const input =
+        $("#search input", page);
+
+    if (input) {
+        input.addEventListener(
+            "input",
+            applyConsultationFilters
+        );
+    }
+
+    $$(".filter-row select", page)
+        .forEach(select => {
+
+            select.addEventListener(
+                "change",
+                applyConsultationFilters
+            );
+
+        });
+
+}
+
+
+/* =========================================================
+   8. INSTALLER UTILITIES
+========================================================= */
+
 function generateInstallerID() {
 
-    let highestNumber = 0;
+    let highest = 0;
 
-    installers.forEach((installer) => {
+    AE.installers.forEach(installer => {
 
         const match =
             String(installer.id || "")
@@ -679,49 +505,47 @@ function generateInstallerID() {
 
         if (match) {
 
-            highestNumber =
+            highest =
                 Math.max(
-                    highestNumber,
+                    highest,
                     Number(match[1])
                 );
+
         }
+
     });
 
     return `INS-${String(
-        highestNumber + 1
+        highest + 1
     ).padStart(4, "0")}`;
 }
 
 
-/* =========================================================
-   INSTALLER STATUS CLASS
-   ========================================================= */
+function getStatusClass(status) {
 
-function getInstallerStatusClass(status) {
-
-    const normalized =
+    const value =
         String(status || "")
             .toLowerCase()
             .trim();
 
     if (
-        normalized === "active" ||
-        normalized === "available" ||
-        normalized === "completed"
+        value === "active" ||
+        value === "available" ||
+        value === "completed"
     ) {
         return "green-b";
     }
 
     if (
-        normalized === "on project" ||
-        normalized === "pending"
+        value === "on project" ||
+        value === "pending"
     ) {
         return "amber-b";
     }
 
     if (
-        normalized === "inactive" ||
-        normalized === "suspended"
+        value === "inactive" ||
+        value === "suspended"
     ) {
         return "purple-b";
     }
@@ -731,218 +555,27 @@ function getInstallerStatusClass(status) {
 
 
 /* =========================================================
-   INSTALLER DIRECTORY
-   ========================================================= */
+   9. INSTALLER STATISTICS
+========================================================= */
 
-function renderInstallerDirectory(
-    filteredInstallers = installers
-) {
-
-    const tableBody =
-        document.querySelector(
-            "#page-installers tbody"
-        );
-
-    if (!tableBody) return;
-
-
-    if (!filteredInstallers.length) {
-
-        tableBody.innerHTML = `
-            <tr>
-                <td colspan="10">
-                    <div class="empty-page">
-                        <div>⌕</div>
-                        <h2>No installers found</h2>
-                        <p>
-                            No installer matches the current
-                            search or filter.
-                        </p>
-                    </div>
-                </td>
-            </tr>
-        `;
-
-        updateInstallerStats([]);
-
-        return;
-    }
-
-
-    tableBody.innerHTML =
-        filteredInstallers
-            .map((installer) => {
-
-                return `
-                    <tr>
-
-                        <td>
-                            <div class="installer-table-person">
-
-                                <div class="avatar">
-                                    ${escapeHTML(
-                                        installer.initials ||
-                                        getInitials(installer.name)
-                                    )}
-                                </div>
-
-                                <div>
-                                    <strong>
-                                        ${escapeHTML(
-                                            installer.name
-                                        )}
-                                    </strong>
-
-                                    <small>
-                                        ${escapeHTML(
-                                            installer.id
-                                        )}
-                                    </small>
-                                </div>
-
-                            </div>
-                        </td>
-
-
-                        <td>
-                            ${escapeHTML(
-                                installer.phone
-                            )}
-
-                            <small>
-                                ${escapeHTML(
-                                    installer.email
-                                )}
-                            </small>
-                        </td>
-
-
-                        <td>
-                            ${escapeHTML(
-                                installer.position
-                            )}
-
-                            <small>
-                                ${escapeHTML(
-                                    installer.state
-                                )}
-                            </small>
-                        </td>
-
-
-                        <td>
-                            <span class="badge blue-b">
-                                ${escapeHTML(
-                                    installer.specialization
-                                )}
-                            </span>
-                        </td>
-
-
-                        <td>
-                            ${escapeHTML(
-                                installer.rcNumber ||
-                                "—"
-                            )}
-                        </td>
-
-
-                        <td>
-                            ${escapeHTML(
-                                installer.group ||
-                                "—"
-                            )}
-                        </td>
-
-
-                        <td>
-                            ${escapeHTML(
-                                installer.registrationDate ||
-                                "—"
-                            )}
-                        </td>
-
-
-                        <td>
-                            <strong>
-                                ${Number(
-                                    installer.projects || 0
-                                )}
-                            </strong>
-
-                            <small>
-                                projects
-                            </small>
-                        </td>
-
-
-                        <td>
-                            <span class="badge ${getInstallerStatusClass(
-                                installer.availability ||
-                                installer.status
-                            )}">
-                                ${escapeHTML(
-                                    installer.availability ||
-                                    installer.status
-                                )}
-                            </span>
-                        </td>
-
-
-                        <td>
-                            <button
-                                class="row-action"
-                                type="button"
-                                data-installer-id="${escapeHTML(
-                                    installer.id
-                                )}"
-                            >
-                                Open Profile
-                            </button>
-                        </td>
-
-                    </tr>
-                `;
-
-            })
-            .join("");
-
-
-    updateInstallerStats(filteredInstallers);
-}
-
-
-/* =========================================================
-   INSTALLER STATISTICS
-   ========================================================= */
-
-function updateInstallerStats(
-    list = installers
-) {
+function updateInstallerStats(list = AE.installers) {
 
     const total =
-        document.getElementById(
-            "installerTotal"
-        );
+        byId("installerTotal");
 
     const active =
-        document.getElementById(
-            "installerActive"
-        );
+        byId("installerActive");
 
     const onProject =
-        document.getElementById(
-            "installerOnProject"
-        );
+        byId("installerOnProject");
 
     const projects =
-        document.getElementById(
-            "installerProjects"
-        );
+        byId("installerProjects");
 
 
     if (total) {
-        total.textContent = list.length;
+        total.textContent =
+            list.length;
     }
 
 
@@ -952,9 +585,9 @@ function updateInstallerStats(
             list.filter(
                 installer =>
                     String(installer.status)
-                        .toLowerCase() ===
-                    "active"
+                        .toLowerCase() === "active"
             ).length;
+
     }
 
 
@@ -964,9 +597,9 @@ function updateInstallerStats(
             list.filter(
                 installer =>
                     String(installer.availability)
-                        .toLowerCase() ===
-                    "on project"
+                        .toLowerCase() === "on project"
             ).length;
+
     }
 
 
@@ -974,40 +607,275 @@ function updateInstallerStats(
 
         projects.textContent =
             list.reduce(
-                (sum, installer) =>
-                    sum +
+                (totalProjects, installer) =>
+                    totalProjects +
                     Number(installer.projects || 0),
                 0
             );
+
     }
+
 }
 
 
 /* =========================================================
-   INSTALLER SEARCH + FILTERS
-   ========================================================= */
+   10. INSTALLER DIRECTORY
+========================================================= */
 
-function getSelectValue(id) {
+function renderInstallerDirectory(
+    list = AE.installers
+) {
 
-    const element =
-        document.getElementById(id);
+    const tbody =
+        $("#page-installers tbody");
+
+    if (!tbody) {
+        console.warn(
+            "AE Backend: installer table body not found."
+        );
+        return;
+    }
+
+
+    if (!list.length) {
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td colspan="10">
+
+                    <div class="empty-page">
+
+                        <div class="empty-icon">
+                            ⌕
+                        </div>
+
+                        <h2>
+                            No installers found
+                        </h2>
+
+                        <p>
+                            No installer matches
+                            your search or filters.
+                        </p>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+        updateInstallerStats([]);
+
+        return;
+    }
+
+
+    tbody.innerHTML =
+        list.map(installer => {
+
+            const initials =
+                installer.initials ||
+                getInitials(installer.name);
+
+            return `
+
+                <tr>
+
+                    <td>
+
+                        <div class="installer-table-person">
+
+                            <div class="avatar">
+
+                                ${
+                                    installer.photo
+
+                                    ? `
+                                        <img
+                                            src="${escapeHTML(installer.photo)}"
+                                            alt="${escapeHTML(installer.name)}"
+                                        >
+                                    `
+
+                                    : escapeHTML(initials)
+                                }
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    ${escapeHTML(
+                                        installer.name
+                                    )}
+                                </strong>
+
+                                <small>
+                                    ${escapeHTML(
+                                        installer.id
+                                    )}
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        <span>
+                            ${escapeHTML(
+                                installer.phone || "—"
+                            )}
+                        </span>
+
+                        <small>
+                            ${escapeHTML(
+                                installer.email || "—"
+                            )}
+                        </small>
+
+                    </td>
+
+
+                    <td>
+
+                        <span>
+                            ${escapeHTML(
+                                installer.position || "—"
+                            )}
+                        </span>
+
+                        <small>
+                            ${escapeHTML(
+                                installer.state || "—"
+                            )}
+                        </small>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="badge blue-b">
+
+                            ${escapeHTML(
+                                installer.specialization || "—"
+                            )}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+                        ${escapeHTML(
+                            installer.rcNumber || "—"
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${escapeHTML(
+                            installer.group || "—"
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${escapeHTML(
+                            installer.registrationDate || "—"
+                        )}
+                    </td>
+
+
+                    <td>
+
+                        <strong>
+                            ${Number(
+                                installer.projects || 0
+                            )}
+                        </strong>
+
+                        <small>
+                            projects
+                        </small>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="badge ${getStatusClass(
+                            installer.availability ||
+                            installer.status
+                        )}">
+
+                            ${escapeHTML(
+                                installer.availability ||
+                                installer.status
+                            )}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <button
+                            type="button"
+                            class="row-action"
+                            data-installer-id="${escapeHTML(
+                                installer.id
+                            )}"
+                        >
+                            Open Profile
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("");
+
+
+    updateInstallerStats(list);
+}
+
+
+/* =========================================================
+   11. INSTALLER FILTERING
+========================================================= */
+
+function getFilterValue(id) {
+
+    const element = byId(id);
 
     if (!element) return "all";
 
-    return String(element.value || "all")
-        .trim();
+    return String(
+        element.value || "all"
+    )
+        .trim()
+        .toLowerCase();
 }
 
 
 function applyInstallerFilters() {
 
     const searchInput =
-        document.getElementById(
-            "installerSearch"
-        );
+        byId("installerSearch");
 
-
-    const searchValue =
+    const search =
         searchInput
             ? searchInput.value
                 .toLowerCase()
@@ -1016,85 +884,78 @@ function applyInstallerFilters() {
 
 
     const state =
-        getSelectValue(
+        getFilterValue(
             "installerStateFilter"
         );
 
-
     const position =
-        getSelectValue(
+        getFilterValue(
             "installerPositionFilter"
         );
 
-
     const status =
-        getSelectValue(
+        getFilterValue(
             "installerStatusFilter"
         );
 
-
     const specialization =
-        getSelectValue(
+        getFilterValue(
             "installerSpecializationFilter"
         );
 
 
     const filtered =
-        installers.filter((installer) => {
+        AE.installers.filter(installer => {
 
-            const searchable =
-                [
-                    installer.id,
-                    installer.name,
-                    installer.phone,
-                    installer.email,
-                    installer.state,
-                    installer.position,
-                    installer.specialization,
-                    installer.group,
-                    installer.rcNumber
-                ]
-                    .join(" ")
-                    .toLowerCase();
+            const searchable = [
+
+                installer.id,
+                installer.name,
+                installer.phone,
+                installer.email,
+                installer.state,
+                installer.lga,
+                installer.position,
+                installer.specialization,
+                installer.group,
+                installer.rcNumber
+
+            ]
+                .join(" ")
+                .toLowerCase();
 
 
             const searchMatch =
-                !searchValue ||
-                searchable.includes(
-                    searchValue
-                );
+                !search ||
+                searchable.includes(search);
 
 
             const stateMatch =
                 state === "all" ||
                 !state ||
                 String(installer.state)
-                    .toLowerCase() ===
-                state.toLowerCase();
+                    .toLowerCase() === state;
 
 
             const positionMatch =
                 position === "all" ||
                 !position ||
                 String(installer.position)
-                    .toLowerCase() ===
-                position.toLowerCase();
+                    .toLowerCase() === position;
 
 
             const statusMatch =
                 status === "all" ||
                 !status ||
                 String(installer.status)
-                    .toLowerCase() ===
-                status.toLowerCase();
+                    .toLowerCase() === status;
 
 
             const specializationMatch =
                 specialization === "all" ||
                 !specialization ||
                 String(installer.specialization)
-                    .toLowerCase() ===
-                specialization.toLowerCase();
+                    .toLowerCase() === specialization;
 
 
             return (
@@ -1104,6 +965,7 @@ function applyInstallerFilters() {
                 statusMatch &&
                 specializationMatch
             );
+
         });
 
 
@@ -1113,24 +975,66 @@ function applyInstallerFilters() {
 }
 
 
-/* =========================================================
-   INSTALLER PROFILE
-   ========================================================= */
+function setupInstallerFilters() {
 
-function openInstallerProfile(
-    installerId
-) {
+    const ids = [
+
+        "installerSearch",
+        "installerStateFilter",
+        "installerPositionFilter",
+        "installerStatusFilter",
+        "installerSpecializationFilter"
+
+    ];
+
+
+    ids.forEach(id => {
+
+        const element = byId(id);
+
+        if (!element) return;
+
+        element.addEventListener(
+            "input",
+            applyInstallerFilters
+        );
+
+        element.addEventListener(
+            "change",
+            applyInstallerFilters
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   12. INSTALLER PROFILE
+========================================================= */
+
+function getCurrentInstaller() {
+
+    return AE.installers.find(
+        installer =>
+            installer.id ===
+            AE.currentInstallerId
+    ) || null;
+}
+
+
+function openInstallerProfile(id) {
 
     const installer =
-        installers.find(
-            item => item.id === installerId
+        AE.installers.find(
+            item => item.id === id
         );
 
 
     if (!installer) {
 
         showToast(
-            "Installer profile could not be found.",
+            "Installer profile not found.",
             "error"
         );
 
@@ -1138,16 +1042,10 @@ function openInstallerProfile(
     }
 
 
-    const page =
-        document.getElementById(
-            "page-installerProfile"
-        );
-
-
-    if (!page) {
+    if (!byId("page-installerProfile")) {
 
         showToast(
-            "Installer profile page is not available.",
+            "Installer Profile page is missing from the HTML.",
             "error"
         );
 
@@ -1155,10 +1053,10 @@ function openInstallerProfile(
     }
 
 
-    currentInstaller =
-        installer;
+    AE.currentInstallerId =
+        installer.id;
 
-    lockVitalInformation();
+    lockVitalInformation(false);
 
     renderInstallerProfile(
         installer
@@ -1170,129 +1068,103 @@ function openInstallerProfile(
 }
 
 
+function setText(id, value) {
+
+    const element = byId(id);
+
+    if (element) {
+        element.textContent =
+            value || "—";
+    }
+
+}
+
+
 function renderInstallerProfile(
     installer
 ) {
 
-    const name =
-        document.getElementById(
-            "installerProfileName"
-        );
+    setText(
+        "installerProfileName",
+        installer.name
+    );
 
+    setText(
+        "installerProfileId",
+        installer.id
+    );
 
-    const id =
-        document.getElementById(
-            "installerProfileId"
-        );
+    setText(
+        "installerProfilePosition",
+        installer.position
+    );
+
+    setText(
+        "installerProfilePhone",
+        installer.phone
+    );
+
+    setText(
+        "installerProfileEmail",
+        installer.email
+    );
+
+    setText(
+        "installerProfileState",
+        installer.state
+    );
+
+    setText(
+        "installerProfileSpecialization",
+        installer.specialization
+    );
+
+    setText(
+        "installerProfileGroup",
+        installer.group
+    );
+
+    setText(
+        "installerProfileExperience",
+        installer.experience
+    );
+
+    setText(
+        "installerProfileRC",
+        installer.rcNumber
+    );
+
+    setText(
+        "installerProfileCACDate",
+        installer.cacDate
+    );
+
+    setText(
+        "installerProfileRegistrationDate",
+        installer.registrationDate
+    );
+
+    setText(
+        "installerProfileProjects",
+        installer.projects || 0
+    );
+
+    setText(
+        "installerProfileQuotation",
+        installer.lastQuotation
+    );
 
 
     const avatar =
-        document.getElementById(
-            "installerProfileAvatar"
-        );
-
-
-    const status =
-        document.getElementById(
-            "installerProfileStatus"
-        );
-
-
-    const position =
-        document.getElementById(
-            "installerProfilePosition"
-        );
-
-
-    const phone =
-        document.getElementById(
-            "installerProfilePhone"
-        );
-
-
-    const email =
-        document.getElementById(
-            "installerProfileEmail"
-        );
-
-
-    const state =
-        document.getElementById(
-            "installerProfileState"
-        );
-
-
-    const specialization =
-        document.getElementById(
-            "installerProfileSpecialization"
-        );
-
-
-    const group =
-        document.getElementById(
-            "installerProfileGroup"
-        );
-
-
-    const experience =
-        document.getElementById(
-            "installerProfileExperience"
-        );
-
-
-    const rc =
-        document.getElementById(
-            "installerProfileRC"
-        );
-
-
-    const cacDate =
-        document.getElementById(
-            "installerProfileCACDate"
-        );
-
-
-    const registrationDate =
-        document.getElementById(
-            "installerProfileRegistrationDate"
-        );
-
-
-    const projects =
-        document.getElementById(
-            "installerProfileProjects"
-        );
-
-
-    const lastQuotation =
-        document.getElementById(
-            "installerProfileQuotation"
-        );
-
-
-    if (name) {
-        name.textContent =
-            installer.name;
-    }
-
-
-    if (id) {
-        id.textContent =
-            installer.id;
-    }
+        byId("installerProfileAvatar");
 
 
     if (avatar) {
 
-        avatar.textContent =
-            installer.initials ||
-            getInitials(
-                installer.name
-            );
-
         if (installer.photo) {
 
             avatar.innerHTML = `
+
                 <img
                     src="${escapeHTML(
                         installer.photo
@@ -1301,9 +1173,23 @@ function renderInstallerProfile(
                         installer.name
                     )}"
                 >
+
             `;
+
+        } else {
+
+            avatar.textContent =
+                getInitials(
+                    installer.name
+                );
+
         }
+
     }
+
+
+    const status =
+        byId("installerProfileStatus");
 
 
     if (status) {
@@ -1312,81 +1198,10 @@ function renderInstallerProfile(
             installer.status;
 
         status.className =
-            `badge ${getInstallerStatusClass(
+            `badge ${getStatusClass(
                 installer.status
             )}`;
-    }
 
-
-    if (position) {
-        position.textContent =
-            installer.position || "—";
-    }
-
-
-    if (phone) {
-        phone.textContent =
-            installer.phone || "—";
-    }
-
-
-    if (email) {
-        email.textContent =
-            installer.email || "—";
-    }
-
-
-    if (state) {
-        state.textContent =
-            installer.state || "—";
-    }
-
-
-    if (specialization) {
-        specialization.textContent =
-            installer.specialization || "—";
-    }
-
-
-    if (group) {
-        group.textContent =
-            installer.group || "—";
-    }
-
-
-    if (experience) {
-        experience.textContent =
-            installer.experience || "—";
-    }
-
-
-    if (rc) {
-        rc.textContent =
-            installer.rcNumber || "—";
-    }
-
-
-    if (cacDate) {
-        cacDate.textContent =
-            installer.cacDate || "—";
-    }
-
-
-    if (registrationDate) {
-        registrationDate.textContent =
-            installer.registrationDate || "—";
-    }
-
-
-    if (projects) {
-        projects.textContent =
-            installer.projects || 0;
-    }
-
-
-    if (lastQuotation) {
-        lastQuotation.textContent =
-            installer.lastQuotation || "—";
     }
 
 
@@ -1409,302 +1224,226 @@ function renderInstallerProfile(
 
 
 /* =========================================================
-   INSTALLER NOTES
-   ========================================================= */
+   13. INSTALLER NOTES
+========================================================= */
 
 function renderInstallerNotes(
     installer
 ) {
 
-    const possibleElements = [
-        document.getElementById(
-            "installerProfileNotes"
-        ),
-        document.getElementById(
-            "installerNotes"
-        )
-    ];
-
     const element =
-        possibleElements.find(Boolean);
+        byId("installerProfileNotes") ||
+        byId("installerNotes");
 
     if (!element) return;
 
     element.textContent =
-        installer.notes || "No notes available.";
+        installer.notes ||
+        "No notes available.";
+
 }
 
 
 /* =========================================================
-   INSTALLER CERTIFICATES
-   ========================================================= */
+   14. CERTIFICATES
+========================================================= */
 
 function renderInstallerCertificates(
     installer
 ) {
 
     const container =
-        document.getElementById(
-            "installerCertificates"
-        );
+        byId("installerCertificates");
 
     if (!container) return;
 
 
     const certificates =
-        installer.certificates || [];
+        Array.isArray(
+            installer.certificates
+        )
+            ? installer.certificates
+            : [];
 
 
     if (!certificates.length) {
 
-        container.innerHTML =
-            `<p>No certificates uploaded.</p>`;
+        container.innerHTML = `
+            <p>
+                No certificates uploaded.
+            </p>
+        `;
 
         return;
     }
 
 
     container.innerHTML =
-        certificates
-            .map((certificate) => {
+        certificates.map(certificate => `
 
-                return `
-                    <div class="certificate-item">
+            <div class="certificate-item">
 
-                        <span>✓</span>
+                <span>✓</span>
 
-                        <strong>
-                            ${escapeHTML(
-                                certificate
-                            )}
-                        </strong>
+                <strong>
+                    ${escapeHTML(
+                        certificate
+                    )}
+                </strong>
 
-                    </div>
-                `;
+            </div>
 
-            })
-            .join("");
+        `).join("");
 }
 
 
 /* =========================================================
-   INSTALLER BANKING / VITAL INFORMATION
-   ========================================================= */
+   15. INSTALLER PROJECT HISTORY
+========================================================= */
 
-function renderInstallerBanking(
+function renderInstallerProjects(
     installer
 ) {
 
-    const accountName =
-        document.getElementById(
-            "installerBankAccountName"
-        );
+    const tbody =
+        $("#installerProjectHistory tbody");
+
+    if (!tbody) return;
 
 
-    const bank =
-        document.getElementById(
-            "installerBankName"
-        );
+    const projects =
+        Array.isArray(
+            installer.projectsHistory
+        )
+            ? installer.projectsHistory
+            : [];
 
 
-    const accountNumber =
-        document.getElementById(
-            "installerBankAccountNumber"
-        );
+    if (!projects.length) {
 
+        tbody.innerHTML = `
 
-    const bvn =
-        document.getElementById(
-            "installerBVN"
-        );
+            <tr>
 
+                <td colspan="9">
 
-    if (!vitalInformationUnlocked) {
+                    <div class="empty-page">
 
-        if (accountName) {
-            accountName.textContent =
-                "••••••••••••••";
-        }
+                        <div class="empty-icon">
+                            ◫
+                        </div>
 
-        if (bank) {
-            bank.textContent =
-                "••••••••";
-        }
+                        <h2>
+                            No project history
+                        </h2>
 
-        if (accountNumber) {
-            accountNumber.textContent =
-                "••••••••••••";
-        }
+                        <p>
+                            Projects assigned to this
+                            installer will appear here.
+                        </p>
 
-        if (bvn) {
-            bvn.textContent =
-                "••••••••••";
-        }
+                    </div>
 
-        updateVitalSecurityUI(false);
+                </td>
+
+            </tr>
+
+        `;
 
         return;
     }
 
 
-    if (accountName) {
-        accountName.textContent =
-            installer.accountName || "—";
-    }
+    tbody.innerHTML =
+        projects.map(project => `
 
+            <tr>
 
-    if (bank) {
-        bank.textContent =
-            installer.bank || "—";
-    }
+                <td>
+                    <strong>
+                        ${escapeHTML(
+                            project.reference
+                        )}
+                    </strong>
+                </td>
 
+                <td>
+                    ${escapeHTML(
+                        project.client
+                    )}
+                </td>
 
-    if (accountNumber) {
-        accountNumber.textContent =
-            installer.accountNumber || "—";
-    }
+                <td>
+                    ${escapeHTML(
+                        project.location
+                    )}
+                </td>
 
+                <td>
+                    <span class="ref">
+                        ${escapeHTML(
+                            project.quotation
+                        )}
+                    </span>
+                </td>
 
-    if (bvn) {
-        bvn.textContent =
-            installer.bvn || "—";
-    }
+                <td>
+                    ${escapeHTML(
+                        project.assignment
+                    )}
+                </td>
 
+                <td>
+                    ${escapeHTML(
+                        project.completion
+                    )}
+                </td>
 
-    updateVitalSecurityUI(true);
+                <td>
+
+                    <span class="badge ${getStatusClass(
+                        project.status
+                    )}">
+
+                        ${escapeHTML(
+                            project.status
+                        )}
+
+                    </span>
+
+                </td>
+
+                <td>
+                    ${Number(
+                        project.images || 0
+                    )}
+                </td>
+
+                <td>
+                    ${Number(
+                        project.workImages || 0
+                    )}
+                </td>
+
+            </tr>
+
+        `).join("");
 }
 
 
 /* =========================================================
-   VITAL INFORMATION SECURITY
-   ========================================================= */
+   16. VITAL INFORMATION SECURITY
+========================================================= */
 
-const INSTALLER_VITAL_PASSCODE =
-    "12345";
-
-
-function unlockVitalInformation() {
-
-    if (!currentInstaller) {
-
-        showToast(
-            "Open an installer profile first.",
-            "warning"
-        );
-
-        return;
-    }
-
-
-    const passcode =
-        window.prompt(
-            "Enter installer vital-information passcode:"
-        );
-
-
-    if (passcode === null) {
-        return;
-    }
-
-
-    if (
-        String(passcode).trim() !==
-        INSTALLER_VITAL_PASSCODE
-    ) {
-
-        vitalInformationUnlocked =
-            false;
-
-        renderInstallerBanking(
-            currentInstaller
-        );
-
-        showToast(
-            "Access denied. Incorrect passcode.",
-            "error"
-        );
-
-        return;
-    }
-
-
-    vitalInformationUnlocked =
-        true;
-
-
-    renderInstallerBanking(
-        currentInstaller
-    );
-
-
-    showToast(
-        "Vital installer information unlocked.",
-        "success"
-    );
-
-
-    startVitalAutoLock();
-}
-
-
-let vitalAutoLockTimer = null;
-
-
-function startVitalAutoLock() {
-
-    clearTimeout(
-        vitalAutoLockTimer
-    );
-
-
-    vitalAutoLockTimer =
-        setTimeout(() => {
-
-            lockVitalInformation();
-
-            showToast(
-                "Vital information has been automatically locked.",
-                "warning"
-            );
-
-        }, 60000);
-}
-
-
-function lockVitalInformation() {
-
-    vitalInformationUnlocked =
-        false;
-
-
-    clearTimeout(
-        vitalAutoLockTimer
-    );
-
-
-    if (currentInstaller) {
-
-        renderInstallerBanking(
-            currentInstaller
-        );
-    }
-}
-
-
-function updateVitalSecurityUI(
-    unlocked
-) {
+function updateVitalButton() {
 
     const button =
-        document.querySelector(
-            "[data-action='unlock-vitals']"
-        );
-
+        $("[data-action='unlock-vitals'], [data-action='lock-vitals']");
 
     if (!button) return;
 
 
-    if (unlocked) {
+    if (AE.vitalUnlocked) {
 
         button.textContent =
             "🔓 Lock Vital Information";
@@ -1719,145 +1458,220 @@ function updateVitalSecurityUI(
 
         button.dataset.action =
             "unlock-vitals";
+
     }
+
 }
 
 
-/* =========================================================
-   INSTALLER PROJECT HISTORY
-   ========================================================= */
-
-function renderInstallerProjects(
+function renderInstallerBanking(
     installer
 ) {
 
-    const tbody =
-        document.querySelector(
-            "#installerProjectHistory tbody"
-        );
+    const accountName =
+        byId("installerBankAccountName");
+
+    const bank =
+        byId("installerBankName");
+
+    const accountNumber =
+        byId("installerBankAccountNumber");
+
+    const bvn =
+        byId("installerBVN");
 
 
-    if (!tbody) return;
+    if (!AE.vitalUnlocked) {
 
+        if (accountName)
+            accountName.textContent =
+                "••••••••••••";
 
-    const history =
-        installer.projectsHistory || [];
+        if (bank)
+            bank.textContent =
+                "••••••••";
 
+        if (accountNumber)
+            accountNumber.textContent =
+                "••••••••••••";
 
-    if (!history.length) {
+        if (bvn)
+            bvn.textContent =
+                "••••••••";
 
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="9">
-                    <div class="empty-page">
-                        <div>⌂</div>
-                        <h2>No project history</h2>
-                        <p>
-                            Projects assigned to this installer
-                            will appear here.
-                        </p>
-                    </div>
-                </td>
-            </tr>
-        `;
+        updateVitalButton();
 
         return;
     }
 
 
-    tbody.innerHTML =
-        history
-            .map((project) => {
+    if (accountName)
+        accountName.textContent =
+            installer.accountName || "—";
 
-                return `
-                    <tr>
+    if (bank)
+        bank.textContent =
+            installer.bank || "—";
 
-                        <td>
-                            <strong>
-                                ${escapeHTML(
-                                    project.reference
-                                )}
-                            </strong>
-                        </td>
+    if (accountNumber)
+        accountNumber.textContent =
+            installer.accountNumber || "—";
 
-                        <td>
-                            ${escapeHTML(
-                                project.client
-                            )}
-                        </td>
+    if (bvn)
+        bvn.textContent =
+            installer.bvn || "—";
 
-                        <td>
-                            ${escapeHTML(
-                                project.location
-                            )}
-                        </td>
 
-                        <td>
-                            <span class="ref">
-                                ${escapeHTML(
-                                    project.quotation
-                                )}
-                            </span>
-                        </td>
+    updateVitalButton();
+}
 
-                        <td>
-                            ${escapeHTML(
-                                project.assignment
-                            )}
-                        </td>
 
-                        <td>
-                            ${escapeHTML(
-                                project.completion
-                            )}
-                        </td>
+function unlockVitalInformation() {
 
-                        <td>
-                            <span class="badge ${getInstallerStatusClass(
-                                project.status
-                            )}">
-                                ${escapeHTML(
-                                    project.status
-                                )}
-                            </span>
-                        </td>
+    const installer =
+        getCurrentInstaller();
 
-                        <td>
-                            ${Number(
-                                project.images || 0
-                            )}
-                        </td>
 
-                        <td>
-                            ${Number(
-                                project.workImages || 0
-                            )}
-                        </td>
+    if (!installer) {
 
-                    </tr>
-                `;
+        showToast(
+            "Open an installer profile first.",
+            "warning"
+        );
 
-            })
-            .join("");
+        return;
+    }
+
+
+    const entered =
+        window.prompt(
+            "Enter installer vital-information passcode:"
+        );
+
+
+    if (entered === null) {
+        return;
+    }
+
+
+    if (
+        String(entered).trim() !==
+        AE.vitalPasscode
+    ) {
+
+        AE.vitalUnlocked = false;
+
+        renderInstallerBanking(
+            installer
+        );
+
+        showToast(
+            "Access denied. Incorrect passcode.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    AE.vitalUnlocked = true;
+
+    renderInstallerBanking(
+        installer
+    );
+
+    showToast(
+        "Vital information unlocked.",
+        "success"
+    );
+
+
+    startVitalAutoLock();
+}
+
+
+function lockVitalInformation(
+    notify = false
+) {
+
+    AE.vitalUnlocked = false;
+
+    clearTimeout(
+        AE.vitalTimer
+    );
+
+
+    const installer =
+        getCurrentInstaller();
+
+
+    if (installer) {
+
+        renderInstallerBanking(
+            installer
+        );
+
+    } else {
+
+        updateVitalButton();
+
+    }
+
+
+    if (notify) {
+
+        showToast(
+            "Vital information locked.",
+            "success"
+        );
+
+    }
+}
+
+
+function startVitalAutoLock() {
+
+    clearTimeout(
+        AE.vitalTimer
+    );
+
+
+    AE.vitalTimer =
+        setTimeout(() => {
+
+            lockVitalInformation();
+
+            showToast(
+                "Vital information automatically locked.",
+                "warning"
+            );
+
+        }, 60000);
 }
 
 
 /* =========================================================
-   INSTALLER REGISTRATION MODAL
-   ========================================================= */
+   17. INSTALLER REGISTRATION MODAL
+========================================================= */
 
-const installerModal =
-    document.getElementById(
+function getInstallerModal() {
+
+    return byId(
         "installerRegistrationModal"
     );
+
+}
 
 
 function openInstallerRegistration() {
 
-    if (!installerModal) {
+    const modal =
+        getInstallerModal();
+
+    if (!modal) {
 
         showToast(
-            "Installer registration modal is not available.",
+            "Installer registration modal is missing.",
             "error"
         );
 
@@ -1866,7 +1680,7 @@ function openInstallerRegistration() {
 
 
     const form =
-        document.getElementById(
+        byId(
             "installerRegistrationForm"
         );
 
@@ -1880,9 +1694,10 @@ function openInstallerRegistration() {
 
     clearInstallerPhoto();
 
-    installerModal.classList.add("show");
 
-    installerModal.setAttribute(
+    modal.classList.add("show");
+
+    modal.setAttribute(
         "aria-hidden",
         "false"
     );
@@ -1894,14 +1709,17 @@ function openInstallerRegistration() {
 
 function closeInstallerRegistration() {
 
-    if (!installerModal) return;
+    const modal =
+        getInstallerModal();
+
+    if (!modal) return;
 
 
-    installerModal.classList.remove(
+    modal.classList.remove(
         "show"
     );
 
-    installerModal.setAttribute(
+    modal.setAttribute(
         "aria-hidden",
         "true"
     );
@@ -1914,110 +1732,42 @@ function closeInstallerRegistration() {
 function setInstallerID() {
 
     const field =
-        document.getElementById(
-            "installerId"
-        );
-
+        byId("installerId");
 
     if (field) {
 
         field.value =
             generateInstallerID();
+
     }
 }
 
 
 /* =========================================================
-   MODAL EVENTS
-   ========================================================= */
+   18. PHOTO UPLOAD
+========================================================= */
 
-const closeInstallerButton =
-    document.querySelector(
-        ".modal-close"
-    );
+function clearInstallerPhoto() {
 
-if (closeInstallerButton) {
+    const input =
+        byId("installerPhoto");
 
-    closeInstallerButton.addEventListener(
-        "click",
-        closeInstallerRegistration
-    );
-}
+    const preview =
+        byId("installerPhotoPreview");
 
 
-const cancelInstallerButton =
-    document.getElementById(
-        "cancelInstallerRegistration"
-    );
-
-if (cancelInstallerButton) {
-
-    cancelInstallerButton.addEventListener(
-        "click",
-        closeInstallerRegistration
-    );
-}
+    if (input) {
+        input.value = "";
+    }
 
 
-if (installerModal) {
+    if (preview) {
 
-    installerModal.addEventListener(
-        "click",
-        (event) => {
-
-            if (
-                event.target ===
-                installerModal
-            ) {
-
-                closeInstallerRegistration();
-            }
-        }
-    );
-}
-
-
-document.addEventListener(
-    "keydown",
-    (event) => {
-
-        if (
-            event.key === "Escape" &&
-            installerModal &&
-            installerModal.classList.contains(
-                "show"
-            )
-        ) {
-
-            closeInstallerRegistration();
-        }
+        preview.innerHTML =
+            "👤";
 
     }
-);
 
-
-/* =========================================================
-   INSTALLER PHOTO UPLOAD
-   ========================================================= */
-
-const installerPhotoInput =
-    document.getElementById(
-        "installerPhoto"
-    );
-
-
-const installerPhotoPreview =
-    document.getElementById(
-        "installerPhotoPreview"
-    );
-
-
-if (installerPhotoInput) {
-
-    installerPhotoInput.addEventListener(
-        "change",
-        handleInstallerPhoto
-    );
 }
 
 
@@ -2050,127 +1800,71 @@ function handleInstallerPhoto(
     }
 
 
+    const maxSize =
+        10 * 1024 * 1024;
+
+
+    if (file.size > maxSize) {
+
+        showToast(
+            "Image is larger than 10MB.",
+            "error"
+        );
+
+        event.target.value = "";
+
+        return;
+    }
+
+
+    const preview =
+        byId(
+            "installerPhotoPreview"
+        );
+
+
+    if (!preview) return;
+
+
     const reader =
         new FileReader();
 
 
-    reader.onload = (e) => {
+    reader.onload =
+        event => {
 
-        if (!installerPhotoPreview) {
-            return;
-        }
+            preview.innerHTML = `
 
+                <img
+                    src="${event.target.result}"
+                    alt="Installer photo preview"
+                >
 
-        installerPhotoPreview.innerHTML = `
-            <img
-                src="${e.target.result}"
-                alt="Installer photo"
-            >
-        `;
-    };
+            `;
 
-
-    reader.readAsDataURL(file);
-}
+        };
 
 
-function clearInstallerPhoto() {
+    reader.readAsDataURL(
+        file
+    );
 
-    if (installerPhotoInput) {
-        installerPhotoInput.value = "";
-    }
-
-
-    if (installerPhotoPreview) {
-
-        installerPhotoPreview.innerHTML =
-            "👤";
-    }
 }
 
 
 /* =========================================================
-   FILE UPLOAD VALIDATION
-   ========================================================= */
+   19. REGISTRATION FORM
+========================================================= */
 
-document
-    .querySelectorAll(
-        "#installerRegistrationForm input[type='file']"
-    )
-    .forEach((input) => {
+function getFormValue(
+    formData,
+    name
+) {
 
-        input.addEventListener(
-            "change",
-            () => {
+    return String(
+        formData.get(name) || ""
+    ).trim();
 
-                const file =
-                    input.files &&
-                    input.files[0];
-
-
-                if (!file) return;
-
-
-                const maxSize =
-                    10 * 1024 * 1024;
-
-
-                if (file.size > maxSize) {
-
-                    showToast(
-                        "File is too large. Maximum size is 10MB.",
-                        "error"
-                    );
-
-                    input.value = "";
-
-                    return;
-                }
-
-
-                const label =
-                    input.closest(
-                        ".document-upload"
-                    );
-
-
-                if (label) {
-
-                    const small =
-                        label.querySelector(
-                            "small"
-                        );
-
-
-                    if (small) {
-
-                        small.textContent =
-                            file.name;
-                    }
-                }
-
-            }
-        );
-
-    });
-
-
-/* =========================================================
-   INSTALLER REGISTRATION FORM
-   ========================================================= */
-
-const installerRegistrationForm =
-    document.getElementById(
-        "installerRegistrationForm"
-    );
-
-
-if (installerRegistrationForm) {
-
-    installerRegistrationForm.addEventListener(
-        "submit",
-        handleInstallerRegistration
-    );
 }
 
 
@@ -2181,22 +1875,22 @@ function handleInstallerRegistration(
     event.preventDefault();
 
 
-    if (!installerRegistrationForm) {
-        return;
-    }
+    const form =
+        event.currentTarget;
+
+
+    if (!form) return;
 
 
     const formData =
-        new FormData(
-            installerRegistrationForm
-        );
+        new FormData(form);
 
 
     const name =
-        String(
-            formData.get("fullName") ||
-            ""
-        ).trim();
+        getFormValue(
+            formData,
+            "fullName"
+        );
 
 
     if (!name) {
@@ -2210,139 +1904,143 @@ function handleInstallerRegistration(
     }
 
 
-    const installerId =
-        String(
-            formData.get("installerId") ||
-            generateInstallerID()
-        ).trim();
+    const photoInput =
+        byId("installerPhoto");
 
 
     const photoFile =
-        installerPhotoInput &&
-        installerPhotoInput.files &&
-        installerPhotoInput.files[0];
+        photoInput &&
+        photoInput.files &&
+        photoInput.files[0];
 
 
     const installer = {
 
-        id: installerId,
+        id:
+            getFormValue(
+                formData,
+                "installerId"
+            ) ||
+            generateInstallerID(),
 
-        name: name,
+        name,
 
         initials:
             getInitials(name),
 
         phone:
-            String(
-                formData.get("phone") ||
-                ""
-            ).trim(),
+            getFormValue(
+                formData,
+                "phone"
+            ),
 
         email:
-            String(
-                formData.get("email") ||
-                ""
-            ).trim(),
+            getFormValue(
+                formData,
+                "email"
+            ),
 
         state:
-            String(
-                formData.get("state") ||
-                ""
-            ).trim(),
+            getFormValue(
+                formData,
+                "state"
+            ),
+
+        lga:
+            getFormValue(
+                formData,
+                "lga"
+            ),
 
         position:
-            String(
-                formData.get("position") ||
-                ""
-            ).trim(),
+            getFormValue(
+                formData,
+                "position"
+            ),
 
         specialization:
-            String(
-                formData.get("specialization") ||
-                ""
-            ).trim(),
+            getFormValue(
+                formData,
+                "specialization"
+            ),
 
         group:
-            String(
-                formData.get("group") ||
-                ""
-            ).trim(),
+            getFormValue(
+                formData,
+                "group"
+            ),
 
         experience:
-            String(
-                formData.get("experience") ||
-                ""
-            ).trim(),
+            getFormValue(
+                formData,
+                "experience"
+            ),
 
         rcNumber:
-            String(
-                formData.get("rcNumber") ||
-                ""
-            ).trim(),
+            getFormValue(
+                formData,
+                "rcNumber"
+            ),
 
         cacDate:
-            String(
-                formData.get("cacDate") ||
-                ""
-            ).trim(),
+            getFormValue(
+                formData,
+                "cacDate"
+            ),
 
         status:
-            formData.get("status") === "on"
+            formData.has("status")
                 ? "Active"
                 : "Inactive",
 
         availability:
             "Available",
 
-        projects:
-            0,
+        projects: 0,
 
-        lastQuotation:
-            "—",
+        lastQuotation: "—",
 
         registrationDate:
-            new Date().toLocaleDateString(
-                "en-GB",
-                {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric"
-                }
+            new Date()
+                .toLocaleDateString(
+                    "en-GB",
+                    {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric"
+                    }
+                ),
+
+        bank:
+            getFormValue(
+                formData,
+                "bank"
+            ),
+
+        accountName:
+            getFormValue(
+                formData,
+                "accountName"
+            ) ||
+            name,
+
+        accountNumber:
+            getFormValue(
+                formData,
+                "accountNumber"
             ),
 
         bvn:
-            String(
-                formData.get("bvn") ||
-                ""
-            ).trim(),
-
-        bank:
-            String(
-                formData.get("bank") ||
-                ""
-            ).trim(),
-
-        accountName:
-            String(
-                formData.get(
-                    "accountName"
-                ) ||
-                name
-            ).trim(),
-
-        accountNumber:
-            String(
-                formData.get(
-                    "accountNumber"
-                ) ||
-                ""
-            ).trim(),
+            getFormValue(
+                formData,
+                "bvn"
+            ),
 
         notes:
-            String(
-                formData.get("notes") ||
-                ""
-            ).trim(),
+            getFormValue(
+                formData,
+                "notes"
+            ),
 
         certificates: [],
 
@@ -2354,21 +2052,20 @@ function handleInstallerRegistration(
                     photoFile
                 )
                 : null
+
     };
 
 
-    const certificateInputs =
-        document.querySelectorAll(
-            "#installerRegistrationForm input[type='file']"
-        );
+    /* -----------------------------------------------------
+       Certificate files
+    ----------------------------------------------------- */
 
-
-    certificateInputs.forEach(
-        (input) => {
+    $$("#installerRegistrationForm input[type='file']")
+        .forEach(input => {
 
             if (
                 input ===
-                installerPhotoInput
+                photoInput
             ) {
                 return;
             }
@@ -2382,24 +2079,23 @@ function handleInstallerRegistration(
                 installer.certificates.push(
                     input.files[0].name
                 );
+
             }
 
-        }
-    );
+        });
 
 
-    installers.push(
+    AE.installers.push(
         installer
     );
 
 
     renderInstallerDirectory(
-        installers
+        AE.installers
     );
 
 
     closeInstallerRegistration();
-
 
     showPage(
         "installers"
@@ -2407,12 +2103,12 @@ function handleInstallerRegistration(
 
 
     showToast(
-        `${installer.name} has been registered successfully.`,
+        `${installer.name} registered successfully.`,
         "success"
     );
 
 
-    installerRegistrationForm.reset();
+    form.reset();
 
     setInstallerID();
 
@@ -2421,235 +2117,39 @@ function handleInstallerRegistration(
 
 
 /* =========================================================
-   OPEN INSTALLER PROFILE FROM TABLE
-   ========================================================= */
+   20. CSV EXPORT
+========================================================= */
 
-document.addEventListener(
-    "click",
-    (event) => {
+function csvEscape(value) {
 
-        const button =
-            event.target.closest(
-                "[data-installer-id]"
-            );
+    const text =
+        String(value ?? "");
 
 
-        if (!button) return;
+    if (
+        text.includes(",") ||
+        text.includes('"') ||
+        text.includes("\n")
+    ) {
 
-
-        const installerId =
-            button.dataset.installerId;
-
-
-        if (!installerId) return;
-
-
-        openInstallerProfile(
-            installerId
-        );
+        return `"${text.replace(
+            /"/g,
+            '""'
+        )}"`;
 
     }
-);
 
 
-/* =========================================================
-   INSTALLER SECURITY BUTTONS
-   ========================================================= */
+    return text;
+}
 
-document.addEventListener(
-    "click",
-    (event) => {
-
-        const button =
-            event.target.closest(
-                "[data-action='unlock-vitals']"
-            );
-
-
-        if (!button) return;
-
-
-        unlockVitalInformation();
-    }
-);
-
-
-document.addEventListener(
-    "click",
-    (event) => {
-
-        const button =
-            event.target.closest(
-                "[data-action='lock-vitals']"
-            );
-
-
-        if (!button) return;
-
-
-        lockVitalInformation();
-
-
-        showToast(
-            "Vital information locked.",
-            "success"
-        );
-    }
-);
-
-
-/* =========================================================
-   INSTALLER ACTION BUTTONS
-   ========================================================= */
-
-document.addEventListener(
-    "click",
-    (event) => {
-
-        const button =
-            event.target.closest(
-                "button"
-            );
-
-
-        if (!button) return;
-
-
-        const text =
-            button.textContent
-                .trim()
-                .toLowerCase();
-
-
-        if (
-            text.includes(
-                "new consultation"
-            ) ||
-            text.includes(
-                "add customer"
-            ) ||
-            text.includes(
-                "add site"
-            ) ||
-            text.includes(
-                "new project"
-            ) ||
-            text.includes(
-                "create quotation"
-            ) ||
-            text.includes(
-                "add equipment"
-            )
-        ) {
-
-            showToast(
-                "This action will be connected to the backend later."
-            );
-        }
-
-    }
-);
-
-
-/* =========================================================
-   INSTALLER DIRECTORY BUTTON
-   ========================================================= */
-
-document.addEventListener(
-    "click",
-    (event) => {
-
-        const button =
-            event.target.closest(
-                "[data-action='register-installer']"
-            );
-
-
-        if (!button) return;
-
-
-        openInstallerRegistration();
-
-    }
-);
-
-
-/* =========================================================
-   INSTALLER FILTER LISTENERS
-   ========================================================= */
-
-[
-    "installerSearch",
-    "installerStateFilter",
-    "installerPositionFilter",
-    "installerStatusFilter",
-    "installerSpecializationFilter"
-]
-    .forEach((id) => {
-
-        const element =
-            document.getElementById(id);
-
-
-        if (!element) return;
-
-
-        element.addEventListener(
-            "input",
-            applyInstallerFilters
-        );
-
-
-        element.addEventListener(
-            "change",
-            applyInstallerFilters
-        );
-
-    });
-
-
-/* =========================================================
-   BACK BUTTONS
-   ========================================================= */
-
-document.addEventListener(
-    "click",
-    (event) => {
-
-        const button =
-            event.target.closest(
-                "[data-back]"
-            );
-
-
-        if (!button) return;
-
-
-        const page =
-            button.dataset.back;
-
-
-        if (page) {
-
-            lockVitalInformation();
-
-            showPage(page);
-        }
-
-    }
-);
-
-
-/* =========================================================
-   EXPORT INSTALLERS CSV
-   ========================================================= */
 
 function exportInstallersCSV() {
 
-    if (!installers.length) {
+    if (!AE.installers.length) {
 
         showToast(
-            "There are no installers to export.",
+            "No installers available for export.",
             "warning"
         );
 
@@ -2658,11 +2158,13 @@ function exportInstallersCSV() {
 
 
     const headers = [
+
         "Installer ID",
         "Name",
         "Phone",
         "Email",
         "State",
+        "LGA",
         "Position",
         "Specialization",
         "Group",
@@ -2674,40 +2176,37 @@ function exportInstallersCSV() {
         "Projects",
         "Last Quotation",
         "Registration Date"
+
     ];
 
 
     const rows =
-        installers.map(
-            (installer) => [
+        AE.installers.map(installer => [
 
-                installer.id,
-                installer.name,
-                installer.phone,
-                installer.email,
-                installer.state,
-                installer.position,
-                installer.specialization,
-                installer.group,
-                installer.experience,
-                installer.rcNumber,
-                installer.cacDate,
-                installer.status,
-                installer.availability,
-                installer.projects,
-                installer.lastQuotation,
-                installer.registrationDate
+            installer.id,
+            installer.name,
+            installer.phone,
+            installer.email,
+            installer.state,
+            installer.lga,
+            installer.position,
+            installer.specialization,
+            installer.group,
+            installer.experience,
+            installer.rcNumber,
+            installer.cacDate,
+            installer.status,
+            installer.availability,
+            installer.projects,
+            installer.lastQuotation,
+            installer.registrationDate
 
-            ]
-        );
+        ]);
 
 
     const csv =
-        [
-            headers,
-            ...rows
-        ]
-            .map((row) =>
+        [headers, ...rows]
+            .map(row =>
                 row
                     .map(csvEscape)
                     .join(",")
@@ -2737,9 +2236,7 @@ function exportInstallersCSV() {
         );
 
 
-    link.href =
-        url;
-
+    link.href = url;
 
     link.download =
         "AE-Renewable-Installer-Directory.csv";
@@ -2751,7 +2248,6 @@ function exportInstallersCSV() {
 
 
     link.click();
-
 
     link.remove();
 
@@ -2768,122 +2264,695 @@ function exportInstallersCSV() {
 }
 
 
-function csvEscape(value) {
+/* =========================================================
+   21. MONITORING DEMO
+========================================================= */
 
-    const stringValue =
-        String(
-            value ?? ""
-        );
+function randomNumber(
+    min,
+    max,
+    decimals = 1
+) {
 
+    const number =
+        Math.random() *
+        (max - min) +
+        min;
 
-    if (
-        stringValue.includes(",") ||
-        stringValue.includes('"') ||
-        stringValue.includes("\n")
-    ) {
-
-        return `"${stringValue.replace(
-            /"/g,
-            '""'
-        )}"`;
-    }
-
-
-    return stringValue;
+    return Number(
+        number.toFixed(decimals)
+    );
 }
 
 
-document.addEventListener(
-    "click",
-    (event) => {
+function updateMonitoringValues() {
 
-        const button =
-            event.target.closest(
-                "[data-action='export-installers']"
+    const dashboardSolar =
+        $(
+            "#page-dashboard .energy-number strong"
+        );
+
+
+    if (dashboardSolar) {
+
+        dashboardSolar.textContent =
+            randomNumber(
+                41.5,
+                44.8
             );
 
+    }
 
-        if (!button) return;
+
+    const stats =
+        $$(
+            "#page-monitoring .monitor-stats strong"
+        );
 
 
-        exportInstallersCSV();
+    if (stats.length >= 4) {
+
+        stats[0].innerHTML =
+            `${randomNumber(
+                17.5,
+                19.8
+            )} <small>kW</small>`;
+
+
+        stats[1].innerHTML =
+            `${randomNumber(
+                10.4,
+                12.8
+            )} <small>kW</small>`;
+
+
+        stats[2].innerHTML =
+            `${randomNumber(
+                79,
+                86,
+                0
+            )} <small>%</small>`;
+
+
+        stats[3].innerHTML =
+            `0.0 <small>kW</small>`;
 
     }
-);
+
+}
+
+
+function startMonitoring() {
+
+    clearInterval(
+        AE.monitoringTimer
+    );
+
+
+    updateMonitoringValues();
+
+
+    AE.monitoringTimer =
+        setInterval(
+            updateMonitoringValues,
+            3000
+        );
+}
+
+
+function setSystemStatus(
+    status
+) {
+
+    const element =
+        $(
+            "#page-monitoring .live-pill"
+        );
+
+
+    if (!element) return;
+
+
+    const statuses = {
+
+        online: {
+            text: "SYSTEM ONLINE",
+            background: "#eaf8f0",
+            color: "#008000"
+        },
+
+        warning: {
+            text: "SYSTEM ATTENTION",
+            background: "#fff5db",
+            color: "#996500"
+        },
+
+        offline: {
+            text: "SYSTEM OFFLINE",
+            background: "#fdecec",
+            color: "#b42318"
+        }
+
+    };
+
+
+    const config =
+        statuses[
+            String(status).toLowerCase()
+        ];
+
+
+    if (!config) return;
+
+
+    element.innerHTML =
+        `<i></i> ${config.text}`;
+
+
+    element.style.background =
+        config.background;
+
+    element.style.color =
+        config.color;
+}
 
 
 /* =========================================================
-   RESPONSIVE SUPPORT
-   ========================================================= */
+   22. INSTALLER MODAL EVENTS
+========================================================= */
+
+function setupInstallerModal() {
+
+    const modal =
+        getInstallerModal();
+
+
+    if (!modal) return;
+
+
+    const form =
+        byId(
+            "installerRegistrationForm"
+        );
+
+
+    if (form) {
+
+        form.addEventListener(
+            "submit",
+            handleInstallerRegistration
+        );
+
+    }
+
+
+    const close =
+        $(".modal-close", modal);
+
+
+    if (close) {
+
+        close.addEventListener(
+            "click",
+            closeInstallerRegistration
+        );
+
+    }
+
+
+    const cancel =
+        byId(
+            "cancelInstallerRegistration"
+        );
+
+
+    if (cancel) {
+
+        cancel.addEventListener(
+            "click",
+            closeInstallerRegistration
+        );
+
+    }
+
+
+    modal.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target === modal
+            ) {
+
+                closeInstallerRegistration();
+
+            }
+
+        }
+    );
+
+
+    const photo =
+        byId(
+            "installerPhoto"
+        );
+
+
+    if (photo) {
+
+        photo.addEventListener(
+            "change",
+            handleInstallerPhoto
+        );
+
+    }
+
+
+    $$("#installerRegistrationForm input[type='file']")
+        .forEach(input => {
+
+            input.addEventListener(
+                "change",
+                () => validateFileInput(input)
+            );
+
+        });
+
+}
+
+
+function validateFileInput(
+    input
+) {
+
+    const file =
+        input.files &&
+        input.files[0];
+
+
+    if (!file) return;
+
+
+    const maxSize =
+        10 * 1024 * 1024;
+
+
+    if (file.size > maxSize) {
+
+        showToast(
+            "File is too large. Maximum size is 10MB.",
+            "error"
+        );
+
+        input.value = "";
+
+        return;
+    }
+
+
+    const label =
+        input.closest(
+            ".document-upload"
+        );
+
+
+    if (label) {
+
+        const small =
+            $("small", label);
+
+        if (small) {
+            small.textContent =
+                file.name;
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   23. GLOBAL CLICK EVENTS
+========================================================= */
+
+function setupGlobalClicks() {
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            /* Installer profile */
+
+            const profileButton =
+                event.target.closest(
+                    "[data-installer-id]"
+                );
+
+
+            if (profileButton) {
+
+                const id =
+                    profileButton.dataset.installerId;
+
+                if (id) {
+                    openInstallerProfile(id);
+                }
+
+                return;
+            }
+
+
+            /* Register installer */
+
+            const register =
+                event.target.closest(
+                    "[data-action='register-installer']"
+                );
+
+
+            if (register) {
+
+                openInstallerRegistration();
+
+                return;
+            }
+
+
+            /* Export */
+
+            const exportButton =
+                event.target.closest(
+                    "[data-action='export-installers']"
+                );
+
+
+            if (exportButton) {
+
+                exportInstallersCSV();
+
+                return;
+            }
+
+
+            /* Unlock */
+
+            const unlock =
+                event.target.closest(
+                    "[data-action='unlock-vitals']"
+                );
+
+
+            if (unlock) {
+
+                unlockVitalInformation();
+
+                return;
+            }
+
+
+            /* Lock */
+
+            const lock =
+                event.target.closest(
+                    "[data-action='lock-vitals']"
+                );
+
+
+            if (lock) {
+
+                lockVitalInformation(true);
+
+                return;
+            }
+
+
+            /* Back */
+
+            const back =
+                event.target.closest(
+                    "[data-back]"
+                );
+
+
+            if (back) {
+
+                const page =
+                    back.dataset.back;
+
+                if (page) {
+
+                    lockVitalInformation();
+
+                    showPage(page);
+
+                }
+
+                return;
+            }
+
+
+            /* Generic backend actions */
+
+            const button =
+                event.target.closest(
+                    "button"
+                );
+
+
+            if (!button) return;
+
+
+            const text =
+                button.textContent
+                    .trim()
+                    .toLowerCase();
+
+
+            const backendActions = [
+
+                "new consultation",
+                "add customer",
+                "add site",
+                "new project",
+                "create quotation",
+                "add equipment"
+
+            ];
+
+
+            const matched =
+                backendActions.some(
+                    action =>
+                        text.includes(action)
+                );
+
+
+            if (matched) {
+
+                showToast(
+                    "This module is ready for backend connection.",
+                    "normal"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   24. HEADER BUTTONS
+========================================================= */
+
+function setupHeaderButtons() {
+
+    const notification =
+        $(".icon-btn[title='Notifications']");
+
+
+    if (notification) {
+
+        notification.addEventListener(
+            "click",
+            () => {
+
+                showToast(
+                    "3 notifications available.",
+                    "normal"
+                );
+
+            }
+        );
+
+    }
+
+
+    const messages =
+        $(".icon-btn[title='Messages']");
+
+
+    if (messages) {
+
+        messages.addEventListener(
+            "click",
+            () => {
+
+                showToast(
+                    "No new messages.",
+                    "normal"
+                );
+
+            }
+        );
+
+    }
+
+
+    const profile =
+        $(".profile");
+
+
+    if (profile) {
+
+        profile.addEventListener(
+            "click",
+            () => {
+
+                showToast(
+                    "Administrator profile menu.",
+                    "normal"
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   25. RESPONSIVE SUPPORT
+========================================================= */
 
 function handleResize() {
 
-    const width =
-        window.innerWidth;
+    const mobile =
+        window.innerWidth <=
+        AE.mobileBreakpoint;
 
 
-    if (width <= 720) {
+    document.body.classList.toggle(
+        "mobile-layout",
+        mobile
+    );
 
-        document.body.classList.add(
-            "mobile-layout"
-        );
-
-    } else {
-
-        document.body.classList.remove(
-            "mobile-layout"
-        );
-    }
 }
 
 
-window.addEventListener(
-    "resize",
-    handleResize
-);
+function setupResponsive() {
+
+    handleResize();
+
+    window.addEventListener(
+        "resize",
+        handleResize
+    );
+
+}
 
 
 /* =========================================================
-   PAGE VISIBILITY / SECURITY
-   ========================================================= */
+   26. SECURITY
+========================================================= */
 
-document.addEventListener(
-    "visibilitychange",
-    () => {
+function setupSecurity() {
 
-        if (
-            document.hidden
-        ) {
+    document.addEventListener(
+        "visibilitychange",
+        () => {
 
-            lockVitalInformation();
+            if (
+                document.hidden
+            ) {
+
+                lockVitalInformation();
+
+            }
+
         }
-    }
-);
+    );
+
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key !== "Escape"
+            ) {
+                return;
+            }
+
+
+            const modal =
+                getInstallerModal();
+
+
+            if (
+                modal &&
+                modal.classList.contains(
+                    "show"
+                )
+            ) {
+
+                closeInstallerRegistration();
+
+            }
+
+        }
+    );
+
+}
 
 
 /* =========================================================
-   INITIALISE
-   ========================================================= */
+   27. INITIALISE
+========================================================= */
 
 function initialiseAEBackend() {
 
-    handleResize();
+    console.log(
+        "AE Renewable ARDE Backend initialising..."
+    );
+
+
+    setupNavigation();
+
+    setupConsultations();
+
+    setupInstallerFilters();
+
+    setupInstallerModal();
+
+    setupGlobalClicks();
+
+    setupHeaderButtons();
+
+    setupResponsive();
+
+    setupSecurity();
+
+
+    renderInstallerDirectory(
+        AE.installers
+    );
+
+
+    setInstallerID();
+
+    lockVitalInformation();
+
+    startMonitoring();
+
 
     showPage(
         "dashboard"
     );
 
-    startMonitoringDemo();
 
-    renderInstallerDirectory(
-        installers
+    console.log(
+        "AE Renewable ARDE Backend ready."
     );
 
-    setInstallerID();
-
-    lockVitalInformation();
 }
 
+
+/* =========================================================
+   28. START APPLICATION
+========================================================= */
 
 if (
     document.readyState ===
@@ -2898,12 +2967,15 @@ if (
 } else {
 
     initialiseAEBackend();
+
 }
 
 
 /* =========================================================
-   GLOBAL FUNCTIONS
-   ========================================================= */
+   29. GLOBAL API
+   Allows existing inline HTML onclick handlers
+   to continue working.
+========================================================= */
 
 window.showPage =
     showPage;
@@ -2940,3 +3012,10 @@ window.unlockVitalInformation =
 
 window.lockVitalInformation =
     lockVitalInformation;
+
+window.setInstallerID =
+    setInstallerID;
+
+window.AE =
+    AE;
+
