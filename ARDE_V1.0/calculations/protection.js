@@ -15,8 +15,6 @@ import {
     chooseBreaker
 } from "../selection/breakerSelector.js";
 
-import {inverters} from "../data/inverters.js";
-
 
 // ======================================================
 // PROTECTION DESIGN ENGINE
@@ -46,6 +44,15 @@ export function chooseProtection(system) {
     // ==================================================
     // VALIDATION
     // ==================================================
+
+    if (!system) {
+
+        throw new Error(
+            "Protection Design: system is required."
+        );
+
+    }
+
 
     if (!inverter) {
 
@@ -482,10 +489,10 @@ export function chooseProtection(system) {
     // ==================================================
     // PV COMBINER RULE
     //
-    // 1 - 9 STRINGS:
+    // 1 - 7 STRINGS:
     // NO COMBINER
     //
-    // 10+ STRINGS:
+    // 8+ STRINGS:
     // COMBINER REQUIRED
     //
     // ==================================================
@@ -547,57 +554,28 @@ export function chooseProtection(system) {
     // ==================================================
     // CHANGEOVER SWITCH
     // ==================================================
-
-    const changeOverMinimum =
-        acInputBreaker;
-
-
-    const changeOverMaximum =
-        acInputBreaker *
-        1.5;
-
-
-    const changeOverRating =
-
-        chooseBreaker(
-            changeOverMinimum
-        );
-
-
-    // ==================================================
-    // VALIDATE CHANGEOVER
-    // ==================================================
-
-    if (
-        changeOverRating >
-        changeOverMaximum
-    ) {
-
-        throw new Error(
-
-            `No suitable Changeover Switch found. ` +
-
-            `AC Input Breaker: ` +
-
-            `${acInputBreaker}A. ` +
-
-            `Maximum allowed Changeover: ` +
-
-            `${changeOverMaximum}A.`
-
-        );
-
-    }
-
-
-    // ==================================================
-    // CHANGEOVER OBJECT
+    //
+    // LOGIC:
+    //
+    // Changeover Switch MUST be exactly the
+    // same rating as the AC Input Breaker.
+    //
+    // Example:
+    //
+    // AC Input Breaker = 100A
+    // Changeover       = 100A
+    //
+    // AC Input Breaker = 63A
+    // Changeover       = 63A
+    //
+    // NO 1.5 × calculation.
+    //
     // ==================================================
 
     const changeOver = {
 
         rating:
-            changeOverRating,
+            acInputBreaker,
 
         quantity:
             inverterQuantity,
@@ -788,15 +766,6 @@ export function chooseProtection(system) {
 
     }
 
-    // else if (
-    //     acOutputCurrentWM <= 63
-    // ) {
-
-    //     acOutputCableSize =
-    //         "10mm²";
-
-    // }
-
     else if (
         acOutputCurrentWM <= 100
     ) {
@@ -805,15 +774,6 @@ export function chooseProtection(system) {
             "16mm²";
 
     }
-
-    // else if (
-    //     acOutputCurrentWM <= 150
-    // ) {
-
-    //     acOutputCableSize =
-    //         "25mm²";
-
-    // }
 
     else if (
         acOutputCurrentWM <= 200
@@ -860,7 +820,21 @@ export function chooseProtection(system) {
 
 
     // ==================================================
-    // AC CABLE OUTPUT
+    // AC CABLE
+    // ==================================================
+    //
+    // INPUT:
+    // 10 METERS
+    //
+    // OUTPUT:
+    // 10 METERS
+    //
+    // TOTAL:
+    // 20 METERS
+    //
+    // NOTE:
+    // The BOQ controls these project cable lengths.
+    //
     // ==================================================
 
     const acCable = {
@@ -871,8 +845,7 @@ export function chooseProtection(system) {
                 "4mm² PV Cable",
 
             length:
-                totalStrings *
-                20
+                10
 
         },
 
@@ -883,14 +856,13 @@ export function chooseProtection(system) {
                 `${acOutputCableSize} ${
                     phase === 1
 
-                        ? "3 Core Copper"
+                        ? "3 Core Flexible Copper"
 
-                        : "4 Core Copper Armoured"
+                        : "4 Core Copper Flexible"
                 }`,
 
             length:
-                inverterQuantity *
-                15
+                10
 
         }
 
