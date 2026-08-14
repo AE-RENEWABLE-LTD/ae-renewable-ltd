@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Client Portal | AE Network</title>
+
+    <meta
+        name="description"
+        content="AE Network Client Portal — Manage projects, quotations, payments, documents and solar system monitoring."
+    >
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="client.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     APP
+========================================================= -->
+
+<div class="app">
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                AE
+            </div>
+
+            <div class="brand-text">
+                <strong>AE NETWORK</strong>
+                <span>CLIENT PORTAL</span>
+            </div>
+
+        </div>
+
+        <div class="client-mini-profile">
+
+            <div class="avatar">
+                EA
+            </div>
+
+            <div>
+                <strong>Eniola Abdulrasaq</strong>
+                <span>Client Account</span>
+            </div>
+
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <button class="nav-item active" data-page="dashboard">
+                <span class="nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </button>
+
+            <button class="nav-item" data-page="projects">
+                <span class="nav-icon">▣</span>
+                <span>My Projects</span>
+                <span class="nav-badge">2</span>
+            </button>
+
+            <button class="nav-item" data-page="quotations">
+                <span class="nav-icon">▤</span>
+                <span>Quotations</span>
+                <span class="nav-badge warning">1</span>
+            </button>
+
+            <button class="nav-item" data-page="payments">
+                <span class="nav-icon">₦</span>
+                <span>Payments</span>
+            </button>
+
+            <button class="nav-item" data-page="monitoring">
+                <span class="nav-icon">◉</span>
+                <span>Monitoring</span>
+                <span class="online-dot"></span>
+            </button>
+
+            <button class="nav-item" data-page="requests">
+                <span class="nav-icon">＋</span>
+                <span>Requests</span>
+            </button>
+
+            <button class="nav-item" data-page="documents">
+                <span class="nav-icon">▧</span>
+                <span>Documents</span>
+            </button>
+
+            <button class="nav-item" data-page="support">
+                <span class="nav-icon">?</span>
+                <span>Support</span>
+            </button>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <button class="nav-item" data-page="profile">
+                <span class="nav-icon">⚙</span>
+                <span>Profile</span>
+            </button>
+
+            <button class="logout-btn" id="logoutBtn">
+                <span>⇥</span>
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN AREA
+    ====================================================== -->
+
+    <main class="main">
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button class="mobile-menu" id="mobileMenu">
+                    ☰
+                </button>
+
+                <div>
+                    <span class="eyebrow">AE NETWORK</span>
+                    <h1 id="pageTitle">Client Dashboard</h1>
+                </div>
+
+            </div>
+
+            <div class="topbar-actions">
+
+                <button class="header-icon" id="searchBtn" title="Search">
+                    ⌕
+                </button>
+
+                <button
+                    class="header-icon notification-button"
+                    id="notificationBtn"
+                    title="Notifications"
+                >
+                    ♢
+                    <span class="notification-count">3</span>
+                </button>
+
+                <button class="profile-button" id="profileButton">
+
+                    <div class="avatar small">
+                        EA
+                    </div>
+
+                    <div class="profile-button-text">
+                        <strong>Eniola</strong>
+                        <span>Client</span>
+                    </div>
+
+                    <span>⌄</span>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- SEARCH -->
+
+        <div class="search-panel" id="searchPanel">
+
+            <div class="search-input-wrapper">
+
+                <span>⌕</span>
+
+                <input
+                    type="search"
+                    id="globalSearch"
+                    placeholder="Search projects, quotations, documents..."
+                >
+
+                <button id="closeSearch">ESC</button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PAGE CONTAINER
+        ================================================== -->
+
+        <section class="page-container">
+
+
+            <!-- =================================================
+                 DASHBOARD
+            ================================================== -->
+
+            <section class="page active" id="dashboardPage">
+
+                <div class="welcome-row">
+
+                    <div>
+
+                        <span class="eyebrow">FRIDAY, AUGUST 14, 2026</span>
+
+                        <h2>
+                            Welcome back, Eniola
+                        </h2>
+
+                        <p>
+                            Here is the latest update on your AE Network projects.
+                        </p>
+
+                    </div>
+
+                    <button class="primary-btn" data-action="new-request">
+                        + New Request
+                    </button>
+
+                </div>
+
+
+                <!-- STATS -->
+
+                <div class="stats-grid">
+
+                    <article class="stat-card">
+
+                        <div class="stat-icon blue">▣</div>
+
+                        <div>
+                            <span>Active Projects</span>
+                            <strong>2</strong>
+                            <small>1 currently in installation</small>
+                        </div>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <div class="stat-icon gold">₦</div>
+
+                        <div>
+                            <span>Outstanding</span>
+                            <strong>₦2.40m</strong>
+                            <small>Next payment milestone</small>
+                        </div>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <div class="stat-icon green">◉</div>
+
+                        <div>
+                            <span>System Status</span>
+                            <strong class="status-online">
+                                Online
+                            </strong>
+                            <small>Solar system operating normally</small>
+                        </div>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <div class="stat-icon purple">▧</div>
+
+                        <div>
+                            <span>Documents</span>
+                            <strong>14</strong>
+                            <small>3 recently uploaded</small>
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- MAIN DASHBOARD GRID -->
+
+                <div class="dashboard-grid">
+
+                    <!-- PROJECT -->
+
+                    <article class="panel project-overview">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <span class="eyebrow">ACTIVE PROJECT</span>
+                                <h3>Residential Hybrid Solar System</h3>
+                            </div>
+
+                            <span class="status-pill progress">
+                                In Installation
+                            </span>
+
+                        </div>
+
+
+                        <div class="project-meta">
+
+                            <div>
+                                <span>Project ID</span>
+                                <strong>AE-PRJ-2026-018</strong>
+                            </div>
+
+                            <div>
+                                <span>Capacity</span>
+                                <strong>16kVA</strong>
+                            </div>
+
+                            <div>
+                                <span>Location</span>
+                                <strong>Abuja</strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="progress-section">
+
+                            <div class="progress-label">
+
+                                <span>Project Completion</span>
+
+                                <strong>72%</strong>
+
+                            </div>
+
+                            <div class="progress-bar">
+
+                                <span style="width:72%"></span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="timeline">
+
+                            <div class="timeline-item completed">
+
+                                <span></span>
+
+                                <div>
+                                    <strong>Consultation</strong>
+                                    <small>Completed</small>
+                                </div>
+
+                            </div>
+
+
+                            <div class="timeline-item completed">
+
+                                <span></span>
+
+                                <div>
+                                    <strong>Site Survey</strong>
+                                    <small>Completed</small>
+                                </div>
+
+                            </div>
+
+
+                            <div class="timeline-item completed">
+
+                                <span></span>
+
+                                <div>
+                                    <strong>Design & Approval</strong>
+                                    <small>Completed</small>
+                                </div>
+
+                            </div>
+
+
+                            <div class="timeline-item current">
+
+                                <span></span>
+
+                                <div>
+                                    <strong>Installation</strong>
+                                    <small>Currently in progress</small>
+                                </div>
+
+                            </div>
+
+
+                            <div class="timeline-item">
+
+                                <span></span>
+
+                                <div>
+                                    <strong>Commissioning</strong>
+                                    <small>Pending</small>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            class="secondary-btn full-width"
+                            data-action="view-project"
+                        >
+                            View Project
+                        </button>
+
+                    </article>
+
+
+                    <!-- MONITORING -->
+
+                    <article class="panel monitoring-card">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <span class="eyebrow">LIVE MONITORING</span>
+                                <h3>Solar System</h3>
+                            </div>
+
+                            <span class="live-status">
+                                <i></i>
+                                LIVE
+                            </span>
+
+                        </div>
+
+
+                        <div class="energy-display">
+
+                            <span>Current Solar Generation</span>
+
+                            <strong>
+                                8.42 <small>kW</small>
+                            </strong>
+
+                            <div class="energy-change">
+                                ↑ 12.4% today
+                            </div>
+
+                        </div>
+
+
+                        <div class="monitor-grid">
+
+                            <div class="monitor-item">
+                                <span>Battery</span>
+                                <strong>86%</strong>
+                            </div>
+
+                            <div class="monitor-item">
+                                <span>Load</span>
+                                <strong>4.21 kW</strong>
+                            </div>
+
+                            <div class="monitor-item">
+                                <span>Grid</span>
+                                <strong class="green-text">Available</strong>
+                            </div>
+
+                            <div class="monitor-item">
+                                <span>Inverter</span>
+                                <strong class="green-text">Normal</strong>
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            class="secondary-btn full-width"
+                            data-action="monitoring"
+                        >
+                            Open Monitoring
+                        </button>
+
+                    </article>
+
+                </div>
+
+
+                <!-- LOWER GRID -->
+
+                <div class="lower-grid">
+
+                    <!-- QUOTATION -->
+
+                    <article class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <span class="eyebrow">ACTION REQUIRED</span>
+                                <h3>Pending Quotation</h3>
+                            </div>
+
+                            <span class="status-pill pending">
+                                Awaiting Approval
+                            </span>
+
+                        </div>
+
+                        <div class="quotation-summary">
+
+                            <div class="quotation-number">
+                                <span>Quotation</span>
+                                <strong>AE-QUO-2026-042</strong>
+                            </div>
+
+                            <div class="quotation-price">
+                                <span>Total</span>
+                                <strong>₦8,750,000</strong>
+                            </div>
+
+                        </div>
+
+                        <p>
+                            20kVA Hybrid Solar Power System including
+                            installation, protection and commissioning.
+                        </p>
+
+                        <div class="button-row">
+
+                            <button
+                                class="secondary-btn"
+                                data-action="view-quotation"
+                            >
+                                Review
+                            </button>
+
+                            <button
+                                class="primary-btn"
+                                data-action="accept-quotation"
+                            >
+                                Accept Quotation
+                            </button>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- RECENT ACTIVITY -->
+
+                    <article class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <span class="eyebrow">RECENT ACTIVITY</span>
+                                <h3>Project Updates</h3>
+                            </div>
+
+                            <button
+                                class="text-btn"
+                                data-page-link="projects"
+                            >
+                                View All
+                            </button>
+
+                        </div>
+
+
+                        <div class="activity-list">
+
+                            <div class="activity-item">
+
+                                <div class="activity-icon green">
+                                    ✓
+                                </div>
+
+                                <div>
+                                    <strong>
+                                        Solar panels installation completed
+                                    </strong>
+
+                                    <span>
+                                        Today · 2 hours ago
+                                    </span>
+                                </div>
+
+                            </div>
+
+
+                            <div class="activity-item">
+
+                                <div class="activity-icon blue">
+                                    ↑
+                                </div>
+
+                                <div>
+                                    <strong>
+                                        Site installation report uploaded
+                                    </strong>
+
+                                    <span>
+                                        Yesterday
+                                    </span>
+                                </div>
+
+                            </div>
+
+
+                            <div class="activity-item">
+
+                                <div class="activity-icon gold">
+                                    ₦
+                                </div>
+
+                                <div>
+                                    <strong>
+                                        Payment milestone recorded
+                                    </strong>
+
+                                    <span>
+                                        Aug 12, 2026
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PROJECTS
+            ================================================== -->
+
+            <section class="page" id="projectsPage">
+
+                <div class="page-heading">
+
+                    <div>
+                        <span class="eyebrow">PROJECT MANAGEMENT</span>
+                        <h2>My Projects</h2>
+                        <p>Track every project from consultation to commissioning.</p>
+                    </div>
+
+                    <button class="primary-btn" data-action="new-request">
+                        + New Project Request
+                    </button>
+
+                </div>
+
+
+                <div class="projects-grid">
+
+                    <article class="project-card">
+
+                        <div class="project-card-top">
+
+                            <span class="status-pill progress">
+                                In Installation
+                            </span>
+
+                            <span class="project-code">
+                                AE-PRJ-2026-018
+                            </span>
+
+                        </div>
+
+                        <h3>Residential Hybrid Solar System</h3>
+
+                        <p>
+                            16kVA Deye Hybrid Inverter · 32kWh Lithium
+                            · 16 × 750W Panels
+                        </p>
+
+                        <div class="project-details">
+
+                            <div>
+                                <span>Location</span>
+                                <strong>Abuja</strong>
+                            </div>
+
+                            <div>
+                                <span>Progress</span>
+                                <strong>72%</strong>
+                            </div>
+
+                            <div>
+                                <span>Installer</span>
+                                <strong>AE Network</strong>
+                            </div>
+
+                        </div>
+
+                        <div class="progress-bar">
+                            <span style="width:72%"></span>
+                        </div>
+
+                        <button
+                            class="secondary-btn full-width"
+                            data-action="view-project"
+                        >
+                            Open Project
+                        </button>
+
+                    </article>
+
+
+                    <article class="project-card">
+
+                        <div class="project-card-top">
+
+                            <span class="status-pill completed">
+                                Completed
+                            </span>
+
+                            <span class="project-code">
+                                AE-PRJ-2026-009
+                            </span>
+
+                        </div>
+
+                        <h3>Home Backup Solar System</h3>
+
+                        <p>
+                            12kVA Felicity Hybrid Inverter · 15kWh Lithium
+                            · 12 × 750W Panels
+                        </p>
+
+                        <div class="project-details">
+
+                            <div>
+                                <span>Location</span>
+                                <strong>Abuja</strong>
+                            </div>
+
+                            <div>
+                                <span>Progress</span>
+                                <strong>100%</strong>
+                            </div>
+
+                            <div>
+                                <span>Status</span>
+                                <strong class="green-text">Online</strong>
+                            </div>
+
+                        </div>
+
+                        <div class="progress-bar">
+                            <span style="width:100%"></span>
+                        </div>
+
+                        <button
+                            class="secondary-btn full-width"
+                            data-action="view-project"
+                        >
+                            Open Project
+                        </button>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 QUOTATIONS
+            ================================================== -->
+
+            <section class="page" id="quotationsPage">
+
+                <div class="page-heading">
+
+                    <div>
+                        <span class="eyebrow">COMMERCIAL DOCUMENTS</span>
+                        <h2>Quotations</h2>
+                        <p>Review and manage your AE Network quotations.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="table-panel">
+
+                    <div class="table-responsive">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Quotation</th>
+                                    <th>Project</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+                                    <td>
+                                        <strong>AE-QUO-2026-042</strong>
+                                    </td>
+
+                                    <td>20kVA Hybrid Solar</td>
+
+                                    <td>14 Aug 2026</td>
+
+                                    <td>₦8,750,000</td>
+
+                                    <td>
+                                        <span class="status-pill pending">
+                                            Awaiting Approval
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <button
+                                            class="table-btn"
+                                            data-action="view-quotation"
+                                        >
+                                            Review
+                                        </button>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td>
+                                        <strong>AE-QUO-2026-018</strong>
+                                    </td>
+
+                                    <td>16kVA Solar System</td>
+
+                                    <td>05 Aug 2026</td>
+
+                                    <td>₦12,400,000</td>
+
+                                    <td>
+                                        <span class="status-pill accepted">
+                                            Accepted
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <button
+                                            class="table-btn"
+                                            data-action="view-quotation"
+                                        >
+                                            View
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PAYMENTS
+            ================================================== -->
+
+            <section class="page" id="paymentsPage">
+
+                <div class="page-heading">
+
+                    <div>
+                        <span class="eyebrow">FINANCIAL MANAGEMENT</span>
+                        <h2>Payments</h2>
+                        <p>Track project payments, balances and receipts.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="payment-summary-grid">
+
+                    <div class="finance-card">
+                        <span>Total Project Value</span>
+                        <strong>₦12,400,000</strong>
+                    </div>
+
+                    <div class="finance-card">
+                        <span>Total Paid</span>
+                        <strong>₦10,000,000</strong>
+                    </div>
+
+                    <div class="finance-card outstanding">
+                        <span>Outstanding Balance</span>
+                        <strong>₦2,400,000</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="table-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <span class="eyebrow">TRANSACTIONS</span>
+                            <h3>Payment History</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Reference</th>
+                                    <th>Date</th>
+                                    <th>Project</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Receipt</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+                                    <td>PAY-001842</td>
+                                    <td>12 Aug 2026</td>
+                                    <td>AE-PRJ-2026-018</td>
+                                    <td>₦4,000,000</td>
+                                    <td>
+                                        <span class="status-pill completed">
+                                            Confirmed
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="table-btn">
+                                            Download
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>PAY-001671</td>
+                                    <td>05 Aug 2026</td>
+                                    <td>AE-PRJ-2026-018</td>
+                                    <td>₦6,000,000</td>
+                                    <td>
+                                        <span class="status-pill completed">
+                                            Confirmed
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="table-btn">
+                                            Download
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 MONITORING
+            ================================================== -->
+
+            <section class="page" id="monitoringPage">
+
+                <div class="page-heading">
+
+                    <div>
+                        <span class="eyebrow">ENERGY MANAGEMENT</span>
+                        <h2>System Monitoring</h2>
+                        <p>Monitor your installed solar energy system.</p>
+                    </div>
+
+                    <span class="live-status large">
+                        <i></i>
+                        SYSTEM ONLINE
+                    </span>
+
+                </div>
+
+
+                <div class="monitoring-main">
+
+                    <div class="monitor-hero">
+
+                        <span>Solar Generation</span>
+
+                        <strong>
+                            8.42
+                            <small>kW</small>
+                        </strong>
+
+                        <p>
+                            Current PV output
+                        </p>
+
+                    </div>
+
+
+                    <div class="monitor-stat-grid">
+
+                        <div class="monitor-stat">
+                            <span>Battery SOC</span>
+                            <strong>86%</strong>
+                            <div class="mini-progress">
+                                <span style="width:86%"></span>
+                            </div>
+                        </div>
+
+                        <div class="monitor-stat">
+                            <span>Load Consumption</span>
+                            <strong>4.21 kW</strong>
+                        </div>
+
+                        <div class="monitor-stat">
+                            <span>Grid Status</span>
+                            <strong class="green-text">Available</strong>
+                        </div>
+
+                        <div class="monitor-stat">
+                            <span>Inverter</span>
+                            <strong class="green-text">Normal</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <span class="eyebrow">SYSTEM INFORMATION</span>
+                            <h3>Installed System</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="system-info-grid">
+
+                        <div>
+                            <span>Inverter</span>
+                            <strong>Deye 16kVA Hybrid</strong>
+                        </div>
+
+                        <div>
+                            <span>Battery</span>
+                            <strong>32kWh Lithium</strong>
+                        </div>
+
+                        <div>
+                            <span>Solar Array</span>
+                            <strong>12kW PV</strong>
+                        </div>
+
+                        <div>
+                            <span>Panels</span>
+                            <strong>16 × 750W</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 REQUESTS
+            ================================================== -->
+
+            <section class="page" id="requestsPage">
+
+                <div class="page-heading">
+
+                    <div>
+                        <span class="eyebrow">SERVICE REQUESTS</span>
+                        <h2>Requests</h2>
+                        <p>Submit and track requests with AE Network.</p>
+                    </div>
+
+                    <button class="primary-btn" data-action="new-request">
+                        + New Request
+                    </button>
+
+                </div>
+
+
+                <div class="request-grid">
+
+                    <button class="request-card" data-request-type="Solar Consultation">
+                        <span>☀</span>
+                        <strong>Solar Consultation</strong>
+                        <small>Discuss a new solar project.</small>
+                    </button>
+
+                    <button class="request-card" data-request-type="Maintenance">
+                        <span>⚙</span>
+                        <strong>Maintenance</strong>
+                        <small>Request system maintenance.</small>
+                    </button>
+
+                    <button class="request-card" data-request-type="System Upgrade">
+                        <span>↑</span>
+                        <strong>System Upgrade</strong>
+                        <small>Increase your system capacity.</small>
+                    </button>
+
+                    <button class="request-card" data-request-type="Site Survey">
+                        <span>⌖</span>
+                        <strong>Site Survey</strong>
+                        <small>Request a professional site survey.</small>
+                    </button>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <span class="eyebrow">REQUEST HISTORY</span>
+                            <h3>Recent Requests</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="activity-list">
+
+                        <div class="activity-item">
+
+                            <div class="activity-icon blue">
+                                #
+                            </div>
+
+                            <div>
+                                <strong>Maintenance Request</strong>
+                                <span>AE-REQ-2026-018 · In Review</span>
+                            </div>
+
+                            <span class="status-pill progress">
+                                In Review
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 DOCUMENTS
+            ================================================== -->
+
+            <section class="page" id="documentsPage">
+
+                <div class="page-heading">
+
+                    <div>
+                        <span class="eyebrow">DOCUMENT VAULT</span>
+                        <h2>Documents</h2>
+                        <p>Access your project documents securely.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="document-grid">
+
+                    <article class="document-card">
+                        <span class="document-icon">PDF</span>
+                        <div>
+                            <strong>Quotation AE-QUO-2026-042</strong>
+                            <small>14 Aug 2026 · 1.2 MB</small>
+                        </div>
+                        <button class="table-btn">View</button>
+                    </article>
+
+                    <article class="document-card">
+                        <span class="document-icon">PDF</span>
+                        <div>
+                            <strong>Site Survey Report</strong>
+                            <small>10 Aug 2026 · 2.8 MB</small>
+                        </div>
+                        <button class="table-btn">View</button>
+                    </article>
+
+                    <article class="document-card">
+                        <span class="document-icon">PDF</span>
+                        <div>
+                            <strong>Installation Report</strong>
+                            <small>13 Aug 2026 · 3.1 MB</small>
+                        </div>
+                        <button class="table-btn">View</button>
+                    </article>
+
+                    <article class="document-card">
+                        <span class="document-icon">PDF</span>
+                        <div>
+                            <strong>Payment Receipt</strong>
+                            <small>12 Aug 2026 · 840 KB</small>
+                        </div>
+                        <button class="table-btn">View</button>
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 SUPPORT
+            ================================================== -->
+
+            <section class="page" id="supportPage">
+
+                <div class="page-heading">
+
+                    <div>
+                        <span class="eyebrow">CLIENT SUPPORT</span>
+                        <h2>Support Center</h2>
+                        <p>We're here to help with your AE Network project.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="support-grid">
+
+                    <button class="support-card" data-action="support">
+                        <span>◉</span>
+                        <strong>System Issue</strong>
+                        <small>Report a problem with your solar system.</small>
+                    </button>
+
+                    <button class="support-card" data-action="support">
+                        <span>?</span>
+                        <strong>General Support</strong>
+                        <small>Ask a question about your account.</small>
+                    </button>
+
+                    <button class="support-card" data-action="support">
+                        <span>▣</span>
+                        <strong>Project Support</strong>
+                        <small>Get help with an ongoing project.</small>
+                    </button>
+
+                </div>
+
+
+                <div class="panel contact-panel">
+
+                    <span class="eyebrow">AE RENEWABLE LTD</span>
+
+                    <h3>Need immediate assistance?</h3>
+
+                    <p>
+                        Contact the AE Network support team for project,
+                        installation and system assistance.
+                    </p>
+
+                    <div class="contact-actions">
+
+                        <a href="tel:08133615132" class="primary-btn">
+                            Call Support
+                        </a>
+
+                        <a
+                            href="mailto:AERenewablesolution@gmail.com"
+                            class="secondary-btn"
+                        >
+                            Email Support
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PROFILE
+            ================================================== -->
+
+            <section class="page" id="profilePage">
+
+                <div class="page-heading">
+
+                    <div>
+                        <span class="eyebrow">ACCOUNT SETTINGS</span>
+                        <h2>My Profile</h2>
+                        <p>Manage your client account information.</p>
+                    </div>
+
+                    <button class="primary-btn" id="saveProfile">
+                        Save Changes
+                    </button>
+
+                </div>
+
+
+                <div class="profile-layout">
+
+                    <div class="panel profile-card-large">
+
+                        <div class="large-avatar">
+                            EA
+                        </div>
+
+                        <h3>Eniola Abdulrasaq</h3>
+
+                        <p>AE Network Client</p>
+
+                        <span class="status-pill completed">
+                            Verified Client
+                        </span>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="form-grid">
+
+                            <label>
+                                Full Name
+                                <input
+                                    type="text"
+                                    value="Eniola Abdulrasaq"
+                                >
+                            </label>
+
+                            <label>
+                                Email
+                                <input
+                                    type="email"
+                                    value="AERenewablesolution@gmail.com"
+                                >
+                            </label>
+
+                            <label>
+                                Phone
+                                <input
+                                    type="tel"
+                                    value="0813 361 5132"
+                                >
+                            </label>
+
+                            <label>
+                                Location
+                                <input
+                                    type="text"
+                                    value="Abuja"
+                                >
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     NOTIFICATION DRAWER
+========================================================= -->
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="notification-drawer" id="notificationDrawer">
+
+    <div class="drawer-header">
+
+        <div>
+            <span class="eyebrow">ACCOUNT</span>
+            <h3>Notifications</h3>
+        </div>
+
+        <button id="closeNotifications">×</button>
+
+    </div>
+
+
+    <div class="notification-list">
+
+        <div class="notification-item unread">
+
+            <div class="notification-dot"></div>
+
+            <div>
+                <strong>Installation Update</strong>
+                <p>
+                    Solar panel installation has been completed.
+                </p>
+                <small>2 hours ago</small>
+            </div>
+
+        </div>
+
+
+        <div class="notification-item unread">
+
+            <div class="notification-dot"></div>
+
+            <div>
+                <strong>Quotation Ready</strong>
+                <p>
+                    Quotation AE-QUO-2026-042 is awaiting your approval.
+                </p>
+                <small>5 hours ago</small>
+            </div>
+
+        </div>
+
+
+        <div class="notification-item">
+
+            <div class="notification-dot"></div>
+
+            <div>
+                <strong>Payment Confirmed</strong>
+                <p>
+                    Your ₦4,000,000 payment has been confirmed.
+                </p>
+                <small>2 days ago</small>
+            </div>
+
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- =========================================================
+     MODAL
+========================================================= -->
+
+<div class="modal-overlay" id="modalOverlay">
+
+    <div class="modal" id="modal">
+
+        <button class="modal-close" id="modalClose">
+            ×
+        </button>
+
+        <div id="modalContent"></div>
+
+    </div>
+
+</div>
+
+
+<script src="client.js"></script>
+
+</body>
+</html>
