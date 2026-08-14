@@ -1,0 +1,2121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ARDE V1.0 | Engineering Decision Engine</title>
+
+    <link rel="stylesheet" href="logicc.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <header class="hero">
+
+        <div class="hero-content">
+
+            <div class="brand">
+                <div class="brand-mark">AE</div>
+
+                <div>
+                    <span class="brand-name">AE RENEWABLE LTD</span>
+                    <span class="brand-subtitle">ARDE ENGINEERING SYSTEM</span>
+                </div>
+            </div>
+
+            <div class="version">
+                <span>ENGINE</span>
+                <strong>ARDE V1.0</strong>
+            </div>
+
+        </div>
+
+        <div class="hero-main">
+
+            <div class="eyebrow">
+                ENGINEERING DESIGN SPECIFICATION
+            </div>
+
+            <h1>
+                ARDE V1.0
+                <span>Engineering Decision Engine</span>
+            </h1>
+
+            <p>
+                ARDE V1.0 converts user system-design inputs into a
+                structured engineering system schedule by calculating,
+                filtering, validating, selecting and confirming compatible
+                solar energy system components before generating the final
+                Bill of Quantities.
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         01 — ENGINE PRINCIPLE
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+            <div class="section-number">01</div>
+
+            <div>
+                <span class="section-label">CORE PRINCIPLE</span>
+                <h2>How ARDE Makes Decisions</h2>
+            </div>
+        </div>
+
+        <div class="decision-flow">
+
+            <div class="flow-card">
+                <span>01</span>
+                <strong>Calculate</strong>
+                <small>Determine system requirement</small>
+            </div>
+
+            <div class="flow-arrow">→</div>
+
+            <div class="flow-card">
+                <span>02</span>
+                <strong>Filter</strong>
+                <small>Search approved database</small>
+            </div>
+
+            <div class="flow-arrow">→</div>
+
+            <div class="flow-card">
+                <span>03</span>
+                <strong>Validate</strong>
+                <small>Check engineering limits</small>
+            </div>
+
+            <div class="flow-arrow">→</div>
+
+            <div class="flow-card">
+                <span>04</span>
+                <strong>Select</strong>
+                <small>Choose suitable equipment</small>
+            </div>
+
+            <div class="flow-arrow">→</div>
+
+            <div class="flow-card">
+                <span>05</span>
+                <strong>Amount</strong>
+                <small>Calculate required quantities and price</small>
+            </div>
+
+            <div class="flow-arrow">→</div>
+
+            <div class="flow-card">
+                <span>06</span>
+                <strong>Confirm</strong>
+                <small>Generate final schedule</small>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         02 — LOAD & ENERGY
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="section-number">02</div>
+
+            <div>
+                <span class="section-label">SYSTEM ANALYSIS</span>
+                <h2>Load & Energy Calculation</h2>
+            </div>
+
+        </div>
+
+        <div class="spec-grid">
+
+            <article class="spec-card">
+
+                <div class="card-icon">01</div>
+
+                <div class="card-content">
+
+                    <h3>Load Power</h3>
+
+                    <p>
+                        Apply the system efficiency allowance to the
+                        calculated load.
+                    </p>
+
+                    <div class="formula">
+                        loadEff = Load Power (W) ÷ System Efficiency
+                    </div>
+
+                    <div class="tags">
+                        <span>kW</span>
+                        <span>80% Efficiency</span>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="spec-card">
+
+                <div class="card-icon">02</div>
+
+                <div class="card-content">
+
+                    <h3>Backup Time</h3>
+
+                    <p>
+                        Required battery-supported operating duration.
+                    </p>
+
+                    <div class="formula">
+                        backupTime = userInputBackupHours
+                    </div>
+
+                    <div class="tags">
+                        <span>Hours</span>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="spec-card">
+
+                <div class="card-icon">03</div>
+
+                <div class="card-content">
+
+                    <h3>Daily Energy</h3>
+
+                    <p>
+                        Determine the energy required by the load during
+                        normal daily operation.
+                    </p>
+
+                    <div class="formula">
+                        dailyEnergy = Load Power (kW) + Battery Energy (kWh)
+                    </div>
+
+                    <div class="tags">
+                        <span>kWh/day</span>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="spec-card">
+
+                <div class="card-icon">04</div>
+
+                <div class="card-content">
+
+                    <h3>Backup Energy</h3>
+
+                    <p>
+                        Energy required from the battery during the
+                        specified backup period.
+                    </p>
+
+                    <div class="formula">
+                        Backup Energy (kWh) =
+                        Load Power (kW) × Backup Time (h) ÷ DoD
+                    </div>
+
+                    <div class="tags">
+                        <span>kWh</span>
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         03 — BATTERY
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="section-number">03</div>
+
+            <div>
+                <span class="section-label">STORAGE SYSTEM</span>
+                <h2>Battery Engineering</h2>
+            </div>
+
+        </div>
+
+
+        <div class="wide-card">
+
+            <div class="wide-card-header">
+
+                <div>
+                    <span class="mini-label">BATTERY SIZING</span>
+                    <h3>Battery Requirement</h3>
+                </div>
+
+                <span class="status">ENGINEERING RULE</span>
+
+            </div>
+
+            <p>
+                The required battery energy is calculated from the backup
+                load and the allowable Depth of Discharge.
+            </p>
+
+            <div class="formula large">
+                Battery Required Energy =
+                (Backup Load × Backup Time) ÷ DoD
+            </div>
+
+        </div>
+
+
+        <div class="logic-box">
+
+            <div class="logic-title">
+                Battery Selection Logic
+            </div>
+
+            <div class="logic-flow">
+
+                <span>Filter Database</span>
+                <b>→</b>
+
+                <span>Check Inverter Compatibility</span>
+                <b>→</b>
+
+                <span>1 Battery</span>
+                <b>→</b>
+
+                <span>2 Batteries</span>
+                <b>→</b>
+
+                <span>3 Batteries</span>
+                <b>→</b>
+
+                <span>Up to 9</span>
+
+            </div>
+
+            <p>
+                ARDE selects the lowest quantity of compatible batteries
+                capable of satisfying the calculated requirement.
+            </p>
+
+        </div>
+
+
+        <div class="spec-grid three">
+
+            <article class="spec-card">
+
+                <div class="card-icon">A</div>
+
+                <div class="card-content">
+
+                    <h3>Battery Model</h3>
+
+                    <p>
+                        Selected directly from the filtered battery database.
+                    </p>
+
+                    <div class="formula">
+                        batteryModel
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="spec-card">
+
+                <div class="card-icon">B</div>
+
+                <div class="card-content">
+
+                    <h3>Battery Quantity</h3>
+
+                    <p>
+                        Minimum number of units required.
+                    </p>
+
+                    <div class="formula">
+                        1 → 9 units
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="spec-card">
+
+                <div class="card-icon">C</div>
+
+                <div class="card-content">
+
+                    <h3>Installed Capacity</h3>
+
+                    <p>
+                        Total battery capacity actually installed.
+                    </p>
+
+                    <div class="formula">
+                        BatteryCapacity × Quantity
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         04 — PV DESIGN
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="section-number">04</div>
+
+            <div>
+                <span class="section-label">SOLAR GENERATION</span>
+                <h2>PV System Design</h2>
+            </div>
+
+        </div>
+
+
+        <div class="spec-grid">
+
+            <!-- Required Energy -->.
+             <!-- article class="spec-card"> -->
+
+                <div class="card-icon">00</div>
+
+                <div class="card-content">
+
+                    <h3>Required Energy</h3>
+
+                    <p>
+                        Determine the total energy required from the solar
+                        PV system to satisfy the load and battery requirement.
+                    </p>
+
+                    <div class="formula">
+                        Required Energy =
+                        Daily Energy + Battery Required Energy
+                    </div>
+
+                    <div class="tags">
+                        <span>kWh/day</span>
+                    </div>
+
+                </div>
+
+            <article class="spec-card">
+
+                <div class="card-icon">01</div>
+
+                <div class="card-content">
+
+                    <h3>Solar PV Requirement</h3>
+
+                    <p>
+                        Determine the required solar generation capacity
+                        from the required energy and available Peak Sun Hours.
+                    </p>
+
+                    <div class="formula">
+                        PV Requirement =
+                        ((Required Energy ÷ PSH) × Panel Factor)
+                    </div>
+
+                    <div class="tags">
+                        <span>kWp</span>
+                        <span>PSH</span>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="spec-card">
+
+                <div class="card-icon">02</div>
+
+                <div class="card-content">
+
+                    <h3>Selected Panel</h3>
+
+                    <p>
+                        Filter the panel database and evaluate available
+                        panel wattages.
+                    </p>
+
+                    <div class="panel-priority">
+                        <span>750W</span>
+                        <span>640W</span>
+                        <span>600W</span>
+                    </div>
+
+                    <small>
+                        Panel selection must also pass Voc, Vmp, Isc,
+                        MPPT and string validation. <br>
+                        Filter Panel Database
+        ↓
+                        Check Panel Voltage
+                                ↓
+                        Check Panel Current
+                                ↓
+                        Check Inverter Compatibility
+                                ↓
+                        Check Voc
+                                ↓
+                        Check Vmp
+                                ↓
+                        Check MPPT
+                                ↓
+                        Select preferred valid panel
+                    </small>
+
+                </div>
+
+            </article>
+
+
+            <article class="spec-card">
+
+                <div class="card-icon">03</div>
+
+                <div class="card-content">
+
+                    <h3>Panel Quantity</h3>
+
+                    <p>
+                        Calculate the minimum quantity required to satisfy
+                        the solar PV requirement.
+                    </p>
+
+                    <div class="formula">
+                        Math.ceil(PVRequirementW / SelectedPanelWattage)
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+
+        <div class="string-design">
+
+            <div class="string-header">
+
+                <div>
+                    <span class="mini-label">PV STRING ENGINE</span>
+                    <h3>Panels Per Series / String</h3>
+                </div>
+
+            </div>
+
+            <div class="string-flow">
+
+                <div>
+                    <strong>Selected Panel</strong>
+                    <small>Voc / Vmp</small>
+                </div>
+
+                <span>↓</span>
+
+                <div>
+                    <strong>Selected Inverter</strong>
+                    <small>PV Voltage Limit</small>
+                </div>
+
+                <span>↓</span>
+
+                <div>
+                    <strong>MPPT Range</strong>
+                    <small>Operating Window</small>
+                </div>
+
+                <span>↓</span>
+
+                <div>
+                    <strong>String Calculation</strong>
+                    <small>Allowable Panels</small>
+                </div>
+
+                <span>↓</span>
+
+                <div>
+                    <strong>Validation</strong>
+                    <small>Voc + Vmp</small>
+                </div>
+
+                <span>↓</span>
+
+                <div class="final-step">
+                    <strong>Valid String</strong>
+                    <small>Approved Configuration</small>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="validation-grid">
+
+            <div class="validation-card">
+
+                <span>VOC CHECK</span>
+
+                <h3>String Voc</h3>
+
+                <div class="formula">
+                    Panel Voc × Panels per String
+                </div>
+
+                <p>
+                    Must remain below the inverter's maximum PV voltage.
+                </p>
+
+            </div>
+
+
+            <div class="validation-card">
+
+                <span>VMP CHECK</span>
+
+                <h3>String Vmp</h3>
+
+                <div class="formula">
+                    Panel Vmp × Panels per String
+                </div>
+
+                <p>
+                    Must fall within the inverter's MPPT operating range.
+                </p>
+
+            </div>
+
+
+            <div class="validation-card">
+
+                <span>STRING CHECK</span>
+
+                <h3>Remaining Panels</h3>
+
+                <div class="formula">
+                    Total Panels − Complete Strings
+                </div>
+
+                <p>
+                    Remaining panels must be identified rather than
+                    silently placed into an invalid string.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         05 — INVERTER
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="section-number">05</div>
+
+            <div>
+                <span class="section-label">POWER CONVERSION</span>
+                <h2>Inverter Selection</h2>
+            </div>
+
+        </div>
+
+
+        <div class="wide-card">
+
+            <div class="wide-card-header">
+
+                <div>
+                    <span class="mini-label">INVERTER SELECTION ENGINE</span>
+                    <h3>PV Capacity Matching</h3>
+                </div>
+
+                <span class="status">MAX × 1.5</span>
+
+            </div>
+
+            <p>
+                ARDE selects an inverter based on the calculated Solar PV
+                Requirement while checking battery compatibility and the
+                inverter's maximum PV input capacity.
+            </p>
+
+            <div class="formula large">
+                Maximum Allowed PV =
+                Inverter Maximum PV Wattage
+            </div>
+
+        </div>
+
+
+        <div class="logic-box">
+
+            <div class="logic-title">
+                Inverter Pairing Logic
+            </div>
+
+            <div class="logic-flow">
+
+                <span>1 Inverter</span>
+                <b>→</b>
+
+                <span>2 Identical</span>
+                <b>→</b>
+
+                <span>3 Identical</span>
+
+            </div>
+
+            <p>
+                ARDE uses the minimum number of compatible identical
+                inverters required to satisfy the system requirement.
+            </p>
+
+        </div>
+
+
+        <div class="spec-grid four">
+
+            <article class="metric-card">
+                <span>INVERTER MODEL</span>
+                <strong>Selected Model</strong>
+                <small>Filtered database</small>
+            </article>
+
+            <article class="metric-card">
+                <span>QUANTITY</span>
+                <strong>1 → 3</strong>
+                <small>Maximum three units</small>
+            </article>
+
+            <article class="metric-card">
+                <span>PHASE</span>
+                <strong>inverterPhase</strong>
+                <small>Single / Three Phase</small>
+            </article>
+
+            <article class="metric-card">
+                <span>PV INPUT CAPACITY</span>
+                <strong>Max PV</strong>
+                <small>Selected inverter limit</small>
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         06 — AC PROTECTION
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="section-number">06</div>
+
+            <div>
+                <span class="section-label">AC PROTECTION</span>
+                <h2>AC Electrical Protection</h2>
+            </div>
+
+        </div>
+
+
+        <div class="spec-grid">
+
+            <article class="spec-card">
+
+                <div class="card-icon">01</div>
+
+                <div class="card-content">
+
+                    <h3>AC Output Current</h3>
+
+                    <p>Single-phase calculation:</p>
+
+                    <div class="formula">
+                        AcOutputCurrent = ChooseInverterCapacity ÷ ChooseInverterAcVoltage
+                    </div>
+
+                    <p>Three-phase calculation:</p>
+
+                    <div class="formula">
+                        ChooseInverterCapacity = ChooseInverterAcVoltage ÷ (√3 × ChooseInverterAcVoltage)
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="spec-card">
+
+                <div class="card-icon">02</div>
+
+                <div class="card-content">
+
+                    <h3>AC Output Breaker</h3>
+
+                    <div class="formula">
+                        AcOutputCurrent × 1.5 Max min 1.3
+                    </div>
+
+                    <p>
+                        Select the nearest valid rating from the breaker
+                        database.
+                    </p>
+
+                </div>
+
+            </article>
+
+            <article class="spec-card">
+
+                <div class="card-icon">02</div>
+
+                <div class="card-content">
+
+                    <h3>AC Output Current </h3>
+
+                    <div class="formula">
+                        maxInverterAcChargingCurrent × inverterQuantity
+                    </div>
+
+                     <!-- Three Phase Calculation: -->
+                     <div class="Card-Content">
+                        <h3>Three Phase Calculation:</h3>
+                        <p>
+                            For three-phase systems, the breaker rating is calculated as:
+                        </p>
+                        <div class="formula">
+                            AcOutputCurrent × 1.5 Max min 1.3
+                        </div>
+                     </div>
+
+                    <p>
+                        Account for combined charging current where multiple
+                        inverters are installed.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+
+            <article class="spec-card">
+
+                <div class="card-icon">03</div>
+
+                <div class="card-content">
+
+                    <h3>AC Input Breaker </h3>
+
+                    <div class="formula">
+                        AcOutputCurrent × 1.5 Max min 1.3
+                    </div>
+                   
+
+                    <p>
+                        Select the nearest valid rating from the breaker
+                        database.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+
+            <article class="spec-card">
+
+                <div class="card-icon">04</div>
+
+                <div class="card-content">
+
+                    <h3>Changeover Switch</h3>
+
+                    <div class="formula">
+                        Rating ≥ ACInputBreaker × 1.5
+                    </div>
+
+                    <p>
+                        Must match the system phase and current requirement. <br>
+                        Select the nearest valid rating from the breaker database.
+                    </p>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         07 — DC PROTECTION
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="section-number">07</div>
+
+            <div>
+                <span class="section-label">DC PROTECTION</span>
+                <h2>PV & Battery Protection</h2>
+            </div>
+
+        </div>
+
+
+        <div class="protection-table-wrap">
+
+            <table class="protection-table">
+
+                <thead>
+                    <tr>
+                        <th>Protection</th>
+                        <th>Calculation</th>
+                        <th>Quantity Basis</th>
+                        <th>Database</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>
+                            <strong>PV Current</strong>
+                            <small>Panel short-circuit current</small>
+                        </td>
+                        <td>Panel Isc</td>
+                        <td>PV String Configuration</td>
+                        <td>Panel Database</td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <strong>PV Breaker</strong>
+                            <small>PV overcurrent protection</small>
+                        </td>
+                        <td>PV Current × 1.5 Max  1.3 Min</td>
+                        <td>PV Strings</td>
+                        <td>Breaker Database</td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <strong>DC Surge</strong>
+                            <small>PV surge protection</small>
+                        </td>
+                        <td>Based on InverterMaxVoltage and PV String Configuration</td>
+                        <td>PV String Architecture</td>
+                        <td>DC SPD Database</td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <strong>Battery Current</strong>
+                            <small>DC operating current</small>
+                        </td>
+                        <td>(SelectedInverterCapacity * 1000) ÷ DCBatteryVoltage) * Inverter Quantity</td>
+                        <td>Inverter Configuration</td>
+                        <td>Battery Database</td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <strong>Battery Breaker</strong>
+                            <small>Battery protection</small>
+                        </td>
+                        <td>Battery Current × 1.5</td>
+                        <td>Inverter Configuration</td>
+                        <td>Breaker Database</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         08 — SURGE
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="section-number">08</div>
+
+            <div>
+                <span class="section-label">SURGE PROTECTION</span>
+                <h2>AC & DC Surge Protection</h2>
+            </div>
+
+        </div>
+
+
+        <div class="spec-grid two">
+
+            <article class="surge-card">
+
+                <div class="surge-top">
+                    <span class="surge-type">DC SPD</span>
+                    <span class="surge-quantity">PV Strings</span>
+                </div>
+
+                <h3>DC Surge Protection</h3>
+
+                <p>
+                    Filter the DC surge-protection database according to
+                    the PV system voltage and inverter requirements.
+                </p>
+
+                <div class="formula">
+                    DC Surge Quantity =
+                    Validated PV String Configuration
+                </div>
+
+            </article>
+
+
+            <article class="surge-card">
+
+                <div class="surge-top">
+                    <span class="surge-type">AC SPD</span>
+                    <span class="surge-quantity">Inverter Quantity</span>
+                </div>
+
+                <h3>AC Surge Protection</h3>
+
+                <p>
+                    Select the appropriate AC surge device according to
+                    inverter phase and AC system voltage.
+                </p>
+
+                <div class="formula">
+                    AC Surge Quantity =
+                    Inverter Quantity
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         09 — EARTHING
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="section-number">09</div>
+
+            <div>
+                <span class="section-label">EARTHING SYSTEM</span>
+                <h2>Earth Cable Selection</h2>
+            </div>
+
+        </div>
+
+
+        <div class="earth-grid">
+
+            <div class="earth-card">
+                <span>&lt; 30 kVA</span>
+                <strong>4 mm²</strong>
+                <small>Flexible earth cable</small>
+            </div>
+
+            <div class="earth-card">
+                <span>30–60 kVA</span>
+                <strong>6 mm²</strong>
+                <small>Flexible earth cable</small>
+            </div>
+
+            <div class="earth-card">
+                <span>&gt; 60 kVA</span>
+                <strong>16 mm²</strong>
+                <small>Flexible earth cable</small>
+            </div>
+
+        </div>
+
+
+        <div class="notice">
+            <strong>Engineering Note:</strong>
+            Final earth conductor sizing must also be validated against
+            the applicable installation standard, protective device,
+            fault current and conductor installation method.
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         10 — MATERIAL SCHEDULE
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="section-number">10</div>
+
+            <div>
+                <span class="section-label">INSTALLATION MATERIALS</span>
+                <h2>PV Installation Schedule</h2>
+            </div>
+
+        </div>
+
+
+        <div class="material-grid">
+
+            <article class="material-card">
+
+                <span class="material-number">01</span>
+
+                <h3>Total PV Strings</h3>
+
+                <p>
+                    Number of complete PV strings created from the final
+                    panel quantity and validated panels-per-string configuration.
+                </p>
+
+                <div class="formula">
+                    Math.floor(Panel Quantity ÷ Panels per String)
+                </div>
+
+            </article>
+
+
+            <article class="material-card">
+
+                <span class="material-number">02</span>
+
+                <h3>Strings per MPPT</h3>
+
+                <p>
+                    Determine allowable strings per MPPT from the selected
+                    inverter's MPPT architecture.
+                </p>
+
+                <div class="formula">
+                    Inverter MPPT Configuration
+                </div>
+
+            </article>
+
+
+            <article class="material-card">
+
+                <span class="material-number">03</span>
+
+                <h3>PV Fuse Quantity</h3>
+
+                <p>
+                    Determine the quantity of PV fuses required from the
+                    validated PV string configuration.
+                </p>
+
+                <div class="formula">
+                    Validated PV Strings
+                </div>
+
+            </article>
+
+
+            <article class="material-card">
+
+                <span class="material-number">04</span>
+
+                <h3>PV Fuse Rating</h3>
+
+                <p>
+                    Select the appropriate fuse from the protection database.
+                </p>
+
+                <div class="formula">
+                    Panel Isc × 1.5
+                </div>
+
+            </article>
+
+
+            <article class="material-card">
+
+                <span class="material-number">05</span>
+
+                <h3>MC4 Connector Pairs</h3>
+
+                <p>
+                    Apply the project installation allowance to the final
+                    validated PV string count.
+                </p>
+
+                <div class="formula">
+                    Math.ceil(Validated PV Strings × 2.5)
+                </div>
+
+            </article>
+
+            <!-- panel Rail -->
+            <article class="materia-card">
+                
+                <span class="material-number">05</span>
+
+                <h3>Panel Rail</h3>
+
+                <p>
+                    Apply the project installation allowance to the final
+                    validated Panel Quantity.
+                </p>
+
+                <div class="formula">
+                    Math.ceil(Panel Quantity / 2.5)
+                </div>
+            </article>
+
+           <article class="material-card">
+
+    <span class="material-number">06</span>
+
+    <h3>
+        Trunk / Flexible Pipe / Bolt & Nut / CO₂ /
+        Panel Rail / Screw / Roof Sealant / Cable Tie /
+        Tape / Clip / Peg
+    </h3>
+
+    <p>
+        Project-size-based installation materials are automatically
+        selected according to the Small, Medium, or Large project
+        classification.
+    </p>
+
+    <div class="formula">
+
+        <!-- SMALL -->
+        Small →
+        32mm Flexible Pipe × 20m |
+        Flex Clips × 1 Packet |
+        Insulation Tape × 2 Rolls |
+        Screw Packets × 1 |
+        10mm Pegs × 1 Packet |
+        Cable Ties × 1 Packet |
+        Solar Sealant × 1 Tube |
+        CO₂ Fire Extinguisher × 1
+
+        <br><br>
+
+        <!-- MEDIUM -->
+        Medium →
+        50mm Flexible Pipe × 40m |
+        Flex Clips × 2 Packets |
+        Insulation Tape × 6 Rolls |
+        Screw Packets × 2 |
+        12mm Pegs × 2 Packets |
+        Cable Ties × 2 Packets |
+        Solar Sealant × 2 Tubes |
+        CO₂ Fire Extinguisher × 1
+
+        <br><br>
+
+        <!-- LARGE -->
+        Large →
+        75mm Flexible Pipe × 50m |
+        Flex Clips × 3 Packets |
+        Insulation Tape × 10 Rolls |
+        Screw Packets × 3 |
+        12mm Pegs × 3 Packets |
+        Cable Ties × 3 Packets |
+        Solar Sealant × 3 Tubes |
+        CO₂ Fire Extinguisher × 2
+
+    </div>
+
+</article>
+
+<!-- PV AND INVERTER CABLES -->
+  <article class="material-card">
+    
+    <span class="material-number">07</span>
+
+    <h3>PV & Inverter Cables</h3>
+
+    <p>
+        ARDE automatically selects the appropriate cable size and
+        quantity from the cable database according to the final
+        validated PV string configuration and inverter selection.
+    </p>
+
+    <div class="formula">
+        PV Cable Size → Validated PV String Configuration
+        <br>
+        Inverter Cable Size → Selected Inverter Configuration
+    </div>
+
+   <div class="formula">
+     <!-- Logic check by inverter capacity and PV string configuration   when it come to 2Inverter or more make the ac cable 15meter per Inverter  * inverter Quantity--> 
+     <!-- <8kva -->
+      AcCableSize = 6mm² 4Core 20meter
+      PvCableSize = 4mm² 2Core 20meter per stringg
+      <br>
+     <!-- <12Kva -->
+      AcCableSize = 10mm² 4core 20meter
+      PvCableSize = 6mm² 2Core 20meter per string
+      <br>
+     <!-- <20Kva -->
+      AcCableSize = 16mm² 4core 20meter
+      PvCableSize = 6mm² 2Core 20meter per string
+      <br>
+     <!-- <30Kva -->
+      AcCableSize = 25mm² 4core 20meter
+      PvCableSize = 10mm² 2Core 20meter per string
+        <br>
+     <!-- <50Kva -->
+      AcCableSize = 35mm² 4core 20meter
+      PvCableSize = 6mm² 2Core 20meter per string
+      <br>
+      <!-- <80Kva -->
+      AcCableSize = 50mm² 4core 20meter
+      PvCableSize = 6mm² 2Core 20meter per string
+      <br>
+      <!-- 120Kva -->
+      AcCableSize = 70mm² 4core 20meter
+      PvCableSize = 6mm² 2Core 20meter per string
+      <br>
+      <!-- 180Kva -->
+      AcCableSize = 95mm² 4core 20meter
+      PvCableSize = 16mm² 2Core 20meter per string
+      <br>
+      <!-- Else -->
+       ELSE 
+       150mm² 4core 20meter
+       6mm² 2Core 20meter per string
+
+   </div>
+
+  </article>
+  <!-- Batterry Cable and Lug -->
+    <article class="material-card">
+        
+        <span class="material-number">08</span>
+
+        <h3>Battery Cable & Lug</h3>
+
+        <p>
+            ARDE automatically selects the appropriate battery cable size
+            and quantity from the cable database according to the final
+            validated inverter selection and battery configuration.
+        </p>
+
+        <div class="formula">
+            Battery Cable Size → Selected Inverter Configuration and should started from 2 Battery upward or 2 Inverter Upward
+
+            <div class="formular">
+                FORMULAR >>>><br>
+                <!-- 35mm per battery 2m 4Lug for < 10kwhr battery -->
+                35mm per battery / 2 Meter / 4Lug
+                <br>
+                ELSE >>>>> <br>
+                <!-- 50mm per battery 4m 4Lug -->
+                50mm per battery / 4 Meter / 4Lug
+            </div>
+        </div>
+    </article>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         11 — BOQ ENGINE
+    ====================================================== -->
+
+    <section class="section boq-section">
+
+        <div class="section-heading">
+
+            <div class="section-number boq-number">11</div>
+
+            <div>
+                <span class="section-label">COMMERCIAL ENGINE</span>
+                <h2>BOQ Engine & Cost Schedule</h2>
+            </div>
+
+        </div>
+
+
+        <!-- BOQ PRINCIPLE -->
+
+        <div class="boq-hero">
+
+            <div class="boq-hero-content">
+
+                <span class="mini-label">
+                    BILL OF QUANTITIES ENGINE
+                </span>
+
+                <h3>
+                    Engineering Result → Commercial Schedule
+                </h3>
+
+                <p>
+                    ARDE must never generate a BOQ directly from raw user
+                    input. Every quantity appearing in the BOQ must originate
+                    from the final validated engineering configuration.
+                </p>
+
+                <div class="boq-core-flow">
+
+                    <span>ENGINEERING RESULT</span>
+                    <b>→</b>
+                    <span>BOQ BUILD</span>
+                    <b>→</b>
+                    <span>COST CALCULATION</span>
+                    <b>→</b>
+                    <span>VALIDATION</span>
+                    <b>→</b>
+                    <span>CONFIRMED BOQ</span>
+
+                </div>
+
+            </div>
+
+            <div class="boq-status-card">
+
+                <span>BOQ STATUS</span>
+
+                <strong>VALIDATED</strong>
+
+                <small>
+                    Only validated engineering results may produce
+                    the final commercial schedule.
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- BOQ LOGIC -->
+
+        <div class="logic-box boq-logic-box">
+
+            <div class="logic-title">
+                BOQ Generation Logic
+            </div>
+
+            <div class="boq-rule-list">
+
+                <div class="boq-rule">
+                    <span>01</span>
+                    <strong>Engineering Status</strong>
+                    <code>engineeringStatus === "VALID"</code>
+                </div>
+
+                <div class="boq-rule">
+                    <span>02</span>
+                    <strong>Read Final Equipment</strong>
+                    <code>Panel + Inverter + Battery</code>
+                </div>
+
+                <div class="boq-rule">
+                    <span>03</span>
+                    <strong>Read Validated PV Configuration</strong>
+                    <code>Strings + MPPT + Remaining Panels</code>
+                </div>
+
+                <div class="boq-rule">
+                    <span>04</span>
+                    <strong>Read Protection Configuration</strong>
+                    <code>AC + DC + SPD + Battery Protection</code>
+                </div>
+
+                <div class="boq-rule">
+                    <span>05</span>
+                    <strong>Build Material Schedule</strong>
+                    <code>Cables + MC4 + Pipe + Accessories</code>
+                </div>
+
+                <div class="boq-rule">
+                    <span>06</span>
+                    <strong>Calculate Cost</strong>
+                    <code>Quantity × Unit Price</code>
+                </div>
+
+                <div class="boq-rule">
+                    <span>07</span>
+                    <strong>Validate BOQ</strong>
+                    <code>Prices + Quantities + Totals</code>
+                </div>
+
+            </div>
+
+            <div class="boq-block-rule">
+
+                <strong>BLOCK RULE</strong>
+
+                <span>
+                    If engineering validation fails, ARDE must not generate
+                    a confirmed BOQ.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRIMARY EQUIPMENT -->
+
+        <div class="boq-subsection">
+
+            <div class="boq-subsection-heading">
+
+                <div>
+                    <span>01</span>
+                    <h3>Primary Equipment</h3>
+                </div>
+
+                <small>
+                    Final selected engineering components
+                </small>
+
+            </div>
+
+
+            <div class="boq-table-wrap">
+
+                <table class="boq-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>No.</th>
+                            <th>Item Description</th>
+                            <th>Unit</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Total</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>01</td>
+                            <td>
+                                <strong>Selected Panel</strong>
+                                <small>Final validated panel model</small>
+                            </td>
+                            <td>pcs</td>
+                            <td>panelQuantity</td>
+                            <td>panelUnitPrice</td>
+                            <td>panelQuantity × panelUnitPrice</td>
+                        </tr>
+
+                        <tr>
+                            <td>02</td>
+                            <td>
+                                <strong>Selected Inverter</strong>
+                                <small>Final validated inverter model</small>
+                            </td>
+                            <td>pcs</td>
+                            <td>inverterQuantity</td>
+                            <td>inverterUnitPrice</td>
+                            <td>inverterQuantity × inverterUnitPrice</td>
+                        </tr>
+
+                        <tr>
+                            <td>03</td>
+                            <td>
+                                <strong>Selected Battery</strong>
+                                <small>Final compatible battery model</small>
+                            </td>
+                            <td>pcs</td>
+                            <td>batteryQuantity</td>
+                            <td>batteryUnitPrice</td>
+                            <td>batteryQuantity × batteryUnitPrice</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- PROTECTION -->
+
+        <div class="boq-subsection">
+
+            <div class="boq-subsection-heading">
+
+                <div>
+                    <span>02</span>
+                    <h3>Protection Equipment</h3>
+                </div>
+
+                <small>
+                    Added only when required by engineering logic
+                </small>
+
+            </div>
+
+
+            <div class="boq-category-grid">
+
+                <article class="boq-category-card">
+
+                    <span>PV PROTECTION</span>
+
+                    <h4>DC Protection</h4>
+
+                    <ul>
+                        <li>PV Fuse</li>
+                        <li>PV Breaker</li>
+                        <li>DC SPD</li>
+                    </ul>
+
+                    <div class="formula">
+                        Quantity = Validated PV Configuration
+                    </div>
+
+                </article>
+
+
+                <article class="boq-category-card">
+
+                    <span>AC PROTECTION</span>
+
+                    <h4>AC Protection</h4>
+
+                    <ul>
+                        <li>AC Output Breaker</li>
+                        <li>Changeover Switch</li>
+                        <li>AC SPD</li>
+                    </ul>
+
+                    <div class="formula">
+                        Quantity = Final Inverter Configuration
+                    </div>
+
+                </article>
+
+
+                <article class="boq-category-card">
+
+                    <span>BATTERY PROTECTION</span>
+
+                    <h4>Battery Protection</h4>
+
+                    <ul>
+                        <li>Battery Breaker</li>
+                        <li>Battery Isolation</li>
+                    </ul>
+
+                    <div class="formula">
+                        Quantity = Battery Configuration
+                    </div>
+
+                </article>
+
+            </div>
+
+        </div>
+
+
+        <!-- INSTALLATION MATERIAL -->
+
+        <div class="boq-subsection">
+
+            <div class="boq-subsection-heading">
+
+                <div>
+                    <span>03</span>
+                    <h3>Installation Materials</h3>
+                </div>
+
+                <small>
+                    Quantities generated from validated system architecture
+                </small>
+
+            </div>
+
+
+            <div class="boq-material-rules">
+
+                <div class="boq-material-rule">
+                    <strong>PV Strings</strong>
+                    <code>
+                        Math.floor(panelQuantity / panelsPerString)
+                    </code>
+                </div>
+
+                <div class="boq-material-rule">
+                    <strong>Remaining Panels</strong>
+                    <code>
+                        panelQuantity -
+                        (completeStrings × panelsPerString)
+                    </code>
+                </div>
+
+                <div class="boq-material-rule">
+                    <strong>MC4 Pairs</strong>
+                    <code>
+                        Math.ceil(validatedPVStrings × 2.5)
+                    </code>
+                </div>
+
+                <div class="boq-material-rule">
+                    <strong>PV Fuse</strong>
+                    <code>
+                        Panel Isc × 1.5
+                    </code>
+                </div>
+
+            </div>
+
+
+            <div class="pipe-rule">
+
+                <div class="pipe-rule-title">
+                    Project Installation Size
+                </div>
+
+                <div class="pipe-grid">
+
+                    <div>
+                        <span>SMALL</span>
+                        <strong>32 mm</strong>
+                        <small>20 m</small>
+                    </div>
+
+                    <div>
+                        <span>MEDIUM</span>
+                        <strong>50 mm</strong>
+                        <small>40 m</small>
+                    </div>
+
+                    <div>
+                        <span>LARGE</span>
+                        <strong>75 mm</strong>
+                        <small>50 m</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- INSTALLATION COST -->
+
+        <div class="boq-subsection">
+
+            <div class="boq-subsection-heading">
+
+                <div>
+                    <span>04</span>
+                    <h3>Engineering & Installation Cost</h3>
+                </div>
+
+                <small>
+                    Determined from final system capacity
+                </small>
+
+            </div>
+
+
+            <div class="installation-cost-grid">
+
+                <div>
+                    <span>&lt; 8 kVA</span>
+                    <strong>₦200,000</strong>
+                </div>
+
+                <div>
+                    <span>8 – &lt;16 kVA</span>
+                    <strong>₦300,000</strong>
+                </div>
+
+                <div>
+                    <span>16 – &lt;30 kVA</span>
+                    <strong>₦450,000</strong>
+                </div>
+
+                <div>
+                    <span>30 – &lt;60 kVA</span>
+                    <strong>₦600,000</strong>
+                </div>
+
+                <div>
+                    <span>60 – &lt;80 kVA</span>
+                    <strong>₦1,000,000</strong>
+                </div>
+
+                <div>
+                    <span>80 – &lt;120 kVA</span>
+                    <strong>₦1,300,000</strong>
+                </div>
+
+                <div>
+                    <span>≥ 120 kVA</span>
+                    <strong>₦2,000,000</strong>
+                </div>
+
+            </div>
+
+
+            <div class="formula large">
+                Installation Cost =
+                System Capacity Pricing Rule
+            </div>
+
+        </div>
+
+
+        <!-- COST RULES -->
+
+        <div class="boq-cost-engine">
+
+            <div class="cost-engine-heading">
+
+                <span>COST ENGINE</span>
+
+                <h3>
+                    Every BOQ line must be mathematically traceable.
+                </h3>
+
+            </div>
+
+
+            <div class="cost-rule-grid">
+
+                <div>
+                    <span>LINE TOTAL</span>
+                    <strong>Quantity × Unit Price</strong>
+                </div>
+
+                <div>
+                    <span>SUBTOTAL</span>
+                    <strong>Σ All Valid Line Totals</strong>
+                </div>
+
+                <div>
+                    <span>ADDITIONAL COST</span>
+                    <strong>Approved Additional Charges</strong>
+                </div>
+
+                <div>
+                    <span>GRAND TOTAL</span>
+                    <strong>Subtotal + Additional Cost</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- BOQ VALIDATION -->
+
+        <div class="boq-validation">
+
+            <div class="boq-validation-heading">
+
+                <span>FINAL VALIDATION</span>
+
+                <h3>BOQ Confirmation Gate</h3>
+
+            </div>
+
+
+            <div class="validation-check-grid">
+
+                <div>✓ Panel selected</div>
+                <div>✓ Panel quantity valid</div>
+                <div>✓ Inverter selected</div>
+                <div>✓ Inverter quantity valid</div>
+                <div>✓ Battery selected</div>
+                <div>✓ Battery quantity valid</div>
+                <div>✓ Compatibility valid</div>
+                <div>✓ PV capacity valid</div>
+                <div>✓ String configuration valid</div>
+                <div>✓ Voc valid</div>
+                <div>✓ Vmp valid</div>
+                <div>✓ MPPT valid</div>
+                <div>✓ Protection valid</div>
+                <div>✓ Material quantities valid</div>
+                <div>✓ Unit prices available</div>
+                <div>✓ No negative quantities</div>
+                <div>✓ Line totals calculated</div>
+                <div>✓ Subtotal calculated</div>
+                <div>✓ Grand total calculated</div>
+
+            </div>
+
+
+            <div class="boq-final-rule">
+
+                <strong>FINAL BOQ RULE</strong>
+
+                <p>
+                    If any critical engineering or commercial validation
+                    fails, BOQ status must be <b>BLOCKED</b>.
+                    The BOQ becomes <b>CONFIRMED</b> only after all
+                    validation requirements pass.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         12 — FINAL ENGINE WORKFLOW
+    ====================================================== -->
+
+    <section class="section workflow-section">
+
+        <div class="section-heading">
+
+            <div class="section-number">12</div>
+
+            <div>
+                <span class="section-label">FINAL ENGINE WORKFLOW</span>
+                <h2>From User Input to Engineering Schedule</h2>
+            </div>
+
+        </div>
+
+
+        <div class="workflow-main">
+
+            <div class="workflow-step">
+                <span>01</span>
+                <strong>User Input</strong>
+            </div>
+
+            <i>→</i>
+
+            <div class="workflow-step">
+                <span>02</span>
+                <strong>Load Analysis</strong>
+            </div>
+
+            <i>→</i>
+
+            <div class="workflow-step">
+                <span>03</span>
+                <strong>Energy Requirement</strong>
+            </div>
+
+            <i>→</i>
+
+            <div class="workflow-step">
+                <span>04</span>
+                <strong>Battery Design</strong>
+            </div>
+
+            <i>→</i>
+
+            <div class="workflow-step">
+                <span>05</span>
+                <strong>Inverter Design</strong>
+            </div>
+
+            <i>→</i>
+
+            <div class="workflow-step">
+                <span>06</span>
+                <strong>PV Design</strong>
+            </div>
+
+            <i>→</i>
+
+            <div class="workflow-step">
+                <span>07</span>
+                <strong>String Validation</strong>
+            </div>
+
+            <i>→</i>
+
+            <div class="workflow-step">
+                <span>08</span>
+                <strong>Protection</strong>
+            </div>
+
+            <i>→</i>
+
+            <div class="workflow-step">
+                <span>09</span>
+                <strong>Material Schedule</strong>
+            </div>
+
+            <i>→</i>
+
+            <div class="workflow-step">
+                <span>10</span>
+                <strong>Recalculate</strong>
+            </div>
+
+            <i>→</i>
+
+            <div class="workflow-step">
+                <span>11</span>
+                <strong>BOQ Validation</strong>
+            </div>
+
+            <i>→</i>
+
+            <div class="workflow-step final">
+                <span>12</span>
+                <strong>CONFIRMED BOQ</strong>
+            </div>
+
+        </div>
+
+
+        <div class="core-rule">
+
+            <strong>ARDE CORE RULE</strong>
+
+            <span>CALCULATE</span>
+            <b>→</b>
+
+            <span>FILTER</span>
+            <b>→</b>
+
+            <span>VALIDATE</span>
+            <b>→</b>
+
+            <span>SELECT</span>
+            <b>→</b>
+
+            <span>RECALCULATE</span>
+            <b>→</b>
+
+            <span>CONFIRM</span>
+            <b>→</b>
+
+            <span>AMOUNT</span>
+            <b>→</b>
+
+            <span>GENERATE BOQ</span>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <div>
+            <strong>AE RENEWABLE LTD</strong>
+            <span>ARDE V1.0 Engineering Decision Engine</span>
+        </div>
+
+        <div>
+            POWERING YOUR FUTURE WITH SUN
+        </div>
+
+    </footer>
+
+</div>
+
+</body>
+</html>

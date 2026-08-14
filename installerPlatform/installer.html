@@ -1,0 +1,2845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Installer Portal | AE Network</title>
+
+    <!-- =========================================================
+         GOOGLE FONTS
+    ========================================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- =========================================================
+         LUCIDE ICONS
+    ========================================================== -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- =========================================================
+         INSTALLER PORTAL CSS
+    ========================================================== -->
+    <link rel="stylesheet" href="installer.css">
+</head>
+
+<body>
+
+<!-- =============================================================
+     APP SHELL
+============================================================== -->
+<div class="app-shell" id="installerApp">
+
+    <!-- =========================================================
+         SIDEBAR
+    ========================================================== -->
+    <aside class="sidebar" id="sidebar">
+
+        <!-- Brand -->
+        <div class="sidebar-brand">
+
+            <a href="#" class="brand-logo">
+                <span class="brand-dot"></span>
+
+                <span class="brand-name">
+                    AE <strong>Network</strong>
+                </span>
+            </a>
+
+            <div class="portal-label">
+                INSTALLER PORTAL
+            </div>
+
+        </div>
+
+
+        <!-- Installer Mini Profile -->
+        <div class="sidebar-profile">
+
+            <div class="profile-avatar">
+                <span>AE</span>
+
+                <span class="online-indicator"></span>
+            </div>
+
+            <div class="profile-info">
+
+                <strong id="sidebarInstallerName">
+                    Abdulrasaq Engineering
+                </strong>
+
+                <span id="sidebarInstallerId">
+                    AER-INS-0024
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Navigation -->
+        <nav class="sidebar-nav">
+
+            <div class="nav-section-title">
+                WORKSPACE
+            </div>
+
+            <button
+                class="nav-item active"
+                data-page="dashboard"
+                type="button"
+            >
+                <i data-lucide="layout-dashboard"></i>
+
+                <span>Dashboard</span>
+            </button>
+
+
+            <button
+                class="nav-item"
+                data-page="available-jobs"
+                type="button"
+            >
+                <i data-lucide="briefcase-business"></i>
+
+                <span>Available Jobs</span>
+
+                <span class="nav-badge" id="availableJobsBadge">
+                    3
+                </span>
+            </button>
+
+
+            <button
+                class="nav-item"
+                data-page="projects"
+                type="button"
+            >
+                <i data-lucide="folder-kanban"></i>
+
+                <span>My Projects</span>
+
+                <span class="nav-badge neutral" id="projectBadge">
+                    1
+                </span>
+            </button>
+
+
+            <div class="nav-section-title">
+                OPERATIONS
+            </div>
+
+
+            <button
+                class="nav-item"
+                data-page="progress"
+                type="button"
+            >
+                <i data-lucide="activity"></i>
+
+                <span>Project Progress</span>
+            </button>
+
+
+            <button
+                class="nav-item"
+                data-page="documents"
+                type="button"
+            >
+                <i data-lucide="file-text"></i>
+
+                <span>Technical Documents</span>
+            </button>
+
+
+            <button
+                class="nav-item"
+                data-page="evidence"
+                type="button"
+            >
+                <i data-lucide="camera"></i>
+
+                <span>Evidence Upload</span>
+            </button>
+
+
+            <div class="nav-section-title">
+                FINANCE
+            </div>
+
+
+            <button
+                class="nav-item"
+                data-page="payments"
+                type="button"
+            >
+                <i data-lucide="wallet"></i>
+
+                <span>Payments</span>
+
+                <span class="nav-badge warning" id="paymentBadge">
+                    2
+                </span>
+            </button>
+
+
+            <button
+                class="nav-item"
+                data-page="performance"
+                type="button"
+            >
+                <i data-lucide="chart-no-axes-combined"></i>
+
+                <span>Performance</span>
+            </button>
+
+
+            <div class="nav-section-title">
+                ACCOUNT
+            </div>
+
+
+            <button
+                class="nav-item"
+                data-page="availability"
+                type="button"
+            >
+                <i data-lucide="calendar-check-2"></i>
+
+                <span>Availability</span>
+            </button>
+
+
+            <button
+                class="nav-item"
+                data-page="profile"
+                type="button"
+            >
+                <i data-lucide="user-round"></i>
+
+                <span>My Profile</span>
+            </button>
+
+        </nav>
+
+
+        <!-- Sidebar Bottom -->
+        <div class="sidebar-bottom">
+
+            <div class="support-card">
+
+                <div class="support-icon">
+                    <i data-lucide="headphones"></i>
+                </div>
+
+                <div>
+                    <strong>Field Support</strong>
+
+                    <span>Need technical help?</span>
+                </div>
+
+                <button type="button" id="supportBtn">
+                    <i data-lucide="arrow-up-right"></i>
+                </button>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="logout-btn"
+                id="logoutBtn"
+            >
+                <i data-lucide="log-out"></i>
+
+                <span>Sign Out</span>
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================================================
+         MAIN AREA
+    ========================================================== -->
+    <main class="main-area">
+
+        <!-- =====================================================
+             TOP HEADER
+        ====================================================== -->
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    type="button"
+                    class="mobile-menu-btn"
+                    id="mobileMenuBtn"
+                    aria-label="Open menu"
+                >
+                    <i data-lucide="menu"></i>
+                </button>
+
+
+                <div class="page-heading">
+
+                    <span class="page-kicker">
+                        AE NETWORK OPERATIONS
+                    </span>
+
+                    <h1 id="pageTitle">
+                        Installer Dashboard
+                    </h1>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <!-- Availability -->
+                <div class="availability-control">
+
+                    <span class="availability-label">
+                        Availability
+                    </span>
+
+                    <button
+                        type="button"
+                        class="availability-pill available"
+                        id="availabilityToggle"
+                        data-status="available"
+                    >
+                        <span class="status-dot"></span>
+
+                        <span id="availabilityText">
+                            Available
+                        </span>
+
+                        <i data-lucide="chevron-down"></i>
+                    </button>
+
+                </div>
+
+
+                <!-- Notification -->
+                <button
+                    type="button"
+                    class="icon-button notification-button"
+                    id="notificationBtn"
+                    aria-label="Notifications"
+                >
+                    <i data-lucide="bell"></i>
+
+                    <span class="notification-count">
+                        4
+                    </span>
+                </button>
+
+
+                <!-- User -->
+                <button
+                    type="button"
+                    class="topbar-user"
+                    id="profileMenuBtn"
+                >
+
+                    <div class="topbar-avatar">
+                        AE
+                    </div>
+
+                    <div class="topbar-user-info">
+
+                        <strong>
+                            Abdulrasaq
+                        </strong>
+
+                        <span>
+                            Installer
+                        </span>
+
+                    </div>
+
+                    <i data-lucide="chevron-down"></i>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =====================================================
+             PAGE CONTENT
+        ====================================================== -->
+        <div class="content-area">
+
+
+            <!-- =================================================
+                 DASHBOARD PAGE
+            ================================================== -->
+            <section
+                class="portal-page active"
+                id="page-dashboard"
+                data-page-content="dashboard"
+            >
+
+                <!-- Welcome -->
+                <div class="welcome-banner">
+
+                    <div class="welcome-content">
+
+                        <span class="eyebrow">
+                            INSTALLER OPERATIONS
+                        </span>
+
+                        <h2>
+                            Good afternoon,
+                            <span id="welcomeInstallerName">
+                                Abdulrasaq
+                            </span>
+                        </h2>
+
+                        <p>
+                            Manage your assigned projects, track installation
+                            progress, submit field evidence, and monitor your
+                            payments from one place.
+                        </p>
+
+                    </div>
+
+
+                    <div class="welcome-status">
+
+                        <div class="verified-chip">
+                            <i data-lucide="badge-check"></i>
+
+                            Verified Installer
+                        </div>
+
+                        <span>
+                            Installer ID:
+                            <strong>AER-INS-0024</strong>
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     STAT CARDS
+                ================================================== -->
+                <div class="stats-grid">
+
+                    <article class="stat-card blue">
+
+                        <div class="stat-card-top">
+
+                            <div class="stat-icon">
+                                <i data-lucide="folder-kanban"></i>
+                            </div>
+
+                            <span class="stat-label">
+                                ACTIVE PROJECTS
+                            </span>
+
+                        </div>
+
+                        <div class="stat-value" id="activeProjectsCount">
+                            01
+                        </div>
+
+                        <div class="stat-footer">
+
+                            <span>
+                                Current workload
+                            </span>
+
+                            <span class="stat-trend neutral">
+                                1 / 2
+                            </span>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="stat-card green">
+
+                        <div class="stat-card-top">
+
+                            <div class="stat-icon">
+                                <i data-lucide="circle-check"></i>
+                            </div>
+
+                            <span class="stat-label">
+                                COMPLETED
+                            </span>
+
+                        </div>
+
+                        <div class="stat-value" id="completedProjectsCount">
+                            24
+                        </div>
+
+                        <div class="stat-footer">
+
+                            <span>
+                                Lifetime projects
+                            </span>
+
+                            <span class="stat-trend positive">
+                                +3 this month
+                            </span>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="stat-card yellow">
+
+                        <div class="stat-card-top">
+
+                            <div class="stat-icon">
+                                <i data-lucide="wallet"></i>
+                            </div>
+
+                            <span class="stat-label">
+                                PENDING PAYMENT
+                            </span>
+
+                        </div>
+
+                        <div class="stat-value">
+                            ₦420K
+                        </div>
+
+                        <div class="stat-footer">
+
+                            <span>
+                                2 payment requests
+                            </span>
+
+                            <span class="stat-trend warning">
+                                Pending
+                            </span>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="stat-card dark">
+
+                        <div class="stat-card-top">
+
+                            <div class="stat-icon">
+                                <i data-lucide="star"></i>
+                            </div>
+
+                            <span class="stat-label">
+                                PERFORMANCE
+                            </span>
+
+                        </div>
+
+                        <div class="stat-value">
+                            94
+                            <small>/100</small>
+                        </div>
+
+                        <div class="stat-footer">
+
+                            <span>
+                                Excellent
+                            </span>
+
+                            <span class="stat-trend positive">
+                                ↑ 4.2%
+                            </span>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- =================================================
+                     MAIN DASHBOARD GRID
+                ================================================== -->
+                <div class="dashboard-grid">
+
+
+                    <!-- CURRENT PROJECT -->
+                    <article class="dashboard-card current-project-card">
+
+                        <div class="card-header">
+
+                            <div>
+
+                                <span class="card-kicker">
+                                    CURRENT PROJECT
+                                </span>
+
+                                <h3>
+                                    Active Installation
+                                </h3>
+
+                            </div>
+
+                            <button
+                                type="button"
+                                class="card-menu-btn"
+                            >
+                                <i data-lucide="more-horizontal"></i>
+                            </button>
+
+                        </div>
+
+
+                        <div class="project-main">
+
+                            <div class="project-title-row">
+
+                                <div class="project-type-icon solar">
+                                    <i data-lucide="sun"></i>
+                                </div>
+
+                                <div>
+
+                                    <h4>
+                                        20kW Hybrid Solar System
+                                    </h4>
+
+                                    <p>
+                                        Project ID:
+                                        <strong>AE-2026-0048</strong>
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="project-location">
+
+                                <i data-lucide="map-pin"></i>
+
+                                <span>
+                                    Guzape, AMAC, Abuja
+                                </span>
+
+                                <span class="location-status">
+                                    4.2 km
+                                </span>
+
+                            </div>
+
+
+                            <!-- Progress -->
+                            <div class="project-progress-block">
+
+                                <div class="progress-heading">
+
+                                    <span>
+                                        Installation Progress
+                                    </span>
+
+                                    <strong id="dashboardProgressValue">
+                                        78%
+                                    </strong>
+
+                                </div>
+
+                                <div class="progress-track">
+
+                                    <div
+                                        class="progress-fill"
+                                        id="dashboardProgressBar"
+                                        style="width:78%;"
+                                    ></div>
+
+                                </div>
+
+                                <div class="progress-meta">
+
+                                    <span>
+                                        7 of 9 milestones completed
+                                    </span>
+
+                                    <span>
+                                        Installation
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Milestone -->
+                            <div class="next-milestone">
+
+                                <div class="milestone-icon">
+                                    <i data-lucide="battery-charging"></i>
+                                </div>
+
+                                <div>
+
+                                    <span>
+                                        NEXT MILESTONE
+                                    </span>
+
+                                    <strong>
+                                        Battery Installation
+                                    </strong>
+
+                                </div>
+
+                                <button
+                                    type="button"
+                                    class="small-action"
+                                    data-page-target="progress"
+                                >
+                                    Open
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="card-footer-actions">
+
+                            <button
+                                type="button"
+                                class="btn btn-primary"
+                                data-page-target="progress"
+                            >
+                                <i data-lucide="arrow-right"></i>
+                                Open Project
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn btn-light"
+                                data-page-target="documents"
+                            >
+                                <i data-lucide="file-text"></i>
+                                Documents
+                            </button>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- QUICK ACTIONS -->
+                    <article class="dashboard-card quick-actions-card">
+
+                        <div class="card-header">
+
+                            <div>
+
+                                <span class="card-kicker">
+                                    QUICK ACTIONS
+                                </span>
+
+                                <h3>
+                                    Operations
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="quick-action-list">
+
+                            <button
+                                type="button"
+                                class="quick-action"
+                                data-page-target="available-jobs"
+                            >
+
+                                <span class="quick-action-icon blue">
+                                    <i data-lucide="search"></i>
+                                </span>
+
+                                <span class="quick-action-text">
+
+                                    <strong>
+                                        Find Available Jobs
+                                    </strong>
+
+                                    <small>
+                                        3 projects near your service area
+                                    </small>
+
+                                </span>
+
+                                <i data-lucide="chevron-right"></i>
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="quick-action"
+                                data-page-target="evidence"
+                            >
+
+                                <span class="quick-action-icon green">
+                                    <i data-lucide="camera"></i>
+                                </span>
+
+                                <span class="quick-action-text">
+
+                                    <strong>
+                                        Upload Evidence
+                                    </strong>
+
+                                    <small>
+                                        2 milestones awaiting evidence
+                                    </small>
+
+                                </span>
+
+                                <i data-lucide="chevron-right"></i>
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="quick-action"
+                                data-page-target="payments"
+                            >
+
+                                <span class="quick-action-icon yellow">
+                                    <i data-lucide="wallet"></i>
+                                </span>
+
+                                <span class="quick-action-text">
+
+                                    <strong>
+                                        Check Payments
+                                    </strong>
+
+                                    <small>
+                                        ₦420,000 awaiting settlement
+                                    </small>
+
+                                </span>
+
+                                <i data-lucide="chevron-right"></i>
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="quick-action"
+                                data-page-target="availability"
+                            >
+
+                                <span class="quick-action-icon dark">
+                                    <i data-lucide="calendar-clock"></i>
+                                </span>
+
+                                <span class="quick-action-text">
+
+                                    <strong>
+                                        Update Availability
+                                    </strong>
+
+                                    <small>
+                                        Control your project workload
+                                    </small>
+
+                                </span>
+
+                                <i data-lucide="chevron-right"></i>
+
+                            </button>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- =================================================
+                     BOTTOM DASHBOARD
+                ================================================== -->
+                <div class="dashboard-grid bottom-grid">
+
+
+                    <!-- PROJECT TIMELINE -->
+                    <article class="dashboard-card">
+
+                        <div class="card-header">
+
+                            <div>
+
+                                <span class="card-kicker">
+                                    PROJECT ACTIVITY
+                                </span>
+
+                                <h3>
+                                    Recent Timeline
+                                </h3>
+
+                            </div>
+
+                            <button
+                                type="button"
+                                class="text-button"
+                                data-page-target="progress"
+                            >
+                                View Project
+                                <i data-lucide="arrow-up-right"></i>
+                            </button>
+
+                        </div>
+
+
+                        <div class="timeline">
+
+                            <div class="timeline-item complete">
+
+                                <div class="timeline-icon">
+                                    <i data-lucide="check"></i>
+                                </div>
+
+                                <div class="timeline-content">
+
+                                    <strong>
+                                        Solar panels installed
+                                    </strong>
+
+                                    <span>
+                                        14 Aug 2026 • 10:42 AM
+                                    </span>
+
+                                </div>
+
+                                <span class="timeline-status">
+                                    Complete
+                                </span>
+
+                            </div>
+
+
+                            <div class="timeline-item complete">
+
+                                <div class="timeline-icon">
+                                    <i data-lucide="check"></i>
+                                </div>
+
+                                <div class="timeline-content">
+
+                                    <strong>
+                                        DC wiring completed
+                                    </strong>
+
+                                    <span>
+                                        13 Aug 2026 • 04:18 PM
+                                    </span>
+
+                                </div>
+
+                                <span class="timeline-status">
+                                    Complete
+                                </span>
+
+                            </div>
+
+
+                            <div class="timeline-item active">
+
+                                <div class="timeline-icon">
+                                    <i data-lucide="loader-circle"></i>
+                                </div>
+
+                                <div class="timeline-content">
+
+                                    <strong>
+                                        Inverter installation
+                                    </strong>
+
+                                    <span>
+                                        In progress
+                                    </span>
+
+                                </div>
+
+                                <span class="timeline-status current">
+                                    Active
+                                </span>
+
+                            </div>
+
+
+                            <div class="timeline-item upcoming">
+
+                                <div class="timeline-icon">
+                                    <i data-lucide="circle"></i>
+                                </div>
+
+                                <div class="timeline-content">
+
+                                    <strong>
+                                        Battery installation
+                                    </strong>
+
+                                    <span>
+                                        Upcoming milestone
+                                    </span>
+
+                                </div>
+
+                                <span class="timeline-status">
+                                    Pending
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- PERFORMANCE -->
+                    <article class="dashboard-card performance-card">
+
+                        <div class="card-header">
+
+                            <div>
+
+                                <span class="card-kicker">
+                                    PERFORMANCE
+                                </span>
+
+                                <h3>
+                                    Your Score
+                                </h3>
+
+                            </div>
+
+                            <span class="score-badge">
+                                Excellent
+                            </span>
+
+                        </div>
+
+
+                        <div class="performance-score">
+
+                            <div class="score-circle">
+
+                                <div>
+
+                                    <strong>
+                                        94
+                                    </strong>
+
+                                    <span>
+                                        /100
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="performance-metrics">
+
+                            <div class="metric-row">
+
+                                <span>
+                                    On-time completion
+                                </span>
+
+                                <strong>
+                                    96%
+                                </strong>
+
+                            </div>
+
+                            <div class="metric-bar">
+                                <span style="width:96%"></span>
+                            </div>
+
+
+                            <div class="metric-row">
+
+                                <span>
+                                    Inspection pass rate
+                                </span>
+
+                                <strong>
+                                    98%
+                                </strong>
+
+                            </div>
+
+                            <div class="metric-bar">
+                                <span style="width:98%"></span>
+                            </div>
+
+
+                            <div class="metric-row">
+
+                                <span>
+                                    Client rating
+                                </span>
+
+                                <strong>
+                                    4.8 / 5
+                                </strong>
+
+                            </div>
+
+                            <div class="metric-bar">
+                                <span style="width:96%"></span>
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- =================================================
+                     AVAILABLE JOB PREVIEW
+                ================================================== -->
+                <article class="dashboard-card available-preview">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="card-kicker">
+                                NEARBY OPPORTUNITIES
+                            </span>
+
+                            <h3>
+                                Available Jobs
+                            </h3>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="text-button"
+                            data-page-target="available-jobs"
+                        >
+                            View All
+                            <i data-lucide="arrow-right"></i>
+                        </button>
+
+                    </div>
+
+
+                    <div class="job-preview-grid">
+
+                        <div class="job-preview-card">
+
+                            <div class="job-top">
+
+                                <span class="job-type solar">
+                                    Solar
+                                </span>
+
+                                <span class="job-distance">
+                                    6.8 km
+                                </span>
+
+                            </div>
+
+                            <h4>
+                                12kVA Hybrid Solar System
+                            </h4>
+
+                            <p>
+                                Maitama, Abuja
+                            </p>
+
+                            <div class="job-bottom">
+
+                                <span>
+                                    ₦180,000
+                                </span>
+
+                                <button
+                                    type="button"
+                                    data-page-target="available-jobs"
+                                >
+                                    View
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="job-preview-card">
+
+                            <div class="job-top">
+
+                                <span class="job-type electrical">
+                                    Electrical
+                                </span>
+
+                                <span class="job-distance">
+                                    11.4 km
+                                </span>
+
+                            </div>
+
+                            <h4>
+                                Commercial Distribution Board
+                            </h4>
+
+                            <p>
+                                Wuse 2, Abuja
+                            </p>
+
+                            <div class="job-bottom">
+
+                                <span>
+                                    ₦95,000
+                                </span>
+
+                                <button
+                                    type="button"
+                                    data-page-target="available-jobs"
+                                >
+                                    View
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="job-preview-card">
+
+                            <div class="job-top">
+
+                                <span class="job-type security">
+                                    CCTV
+                                </span>
+
+                                <span class="job-distance">
+                                    15.2 km
+                                </span>
+
+                            </div>
+
+                            <h4>
+                                12-Camera CCTV Installation
+                            </h4>
+
+                            <p>
+                                Gwarinpa, Abuja
+                            </p>
+
+                            <div class="job-bottom">
+
+                                <span>
+                                    ₦140,000
+                                </span>
+
+                                <button
+                                    type="button"
+                                    data-page-target="available-jobs"
+                                >
+                                    View
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+
+            <!-- =================================================
+                 AVAILABLE JOBS PAGE
+            ================================================== -->
+            <section
+                class="portal-page"
+                id="page-available-jobs"
+                data-page-content="available-jobs"
+            >
+
+                <div class="page-section-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            PROJECT OPPORTUNITIES
+                        </span>
+
+                        <h2>
+                            Available Jobs
+                        </h2>
+
+                        <p>
+                            Projects matched to your verified skills and
+                            registered service areas.
+                        </p>
+
+                    </div>
+
+                    <div class="header-actions">
+
+                        <button
+                            type="button"
+                            class="btn btn-light"
+                            id="refreshJobsBtn"
+                        >
+                            <i data-lucide="refresh-cw"></i>
+                            Refresh
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="filter-bar">
+
+                    <div class="search-field">
+
+                        <i data-lucide="search"></i>
+
+                        <input
+                            type="search"
+                            id="jobSearch"
+                            placeholder="Search projects..."
+                        >
+
+                    </div>
+
+                    <select id="jobTypeFilter">
+                        <option value="all">
+                            All Services
+                        </option>
+                        <option value="solar">
+                            Solar & Battery
+                        </option>
+                        <option value="electrical">
+                            Electrical
+                        </option>
+                        <option value="cctv">
+                            CCTV & Security
+                        </option>
+                        <option value="automation">
+                            Smart Automation
+                        </option>
+                    </select>
+
+                    <select id="jobDistanceFilter">
+                        <option value="all">
+                            Any Distance
+                        </option>
+                        <option value="10">
+                            Within 10 km
+                        </option>
+                        <option value="25">
+                            Within 25 km
+                        </option>
+                        <option value="50">
+                            Within 50 km
+                        </option>
+                    </select>
+
+                </div>
+
+
+                <div
+                    class="jobs-list"
+                    id="availableJobsList"
+                >
+
+                    <!-- JS will populate jobs -->
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 MY PROJECTS PAGE
+            ================================================== -->
+            <section
+                class="portal-page"
+                id="page-projects"
+                data-page-content="projects"
+            >
+
+                <div class="page-section-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            WORK MANAGEMENT
+                        </span>
+
+                        <h2>
+                            My Projects
+                        </h2>
+
+                        <p>
+                            Track all projects assigned to your installer team.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="project-tabs">
+
+                    <button
+                        class="project-tab active"
+                        data-project-status="all"
+                        type="button"
+                    >
+                        All
+                    </button>
+
+                    <button
+                        class="project-tab"
+                        data-project-status="active"
+                        type="button"
+                    >
+                        Active
+                    </button>
+
+                    <button
+                        class="project-tab"
+                        data-project-status="inspection"
+                        type="button"
+                    >
+                        Inspection
+                    </button>
+
+                    <button
+                        class="project-tab"
+                        data-project-status="completed"
+                        type="button"
+                    >
+                        Completed
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="projects-list"
+                    id="projectsList"
+                >
+
+                    <!-- JS will populate -->
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PROJECT PROGRESS PAGE
+            ================================================== -->
+            <section
+                class="portal-page"
+                id="page-progress"
+                data-page-content="progress"
+            >
+
+                <div class="page-section-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            FIELD OPERATIONS
+                        </span>
+
+                        <h2>
+                            Project Progress
+                        </h2>
+
+                        <p>
+                            Manage milestones, installation activities and
+                            completion evidence.
+                        </p>
+
+                    </div>
+
+                    <span class="project-status-badge installation">
+                        <span></span>
+                        Installation
+                    </span>
+
+                </div>
+
+
+                <div class="progress-project-header">
+
+                    <div class="project-title-row">
+
+                        <div class="project-type-icon solar">
+                            <i data-lucide="sun"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                AE-2026-0048
+                            </span>
+
+                            <h3>
+                                20kW Hybrid Solar System
+                            </h3>
+
+                            <p>
+                                <i data-lucide="map-pin"></i>
+                                Guzape, AMAC, Abuja
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="project-progress-summary">
+
+                        <strong>
+                            78%
+                        </strong>
+
+                        <span>
+                            Overall Progress
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="milestone-container">
+
+                    <div class="milestone-list" id="milestoneList">
+
+                        <!-- JS populated -->
+
+                    </div>
+
+
+                    <aside class="progress-side-panel">
+
+                        <div class="side-panel-card">
+
+                            <span class="card-kicker">
+                                PROJECT INFORMATION
+                            </span>
+
+                            <div class="info-list">
+
+                                <div>
+                                    <span>Client</span>
+                                    <strong>AE Residential Client</strong>
+                                </div>
+
+                                <div>
+                                    <span>System</span>
+                                    <strong>20kW Hybrid</strong>
+                                </div>
+
+                                <div>
+                                    <span>Scheduled</span>
+                                    <strong>20 Aug 2026</strong>
+                                </div>
+
+                                <div>
+                                    <span>Team</span>
+                                    <strong>2 Installers</strong>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="side-panel-card">
+
+                            <span class="card-kicker">
+                                TECHNICAL FILES
+                            </span>
+
+                            <div class="document-mini-list">
+
+                                <button type="button">
+                                    <i data-lucide="file-text"></i>
+                                    System SLD
+                                    <i data-lucide="download"></i>
+                                </button>
+
+                                <button type="button">
+                                    <i data-lucide="file-text"></i>
+                                    Installation Guide
+                                    <i data-lucide="download"></i>
+                                </button>
+
+                                <button type="button">
+                                    <i data-lucide="file-text"></i>
+                                    Equipment Schedule
+                                    <i data-lucide="download"></i>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </aside>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 TECHNICAL DOCUMENTS PAGE
+            ================================================== -->
+            <section
+                class="portal-page"
+                id="page-documents"
+                data-page-content="documents"
+            >
+
+                <div class="page-section-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            PROJECT RESOURCES
+                        </span>
+
+                        <h2>
+                            Technical Documents
+                        </h2>
+
+                        <p>
+                            Access technical drawings, specifications,
+                            schematics and installation instructions.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="documents-grid"
+                    id="documentsGrid"
+                >
+
+                    <!-- JS populated -->
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 EVIDENCE PAGE
+            ================================================== -->
+            <section
+                class="portal-page"
+                id="page-evidence"
+                data-page-content="evidence"
+            >
+
+                <div class="page-section-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            FIELD VERIFICATION
+                        </span>
+
+                        <h2>
+                            Evidence Upload
+                        </h2>
+
+                        <p>
+                            Upload installation photos, videos and completion
+                            evidence for project verification.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="evidence-layout">
+
+                    <div class="evidence-main">
+
+                        <div class="evidence-upload-card">
+
+                            <div class="upload-icon">
+                                <i data-lucide="cloud-upload"></i>
+                            </div>
+
+                            <h3>
+                                Upload Installation Evidence
+                            </h3>
+
+                            <p>
+                                Select photos or videos from your device.
+                                Evidence will be attached to the selected
+                                project milestone.
+                            </p>
+
+
+                            <div class="upload-controls">
+
+                                <select id="evidenceMilestone">
+
+                                    <option value="">
+                                        Select milestone
+                                    </option>
+
+                                    <option>
+                                        Solar Panel Installation
+                                    </option>
+
+                                    <option>
+                                        DC Wiring
+                                    </option>
+
+                                    <option>
+                                        Inverter Installation
+                                    </option>
+
+                                    <option>
+                                        Battery Installation
+                                    </option>
+
+                                    <option>
+                                        Testing & Commissioning
+                                    </option>
+
+                                </select>
+
+
+                                <label
+                                    class="upload-dropzone"
+                                    for="evidenceFiles"
+                                >
+
+                                    <i data-lucide="image-plus"></i>
+
+                                    <strong>
+                                        Click to select files
+                                    </strong>
+
+                                    <span>
+                                        JPG, PNG, MP4 up to 50MB
+                                    </span>
+
+                                    <input
+                                        type="file"
+                                        id="evidenceFiles"
+                                        accept="image/*,video/*"
+                                        multiple
+                                        hidden
+                                    >
+
+                                </label>
+
+                            </div>
+
+
+                            <div
+                                class="evidence-preview"
+                                id="evidencePreview"
+                            ></div>
+
+
+                            <div class="evidence-form-row">
+
+                                <textarea
+                                    id="evidenceNotes"
+                                    placeholder="Add installation notes..."
+                                ></textarea>
+
+                                <button
+                                    type="button"
+                                    class="btn btn-primary"
+                                    id="submitEvidenceBtn"
+                                >
+                                    <i data-lucide="upload"></i>
+                                    Submit Evidence
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <aside class="evidence-side">
+
+                        <div class="side-panel-card">
+
+                            <span class="card-kicker">
+                                EVIDENCE REQUIREMENTS
+                            </span>
+
+                            <ul class="requirements-list">
+
+                                <li>
+                                    <i data-lucide="check-circle-2"></i>
+                                    Clear installation photos
+                                </li>
+
+                                <li>
+                                    <i data-lucide="check-circle-2"></i>
+                                    Correct project location
+                                </li>
+
+                                <li>
+                                    <i data-lucide="check-circle-2"></i>
+                                    Completed equipment visible
+                                </li>
+
+                                <li>
+                                    <i data-lucide="check-circle-2"></i>
+                                    Testing evidence where required
+                                </li>
+
+                                <li>
+                                    <i data-lucide="check-circle-2"></i>
+                                    Accurate installation notes
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    </aside>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PAYMENTS PAGE
+            ================================================== -->
+            <section
+                class="portal-page"
+                id="page-payments"
+                data-page-content="payments"
+            >
+
+                <div class="page-section-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            FINANCIAL OPERATIONS
+                        </span>
+
+                        <h2>
+                            Payments
+                        </h2>
+
+                        <p>
+                            Track approved installation fees and settlement
+                            history.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="payment-summary-grid">
+
+                    <div class="finance-card">
+
+                        <span>
+                            PENDING
+                        </span>
+
+                        <strong>
+                            ₦420,000
+                        </strong>
+
+                        <small>
+                            2 payment requests
+                        </small>
+
+                    </div>
+
+
+                    <div class="finance-card green">
+
+                        <span>
+                            PAID THIS MONTH
+                        </span>
+
+                        <strong>
+                            ₦680,000
+                        </strong>
+
+                        <small>
+                            4 completed settlements
+                        </small>
+
+                    </div>
+
+
+                    <div class="finance-card blue">
+
+                        <span>
+                            TOTAL EARNINGS
+                        </span>
+
+                        <strong>
+                            ₦4.82M
+                        </strong>
+
+                        <small>
+                            Lifetime installer earnings
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-card payment-table-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="card-kicker">
+                                PAYMENT HISTORY
+                            </span>
+
+                            <h3>
+                                Transactions
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Project</th>
+                                    <th>Amount</th>
+                                    <th>Submitted</th>
+                                    <th>Status</th>
+                                    <th>Reference</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="paymentTableBody">
+
+                                <!-- JS populated -->
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PERFORMANCE PAGE
+            ================================================== -->
+            <section
+                class="portal-page"
+                id="page-performance"
+                data-page-content="performance"
+            >
+
+                <div class="page-section-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            PERFORMANCE ANALYTICS
+                        </span>
+
+                        <h2>
+                            Installer Performance
+                        </h2>
+
+                        <p>
+                            Your quality, reliability and project delivery
+                            metrics.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="performance-dashboard">
+
+                    <div class="performance-main-card">
+
+                        <div class="performance-score-large">
+
+                            <div class="large-score-circle">
+
+                                <strong>
+                                    94
+                                </strong>
+
+                                <span>
+                                    /100
+                                </span>
+
+                            </div>
+
+                            <div>
+
+                                <span class="score-label">
+                                    CURRENT RATING
+                                </span>
+
+                                <h3>
+                                    Excellent Performance
+                                </h3>
+
+                                <p>
+                                    Your performance places you among the
+                                    highest-rated installers in the network.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="performance-stat-grid">
+
+                        <div class="performance-stat">
+                            <span>Completed Projects</span>
+                            <strong>24</strong>
+                        </div>
+
+                        <div class="performance-stat">
+                            <span>On-Time Rate</span>
+                            <strong>96%</strong>
+                        </div>
+
+                        <div class="performance-stat">
+                            <span>Inspection Pass</span>
+                            <strong>98%</strong>
+                        </div>
+
+                        <div class="performance-stat">
+                            <span>Client Rating</span>
+                            <strong>4.8★</strong>
+                        </div>
+
+                        <div class="performance-stat">
+                            <span>Rework Rate</span>
+                            <strong>2%</strong>
+                        </div>
+
+                        <div class="performance-stat">
+                            <span>Avg. Completion</span>
+                            <strong>2.4d</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 AVAILABILITY PAGE
+            ================================================== -->
+            <section
+                class="portal-page"
+                id="page-availability"
+                data-page-content="availability"
+            >
+
+                <div class="page-section-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            WORKLOAD CONTROL
+                        </span>
+
+                        <h2>
+                            Availability
+                        </h2>
+
+                        <p>
+                            Control when your team can receive new project
+                            assignments.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="availability-grid">
+
+                    <div class="dashboard-card availability-status-card">
+
+                        <span class="card-kicker">
+                            CURRENT STATUS
+                        </span>
+
+                        <div class="availability-large">
+
+                            <div
+                                class="large-status-dot available"
+                                id="largeStatusDot"
+                            ></div>
+
+                            <div>
+
+                                <h3 id="largeAvailabilityText">
+                                    Available
+                                </h3>
+
+                                <p>
+                                    Your team can currently receive new
+                                    projects.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="availability-options">
+
+                            <button
+                                type="button"
+                                class="availability-option active"
+                                data-availability="available"
+                            >
+                                <span></span>
+                                Available
+                            </button>
+
+                            <button
+                                type="button"
+                                class="availability-option"
+                                data-availability="occupied"
+                            >
+                                <span></span>
+                                Occupied
+                            </button>
+
+                            <button
+                                type="button"
+                                class="availability-option"
+                                data-availability="offline"
+                            >
+                                <span></span>
+                                Offline
+                            </button>
+
+                            <button
+                                type="button"
+                                class="availability-option"
+                                data-availability="leave"
+                            >
+                                <span></span>
+                                On Leave
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard-card">
+
+                        <span class="card-kicker">
+                            CURRENT WORKLOAD
+                        </span>
+
+                        <div class="workload-number">
+
+                            <strong id="workloadCount">
+                                1
+                            </strong>
+
+                            <span>
+                                / 2 active projects
+                            </span>
+
+                        </div>
+
+                        <div class="workload-track">
+
+                            <span
+                                id="workloadBar"
+                                style="width:50%"
+                            ></span>
+
+                        </div>
+
+                        <p class="workload-description">
+                            You can currently accept
+                            <strong>1 more project</strong>
+                            before reaching your configured workload limit.
+                        </p>
+
+                    </div>
+
+
+                    <div class="dashboard-card full-width">
+
+                        <span class="card-kicker">
+                            SERVICE COVERAGE
+                        </span>
+
+                        <h3>
+                            Your Operating Areas
+                        </h3>
+
+                        <p class="muted">
+                            Projects are matched based on these registered
+                            locations.
+                        </p>
+
+
+                        <div class="coverage-list">
+
+                            <div class="coverage-item">
+
+                                <div class="coverage-icon">
+                                    <i data-lucide="map-pin"></i>
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        FCT
+                                    </strong>
+
+                                    <span>
+                                        Abuja
+                                    </span>
+
+                                </div>
+
+                                <span class="coverage-badge">
+                                    Primary
+                                </span>
+
+                            </div>
+
+
+                            <div class="coverage-item">
+
+                                <div class="coverage-icon">
+                                    <i data-lucide="map"></i>
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        AMAC
+                                    </strong>
+
+                                    <span>
+                                        Guzape • Wuse • Maitama • Gwarinpa
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PROFILE PAGE
+            ================================================== -->
+            <section
+                class="portal-page"
+                id="page-profile"
+                data-page-content="profile"
+            >
+
+                <div class="page-section-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            INSTALLER ACCOUNT
+                        </span>
+
+                        <h2>
+                            My Profile
+                        </h2>
+
+                        <p>
+                            Manage your verified company, technical and
+                            operational information.
+                        </p>
+
+                    </div>
+
+                    <span class="verified-chip">
+                        <i data-lucide="badge-check"></i>
+                        Verified
+                    </span>
+
+                </div>
+
+
+                <div class="profile-layout">
+
+                    <div class="dashboard-card profile-overview">
+
+                        <div class="profile-avatar-large">
+                            AE
+                        </div>
+
+                        <h3>
+                            Abdulrasaq Engineering Services
+                        </h3>
+
+                        <span>
+                            AER-INS-0024
+                        </span>
+
+                        <div class="profile-rating">
+                            <i data-lucide="star"></i>
+                            <strong>4.8</strong>
+                            <span>Installer Rating</span>
+                        </div>
+
+                        <div class="profile-specializations">
+
+                            <span>Solar & Battery</span>
+                            <span>Electrical</span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard-card">
+
+                        <div class="card-header">
+
+                            <div>
+
+                                <span class="card-kicker">
+                                    COMPANY INFORMATION
+                                </span>
+
+                                <h3>
+                                    Business Details
+                                </h3>
+
+                            </div>
+
+                            <button
+                                type="button"
+                                class="btn btn-light"
+                            >
+                                <i data-lucide="pencil"></i>
+                                Edit
+                            </button>
+
+                        </div>
+
+
+                        <div class="profile-details-grid">
+
+                            <div>
+                                <span>Company Name</span>
+                                <strong>
+                                    Abdulrasaq Engineering Services
+                                </strong>
+                            </div>
+
+                            <div>
+                                <span>CAC Number</span>
+                                <strong>
+                                    RC 1234567
+                                </strong>
+                            </div>
+
+                            <div>
+                                <span>State</span>
+                                <strong>
+                                    FCT
+                                </strong>
+                            </div>
+
+                            <div>
+                                <span>LGA</span>
+                                <strong>
+                                    AMAC
+                                </strong>
+                            </div>
+
+                            <div>
+                                <span>Phone</span>
+                                <strong>
+                                    +234 800 000 0000
+                                </strong>
+                            </div>
+
+                            <div>
+                                <span>Email</span>
+                                <strong>
+                                    installer@example.com
+                                </strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard-card full-width">
+
+                        <div class="card-header">
+
+                            <div>
+
+                                <span class="card-kicker">
+                                    VERIFICATION
+                                </span>
+
+                                <h3>
+                                    Documents & Certifications
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="verification-grid">
+
+                            <div class="verification-item verified">
+
+                                <i data-lucide="file-check-2"></i>
+
+                                <div>
+                                    <strong>CAC Certificate</strong>
+                                    <span>Verified</span>
+                                </div>
+
+                            </div>
+
+
+                            <div class="verification-item verified">
+
+                                <i data-lucide="file-check-2"></i>
+
+                                <div>
+                                    <strong>Government ID</strong>
+                                    <span>Verified</span>
+                                </div>
+
+                            </div>
+
+
+                            <div class="verification-item verified">
+
+                                <i data-lucide="file-check-2"></i>
+
+                                <div>
+                                    <strong>NEMSA Certificate</strong>
+                                    <span>Verified</span>
+                                </div>
+
+                            </div>
+
+
+                            <div class="verification-item pending">
+
+                                <i data-lucide="clock-3"></i>
+
+                                <div>
+                                    <strong>Additional Certification</strong>
+                                    <span>Under Review</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- =====================================================
+             FOOTER
+        ====================================================== -->
+        <footer class="portal-footer">
+
+            <div>
+
+                <strong>
+                    AE Network
+                </strong>
+
+                <span>
+                    Installer Operations Platform
+                </span>
+
+            </div>
+
+            <span>
+                © 2026 AE Network Ltd. All rights reserved.
+            </span>
+
+        </footer>
+
+    </main>
+
+</div>
+
+
+<!-- =============================================================
+     AVAILABILITY DROPDOWN
+============================================================== -->
+<div
+    class="availability-menu"
+    id="availabilityMenu"
+    hidden
+>
+
+    <button
+        type="button"
+        data-status-select="available"
+    >
+        <span class="menu-status-dot available"></span>
+        Available
+    </button>
+
+    <button
+        type="button"
+        data-status-select="occupied"
+    >
+        <span class="menu-status-dot occupied"></span>
+        Occupied
+    </button>
+
+    <button
+        type="button"
+        data-status-select="offline"
+    >
+        <span class="menu-status-dot offline"></span>
+        Offline
+    </button>
+
+    <button
+        type="button"
+        data-status-select="leave"
+    >
+        <span class="menu-status-dot leave"></span>
+        On Leave
+    </button>
+
+</div>
+
+
+<!-- =============================================================
+     NOTIFICATION PANEL
+============================================================== -->
+<div
+    class="notification-panel"
+    id="notificationPanel"
+    hidden
+>
+
+    <div class="notification-panel-header">
+
+        <div>
+            <strong>Notifications</strong>
+
+            <span>
+                4 new updates
+            </span>
+        </div>
+
+        <button type="button" id="markNotificationsRead">
+            Mark all read
+        </button>
+
+    </div>
+
+
+    <div class="notification-list">
+
+        <button type="button" class="notification-item unread">
+
+            <span class="notification-icon green">
+                <i data-lucide="check-circle-2"></i>
+            </span>
+
+            <span>
+                <strong>
+                    Evidence approved
+                </strong>
+
+                <small>
+                    Solar panel installation evidence was approved.
+                </small>
+
+                <em>
+                    15 minutes ago
+                </em>
+            </span>
+
+        </button>
+
+
+        <button type="button" class="notification-item unread">
+
+            <span class="notification-icon yellow">
+                <i data-lucide="wallet"></i>
+            </span>
+
+            <span>
+                <strong>
+                    Payment update
+                </strong>
+
+                <small>
+                    Your ₦250,000 payment request is under review.
+                </small>
+
+                <em>
+                    1 hour ago
+                </em>
+            </span>
+
+        </button>
+
+
+        <button type="button" class="notification-item unread">
+
+            <span class="notification-icon blue">
+                <i data-lucide="briefcase"></i>
+            </span>
+
+            <span>
+                <strong>
+                    New project available
+                </strong>
+
+                <small>
+                    A new solar project is available 6.8 km away.
+                </small>
+
+                <em>
+                    2 hours ago
+                </em>
+
+            </span>
+
+        </button>
+
+
+        <button type="button" class="notification-item">
+
+            <span class="notification-icon dark">
+                <i data-lucide="file-text"></i>
+            </span>
+
+            <span>
+                <strong>
+                    Technical document updated
+                </strong>
+
+                <small>
+                    Installation documentation has been updated.
+                </small>
+
+                <em>
+                    Yesterday
+                </em>
+            </span>
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =============================================================
+     SUPPORT MODAL
+============================================================== -->
+<div
+    class="modal-overlay"
+    id="supportModal"
+    hidden
+>
+
+    <div class="modal-card">
+
+        <button
+            type="button"
+            class="modal-close"
+            data-close-modal
+        >
+            <i data-lucide="x"></i>
+        </button>
+
+        <div class="modal-icon">
+            <i data-lucide="headphones"></i>
+        </div>
+
+        <span class="eyebrow">
+            FIELD SUPPORT
+        </span>
+
+        <h2>
+            Need technical assistance?
+        </h2>
+
+        <p>
+            Contact the AE Network field engineering team for installation,
+            equipment, commissioning or project-related support.
+        </p>
+
+
+        <div class="support-options">
+
+            <button type="button">
+                <i data-lucide="phone"></i>
+
+                <span>
+                    <strong>Call Support</strong>
+                    <small>Speak with an engineer</small>
+                </span>
+            </button>
+
+
+            <button type="button">
+                <i data-lucide="message-circle"></i>
+
+                <span>
+                    <strong>WhatsApp Support</strong>
+                    <small>Send a technical message</small>
+                </span>
+            </button>
+
+
+            <button type="button">
+                <i data-lucide="mail"></i>
+
+                <span>
+                    <strong>Email Support</strong>
+                    <small>Submit a support request</small>
+                </span>
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =============================================================
+     PROJECT DETAIL MODAL
+============================================================== -->
+<div
+    class="modal-overlay"
+    id="projectModal"
+    hidden
+>
+
+    <div class="modal-card project-modal">
+
+        <button
+            type="button"
+            class="modal-close"
+            data-close-modal
+        >
+            <i data-lucide="x"></i>
+        </button>
+
+        <div id="projectModalContent">
+            <!-- JS populated -->
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =============================================================
+     INSTALLER PORTAL JAVASCRIPT
+============================================================== -->
+<script src="installer.js"></script>
+
+</body>
+</html>
