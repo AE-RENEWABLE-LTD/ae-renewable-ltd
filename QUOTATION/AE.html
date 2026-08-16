@@ -1,472 +1,3495 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <style>
+        /* =========================================================
+   AE RENEWABLE LTD
+   PREMIUM QUOTATION SYSTEM
+   quotation.css
+   ========================================================= */
 
+/* =========================================================
+   01. ROOT / DESIGN TOKENS
+========================================================= */
+
+:root {
+    --navy: #010a1d;
+    --navy-2: #044381;
+    --blue: #0a5ea8;
+    --green: #008000;
+    --green-dark: #006b00;
+    --gold: #f4a600;
+    --gold-light: #fff4d6;
+
+    --white: #ffffff;
+    --off-white: #f7f9fc;
+    --surface: #f1f5f9;
+    --surface-2: #e9eef5;
+
+    --text: #172033;
+    --text-soft: #596579;
+    --muted: #7b8798;
+
+    --border: #dce3ec;
+    --border-dark: #c8d2df;
+
+    --success-bg: #edf8f0;
+    --info-bg: #edf5fc;
+    --warning-bg: #fff8e8;
+
+    --shadow-sm: 0 5px 18px rgba(1, 10, 29, 0.06);
+    --shadow-md: 0 12px 35px rgba(1, 10, 29, 0.09);
+    --shadow-lg: 0 20px 55px rgba(1, 10, 29, 0.13);
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+
+    --container: 1180px;
+
+    --font-body: "DM Sans", sans-serif;
+    --font-heading: "Manrope", sans-serif;
+}
+
+
+/* =========================================================
+   02. RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background:
+        linear-gradient(
+            180deg,
+            #eef2f7 0%,
+            #f7f9fc 30%,
+            #eef2f7 100%
+        );
+
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.65;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+strong {
+    font-weight: 700;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+
+/* =========================================================
+   03. MAIN QUOTATION SHEET
+========================================================= */
+
+.quotation {
+    width: min(100%, var(--container));
+    margin: 35px auto;
+    background: var(--white);
+
+    box-shadow: var(--shadow-lg);
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   04. HEADER
+========================================================= */
+
+.quotation-header {
+    position: relative;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    min-height: 105px;
+
+    padding: 24px 45px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--navy) 0%,
+            #03182f 55%,
+            var(--navy-2) 100%
+        );
+
+    color: var(--white);
+
+    overflow: hidden;
+}
+
+.quotation-header::after {
+    content: "";
+
+    position: absolute;
+
+    width: 260px;
+    height: 260px;
+
+    right: -100px;
+    top: -160px;
+
+    border-radius: 50%;
+
+    border: 35px solid rgba(244, 166, 0, 0.12);
+}
+
+.quotation-header::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--green),
+            var(--gold),
+            var(--green)
+        );
+}
+
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.brand {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+}
+
+.logo-mark {
+    width: 58px;
+    height: 58px;
+
+    display: grid;
+    place-items: center;
+
+    background: rgba(255,255,255,0.08);
+
+    border: 1px solid rgba(255,255,255,0.18);
+
+    border-radius: 50%;
+
+    overflow: hidden;
+}
+
+.logo-mark img {
+    width: 50px !important;
+    height: 50px !important;
+
+    object-fit: contain;
+
+    border-radius: 50%;
+}
+
+.brand-content h1 {
+    font-family: var(--font-heading);
+
+    font-size: 21px;
+    font-weight: 800;
+
+    letter-spacing: 0.03em;
+
+    color: var(--white);
+}
+
+.brand-content p {
+    margin-top: 2px;
+
+    color: #c8d5e5;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 0.18em;
+}
+
+
+/* =========================================================
+   QUOTATION META
+========================================================= */
+
+.quotation-meta {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    gap: 2px;
+
+    text-align: right;
+}
+
+.quotation-meta .meta-label {
+    color: var(--gold);
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 0.2em;
+}
+
+.quotation-meta strong {
+    font-family: var(--font-heading);
+
+    font-size: 16px;
+
+    color: var(--white);
+}
+
+.quotation-meta span:last-child {
+    color: #b8c5d6;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   05. HERO
+========================================================= */
+
+.hero {
+    position: relative;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 40px;
+
+    padding: 48px 45px;
+
+    background:
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(244,166,0,0.10),
+            transparent 25%
+        ),
+        linear-gradient(
+            135deg,
+            #f7fafc,
+            #ffffff
+        );
+
+    border-bottom: 1px solid var(--border);
+}
+
+.hero-content {
+    max-width: 750px;
+}
+
+.eyebrow {
+    display: inline-flex;
+
+    margin-bottom: 13px;
+    padding: 6px 11px;
+
+    border-radius: 5px;
+
+    background: var(--gold-light);
+
+    color: #8a5c00;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 0.16em;
+}
+
+.hero h2 {
+    font-family: var(--font-heading);
+
+    font-size: clamp(30px, 4vw, 45px);
+
+    line-height: 1.08;
+
+    letter-spacing: -0.035em;
+
+    color: var(--navy);
+}
+
+.hero h2 span {
+    display: block;
+
+    color: var(--green);
+}
+
+.hero p {
+    max-width: 720px;
+
+    margin-top: 18px;
+
+    color: var(--text-soft);
+
+    font-size: 14px;
+
+    line-height: 1.8;
+}
+
+.hero-capacity {
+    flex: 0 0 170px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 150px;
+
+    padding: 20px;
+
+    border-radius: var(--radius-lg);
+
+    background: var(--navy);
+
+    box-shadow: var(--shadow-md);
+
+    text-align: center;
+}
+
+.hero-capacity strong {
+    font-family: var(--font-heading);
+
+    color: var(--gold);
+
+    font-size: 33px;
+    line-height: 1;
+}
+
+.hero-capacity span {
+    margin-top: 10px;
+
+    color: #c6d1df;
+
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   06. CLIENT INFORMATION
+========================================================= */
+
+.client-information {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    border-bottom: 1px solid var(--border);
+}
+
+.client-card {
+    padding: 25px 30px;
+
+    min-height: 145px;
+
+    border-right: 1px solid var(--border);
+}
+
+.client-card:last-child {
+    border-right: none;
+}
+
+.client-card > span {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--green);
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 0.15em;
+}
+
+.client-card h3 {
+    font-family: var(--font-heading);
+
+    color: var(--navy);
+
+    font-size: 15px;
+
+    line-height: 1.35;
+}
+
+.client-card p {
+    margin-top: 7px;
+
+    color: var(--text-soft);
+
+    font-size: 12px;
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   07. GENERAL SECTIONS
+========================================================= */
+
+.section {
+    padding: 55px 45px;
+}
+
+.section + .section {
+    border-top: 1px solid var(--border);
+}
+
+.section-heading {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 18px;
+
+    margin-bottom: 30px;
+}
+
+.section-number {
+    flex: 0 0 auto;
+
+    width: 42px;
+    height: 42px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 10px;
+
+    background: var(--navy);
+
+    color: var(--gold);
+
+    font-family: var(--font-heading);
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.section-kicker {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: var(--green);
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 0.17em;
+}
+
+.section-heading h2 {
+    font-family: var(--font-heading);
+
+    color: var(--navy);
+
+    font-size: 25px;
+
+    line-height: 1.25;
+
+    letter-spacing: -0.025em;
+}
+
+.section-heading p {
+    max-width: 750px;
+
+    margin-top: 7px;
+
+    color: var(--text-soft);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   08. METRICS
+========================================================= */
+
+.metrics {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+}
+
+.metric {
+    min-height: 145px;
+
+    padding: 22px;
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-md);
+
+    background: var(--white);
+
+    box-shadow: var(--shadow-sm);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.metric:hover {
+    transform: translateY(-3px);
+
+    box-shadow: var(--shadow-md);
+}
+
+.metric span {
+    display: block;
+
+    color: var(--text-soft);
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.metric strong {
+    display: block;
+
+    margin-top: 12px;
+
+    color: var(--navy);
+
+    font-family: var(--font-heading);
+
+    font-size: 25px;
+
+    line-height: 1.15;
+}
+
+.metric small {
+    display: block;
+
+    margin-top: 7px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    line-height: 1.45;
+}
+
+.metric.highlighted {
+    border-color: rgba(0,128,0,.25);
+
+    background:
+        linear-gradient(
+            145deg,
+            #f1fbf3,
+            #ffffff
+        );
+}
+
+.metric.highlighted strong {
+    color: var(--green);
+}
+
+
+/* =========================================================
+   09. ENGINEERING NOTE
+========================================================= */
+
+.engineering-note {
+    display: flex;
+
+    gap: 18px;
+
+    margin: 0 45px 55px;
+
+    padding: 28px 30px;
+
+    border: 1px solid #f0d68c;
+
+    border-left: 5px solid var(--gold);
+
+    border-radius: var(--radius-md);
+
+    background:
+        linear-gradient(
+            135deg,
+            #fffaf0,
+            #fffdf8
+        );
+}
+
+.note-icon {
+    flex: 0 0 38px;
+
+    width: 38px;
+    height: 38px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    background: var(--gold);
+
+    color: var(--navy);
+
+    font-family: var(--font-heading);
+
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.engineering-note h3 {
+    margin-bottom: 10px;
+
+    color: var(--navy);
+
+    font-family: var(--font-heading);
+
+    font-size: 17px;
+}
+
+.engineering-note p {
+    margin-top: 8px;
+
+    color: var(--text-soft);
+
+    font-size: 12px;
+
+    line-height: 1.8;
+}
+
+.engineering-note strong {
+    color: var(--navy);
+}
+
+
+/* =========================================================
+   10. LOAD GRID
+========================================================= */
+
+.load-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 10px;
+}
+
+.load-item {
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    min-height: 95px;
+
+    padding: 16px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 11px;
+
+    background: var(--off-white);
+}
+
+.load-item strong {
+    color: var(--green);
+
+    font-family: var(--font-heading);
+
+    font-size: 23px;
+
+    line-height: 1;
+}
+
+.load-item span {
+    margin-top: 9px;
+
+    color: var(--text-soft);
+
+    font-size: 10px;
+}
+
+.load-item.wide {
+    grid-column: span 2;
+
+    flex-direction: row;
+
+    align-items: center;
+
+    gap: 15px;
+
+    background: var(--navy);
+
+    border-color: var(--navy);
+}
+
+.load-item.wide strong {
+    color: var(--gold);
+}
+
+.load-item.wide span {
+    margin-top: 0;
+
+    color: #d1dce8;
+}
+
+
+/* =========================================================
+   11. SYSTEM ARCHITECTURE
+========================================================= */
+
+.architecture {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 16px;
+}
+
+.architecture-card {
+    position: relative;
+
+    min-height: 220px;
+
+    padding: 27px 23px;
+
+    border-radius: var(--radius-md);
+
+    background: var(--navy);
+
+    overflow: hidden;
+
+    box-shadow: var(--shadow-sm);
+}
+
+.architecture-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 100px;
+    height: 100px;
+
+    right: -45px;
+    bottom: -45px;
+
+    border-radius: 50%;
+
+    border: 18px solid rgba(244,166,0,.09);
+}
+
+.architecture-number {
+    display: inline-flex;
+
+    width: 31px;
+    height: 31px;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: rgba(255,255,255,.08);
+
+    color: var(--gold);
+
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.architecture-card h3 {
+    margin-top: 27px;
+
+    color: var(--white);
+
+    font-family: var(--font-heading);
+
+    font-size: 15px;
+}
+
+.architecture-card > strong {
+    display: block;
+
+    margin-top: 10px;
+
+    color: var(--gold);
+
+    font-family: var(--font-heading);
+
+    font-size: 25px;
+}
+
+.architecture-card p {
+    margin-top: 9px;
+
+    color: #b8c6d6;
+
+    font-size: 10px;
+
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   12. BOQ SECTION
+========================================================= */
+
+.boq-section {
+    padding: 55px 45px;
+
+    border-top: 1px solid var(--border);
+
+    background:
+        linear-gradient(
+            180deg,
+            #fbfcfe,
+            #ffffff
+        );
+}
+
+
+/* =========================================================
+   13. SYSTEM SUMMARY
+========================================================= */
+
+.system-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 25px;
+}
+
+.summary-card {
+    padding: 20px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    background: var(--white);
+
+    box-shadow: var(--shadow-sm);
+}
+
+.summary-card span {
+    display: block;
+
+    color: var(--green);
+
+    font-size: 8px;
+    font-weight: 800;
+
+    letter-spacing: .14em;
+}
+
+.summary-card strong {
+    display: block;
+
+    margin-top: 8px;
+
+    color: var(--navy);
+
+    font-family: var(--font-heading);
+
+    font-size: 19px;
+
+    line-height: 1.25;
+}
+
+.summary-card small {
+    display: block;
+
+    margin-top: 7px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   14. BOQ CONTAINER
+========================================================= */
+
+.boq-container {
+    width: 100%;
+
+    overflow-x: auto;
+
+    border: 1px solid var(--border);
+
+    border-radius: 13px;
+
+    background: var(--white);
+
+    box-shadow: var(--shadow-sm);
+}
+
+.boq-table {
+    width: 100%;
+
+    min-width: 900px;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   TABLE HEADER
+========================================================= */
+
+.boq-table thead th {
+    padding: 15px 12px;
+
+    background: var(--navy);
+
+    color: var(--white);
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: .06em;
+
+    text-align: left;
+
+    border-right: 1px solid rgba(255,255,255,.08);
+}
+
+.boq-table thead th:last-child {
+    border-right: none;
+}
+
+.boq-table .col-number {
+    width: 55px;
+
+    text-align: center;
+}
+
+.boq-table .col-qty {
+    width: 85px;
+
+    text-align: center;
+}
+
+.boq-table .col-price {
+    width: 125px;
+
+    text-align: right;
+}
+
+
+/* =========================================================
+   TABLE BODY
+========================================================= */
+
+.boq-table tbody td {
+    padding: 15px 12px;
+
+    border-bottom: 1px solid #e8edf3;
+
+    vertical-align: middle;
+
+    color: var(--text-soft);
+
+    line-height: 1.5;
+}
+
+.boq-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.boq-table tbody tr:not(.category-row):hover td {
+    background: #fafcfe;
+}
+
+
+/* =========================================================
+   ITEM NUMBER
+========================================================= */
+
+.item-number {
+    text-align: center;
+
+    color: var(--green) !important;
+
+    font-family: var(--font-heading);
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.boq-table td strong {
+    display: block;
+
+    color: var(--navy);
+
+    font-size: 11px;
+}
+
+.boq-table td span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   AMOUNT
+========================================================= */
+
+.boq-table .amount {
+    color: var(--navy);
+
+    font-weight: 800;
+
+    text-align: right;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   CATEGORY ROW
+========================================================= */
+
+.boq-table .category-row td {
+    padding: 10px 14px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #eef6f1,
+            #f8fbf9
+        );
+
+    color: var(--green);
+
+    border-bottom: 1px solid #dbe8df;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: .12em;
+}
+
+
+/* =========================================================
+   SUBTOTAL
+========================================================= */
+
+.boq-table .text-right {
+    text-align: right;
+
+    background: #fafbfd;
+
+    color: var(--text);
+}
+
+.boq-table .text-right strong {
+    display: inline;
+
+    font-size: 10px;
+}
+
+.boq-table tr:has(.text-right) td {
+    background: #fafbfd;
+}
+
+
+/* =========================================================
+   INSTALLATION ROW
+========================================================= */
+
+.boq-table .installation-row td {
+    background: #f4faf5;
+}
+
+.boq-table .installation-row .amount {
+    color: var(--green);
+}
+
+
+/* =========================================================
+   15. BOQ NOTE
+========================================================= */
+
+.boq-note {
+    display: flex;
+
+    gap: 14px;
+
+    margin-top: 20px;
+
+    padding: 18px 20px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 11px;
+
+    background: var(--surface);
+}
+
+.note-symbol {
+    flex: 0 0 27px;
+
+    width: 27px;
+    height: 27px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    background: var(--navy);
+
+    color: var(--gold);
+
+    font-family: Georgia, serif;
+
+    font-style: italic;
+
+    font-weight: 700;
+}
+
+.boq-note strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: var(--navy);
+
+    font-family: var(--font-heading);
+
+    font-size: 11px;
+}
+
+.boq-note p {
+    color: var(--text-soft);
+
+    font-size: 10px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   16. COMMERCIAL SUMMARY
+========================================================= */
+
+.commercial-summary {
+    max-width: 720px;
+
+    margin: 30px 0 0 auto;
+
+    padding: 22px 25px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    background: var(--white);
+
+    box-shadow: var(--shadow-sm);
+}
+
+.commercial-line,
+.commercial-summary > div {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 25px;
+
+    padding: 11px 0;
+
+    border-bottom: 1px solid #edf0f4;
+}
+
+.commercial-line:last-child,
+.commercial-summary > div:last-child {
+    border-bottom: none;
+}
+
+.commercial-line span,
+.commercial-summary > div > span {
+    color: var(--text-soft);
+
+    font-size: 11px;
+}
+
+.commercial-line strong,
+.commercial-summary > div > strong {
+    color: var(--navy);
+
+    font-family: var(--font-heading);
+
+    font-size: 12px;
+
+    white-space: nowrap;
+}
+
+.vat-line {
+    padding-top: 15px;
+
+    border-top: 1px solid var(--border);
+
+    border-bottom: none;
+}
+
+.vat-line strong {
+    color: var(--green);
+}
+
+
+/* =========================================================
+   17. GRAND TOTAL
+========================================================= */
+
+.commercial-summary .grand {
+    margin: 12px -25px -22px;
+
+    padding: 22px 25px;
+
+    border-radius: 0 0 14px 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--navy),
+            #062d50
+        );
+}
+
+.commercial-summary .grand span {
+    color: #c6d3e1;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: .12em;
+}
+
+.commercial-summary .grand strong {
+    color: var(--gold);
+
+    font-size: 20px;
+}
+
+
+/* =========================================================
+   18. SYSTEM OPERATION / SPLIT
+========================================================= */
+
+.split {
+    display: grid;
+
+    grid-template-columns:
+        1.25fr .75fr;
+
+    gap: 35px;
+
+    align-items: start;
+}
+
+.section-heading.compact {
+    margin-bottom: 22px;
+}
+
+.section-heading.compact > span {
+    display: grid;
+
+    place-items: center;
+
+    width: 42px;
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    border-radius: 10px;
+
+    background: var(--navy);
+
+    color: var(--gold);
+
+    font-family: var(--font-heading);
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.section-heading.compact h2 {
+    font-size: 23px;
+}
+
+
+/* =========================================================
+   19. FEATURE LIST
+========================================================= */
+
+.feature-list {
+    list-style: none;
+
+    display: grid;
+
+    gap: 11px;
+}
+
+.feature-list li {
+    position: relative;
+
+    padding: 12px 15px 12px 40px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 9px;
+
+    background: var(--off-white);
+
+    color: var(--text-soft);
+
+    font-size: 11px;
+}
+
+.feature-list li::before {
+    content: "✓";
+
+    position: absolute;
+
+    left: 14px;
+    top: 12px;
+
+    width: 18px;
+    height: 18px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    background: #e8f6eb;
+
+    color: var(--green);
+
+    font-size: 10px;
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   20. ENGINEERING BOUNDARY
+========================================================= */
+
+.design-boundary {
+    padding: 28px;
+
+    border-radius: 15px;
+
+    background: var(--navy);
+
+    box-shadow: var(--shadow-md);
+}
+
+.design-boundary > span {
+    display: block;
+
+    color: var(--gold);
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: .16em;
+}
+
+.design-boundary h3 {
+    margin-top: 13px;
+
+    color: var(--white);
+
+    font-family: var(--font-heading);
+
+    font-size: 19px;
+
+    line-height: 1.3;
+}
+
+.design-boundary p {
+    margin-top: 12px;
+
+    color: #b9c8d9;
+
+    font-size: 11px;
+
+    line-height: 1.75;
+}
+
+.design-boundary strong {
+    color: var(--gold);
+}
+
+
+/* =========================================================
+   21. FOOTER
+========================================================= */
+
+footer {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 30px;
+
+    padding: 28px 45px;
+
+    background: var(--navy);
+
+    color: var(--white);
+
+    border-top: 3px solid var(--gold);
+}
+
+footer strong {
+    font-family: var(--font-heading);
+
+    font-size: 13px;
+
+    letter-spacing: .04em;
+}
+
+footer p {
+    margin-top: 5px;
+
+    color: #9fb0c3;
+
+    font-size: 9px;
+}
+
+footer .contact {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    gap: 3px;
+
+    color: #c4d0de;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   22. PRINT / A4
+========================================================= */
+
+@page {
+    size: A4;
+    margin: 10mm;
+}
+
+@media print {
+
+    html,
+    body {
+        width: 210mm;
+        min-height: 297mm;
+
+        background: white !important;
+    }
+
+    body {
+        font-size: 10px;
+    }
+
+    .quotation {
+        width: 100%;
+
+        margin: 0;
+
+        box-shadow: none;
+
+        overflow: visible;
+    }
+
+    .quotation-header,
+    .hero,
+    .architecture-card,
+    .design-boundary,
+    footer,
+    .commercial-summary .grand,
+    .boq-table thead th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .section,
+    .boq-section {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .engineering-note {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .boq-container {
+        overflow: visible;
+
+        box-shadow: none;
+    }
+
+    .boq-table {
+        min-width: 0;
+
+        font-size: 8px;
+    }
+
+    .boq-table thead th {
+        font-size: 7px;
+    }
+
+    .boq-table tbody td {
+        padding: 7px 6px;
+    }
+
+    .boq-table td strong {
+        font-size: 8px;
+    }
+
+    .boq-table td span {
+        font-size: 7px;
+    }
+
+    .boq-table .col-price {
+        width: 90px;
+    }
+
+    .boq-table .col-qty {
+        width: 65px;
+    }
+
+    .metric,
+    .architecture-card,
+    .summary-card,
+    .client-card,
+    .load-item,
+    .feature-list li,
+    .commercial-summary {
+        box-shadow: none;
+    }
+
+    .metric:hover {
+        transform: none;
+    }
+
+    .boq-table tr {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .category-row {
+        break-after: avoid;
+        page-break-after: avoid;
+    }
+
+    .engineering-note,
+    .boq-note,
+    .design-boundary {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+}
+
+
+/* =========================================================
+   23. TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .quotation {
+        margin: 20px auto;
+    }
+
+    .quotation-header,
+    .hero,
+    footer {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .section,
+    .boq-section {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .engineering-note {
+        margin-left: 30px;
+        margin-right: 30px;
+    }
+
+    .metrics {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .architecture {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .load-grid {
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+    .load-item.wide {
+        grid-column: span 2;
+    }
+
+    .system-summary {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+
+/* =========================================================
+   24. MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    body {
+        background: #f5f7fa;
+    }
+
+    .quotation {
+        width: 100%;
+
+        margin: 0;
+
+        border-radius: 0;
+    }
+
+    .quotation-header {
+        min-height: auto;
+
+        padding: 22px 20px;
+
+        align-items: flex-start;
+    }
+
+    .brand {
+        gap: 10px;
+    }
+
+    .logo-mark {
+        width: 48px;
+        height: 48px;
+    }
+
+    .logo-mark img {
+        width: 42px !important;
+        height: 42px !important;
+    }
+
+    .brand-content h1 {
+        font-size: 15px;
+    }
+
+    .brand-content p {
+        font-size: 7px;
+    }
+
+    .quotation-meta {
+        display: none;
+    }
+
+    .hero {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        padding: 35px 20px;
+
+        gap: 25px;
+    }
+
+    .hero h2 {
+        font-size: 32px;
+    }
+
+    .hero p {
+        font-size: 12px;
+    }
+
+    .hero-capacity {
+        width: 100%;
+
+        min-height: 110px;
+    }
+
+    .hero-capacity strong {
+        font-size: 28px;
+    }
+
+    .client-information {
+        grid-template-columns: 1fr;
+    }
+
+    .client-card {
+        min-height: auto;
+
+        padding: 20px;
+
+        border-right: none;
+
+        border-bottom: 1px solid var(--border);
+    }
+
+    .client-card:last-child {
+        border-bottom: none;
+    }
+
+    .section,
+    .boq-section {
+        padding: 38px 20px;
+    }
+
+    .section-heading {
+        gap: 12px;
+    }
+
+    .section-number {
+        width: 36px;
+        height: 36px;
+    }
+
+    .section-heading h2 {
+        font-size: 21px;
+    }
+
+    .engineering-note {
+        margin: 0 20px 38px;
+
+        padding: 22px 20px;
+    }
+
+    .metrics {
+        grid-template-columns: 1fr;
+    }
+
+    .metric {
+        min-height: 125px;
+    }
+
+    .load-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .load-item.wide {
+        grid-column: span 2;
+    }
+
+    .architecture {
+        grid-template-columns: 1fr;
+    }
+
+    .architecture-card {
+        min-height: 190px;
+    }
+
+    .system-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .boq-container {
+        margin-left: 0;
+        margin-right: 0;
+
+        border-radius: 9px;
+    }
+
+    .commercial-summary {
+        max-width: none;
+
+        margin-top: 25px;
+    }
+
+    .split {
+        grid-template-columns: 1fr;
+
+        gap: 30px;
+    }
+
+    footer {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        padding: 25px 20px;
+    }
+
+    footer .contact {
+        align-items: flex-start;
+    }
+}
+
+
+/* =========================================================
+   25. SMALL MOBILE
+========================================================= */
+
+@media (max-width: 430px) {
+
+    .load-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .load-item {
+        min-height: 85px;
+
+        padding: 13px;
+    }
+
+    .load-item strong {
+        font-size: 20px;
+    }
+
+    .load-item span {
+        font-size: 9px;
+    }
+
+    .load-item.wide {
+        grid-column: span 2;
+    }
+
+    .hero h2 {
+        font-size: 29px;
+    }
+
+    .section-heading h2 {
+        font-size: 19px;
+    }
+
+    .commercial-summary {
+        padding: 18px;
+    }
+
+    .commercial-summary .grand {
+        margin-left: -18px;
+        margin-right: -18px;
+        margin-bottom: -18px;
+
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+}
+
+
+/* =========================================================
+   26. ACCESSIBILITY / REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>AE Renewable Ltd | Professional Quotation</title>
+    <title>AE Renewable Ltd | Premium Solar Quotation</title>
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <!-- CSS -->
     <link rel="stylesheet" href="AE.css">
-
 </head>
 
 <body>
 
- 
+<main class="quotation">
 
 
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
+    <header class="quotation-header">
 
+        <div class="brand">
 
-
-    <!-- =========================================================
-     PAGE 6
-     COMMERCIAL SUMMARY
-========================================================= -->
-
-<section class="commercial-page">
-
-    <div class="page-header">
-
-    <div class="header-left">
-
-        <img src="/LETS_GO/images/logo.jpeg"
-             alt="AE Renewable Ltd"
-             class="header-logo">
-
-        <div>
-
-            <h3>AE RENEWABLE LTD</h3>
-
-            <span>
-                Professional Engineering Solutions
-            </span>
-
-        </div>
-
-    </div>
-
-    <div class="header-right">
-
-        <div class="header-item">
-
-            <small>Quotation No.</small>
-
-            <strong>AE-20260806-001</strong>
-
-        </div>
-
-        <div class="header-item">
-
-            <small>Date</small>
-
-            <strong>06 August 2026</strong>
-
-        </div>
-
-    </div>
-
-</div>
-
-    <div class="commercial-header">
-
-        <span class="section-label">
-            SECTION D
-        </span>
-
-        <h2>
-            Commercial Summary
-        </h2>
-
-        <p>
-
-            Thank you for considering AE Renewable Ltd for your
-            power and security requirements. We are committed to
-            delivering reliable engineering solutions using premium
-            equipment, professional workmanship and exceptional
-            after-sales support.
-
-        </p>
-
-    </div>
-
-
-    <!--=========================================
-            PROJECT COST SUMMARY
-    ==========================================-->
-
-    <div class="summary-grid">
-
-        <div class="summary-card solar">
-
-            <h4>Solar Power System</h4>
-
-            <h2>₦ 6,172,000</h2>
-
-        </div>
-
-        <div class="summary-card cctv">
-
-            <h4>CCTV Surveillance</h4>
-
-            <h2>₦ 476,000</h2>
-
-        </div>
-
-        <div class="summary-card fence">
-
-            <h4>Electric Fence</h4>
-
-            <h2>₦ 735,000</h2>
-
-        </div>
-
-    </div>
-
-
-    <div class="grand-total">
-
-        <span>GRAND TOTAL</span>
-
-        <h1>₦ 7,383,000</h1>
-
-    </div>
-
-
-
-    <!--=========================================
-              PROJECT INFORMATION
-    ==========================================-->
-<!-- 
-    <div class="info-grid">
-
-        <div class="info-card">
-
-            <h3>Project Duration</h3>
-
-            <p>5 – 7 Working Days</p>
-
-        </div>
-
-        <div class="info-card">
-
-            <h3>Quotation Validity</h3>
-
-            <p>14 Days</p>
-
-        </div>
-
-        <div class="info-card">
-
-            <h3>Payment Terms</h3>
-
-            <p>90% Advance • 10% Upon Completion</p>
-
-        </div>
-
-        <div class="info-card">
-
-            <h3>Delivery</h3>
-
-            <p>Subject to Product Availability</p>
-
-        </div>
-
-    </div> -->
-
-
-
-    <!--=========================================
-                    WARRANTY
-    ==========================================-->
-
-    <!-- <div class="policy-card">
-
-        <h3>
-
-            Warranty
-
-        </h3>
-
-        <ul>
-
-            <li>Manufacturer's warranty applies to all supplied equipment.</li>
-
-            <li>Installation workmanship is covered for <strong>3 Months.</strong></li>
-
-            <li>Warranty excludes physical damage, misuse, lightning and unauthorized modifications.</li>
-
-            <li>Warranty becomes void if the system is altered by unauthorized personnel.</li>
-
-        </ul>
-
-    </div> -->
-
-
-
-    <!--=========================================
-                 TERMS & CONDITIONS
-    ==========================================-->
-<!-- 
-    <div class="policy-card">
-
-        <h3>
-
-            Terms & Conditions
-
-        </h3>
-
-        <ul>
-
-            <li>This quotation is valid for fourteen (14) days from the date of issue.</li>
-
-            <li>Prices may change without prior notice after the validity period.</li>
-
-            <li>Additional works outside the agreed scope shall be quoted separately.</li>
-
-            <li>Final installation schedule shall be agreed after confirmation of payment.</li>
-
-            <li>Equipment remains the property of AE Renewable Ltd until full payment is received.</li>
-
-        </ul>
-
-    </div> -->
-
-<!-- =========================================================
-     OFFICIAL PAYMENT & ACCOUNT DETAILS
-========================================================= -->
-
-<section class="accountDetails">
-
-    <div class="account-top">
-
-        <div class="account-title">
-
-            <div class="account-icon">
-                <i data-lucide="shield-check"></i>
+            <div class="logo-mark">
+             <img src="logo_NoBackgrouund.jpeg" alt=""  style="width: 50px; height: 40px; border-radius: 50%;">
             </div>
 
-            <div>
-                <span class="account-label">OFFICIAL PAYMENT CHANNEL</span>
-
-                <h3>AE Renewable Ltd</h3>
+            <div class="brand-content">
+                <h1>AE RENEWABLE LTD</h1>
 
                 <p>
-                    Secure payment details for your approved quotation
+                    POWERING YOUR FUTURE WITH SUN
                 </p>
             </div>
 
         </div>
 
-        <div class="verified-badge">
-            <i data-lucide="badge-check"></i>
-            <span>Verified Company Account</span>
-        </div>
 
-    </div>
+        <div class="quotation-meta">
 
-
-    <div class="account-main">
-
-        <!-- ACCOUNT NAME -->
-
-        <div class="account-item account-name">
-
-            <div class="account-item-icon">
-                <i data-lucide="building-2"></i>
-            </div>
-
-            <div class="account-item-content">
-
-                <span>ACCOUNT NAME</span>
-
-                <strong>
-                    AE RENEWABLE LTD
-                </strong>
-
-            </div>
-
-        </div>
-
-
-        <!-- BANK -->
-
-        <div class="account-item">
-
-            <div class="account-item-icon">
-                <i data-lucide="landmark"></i>
-            </div>
-
-            <div class="account-item-content">
-
-                <span>BANK</span>
-
-                <strong>
-                    <!-- ENTER BANK NAME -->
-                    UBA
-                </strong>
-
-            </div>
-
-        </div>
-
-
-        <!-- ACCOUNT NUMBER -->
-
-        <div class="account-item account-number">
-
-            <div class="account-item-icon">
-                <i data-lucide="credit-card"></i>
-            </div>
-
-            <div class="account-item-content">
-
-                <span>ACCOUNT NUMBER</span>
-
-                <strong>
-                    <!-- ENTER ACCOUNT NUMBER -->
-                    1029827207
-                </strong>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- PAYMENT SECURITY NOTICE -->
-
-    <div class="payment-notice">
-
-        <div class="notice-icon">
-            <i data-lucide="lock-keyhole"></i>
-        </div>
-
-        <div class="notice-content">
+            <span class="meta-label">
+                QUOTATION
+            </span>
 
             <strong>
-                Payment Security Notice
+                AER-2026-0806-161
             </strong>
 
+            <span>
+                15 August 2026
+            </span>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <span class="eyebrow">
+                HYBRID SOLAR POWER SOLUTION
+            </span>
+
+            <h2>
+                Premium Residential
+                <span>Energy System</span>
+            </h2>
+
             <p>
-                Please make payments only to the official AE Renewable Ltd
-                account details stated above. Always confirm account details
-                with our office before making payment. AE Renewable Ltd shall
-                not be responsible for payments made to unauthorized accounts
-                or third parties.
+                A professionally engineered Felicity hybrid solar power
+                solution configured around the property's actual energy
+                demand, available rooftop capacity and overnight energy
+                requirements.
             </p>
 
         </div>
 
-    </div>
+
+        <div class="hero-capacity">
+
+            <strong>
+                40 kVA
+            </strong>
+
+            <span>
+                Hybrid Inverter Capacity
+            </span>
+
+        </div>
+
+    </section>
 
 
-    <!-- COMPANY VERIFICATION -->
 
-    <div class="account-verification">
+    <!-- =====================================================
+         CLIENT INFORMATION
+    ====================================================== -->
 
-        <div class="verification-item">
+    <section class="client-information">
 
-            <i data-lucide="phone"></i>
+        <div class="client-card">
+
+            <span>
+                PREPARED FOR
+            </span>
+
+            <h3>
+                Engr Kamal
+            </h3>
+
+            <p>
+                Residential Property<br>
+                Abuja, Nigeria
+            </p>
+
+        </div>
+
+
+        <div class="client-card">
+
+            <span>
+                SYSTEM CLASS
+            </span>
+
+            <h3>
+                Felicity Hybrid Solar
+            </h3>
+
+            <p>
+                Solar PV + Lithium Storage +
+                Grid-Assisted Charging
+            </p>
+
+        </div>
+
+
+        <div class="client-card">
+
+            <span>
+                DESIGN BASIS
+            </span>
+
+            <h3>
+                Practical Operating Load
+            </h3>
+
+            <p>
+                Designed around approximately
+                50% concurrent household demand.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         ENGINEERING DESIGN
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="section-number">
+                01
+            </div>
 
             <div>
-                <span>VERIFY BEFORE PAYMENT</span>
-                <strong>08133615132</strong>
+
+                <span class="section-kicker">
+                    ENGINEERING BASIS
+                </span>
+
+                <h2>
+                    System Design Summary
+                </h2>
+
+                <p>
+                    The proposed system is engineered from the property's
+                    assessed load profile, available roof area and required
+                    energy storage capacity.
+                </p>
+
             </div>
 
         </div>
 
 
-        <div class="verification-divider"></div>
+        <div class="metrics">
+
+            <div class="metric">
+
+                <span>
+                    Assessed House Load
+                </span>
+
+                <strong>
+                    37.4 kW
+                </strong>
+
+                <small>
+                    100% theoretical simultaneous load
+                </small>
+
+            </div>
 
 
-        <div class="verification-item">
+            <div class="metric highlighted">
 
-            <i data-lucide="mail"></i>
+                <span>
+                    Design Operating Load
+                </span>
 
-            <div>
-                <span>OFFICIAL EMAIL</span>
-                <strong>AERenewablesolution@gmail.com</strong>
+                <strong>
+                    ≈12.46 kW
+                </strong>
+
+                <small>
+                    Approximately 33% concurrent demand
+                </small>
+
+            </div>
+
+
+            <div class="metric">
+
+                <span>
+                    Solar PV Capacity
+                </span>
+
+                <strong>
+                    27.675 kWp
+                </strong>
+
+                <small>
+                    45 × 615 W solar modules
+                </small>
+
+            </div>
+
+
+            <div class="metric">
+
+                <span>
+                    Battery Storage
+                </span>
+
+                <strong>
+                    100 kWh
+                </strong>
+
+                <small>
+                    4 × 25 kWh Felicity batteries
+                </small>
+
             </div>
 
         </div>
 
+    </section>
 
-        <div class="verification-divider"></div>
 
 
-        <div class="verification-item">
+    <!-- =====================================================
+         ROOF LIMITATION
+    ====================================================== -->
 
-            <i data-lucide="globe-2"></i>
+    <section class="engineering-note">
 
-            <div>
-                <span>WEBSITE</span>
-                <strong>AERenewablesolution.com</strong>
-            </div>
-
+        <div class="note-icon">
+            !
         </div>
 
-    </div>
-
-
-    <!-- TRUST FOOTER -->
-
-    <div class="account-footer">
-
-        <div class="trust-mark">
-            <i data-lucide="check-circle-2"></i>
-        </div>
 
         <div>
 
-            <strong>
-                POWERING YOUR FUTURE WITH SUN
-            </strong>
+            <h3>
+                Roof Capacity & PV Design Decision
+            </h3>
 
             <p>
-                Professional Engineering Solutions • Solar Energy •
-                CCTV • Electric Fence • Electrical Engineering
+                The property's theoretical solar requirement is approximately
+                <strong>55 kW</strong>, which would require approximately
+                <strong>73 × 750 W panels</strong> under the original
+                assessment.
+            </p>
+
+            <p>
+                However, the available roof area cannot accommodate the
+                full theoretical array. The practical installation has
+                therefore been limited to <strong>45 solar modules</strong>.
+            </p>
+
+            <p>
+                With the selected <strong>615 W panels</strong>, the available
+                roof capacity provides a total installed PV capacity of
+                <strong>27.675 kWp</strong>.
+            </p>
+
+            <p>
+                To improve energy availability outside solar production
+                hours, the system incorporates <strong>100 kWh of lithium
+                storage</strong> and <strong>night-time grid charging</strong>.
+                This allows the battery bank to be replenished from the grid
+                during scheduled periods when required.
             </p>
 
         </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         PROPERTY LOAD
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="section-number">
+                02
+            </div>
+
+            <div>
+
+                <span class="section-kicker">
+                    LOAD ASSESSMENT
+                </span>
+
+                <h2>
+                    Property Load Profile
+                </h2>
+
+                <p>
+                    Major electrical loads considered during the preliminary
+                    system design.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="load-grid">
+
+            <div class="load-item">
+                <strong>09</strong>
+                <span>Air Conditioners</span>
+            </div>
+
+            <div class="load-item">
+                <strong>05</strong>
+                <span>Water Heaters</span>
+            </div>
+
+            <div class="load-item">
+                <strong>01</strong>
+                <span>Microwave</span>
+            </div>
+
+            <div class="load-item">
+                <strong>01</strong>
+                <span>Oven</span>
+            </div>
+
+            <div class="load-item">
+                <strong>01</strong>
+                <span>Refrigerator</span>
+            </div>
+
+            <div class="load-item">
+                <strong>01</strong>
+                <span>Dishwasher</span>
+            </div>
+
+            <div class="load-item">
+                <strong>01</strong>
+                <span>Lift</span>
+            </div>
+
+            <div class="load-item">
+                <strong>07</strong>
+                <span>Televisions</span>
+            </div>
+
+            <div class="load-item">
+                <strong>01</strong>
+                <span>Washing Machine</span>
+            </div>
+
+            <div class="load-item wide">
+                <strong>+</strong>
+                <span>
+                    Lighting, sockets and general household loads
+                </span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SYSTEM ARCHITECTURE
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="section-number">
+                03
+            </div>
+
+            <div>
+
+                <span class="section-kicker">
+                    PROPOSED SYSTEM
+                </span>
+
+                <h2>
+                    System Architecture
+                </h2>
+
+                <p>
+                    Core equipment forming the proposed hybrid energy system.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="architecture">
+
+
+            <div class="architecture-card">
+
+                <span class="architecture-number">
+                    01
+                </span>
+
+                <h3>
+                    Solar PV
+                </h3>
+
+                <strong>
+                    27.675 kWp
+                </strong>
+
+                <p>
+                    45 × 615 W high-efficiency solar panels.
+                </p>
+
+            </div>
+
+
+            <div class="architecture-card">
+
+                <span class="architecture-number">
+                    02
+                </span>
+
+                <h3>
+                    Felicity Inverters
+                </h3>
+
+                <strong>
+                    40 kVA
+                </strong>
+
+                <p>
+                    2 × 20 kVA Felicity hybrid inverters.
+                </p>
+
+            </div>
+
+
+            <div class="architecture-card">
+
+                <span class="architecture-number">
+                    03
+                </span>
+
+                <h3>
+                    Felicity Lithium Storage
+                </h3>
+
+                <strong>
+                    100 kWh
+                </strong>
+
+                <p>
+                    4 × 25 kWh Felicity lithium batteries.
+                </p>
+
+            </div>
+
+
+            <div class="architecture-card">
+
+                <span class="architecture-number">
+                    04
+                </span>
+
+                <h3>
+                    Grid Charging
+                </h3>
+
+                <strong>
+                    Night Support
+                </strong>
+
+                <p>
+                    Scheduled grid charging to replenish battery storage.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         BILL OF MATERIALS
+    ====================================================== -->
+
+    <section class="boq-section">
+
+        <div class="section-heading">
+
+            <div class="section-number">
+                04
+            </div>
+
+            <div>
+
+                <span class="section-kicker">
+                    PROJECT MATERIAL SCHEDULE
+                </span>
+
+                <h2>
+                    Bill of Materials
+                </h2>
+
+                <p>
+                    Detailed schedule of the principal equipment,
+                    protection devices, cabling, mounting accessories
+                    and installation materials required for the project.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SYSTEM SUMMARY -->
+
+        <div class="system-summary">
+
+            <div class="summary-card">
+
+                <span>
+                    PV GENERATION
+                </span>
+
+                <strong>
+                    27.675 kWp
+                </strong>
+
+                <small>
+                    45 × 615 W Solar Panels
+                </small>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <span>
+                    INVERTER CAPACITY
+                </span>
+
+                <strong>
+                    40 kVA
+                </strong>
+
+                <small>
+                    2 × 20 kVA Felicity Hybrid Inverters
+                </small>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <span>
+                    BATTERY STORAGE
+                </span>
+
+                <strong>
+                    100 kWh
+                </strong>
+
+                <small>
+                    4 × 25 kWh Felicity Lithium Batteries
+                </small>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <span>
+                    GRID SUPPORT
+                </span>
+
+                <strong>
+                    Night Charging
+                </strong>
+
+                <small>
+                    Grid-assisted battery replenishment
+                </small>
+
+            </div>
+
+        </div>
+
+
+
+      
+    <!-- =====================================================
+         BOQ TABLE
+    ====================================================== -->
+
+    <div class="boq-container">
+
+        <table class="boq-table">
+
+            <thead>
+                <tr>
+                    <th class="col-number">#</th>
+                    <th>Description</th>
+                    <th>Specification</th>
+                    <th class="col-qty">Qty</th>
+                    <th class="col-price">Unit Price</th>
+                    <th class="col-price">Amount</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+
+                <!-- PRIMARY EQUIPMENT -->
+
+                <tr class="category-row">
+                    <td colspan="6">
+                        A — PRIMARY SYSTEM EQUIPMENT
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="item-number">01</td>
+
+                    <td>
+                        <strong>Solar PV Modules</strong>
+                        <span>High-efficiency solar generation</span>
+                    </td>
+
+                    <td>
+                        615 W Solar Panel
+                    </td>
+
+                    <td>45 Nos.</td>
+
+                    <td>₦ 145,000</td>
+
+                    <td class="amount">₦ 6,525,000</td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">02</td>
+
+                    <td>
+                        <strong>Hybrid Inverter</strong>
+                        <span>Three-phase hybrid power conversion</span>
+                    </td>
+
+                    <td>
+                        20 kVA Hybrid Inverter
+                    </td>
+
+                    <td>2 Nos.</td>
+
+                    <td>₦ 2,600,000</td>
+
+                    <td class="amount">₦ 5,200,000</td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">03</td>
+
+                    <td>
+                        <strong>Lithium Battery</strong>
+                        <span>Energy storage system</span>
+                    </td>
+
+                    <td>
+                        25 kWh Lithium Battery
+                    </td>
+
+                    <td>4 Nos.</td>
+
+                    <td>₦ 3,500,000</td>
+
+                    <td class="amount">₦ 14,000,000</td>
+                </tr>
+                <!-- subtotal -->
+                <tr>
+                    <td colspan="5" class="text-right"><strong>Subtotal:</strong></td>
+                    <td class="amount">₦ 25,725,000</td>
+                </tr>
+
+
+                <!-- PV MOUNTING -->
+
+                <tr class="category-row">
+                    <td colspan="6">
+                        B — PV MOUNTING &amp; SOLAR DC MATERIALS
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">04</td>
+
+                    <td>
+                        <strong>PV Mounting Rail</strong>
+                        <span>Roof mounting structure</span>
+                    </td>
+
+                    <td>
+                        Solar Panel Rail
+                    </td>
+
+                    <td>18 Lengths</td>
+
+                    <td>₦ 7,500</td>
+
+                    <td class="amount">₦ 135,000</td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">05</td>
+
+                    <td>
+                        <strong>Rail Bolt &amp; Nut</strong>
+                        <span>Panel mounting hardware</span>
+                    </td>
+
+                    <td>
+                        Stainless Steel / Size 17
+                    </td>
+
+                    <td>100 Pcs.</td>
+
+                    <td>₦ 600</td>
+
+                    <td class="amount">₦ 60,000</td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">06</td>
+
+                    <td>
+                        <strong>Roof Sealant</strong>
+                        <span>Weatherproof installation sealing</span>
+                    </td>
+
+                    <td>
+                        Solar / Weatherproof Sealant
+                    </td>
+
+                    <td>3 Tube</td>
+
+                    <td>₦ 5,000</td>
+
+                    <td class="amount">₦ 15,000</td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">07</td>
+
+                    <td>
+                        <strong>MC4 Connectors</strong>
+                        <span>Solar PV connection accessories</span>
+                    </td>
+
+                    <td>
+                        MC4 Connector Pairs
+                    </td>
+
+                    <td>15 Pairs</td>
+
+                    <td>₦ 2,000</td>
+
+                    <td class="amount">₦ 30,000</td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">08</td>
+
+                    <td>
+                        <strong>PV Cable</strong>
+                        <span>Solar DC cable</span>
+                    </td>
+
+                    <td>
+                        4 mm² Solar Cable
+                    </td>
+
+                    <td>150 m</td>
+
+                    <td>₦ 3,600</td>
+
+                    <td class="amount">₦ 540,000</td>
+                </tr>
+
+
+                <!-- <tr>
+                    <td class="item-number">09</td>
+
+                    <td>
+                        <strong>DC Cable</strong>
+                        <span>DC connection cable</span>
+                    </td>
+
+                    <td>
+                        6 mm² DC Cable
+                    </td>
+
+                    <td>As Required</td>
+
+                    <td>₦ —</td>
+
+                    <td class="amount">₦ —</td>
+                </tr> -->
+
+
+                <tr>
+                    <td class="item-number">09</td>
+
+                    <td>
+                        <strong>Insulation Tape</strong>
+                        <span>Electrical identification &amp; insulation</span>
+                    </td>
+
+                    <td>
+                        Red &amp; Black
+                    </td>
+
+                    <td>6 3R/3B</td>
+
+                    <td>₦ 500</td>
+
+                    <td class="amount">₦ 3,000</td>
+                </tr>
+
+                <!-- subtotal -->
+                <tr>
+                    <td colspan="5" class="text-right"><strong>Subtotal:</strong></td>
+                    <td class="amount">₦ 783,000</td>
+                </tr>
+
+                <!-- BATTERY -->
+
+                <tr class="category-row">
+                    <td colspan="6">
+                        C — BATTERY &amp; INVERTER CONNECTION
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">10</td>
+
+                    <td>
+                        <strong>Inverter / BussBar Flex Cable</strong>
+                        <span>High-current battery connection</span>
+                    </td>
+
+                    <td>
+                        90 mm² Flexible Cable
+                    </td>
+
+                    <td>12 m</td>
+
+                    <td>₦ 25,000</td>
+
+                    <td class="amount">₦ 300,000</td>
+                </tr>
+
+                              <tr>
+                    <td class="item-number">11</td>
+
+                    <td>
+                        <strong>Custom Busbar / Distribution</strong>
+                        <span>Inverter power distribution</span>
+                    </td>
+
+                    <td>
+                        4-Way Custom Assembly
+                    </td>
+
+                    <td>2 Pcs.</td>
+
+                    <td>₦ 75,000</td>
+
+                    <td class="amount">₦ 150,000</td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">12</td>
+
+                    <td>
+                        <strong>Cable Lugs</strong>
+                        <span>Battery cable termination</span>
+                    </td>
+
+                    <td>
+                        90 mm² Heavy-Duty Cable Lug
+                    </td>
+
+                    <td>15 Pcs.</td>
+
+                    <td>₦ 4,000</td>
+
+                    <td class="amount">₦ 60,000</td>
+                </tr>
+                <tr>
+                    <td class="item-number">13</td>
+
+                    <td>
+                        <strong>Battery / BussBar Flex Cable</strong>
+                        <span>High-current battery connection</span>
+                    </td>
+
+                    <td>
+                        50 mm² Flexible Cable
+                    </td>
+
+                    <td>37m</td>
+
+                    <td>₦ 12,500</td>
+
+                    <td class="amount">₦ 462,500</td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">14</td>
+
+                    <td>
+                        <strong>Cable Lugs</strong>
+                        <span>Battery cable termination</span>
+                    </td>
+
+                    <td>
+                        50 mm² Heavy-Duty Cable Lug
+                    </td>
+
+                    <td>32 Pcs.</td>
+
+                    <td>₦ 2,700</td>
+
+                    <td class="amount">₦ 86,400</td>
+                </tr>
+
+
+  
+                <tr>
+                    <td class="item-number">15</td>
+
+                    <td>
+                        <strong>Custom Busbar / Distribution</strong>
+                        <span>Battery power distribution</span>
+                    </td>
+
+                    <td>
+                        8-Way Custom Assembly
+                    </td>
+
+                    <td>2 Pcs.</td>
+
+                    <td>₦ 120,000</td>
+
+                    <td class="amount">₦ 240,000</td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">16</td>
+
+                    <td>
+                        <strong>Battery Breaker</strong>
+                        <span>Inverter / Battery DC protection</span>
+                    </td>
+
+                    <td>
+                        250 A DC Breaker
+                    </td>
+
+                    <td>3 Pcs.</td>
+
+                    <td>₦ 45,000</td>
+
+                    <td class="amount">₦ 135,000</td>
+                </tr>
+
+
+                <!-- subtotal -->
+                <tr>
+                    <td colspan="5" class="text-right"><strong>Subtotal:</strong></td>
+                    <td class="amount">₦ 1,433,900</td>
+                </tr>
+
+                <!-- PROTECTION -->
+
+                <tr class="category-row">
+                    <td colspan="6">
+                        D — PV &amp; AC PROTECTION
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">17</td>
+
+                    <td>
+                        <strong>PV Breaker</strong>
+                        <span>Solar string protection</span>
+                    </td>
+
+                    <td>
+                        25 A DC Breaker
+                    </td>
+
+                    <td>5 Pcs.</td>
+
+                    <td>₦ 15,000</td>
+
+                    <td class="amount">₦ 75,000</td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">18</td>
+
+                    <td>
+                        <strong>PV Surge Protection</strong>
+                        <span>DC surge protection</span>
+                    </td>
+
+                    <td>
+                        DC Type 2 SPD
+                    </td>
+
+                    <td>5 Pcs.</td>
+
+                    <td>₦ 15,000</td>
+
+                    <td class="amount">₦ 75,000</td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">19</td>
+
+                    <td>
+                        <strong>AC Breaker</strong>
+                        <span>Inverter AC protection</span>
+                    </td>
+
+                    <td>
+                        100 A AC Breaker
+                    </td>
+
+                    <td>3 Pcs.</td>
+
+                    <td>₦ 18,000</td>
+
+                    <td class="amount">₦ 54,000</td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">20</td>
+
+                    <td>
+                        <strong>Main AC Breaker</strong>
+                        <span>Main system protection</span>
+                    </td>
+
+                    <td>
+                        300 A — 3 Phase
+                    </td>
+
+                    <td>1 Pc.</td>
+
+                    <td>₦ 140,000</td>
+
+                    <td class="amount">₦ 140,000</td>
+                </tr>
+                <!-- subtotal -->
+                <tr>
+                    <td colspan="5" class="text-right"><strong>Subtotal:</strong></td>
+                    <td class="amount">₦ 344,000</td>
+                </tr>
+
+
+
+
+
+
+                <!-- DISTRIBUTION -->
+
+                <tr class="category-row">
+                    <td colspan="6">
+                        E — DISTRIBUTION, CABLES &amp; CHANGEOVER
+                    </td>
+                </tr>
+
+
+                <!-- <tr>
+                    <td class="item-number">20</td>
+
+                    <td>
+                        <strong>Distribution Board</strong>
+                        <span>Load distribution and protection</span>
+                    </td>
+
+                    <td>
+                        12-Way Distribution Board
+                    </td>
+
+                    <td>1 Pc.</td>
+
+                    <td>₦ —</td>
+
+                    <td class="amount">₦ —</td>
+                </tr> -->
+
+
+                <tr>
+                    <td class="item-number">21</td>
+
+                    <td>
+                        <strong>Flexible Cable</strong>
+                        <span>AC power connection</span>
+                    </td>
+
+                    <td>
+                        10 mm² Flexible Cable
+                    </td>
+
+                    <td>30 m</td>
+
+                    <td>₦ 5,800</td>
+
+                    <td class="amount">₦ 174,000</td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">22</td>
+
+                    <td>
+                        <strong>Flexible Cable</strong>
+                        <span>High-current AC connection</span>
+                    </td>
+
+                    <td>
+                        25 mm² Flexible Cable
+                    </td>
+
+                    <td>15 m</td>
+
+                    <td>₦ 8,000</td>
+
+                    <td class="amount">₦ 120,000</td>
+                </tr>
+                <tr>
+                    <td class="item-number">23</td>
+
+                    <td>
+                        <strong>PEG / SCREW</strong>
+                        <span>1 Packet</span>
+                    </td>
+
+                    <td>
+                        12mm Peg / 3' Screw
+                    </td>
+
+                    <td>1 packet</td>
+
+                    <td>₦ 30,000</td>
+
+                    <td class="amount">₦ 30,000</td>
+                </tr>
+
+                                <tr>
+                    <td class="item-number">24</td>
+
+                    <td>
+                        <strong>AC Cable Lug</strong>
+                        <span>AC cable termination</span>
+                    </td>
+
+                    <td>
+                        25mm
+                    </td>
+
+                    <td> 10 Pieces</td>
+
+                    <td>₦ 5,000</td>
+
+                    <td class="amount">₦ 50,000</td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">25</td>
+
+                    <td>
+                        <strong>Changeover Switch</strong>
+                        <span>Grid / inverter source selection</span>
+                    </td>
+
+                    <td>
+                        200 A Changeover Switch
+                    </td>
+
+                    <td>1 Pc.</td>
+
+                    <td>₦ 35,000</td>
+
+                    <td class="amount">₦ 35,000</td>
+                </tr>
+
+                <!-- subtotal -->
+                <tr>
+                    <td colspan="5" class="text-right"><strong>Subtotal:</strong></td>
+                    <td class="amount">₦ 409,000</td>
+                </tr>
+
+                <!-- INSTALLATION -->
+
+                <tr class="category-row">
+                    <td colspan="6">
+                        F — BALANCE OF SYSTEM &amp; INSTALLATION
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td class="item-number">26</td>
+
+                    <td>
+                        <strong>Earthing System</strong>
+                        <span>System grounding and protection</span>
+                    </td>
+
+                    <td>
+                        Earth Rods
+                    </td>
+
+                    <td>1 Length</td>
+
+                    <td>₦ 6,000</td>
+
+                    <td class="amount">₦ 6,000</td>
+                </tr>
+                <tr>
+                    <td class="item-number">27</td>
+
+                    <td>
+                        <strong>Earthing System</strong>
+                        <span>System grounding and protection</span>
+                    </td>
+
+                    <td>
+                        6mm Earthing Cable
+                    </td>
+
+                    <td>30 m</td>
+
+                    <td>₦ 2,800</td>
+
+                    <td class="amount">₦ 84,000</td>
+                </tr>
+
+
+
+                <tr>
+                    <td class="item-number">28</td>
+
+                    <td>
+                        <strong>Cable Management</strong>
+                        <span>Trunking /  flex / Clip </span>
+                    </td>
+
+                    <td>
+                         100^100 mm /  32mm / 20mm
+                    </td>
+
+                    <td>6 Lengths / 15m / 1 packet</td>
+
+                    <td>₦ 75,000</td>
+
+                    <td class="amount">₦ 75,000</td>
+                </tr>
+
+
+                <tr class="installation-row">
+                    <td class="item-number">29</td>
+
+                    <td>
+                        <strong>Installation &amp; Commissioning</strong>
+                        <span>Complete professional project execution</span>
+                    </td>
+
+                    <td>
+                        Supply, Installation, Configuration,
+                        Testing &amp; Commissioning
+                    </td>
+
+                    <td>----</td>
+
+                    <td>₦ 600,000</td>
+
+                    <td class="amount">₦ 600,000</td>
+                </tr>
+                <!-- subtotal -->
+                <tr>
+                    <td colspan="5" class="text-right"><strong>Subtotal:</strong></td>
+                    <td class="amount">₦ 765,000</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- =====================================================
+         ENGINEERING NOTE
+    ====================================================== -->
+
+    <div class="boq-note">
+
+        <div class="note-symbol">i</div>
+
+        <div>
+            <strong>Engineering Note</strong>
+
+            <p>
+                The material quantities shown above are based on the current
+                project design and preliminary site requirements. Final cable
+                lengths, protection ratings, PV string configuration,
+                termination quantities and mounting details shall be verified
+                during final site engineering before installation.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         COMMERCIAL SUMMARY
+    ====================================================== -->
+
+    <div class="commercial-summary">
+
+        <div class="commercial-line">
+            <span>Primary Equipment</span>
+            <strong>₦ 25,725,000</strong>
+        </div>
+
+        <div class="commercial-line">
+            <span> PV MOUNTING & SOLAR DC MATERIALS</span>
+            <strong>₦ 783,000</strong>
+        </div>
+
+        <div class="commercial-line">
+            <span> BATTERY & INVERTER CONNECTION</span>
+            <strong>₦  1,433,900</strong>
+        </div>
+
+        <div class="commercial-line">
+            <span> PV & AC PROTECTION</span>
+            <strong>₦ 344,000</strong>
+        </div>
+        <div class="commercial-line">
+            <span>DISTRIBUTION, CABLES & CHANGEOVER</span>
+            <strong>₦ 409,000</strong>
+        </div>
+        <div class="commercial-line">
+            <span> BALANCE OF SYSTEM & INSTALLATION</span>
+            <strong>₦  765,000</strong>
+        </div>
+
+        <div class="commercial-line vat-line">
+            <span>VAT / Applicable Taxes</span>
+            <strong>₦ 150,000</strong>
+        </div>
+
+
 
     </div>
 
 </section>
 
-</section>
+      <div class="commercial-summary">
+        <div><span>Equipment & Materials</span><strong>₦ 28,759,900</strong></div>
+        <div><span>Installation & Commissioning</span><strong>₦ 600,000</strong></div>
+        <div><span>Logistics / Ancillary Works</span><strong>₦ 100,000</strong></div>
+        <div class="grand"><span>PROJECT TOTAL</span><strong>₦ 29,609,900</strong></div>
+      </div>
+    </section>
 
+    <section class="section split">
+      <div>
+        <div class="section-heading compact">
+          <span>05</span>
+          <div><h2>System Operation</h2></div>
+        </div>
+        <ul class="feature-list">
+          <li>Solar power supplies the property's daytime demand and charges the battery bank.</li>
+          <li>Battery storage supplies loads during power interruptions and scheduled discharge periods.</li>
+          <li>Grid charging is introduced during the night to replenish battery energy when required.</li>
+          <li>The three-inverter architecture provides a combined 48 kVA conversion capacity.</li>
+          <li>System operation should prioritize essential loads during constrained solar or battery conditions.</li>
+        </ul>
+      </div>
 
+      <div class="design-boundary">
+        <span>ENGINEERING BOUNDARY</span>
+        <h3>Roof Area Controls PV Capacity</h3>
+        <p>
+          The 55 kW theoretical PV requirement is not the installed system size.
+          The quoted PV system is intentionally limited to the available roof capacity:
+          <strong>45 × 615 W = 27.675 kWp.</strong>
+        </p>
+      </div>
+    </section>
 
+    <!-- <section class="terms">
+      <h2>Commercial & Technical Notes</h2>
+      <div class="terms-grid">
+        <div>
+          <h3>Scope</h3>
+          <p>Supply, installation, configuration, testing and commissioning of the quoted solar hybrid system and associated balance-of-system components.</p>
+        </div>
+        <div>
+          <h3>Validity</h3>
+          <p>Quotation validity: 14 days from the issue date, subject to equipment availability and supplier pricing.</p>
+        </div>
+        <div>
+          <h3>Final Design</h3>
+          <p>Final cable sizing, protection ratings, PV string configuration, earthing and mounting details shall be confirmed during detailed site engineering.</p>
+        </div>
+        <div>
+          <h3>Client Approval</h3>
+          <p>Any changes to equipment brand, quantities, roof conditions or project scope may require commercial and engineering revision.</p>
+        </div>
+      </div>
+    </section> -->
 
-    <!-- Acceptance -->
-
-
-    <!-- Footer -->
-
-
-    <!-- Floating Print Button -->
-
-
-<script src="AE.js"></script>
-
-<script>
-lucide.createIcons();
-</script>
-
-</body>
-
+    <footer>
+      <div>
+        <strong>AE RENEWABLE LTD</strong>
+        <p>Solar Energy • CCTV • Electric Fence • Electrical Engineering</p>
+      </div>
+      <div class="contact">
+        <span>0813 361 5132</span>
+        <span>AERenewablesolution.com</span>
