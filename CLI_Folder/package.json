@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node backend/server.js",
     "dev": "nodemon backend/server.js",
+    "build": "echo \"Build complete\"",
     "migrate": "node database/migrations/run.js",
     "seed": "node database/migrations/seed/seed.js"
   },
