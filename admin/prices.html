@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Material & Price Management | AE Renewable Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/admin/admin.css?v=20261004-01">
+  <style>
+    :root {
+      --primary-blue: #004AAD;
+      --primary-dark: #020C1A;
+      --accent-gold: #F4A600;
+      --accent-green: #00B140;
+      --navy-card: #0A1931;
+      --navy-card-border: rgba(255, 255, 255, 0.08);
+      --slate-text: #94A3B8;
+    }
+    body {
+      background: #020C1A;
+      color: #F8FAFC;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .price-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 30px 24px 80px;
+    }
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--navy-card-border);
+      margin-bottom: 30px;
+    }
+    .header-title h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin: 0 0 6px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-title p {
+      color: var(--slate-text);
+      font-size: 13px;
+      margin: 0;
+    }
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: none;
+    }
+    .btn-gold {
+      background: linear-gradient(135deg, #F4A600 0%, #D97706 100%);
+      color: #020C1A;
+    }
+    .btn-blue {
+      background: #004AAD;
+      color: #FFFFFF;
+    }
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--navy-card-border);
+      color: #F8FAFC;
+    }
+    .btn-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    }
+    .filter-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .search-box {
+      flex: 1;
+      min-width: 260px;
+      position: relative;
+    }
+    .search-box input {
+      width: 100%;
+      background: #07172E;
+      border: 1px solid var(--navy-card-border);
+      padding: 12px 16px 12px 40px;
+      border-radius: 8px;
+      color: #FFF;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    .search-box span {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--slate-text);
+    }
+    .category-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .cat-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--navy-card-border);
+      color: var(--slate-text);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .cat-btn.active, .cat-btn:hover {
+      background: #004AAD;
+      color: #FFFFFF;
+      border-color: #004AAD;
+    }
+    .pricing-table-card {
+      background: #07172E;
+      border: 1px solid var(--navy-card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    th {
+      background: #0B2347;
+      padding: 14px 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--navy-card-border);
+    }
+    td {
+      padding: 14px 20px;
+      font-size: 13px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      vertical-align: middle;
+    }
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .price-input {
+      background: #020C1A;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #38BDF8;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      width: 140px;
+      text-align: right;
+    }
+    .price-input:focus {
+      outline: none;
+      border-color: #F4A600;
+      box-shadow: 0 0 0 2px rgba(244, 166, 0, 0.2);
+    }
+    .badge-cat {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(0, 74, 173, 0.2);
+      color: #38BDF8;
+      border: 1px solid rgba(0, 74, 173, 0.4);
+    }
+    .badge-custom {
+      background: rgba(0, 177, 64, 0.2);
+      color: #34D399;
+      border: 1px solid rgba(0, 177, 64, 0.4);
+    }
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(2, 12, 26, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open {
+      display: flex;
+    }
+    .modal-card {
+      background: #07172E;
+      border: 1px solid var(--navy-card-border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 520px;
+      padding: 28px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group label {
+      display: block;
+      color: #94A3B8;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      background: #020C1A;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #FFF;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    .toast-notice {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #00B140;
+      color: #FFF;
+      padding: 14px 22px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 10000;
+    }
+    .toast-notice.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="price-container">
+    <div class="header-bar">
+      <div class="header-title">
+        <h1><span>💎</span> AE Renewable Price & Material Engine</h1>
+        <p>Real-time equipment price manager, procurement tariffs & custom materials catalog for ARDE V1.0 Studio</p>
+      </div>
+      <div class="header-actions">
+        <button type="button" class="btn-action btn-gold" id="btnAddNewMaterial">+ Add New Material</button>
+        <button type="button" class="btn-action btn-blue" id="btnSaveAllPrices">💾 Save All Prices</button>
+        <a href="/admin" class="btn-action btn-outline">← Back to Admin</a>
+      </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filter-bar">
+      <div class="search-box">
+        <span>🔍</span>
+        <input type="text" id="searchInput" placeholder="Search equipment, inverters, cables, breakers, panels...">
+      </div>
+      <div class="category-tabs" id="categoryTabs">
+        <button class="cat-btn active" data-cat="all">All Items (<span id="countAll">0</span>)</button>
+        <button class="cat-btn" data-cat="Inverter">Inverters</button>
+        <button class="cat-btn" data-cat="Battery">Batteries</button>
+        <button class="cat-btn" data-cat="Panel">Solar Panels</button>
+        <button class="cat-btn" data-cat="Breaker">Breakers & SPDs</button>
+        <button class="cat-btn" data-cat="Cable">Cables</button>
+        <button class="cat-btn" data-cat="Accessories">Hardware & Accessories</button>
+        <button class="cat-btn" data-cat="Custom">Custom Items (<span id="countCustom">0</span>)</button>
+      </div>
+    </div>
+
+    <!-- PRICE TABLE -->
+    <div class="pricing-table-card">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 50px;">#</th>
+            <th>Equipment / Material Name</th>
+            <th style="width: 140px;">Category</th>
+            <th style="width: 90px;">Unit</th>
+            <th style="width: 190px; text-align: right;">Unit Price (₦)</th>
+            <th style="width: 110px; text-align: center;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="priceTableBody">
+          <!-- Populated by prices.js -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ADD MATERIAL MODAL -->
+  <div class="modal-overlay" id="addMaterialModal">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h2 style="font-family:'Outfit',sans-serif; margin:0; font-size:20px; color:#FFF;">Add New Material</h2>
+        <button type="button" style="background:none; border:none; color:#94A3B8; font-size:24px; cursor:pointer;" id="btnCloseModal">×</button>
+      </div>
+      <form id="addMaterialForm">
+        <div class="form-group">
+          <label>Material Name / Specification *</label>
+          <input type="text" id="newMatName" placeholder="e.g. 10kVA Hybrid MPPT Inverter" required>
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select id="newMatCat" required>
+            <option value="Inverter">Inverters</option>
+            <option value="Battery">Batteries</option>
+            <option value="Panel">Solar Panels</option>
+            <option value="Breaker">Breakers & Switchgear</option>
+            <option value="Cable">Cables & Conductors</option>
+            <option value="Accessories">Hardware & Accessories</option>
+            <option value="Custom" selected>Custom Material</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Unit of Measurement *</label>
+          <input type="text" id="newMatUnit" placeholder="e.g. pcs, meters, length, rolls" value="pcs" required>
+        </div>
+        <div class="form-group">
+          <label>Unit Price in NGN (₦) *</label>
+          <input type="number" id="newMatPrice" placeholder="e.g. 45000" min="0" step="100" required>
+        </div>
+        <div class="form-group">
+          <label>Description / Technical Notes</label>
+          <textarea id="newMatDesc" rows="3" placeholder="Optional notes..."></textarea>
+        </div>
+        <div style="display:flex; gap:12px; margin-top:24px;">
+          <button type="submit" class="btn-action btn-gold" style="flex:1; justify-content:center;">Add to Catalog</button>
+          <button type="button" class="btn-action btn-outline" id="btnCancelModal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast-notice" id="toastNotice">Prices Saved Successfully!</div>
+
+  <script type="module" src="/admin/prices.js"></script>
+</body>
+</html>

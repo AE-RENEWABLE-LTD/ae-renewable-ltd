@@ -1,0 +1,2316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>AE Renewable Ltd | Operations Backend</title>
+  <script>
+    (function() {
+      try {
+        if (sessionStorage.getItem("ae_admin_logged_in") !== "true") {
+          document.documentElement.style.display = "none";
+          window.location.replace("/admin/login");
+          throw new Error("Access Denied: Admin authentication required");
+        }
+        var token = localStorage.getItem("token") || localStorage.getItem("accessToken") || localStorage.getItem("aeAdminToken") || "";
+        var rawUser = localStorage.getItem("user") || localStorage.getItem("aeAdminUser") || "{}";
+        var user = {};
+        try { user = JSON.parse(rawUser) || {}; } catch(e) { user = {}; }
+        var role = user && user.role ? String(user.role).toLowerCase() : "";
+        if (!token || (role !== "admin" && role !== "staff")) {
+          document.documentElement.style.display = "none";
+          window.location.replace("/admin/login");
+          throw new Error("Access Denied: Admin authentication required");
+        }
+      } catch(err) {
+        document.documentElement.style.display = "none";
+        window.location.replace("/admin/login");
+        throw err;
+      }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/admin/admin.css?v=20261003-02">
+</head>
+<body>
+<div class="app">
+
+  <!-- =========================================================
+       SIDEBAR
+  ========================================================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-logo">AE</div>
+      <div>
+        <strong>AE RENEWABLE</strong>
+        <span>POWERING YOUR FUTURE WITH SUN</span>
+      </div>
+      <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close Navigation">×</button>
+    </div>
+
+    <!-- WORKSPACE -->
+    <div class="nav-label">WORKSPACE</div>
+    <nav>
+      <button class="nav-item active" data-page="dashboard">
+        <span class="nav-sym">⌂</span>
+        <span class="nav-txt">Dashboard</span>
+      </button>
+      <button class="nav-item" data-page="consultations">
+        <span class="nav-sym">◌</span>
+        <span class="nav-txt">Consultations</span>
+        <b class="nav-count" id="navConsultationBadge">08</b>
+      </button>
+      <button class="nav-item" data-page="weekly-maintenance">
+        <span class="nav-sym">📋</span>
+        <span class="nav-txt">Weekly Maintenance</span>
+        <b class="nav-count" id="navWeeklyBadge" style="background:rgba(16,185,129,0.18); color:#059669;">02</b>
+      </button>
+      <button class="nav-item" data-page="customers">
+        <span class="nav-sym">♙</span>
+        <span class="nav-txt">Customers</span>
+      </button>
+      <button class="nav-item" data-page="sites">
+        <span class="nav-sym">⌖</span>
+        <span class="nav-txt">Sites</span>
+      </button>
+      <button class="nav-item" data-page="projects">
+        <span class="nav-sym">▣</span>
+        <span class="nav-txt">Projects</span>
+      </button>
+    </nav>
+
+    <!-- COMMERCIAL -->
+    <div class="nav-label">COMMERCIAL</div>
+    <nav>
+      <button class="nav-item" data-page="quotations">
+        <span class="nav-sym">▤</span>
+        <span class="nav-txt">Quotations</span>
+      </button>
+      <button class="nav-item" data-page="invoices">
+        <span class="nav-sym">💳</span>
+        <span class="nav-txt">Payments & Invoices</span>
+      </button>
+      <button class="nav-item" data-page="reports">
+        <span class="nav-sym">◫</span>
+        <span class="nav-txt">Reports</span>
+      </button>
+    </nav>
+
+    <!-- PORTALS & STUDIOS -->
+    <div class="nav-label">PORTALS &amp; STUDIOS</div>
+    <nav>
+      <a class="nav-item" href="/client/dashboard" target="_blank" style="text-decoration:none; display:flex; align-items:center;">
+        <span class="nav-sym" style="color:#10b981;">👤</span>
+        <span class="nav-txt">Client Portal</span>
+        <span style="font-size:10px; background:rgba(16,185,129,0.18); color:#10b981; padding:2px 6px; border-radius:4px; font-weight:bold; margin-left:auto;">Executive</span>
+      </a>
+      <a class="nav-item" href="/installer/portal" target="_blank" style="text-decoration:none; display:flex; align-items:center;">
+        <span class="nav-sym" style="color:#3b82f6;">🛠️</span>
+        <span class="nav-txt">Installer Portal</span>
+        <span style="font-size:10px; background:rgba(59,130,246,0.18); color:#3b82f6; padding:2px 6px; border-radius:4px; font-weight:bold; margin-left:auto;">Executive</span>
+      </a>
+      <a class="nav-item" href="/arde" target="_blank" style="text-decoration:none; display:flex; align-items:center;">
+        <span class="nav-sym" style="color:var(--gold);">⚡</span>
+        <span class="nav-txt">ARDE Client Intake</span>
+        <span style="font-size:10px; background:rgba(244,166,0,0.2); color:#f4a600; padding:2px 6px; border-radius:4px; font-weight:bold; margin-left:auto;">Intake</span>
+      </a>
+      <a class="nav-item" href="/arde/studio" target="_blank" style="text-decoration:none; display:flex; align-items:center;">
+        <span class="nav-sym" style="color:#38bdf8;">📐</span>
+        <span class="nav-txt">ARDE Studio Engine</span>
+        <span style="font-size:10px; background:rgba(56,189,248,0.2); color:#38bdf8; padding:2px 6px; border-radius:4px; font-weight:bold; margin-left:auto;">Studio</span>
+      </a>
+    </nav>
+
+    <!-- ENGINEERING -->
+    <div class="nav-label">ENGINEERING</div>
+    <nav>
+      <button class="nav-item" data-page="monitoring">
+        <span class="nav-sym">◉</span>
+        <span class="nav-txt">Monitoring</span>
+        <span class="live-dot-indicator"></span>
+      </button>
+      <button class="nav-item" data-page="equipment">
+        <span class="nav-sym">◇</span>
+        <span class="nav-txt">Equipment</span>
+      </button>
+      <button class="nav-item" data-page="installers">
+        <span class="nav-sym">♙</span>
+        <span class="nav-txt">Installers</span>
+      </button>
+      <button class="nav-item" data-page="field-stream">
+        <span class="nav-sym">📡</span>
+        <span class="nav-txt">Live Field Stream</span>
+        <span class="live-dot-indicator"></span>
+      </button>
+      <a class="nav-item" href="/admin/prices.html" target="_blank" style="text-decoration:none; display:flex; align-items:center;">
+        <span class="nav-sym" style="color:#00B140;">💎</span>
+        <span class="nav-txt">Price & Material Manager</span>
+        <span style="font-size:10px; background:rgba(0,177,64,0.2); color:#00B140; padding:2px 6px; border-radius:4px; font-weight:bold; margin-left:auto;">Pricing</span>
+      </a>
+    </nav>
+
+    <!-- SYSTEM -->
+    <div class="nav-label">SYSTEM</div>
+    <nav>
+      <button class="nav-item" data-page="settings">
+        <span class="nav-sym">⚙</span>
+        <span class="nav-txt">Settings</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="online">
+        <span></span> Platform operational
+      </div>
+      <div class="user-mini" id="userMiniBtn" title="Account settings">
+        <div class="avatar" id="sidebarAvatar">AE</div>
+        <div>
+          <strong id="sidebarUserName">Administrator</strong>
+          <small id="sidebarUserRole">Operations Console</small>
+        </div>
+        <span class="more-dots">⋮</span>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebarDrawer()"></div>
+
+  <!-- =========================================================
+       MAIN CONTENT
+  ========================================================== -->
+  <main class="main">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Navigation">☰</button>
+      <div class="mobile-brand">AE RENEWABLE</div>
+      <div class="breadcrumbs">
+        Operations <span>/</span> <strong id="breadcrumb">Dashboard</strong>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" id="notificationBtn" title="Notifications">
+          ♧<em id="notifBadge">3</em>
+        </button>
+        <button class="icon-btn" id="messagesBtn" title="Messages">
+          □<em id="messagesBadge">2</em>
+        </button>
+        <button class="profile" id="profileBtn" title="Profile options">
+          <span id="profileAvatar">AE</span> <span id="profileName">Administrator</span><span class="chevron">⌄</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 01. DASHBOARD -->
+    <section class="page active" id="page-dashboard">
+      <div class="page-head">
+        <div>
+          <div class="overline" id="dashboardDate">SYSTEM LIVE TELEMETRY</div>
+          <h1 id="dashboardGreeting">Welcome, Administrator</h1>
+          <p>Live operational overview of engineering delivery, client contracts, and installer activities.</p>
+        </div>
+        <button class="primary" onclick="openNewConsultationModal()">+ New Consultation</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card" onclick="showPage('consultations')">
+          <div class="stat-icon blue">⚡</div>
+          <div>
+            <span>Active Consultations</span>
+            <strong id="statActiveConsultations">--</strong>
+            <small class="up">Energy Profiling &amp; Site Surveys</small>
+          </div>
+        </div>
+        <div class="stat-card" onclick="showPage('quotations')">
+          <div class="stat-icon gold">🛠️</div>
+          <div>
+            <span>Installer Active Quotes</span>
+            <strong id="statOpenQuotations">--</strong>
+            <small class="up">Quotations under field execution</small>
+          </div>
+        </div>
+        <div class="stat-card" onclick="showPage('invoices')">
+          <div class="stat-icon green">💳</div>
+          <div>
+            <span>Payments Received</span>
+            <strong id="dashPaymentVolume">₦--</strong>
+            <small class="up">Total verified commercial inflow</small>
+          </div>
+        </div>
+        <div class="stat-card" onclick="showPage('monitoring')">
+          <div class="stat-icon navy">◉</div>
+          <div>
+            <span>Live Controlled Systems</span>
+            <strong id="statLiveSystems">--</strong>
+            <small class="online-text">● Admin Telemetry &amp; Inverter Control</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXECUTIVE COMMAND ECOSYSTEM QUICK ACCESS -->
+      <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:14px 18px; margin-bottom:24px; box-shadow:0 1px 3px rgba(0,0,0,0.05); display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:20px;">🏛️</span>
+          <div>
+            <strong style="font-size:13px; color:#0f172a; display:block;">Executive Multi-Portal Hub</strong>
+            <small style="color:#64748b; font-size:11px;">Direct platform links — all portals strictly require authentication before entry</small>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <a href="/client/dashboard" target="_blank" style="text-decoration:none; padding:6px 12px; background:#ecfdf5; border:1px solid #a7f3d0; color:#065f46; border-radius:6px; font-size:12px; font-weight:700; display:inline-flex; align-items:center; gap:6px;">
+            <span>👤</span> Client Portal
+          </a>
+          <a href="/installer/portal" target="_blank" style="text-decoration:none; padding:6px 12px; background:#eff6ff; border:1px solid #bfdbfe; color:#1e40af; border-radius:6px; font-size:12px; font-weight:700; display:inline-flex; align-items:center; gap:6px;">
+            <span>🛠️</span> Installer Portal
+          </a>
+          <a href="/arde" target="_blank" style="text-decoration:none; padding:6px 12px; background:#fffbeb; border:1px solid #fde68a; color:#92400e; border-radius:6px; font-size:12px; font-weight:700; display:inline-flex; align-items:center; gap:6px;">
+            <span>⚡</span> ARDE Client Intake
+          </a>
+          <a href="/arde/studio" target="_blank" style="text-decoration:none; padding:6px 12px; background:#f0f9ff; border:1px solid #bae6fd; color:#0369a1; border-radius:6px; font-size:12px; font-weight:700; display:inline-flex; align-items:center; gap:6px;">
+            <span>📐</span> ARDE Studio Engine
+          </a>
+          <button onclick="showPage('invoices')" style="border:none; cursor:pointer; padding:6px 12px; background:#f5f3ff; border:1px solid #ddd6fe; color:#5b21b6; border-radius:6px; font-size:12px; font-weight:700; display:inline-flex; align-items:center; gap:6px;">
+            <span>💳</span> Payment Tracking
+          </button>
+        </div>
+      </div>
+
+      <div class="grid-two">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Project Pipeline</h2>
+              <p>Current workload by engineering stage</p>
+            </div>
+            <button class="text-btn" onclick="showPage('projects')">View pipeline →</button>
+          </div>
+          <div class="pipeline" id="dashProjectPipeline">
+            <!-- Dynamically populated from active database projects -->
+          </div>
+        </div>
+
+        <div class="panel monitoring-card">
+          <div class="panel-head">
+            <div>
+              <h2>Live Energy Overview</h2>
+              <p id="dashConnectedSystemsSub">Entire projects inverter capacity &bull; <span id="dashLiveOnlineCount">05</span> Complete Paid Tracking</p>
+            </div>
+            <button class="live-pill" onclick="showPage('monitoring')"><i></i> LIVE</button>
+          </div>
+          <div class="energy-number">
+            <strong id="dashSolarGen">31.5</strong><span id="dashEnergyUnitLabel">kVA inverter capacity (complete paid)</span>
+          </div>
+          <div class="energy-chart">
+            <div class="chart-line"></div>
+            <div class="chart-fill"></div>
+          </div>
+          <div class="energy-row">
+            <span>Current Load <b id="dashCurrentLoad">22.7 kW</b></span>
+            <span>Battery <b id="dashBatterySoc">78%</b></span>
+            <span>Grid <b id="dashGridPower">0.0 kW</b></span>
+          </div>
+          <div class="energy-pipeline-breakdown" id="dashEnergyPipelineBreakdown" style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding-top:10px; border-top:1px solid rgba(0,0,0,0.06); font-size:10px; color:#64748b;">
+            <span>⚡ Commissioned: <b id="dashCommPill" style="color:#059669; font-weight:700;">05 Fully Paid</b></span>
+            <span>☀️ PV Solar Array: <b id="dashSolarArrayPill" style="color:#f59e0b; font-weight:700;">48.4 kWp</b></span>
+            <span>🔋 Storage Bank: <b id="dashBatteryCapPill" style="color:#004aad; font-weight:700;">184.3 kWh</b></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-two lower">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Recent Consultations</h2>
+              <p>Inbound Engineering Intakes &bull; Section 1 (Energy Profiling) &amp; Section 2 (ARDE Site Survey)</p>
+            </div>
+            <button class="text-btn" onclick="showPage('consultations')">View all →</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>REFERENCE</th>
+                <th>CLIENT &amp; CONTACT</th>
+                <th>REPORT: SEC 1 (ENERGY) &amp; SEC 2 (ARDE)</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody id="dashRecentConsultationsBody">
+              <!-- Dynamically populated from live database intake consultations -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>System Health</h2>
+              <p>Live Maintenance Reports, Notifications &amp; Consultation Tracking</p>
+            </div>
+            <button class="text-btn" onclick="showPage('weekly-maintenance')">Weekly Maintenance →</button>
+          </div>
+          <div class="health-list" id="dashSystemHealthList" style="display:flex; flex-direction:column; gap:10px; padding:6px 0;">
+            <!-- Dynamically populated from live database tracking metrics -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 13. WEEKLY MAINTENANCE & SYSTEM CONSULTATION -->
+    <section class="page" id="page-weekly-maintenance">
+      <div class="page-head">
+        <div>
+          <div class="overline">SYSTEM CONSULTATION • PREVENTATIVE CARE</div>
+          <h1>Weekly Maintenance &amp; System Consultation</h1>
+          <p>Broadcast weekly check-up notifications to client emails &amp; in-portal feeds. Track client system operational write-ups.</p>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="primary" style="background:#059669; border-color:#059669; display:inline-flex; align-items:center; gap:8px;" onclick="triggerBroadcastWeeklyModal()">
+            <span>📢 Spread Out Weekly Check-up</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI METRICS -->
+      <div class="grid-four" style="margin-bottom:20px;">
+        <div class="stat-card">
+          <span>Check-ups Dispatched</span>
+          <strong id="statWeeklyTotal">0</strong>
+          <small>Weekly notices spread to client portal/mail</small>
+        </div>
+        <div class="stat-card">
+          <span>Client Reports Received</span>
+          <strong id="statWeeklyReplied" style="color:#059669;">0</strong>
+          <small>Replies with full contact profile</small>
+        </div>
+        <div class="stat-card">
+          <span>Pending Client Write-ups</span>
+          <strong id="statWeeklyPending" style="color:#f59e0b;">0</strong>
+          <small>Awaiting client response</small>
+        </div>
+        <div class="stat-card">
+          <span>System Attention Items</span>
+          <strong id="statWeeklyIssues" style="color:#ef4444;">0</strong>
+          <small>Client flagged observations</small>
+        </div>
+      </div>
+
+      <!-- TABLE OF CLIENT WEEKLY REPLIES & PROFILES -->
+      <div class="panel table-panel">
+        <div class="panel-head" style="padding:14px 20px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <h2 style="margin:0; font-size:15px;">Client Weekly System Check-in Reports</h2>
+            <p style="margin:2px 0 0; font-size:12px; color:var(--muted);">Review client performance write-ups with full contact profile (phone &amp; mail)</p>
+          </div>
+          <button class="text-btn" onclick="fetchWeeklyMaintenanceRecords()" style="font-weight:700;">Refresh Feed ↻</button>
+        </div>
+        <table class="full-table">
+          <thead>
+            <tr>
+              <th>CLIENT PROFILE</th>
+              <th>CONTACT PHONE &amp; WHATSAPP</th>
+              <th>EMAIL ADDRESS</th>
+              <th>SYSTEM &amp; INVERTER</th>
+              <th>CLIENT WEEKLY WRITE-UP</th>
+              <th>STATUS</th>
+              <th>RECEIVED DATE</th>
+              <th>ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody id="weeklyMaintenanceTableBody">
+            <tr><td colspan="8" style="text-align:center; padding:24px; color:var(--muted);">Loading weekly maintenance reports...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 02. CONSULTATIONS -->
+    <section class="page" id="page-consultations">
+      <div class="page-head">
+        <div>
+          <div class="overline">CLIENT INTAKE • WORKSPACE</div>
+          <h1>Consultations</h1>
+          <p>Manage enquiries and move clients into engineering workflow.</p>
+        </div>
+        <button class="primary" onclick="openNewConsultationModal()">+ New Consultation</button>
+      </div>
+      <!-- ✓ ADMIN NOTIFICATION DISPATCHED FACE -->
+      <div class="panel" id="dispatchedInquiriesPanel" style="margin-bottom: 24px; border: 1.5px solid rgba(5, 150, 105, 0.4); background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(5, 150, 105, 0.06);">
+        <div class="panel-head" style="border-bottom: 1px solid rgba(5, 150, 105, 0.15); padding: 14px 20px; background: rgba(5, 150, 105, 0.04); display: flex; justify-content: space-between; align-items: center;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:50%; background:#059669; color:#fff; font-weight:800; font-size:14px; box-shadow:0 2px 6px rgba(5,150,105,0.3);">✓</span>
+            <div>
+              <h2 style="font-size:15px; color:#065f46; margin:0; display:flex; align-items:center; gap:8px;">
+                <span>✓ Admin Notification Dispatched:</span>
+                <span style="font-size:11.5px; font-weight:700; color:#065f46; background:rgba(5,150,105,0.14); padding:3px 10px; border-radius:12px;" id="dispatchedInquiriesCount">Loading...</span>
+              </h2>
+              <p style="margin:2px 0 0; font-size:12px; color:#047857;">Inbound Energy Profiling &amp; Site Survey inquiries awaiting admin acceptance &amp; client credentials dispatch.</p>
+            </div>
+          </div>
+          <button class="text-btn" onclick="fetchDispatchedInquiries()" style="color:#059669; font-weight:700; font-size:12px; cursor:pointer;">Refresh Feed ↻</button>
+        </div>
+        <div id="dispatchedInquiriesList" style="padding: 16px 20px; display:flex; flex-direction:column; gap:12px;">
+          <!-- Dynamically populated by admin.js -->
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <div class="search">
+          ⌕ <input id="consultationSearch" placeholder="Search client, reference, location..." oninput="filterConsultations()">
+        </div>
+        <select id="consultationStatus" onchange="filterConsultations()">
+          <option value="">All Statuses</option>
+          <option value="New">New</option>
+          <option value="Under Review">Under Review</option>
+          <option value="Site Survey">Site Survey</option>
+          <option value="Quotation">Quotation</option>
+        </select>
+        <select id="consultationService" onchange="filterConsultations()">
+          <option value="">All Services</option>
+          <option value="Solar & Hybrid Power">Solar & Hybrid Power</option>
+          <option value="Electrical Engineering">Electrical Engineering</option>
+          <option value="CCTV Surveillance">CCTV Surveillance</option>
+        </select>
+      </div>
+      <div class="panel table-panel">
+        <table class="full-table">
+          <thead>
+            <tr>
+              <th>REFERENCE</th><th>CLIENT</th><th>LOCATION</th><th>SERVICE</th><th>PROPERTY</th><th>STATUS</th><th>RECEIVED</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="consultationTableBody">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 03. CONSULTATION DETAIL -->
+    <section class="page" id="page-detail">
+      <div class="page-head">
+        <div>
+          <button class="back" onclick="showPage('consultations')">← Back to Consultations</button>
+          <div class="overline">CONSULTATION DETAIL</div>
+          <h1 id="detailTitle">CON-2026-0024</h1>
+          <p>Client requirement and engineering intake record.</p>
+        </div>
+        <div class="action-buttons">
+          <button class="secondary-btn" onclick="openAssignSiteModal()">Assign Site Survey</button>
+          <button class="primary" onclick="launchArdeStudioForCurrentConsultation()" style="background:linear-gradient(135deg,#f4a600,#fbbf24); color:#010a1d; font-weight:800; border:none;">⚡ Open ARDE Studio</button>
+          <button class="primary" onclick="showPage('quotations')">Create Quotation</button>
+        </div>
+      </div>
+      <div class="detail-grid">
+        <div class="panel detail-main">
+          <div class="detail-head">
+            <div class="avatar large" id="detailAvatar">AE</div>
+            <div>
+              <h2 id="detailClientName">AbdulRasaq Eniola</h2>
+              <p id="detailSubtitle">Individual Client • Maitama, Abuja</p>
+            </div>
+            <label class="badge blue-b" id="detailBadge">New Request</label>
+          </div>
+          <div class="section-title">CONTACT INFORMATION</div>
+          <div class="info-grid">
+            <div><small>Phone</small><strong id="detailPhone">+234 813 361 5132</strong></div>
+            <div><small>Email</small><strong id="detailEmail">AERenewablesolution@gmail.com</strong></div>
+            <div><small>Project Location</small><strong id="detailLocation">Maitama, Abuja</strong></div>
+            <div><small>Property Type</small><strong id="detailProperty">Residential</strong></div>
+          </div>
+          <div class="section-title">PROJECT REQUIREMENT</div>
+          <div class="requirement">
+            <span>Primary Service</span>
+            <strong id="detailService">Solar & Hybrid Power System</strong>
+            <p id="detailRequirement">Client requires reliable backup power with solar generation, lithium storage and intelligent inverter control for a residential property.</p>
+          </div>
+          <div class="section-title">1. ENERGY PROFILING &amp; SIZING TARGETS</div>
+          <div class="note-box" id="detailEnergyProfiling" style="background:#eff6ff; border-left:4px solid #004AAD; margin-bottom:14px;">
+            Tier-1 Hybrid Inverter &amp; High-Yield PV Load Profile loaded from client intake.
+          </div>
+          <div class="section-title">2. SITE SURVEY &amp; INFRASTRUCTURE ASSESSMENT</div>
+          <div class="note-box" id="detailSiteSurvey" style="background:#f0fdf4; border-left:4px solid #059669; margin-bottom:14px;">
+            Public Grid Reliability (DISCO / NEPA Tier) &amp; DB Distribution Assessment.
+          </div>
+          <div class="section-title">ADDITIONAL AUDIT &amp; ENGINEERING NOTES</div>
+          <div class="note-box" id="detailNotes">
+            Requested minimum 16kVA inverter capacity, lithium battery storage and approximately 12kWp solar generation. Final sizing subject to load assessment and site survey.
+          </div>
+        </div>
+
+        <aside class="panel timeline-panel">
+          <div class="panel-head">
+            <div>
+              <h2>Workflow</h2>
+              <p>Project progression</p>
+            </div>
+          </div>
+          <div class="timeline">
+            <div class="step current"><i></i><div><strong>Consultation Received</strong><small>09 Aug 2026 • 10:42 AM</small></div></div>
+            <div class="step"><i></i><div><strong>Technical Review</strong><small>Pending assignment</small></div></div>
+            <div class="step"><i></i><div><strong>Site Survey</strong><small>Pending</small></div></div>
+            <div class="step"><i></i><div><strong>System Design</strong><small>Pending</small></div></div>
+            <div class="step"><i></i><div><strong>Quotation</strong><small>Pending</small></div></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 04. CUSTOMERS -->
+    <section class="page" id="page-customers">
+      <div class="page-head">
+        <div>
+          <div class="overline">CLIENT RELATIONSHIPS • WORKSPACE</div>
+          <h1>Customers</h1>
+          <p>Central customer directory, profile records, active systems and purchase history.</p>
+        </div>
+        <button class="primary" onclick="openAddCustomerModal()">+ Add Customer</button>
+      </div>
+      <div class="stats compact">
+        <div class="stat-card">
+          <div class="stat-icon blue">♙</div>
+          <div><span>Total Customers</span><strong id="custStatTotal">--</strong><small class="online-text">● Active relationships</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✓</div>
+          <div><span>Residential</span><strong id="custStatResidential">--</strong><small>Homeowners & estates</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon gold">▣</div>
+          <div><span>Commercial</span><strong id="custStatCommercial">--</strong><small>Plazas, offices & clinics</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon navy">₦</div>
+          <div><span>Lifetime Value</span><strong id="custStatLtv">--</strong><small>Total project value</small></div>
+        </div>
+      </div>
+      <div class="filter-row">
+        <div class="search">
+          ⌕ <input id="customerSearch" placeholder="Search customer name, phone, email, state..." oninput="filterCustomers()">
+        </div>
+        <select id="customerTypeFilter" onchange="filterCustomers()">
+          <option value="">All Categories</option>
+          <option value="Residential">Residential</option>
+          <option value="Commercial">Commercial</option>
+        </select>
+        <select id="customerStatusFilter" onchange="filterCustomers()">
+          <option value="">All Statuses</option>
+          <option value="Active">Active</option>
+          <option value="Quotation">Quotation</option>
+          <option value="Prospect">Prospect</option>
+        </select>
+      </div>
+      <div class="panel table-panel">
+        <table class="full-table">
+          <thead>
+            <tr>
+              <th>CUSTOMER ID</th><th>CLIENT NAME</th><th>CONTACT</th><th>LOCATION</th><th>TYPE</th><th>SYSTEMS</th><th>LIFETIME VALUE</th><th>STATUS</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="customersTableBody">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 05. SITES -->
+    <section class="page" id="page-sites">
+      <div class="page-head">
+        <div>
+          <div class="overline">FIELD LOCATIONS • WORKSPACE</div>
+          <h1>Sites</h1>
+          <p>Project locations, roof evaluations, GPS coordinates and site survey reports.</p>
+        </div>
+        <button class="primary" onclick="openAddSiteModal()">+ Add Site</button>
+      </div>
+      <div class="stats compact">
+        <div class="stat-card">
+          <div class="stat-icon blue">⌖</div>
+          <div><span>Total Sites</span><strong id="siteStatTotal">--</strong><small>Mapped installations</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✓</div>
+          <div><span>Survey Completed</span><strong id="siteStatCompleted">--</strong><small class="online-text">● Ready for installation</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon gold">◌</div>
+          <div><span>Pending Survey</span><strong id="siteStatPending">--</strong><small>Scheduled visits</small></div>
+        </div>
+      </div>
+      <div class="filter-row">
+        <div class="search">
+          ⌕ <input id="siteSearch" placeholder="Search site name, client, address, state..." oninput="filterSites()">
+        </div>
+        <select id="siteStateFilter" onchange="filterSites()">
+          <option value="">All Locations</option>
+          <option value="Abuja">Abuja</option>
+          <option value="Kaduna">Kaduna</option>
+          <option value="Kano">Kano</option>
+          <option value="Nasarawa">Nasarawa</option>
+        </select>
+      </div>
+      <div class="panel table-panel">
+        <table class="full-table">
+          <thead>
+            <tr>
+              <th>SITE CODE</th><th>SITE NAME & ADDRESS</th><th>CLIENT</th><th>ROOF TYPE</th><th>IRRADIANCE</th><th>GRID STABILITY</th><th>SURVEY STATUS</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="sitesTableBody">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 06. PROJECTS -->
+    <section class="page" id="page-projects">
+      <div class="page-head">
+        <div>
+          <div class="overline">ENGINEERING DELIVERY • WORKSPACE</div>
+          <h1>Projects</h1>
+          <p>Track engineering milestones, procurement, installation teams and commissioning.</p>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <button class="secondary-btn" onclick="openWhileYouSleepModal()" style="display:inline-flex; align-items:center; gap:6px; background:#010a1d; color:#f4a600; border:1px solid rgba(244,166,0,0.4); font-weight:700; padding:9px 16px; border-radius:8px; cursor:pointer;">
+            <span>🌙</span> While You Sleep
+          </button>
+          <button class="primary" onclick="openNewProjectModal()">+ New Project</button>
+        </div>
+      </div>
+      <div class="stats compact">
+        <div class="stat-card">
+          <div class="stat-icon blue">▣</div>
+          <div><span>Active Projects</span><strong id="projStatActive">--</strong><small>In field & engineering</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon gold">⚙</div>
+          <div><span>In Installation</span><strong id="projStatInstalling">--</strong><small>Teams on site</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✓</div>
+          <div><span>Commissioned</span><strong id="projStatCommissioned">--</strong><small class="up">100% handover</small></div>
+        </div>
+      </div>
+      <div class="filter-row">
+        <div class="search">
+          ⌕ <input id="projectSearch" placeholder="Search project code, client, system..." oninput="filterProjects()">
+        </div>
+        <select id="projectStageFilter" onchange="filterProjects()">
+          <option value="">All Stages</option>
+          <option value="Design">Design</option>
+          <option value="Procurement">Procurement</option>
+          <option value="Installation">Installation</option>
+          <option value="Commissioning">Commissioning</option>
+        </select>
+      </div>
+      <div class="panel table-panel">
+        <table class="full-table">
+          <thead>
+            <tr>
+              <th>PROJECT ID</th><th>PROJECT NAME</th><th>CLIENT</th><th>CAPACITY</th><th>LEAD INSTALLER</th><th>PROGRESS</th><th>STAGE</th><th>DEADLINE</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="projectsTableBody">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 07. QUOTATIONS -->
+    <section class="page" id="page-quotations">
+      <div class="page-head">
+        <div>
+          <div class="overline">COMMERCIAL CONTROL</div>
+          <h1>Quotations</h1>
+          <p>Prepare, review, calculate system pricing and issue formal project proposals.</p>
+        </div>
+        <button class="primary" onclick="openCreateQuotationModal()">+ Create Quotation</button>
+      </div>
+      <div class="stats compact">
+        <div class="stat-card">
+          <div class="stat-icon blue">▤</div>
+          <div><span>Total Proposals</span><strong id="quoteStatTotal">--</strong><small>Quotations issued</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✓</div>
+          <div><span>Accepted</span><strong id="quoteStatAccepted">--</strong><small class="up">Approved by clients</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon gold">₦</div>
+          <div><span>Pipeline Value</span><strong id="quoteStatValue">--</strong><small>Open quotations</small></div>
+        </div>
+      </div>
+      <div class="filter-row">
+        <div class="search">
+          ⌕ <input id="quotationSearch" placeholder="Search quotation ID, client, capacity..." oninput="filterQuotations()">
+        </div>
+        <select id="quotationStatusFilter" onchange="filterQuotations()">
+          <option value="">All Statuses</option>
+          <option value="Draft">Draft</option>
+          <option value="Issued">Issued</option>
+          <option value="Accepted">Accepted</option>
+          <option value="Under Review">Under Review</option>
+        </select>
+      </div>
+      <div class="panel table-panel">
+        <table class="full-table">
+          <thead>
+            <tr>
+              <th>QUOTATION</th><th>CLIENT / PROJECT</th><th>SYSTEM</th><th>VALUE</th><th>STATUS</th><th>DATE</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="quotationTableBody">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 08. INVOICES & PAYMENT TRACKING -->
+    <section class="page" id="page-invoices">
+      <div class="page-head">
+        <div>
+          <div class="overline">FINANCIAL AUDIT • COMMERCIAL &amp; INSTALLER DISBURSEMENTS</div>
+          <h1>Payment Tracking &amp; Invoices</h1>
+          <p>Real-time ledger of client milestone payments, installer settlements, bank proof slips, and immediate audit verification.</p>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="secondary-btn" onclick="fetchInvoices()" title="Refresh Ledger">↻ Refresh Ledger</button>
+          <button class="primary" onclick="openCreateInvoiceModal()">+ Create Invoice</button>
+        </div>
+      </div>
+      <div class="stats compact">
+        <div class="stat-card">
+          <div class="stat-icon blue">💳</div>
+          <div><span>Total Invoiced</span><strong id="invStatTotal">--</strong><small>Gross billing</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✓</div>
+          <div><span>Settled / Verified</span><strong id="invStatReceived">--</strong><small class="online-text">● Confirmed inflow</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon gold">⏳</div>
+          <div><span>Pending Audit</span><strong id="invStatOutstanding">--</strong><small>Requires verification</small></div>
+        </div>
+      </div>
+      <div class="filter-row">
+        <div class="search">
+          ⌕ <input id="invoiceSearch" placeholder="Search reference, client, project, transaction ID..." oninput="filterInvoices()">
+        </div>
+        <select id="invoiceStatusFilter" onchange="filterInvoices()">
+          <option value="">All Payment Statuses</option>
+          <option value="Paid">Paid / Confirmed</option>
+          <option value="Pending">Pending Audit</option>
+          <option value="Partial">Partial</option>
+        </select>
+        <select id="invoiceProofFilter" onchange="filterInvoices()">
+          <option value="">All Transactions</option>
+          <option value="has_proof">Has Uploaded Proof 🖼️</option>
+          <option value="pending_verify">Pending Verification ⏳</option>
+        </select>
+      </div>
+      <div class="panel table-panel">
+        <table class="full-table">
+          <thead>
+            <tr>
+              <th>REF / INVOICE</th>
+              <th>CLIENT / RECIPIENT</th>
+              <th>PROJECT &amp; SCOPE</th>
+              <th>METHOD &amp; TX REF</th>
+              <th>AMOUNT</th>
+              <th>DATE</th>
+              <th>PROOF / RECEIPT</th>
+              <th>STATUS</th>
+              <th>ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody id="invoicesTableBody">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 09. REPORTS -->
+    <section class="page" id="page-reports">
+      <div class="page-head">
+        <div>
+          <div class="overline">BUSINESS INTELLIGENCE • COMMERCIAL</div>
+          <h1>Reports & Analytics</h1>
+          <p>Operational yield, monthly commercial revenue, conversion ratios and engineering audit.</p>
+        </div>
+        <div class="action-buttons">
+          <button class="secondary-btn" onclick="exportReportData('csv')">Export CSV</button>
+          <button class="primary" onclick="exportReportData('pdf')">Export PDF Summary</button>
+        </div>
+      </div>
+      <div class="stats compact">
+        <div class="stat-card">
+          <div class="stat-icon blue">☀</div>
+          <div><span>Energy Generated</span><strong id="repEnergyGen">--</strong><small class="up">↑ Live operational telemetry</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">₦</div>
+          <div><span>Quarter Revenue</span><strong id="repQuarterRev">--</strong><small class="up">↑ Realized billing</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon gold">✓</div>
+          <div><span>Quote Conversion</span><strong id="repQuoteConv">--</strong><small>Lead to project conversion</small></div>
+        </div>
+      </div>
+      <div class="grid-two">
+        <div class="panel">
+          <div class="panel-head">
+            <div><h2>Monthly Revenue & Generation</h2><p>Performance overview from live database contracts</p></div>
+          </div>
+          <div class="report-bar-chart" id="repRevenueChart">
+            <!-- Dynamically populated from actual contract values and payments -->
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <div><h2>System Technology Distribution</h2><p>Share by system architecture</p></div>
+          </div>
+          <div class="tech-dist-list" id="repTechDistribution">
+            <!-- Dynamically populated from project equipment specs -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. MONITORING -->
+    <section class="page" id="page-monitoring">
+      <div class="page-head">
+        <div>
+          <div class="overline">ENGINEERING TELEMETRY</div>
+          <h1>Live Monitoring</h1>
+          <p>Real-time performance, inverter power flows, battery banks and grid parameters.</p>
+        </div>
+        <div class="site-switch-wrap">
+          <select id="monitoredSiteSelect" onchange="changeMonitoredSite()">
+            <option value="">Connecting to live telemetry...</option>
+          </select>
+          <div class="connection"><i></i> <span id="onlineSystemsCount">-- SYSTEMS ONLINE</span></div>
+        </div>
+      </div>
+
+      <div class="monitor-hero panel">
+        <div>
+          <span class="live-pill" id="livePillIndicator"><i></i> SYSTEM ONLINE &amp; UNDER ADMIN CONTROL</span>
+          <h2 id="monitorSiteTitle">Maitama Residence</h2>
+          <p id="monitorSiteSubtitle">DEYE 16kVA Hybrid • 32kWh Lithium • 12kWp Solar Array</p>
+        </div>
+        <div class="updated">
+          Last update<br><strong id="monitorUpdated">Just now</strong>
+        </div>
+      </div>
+
+      <!-- ADMIN INTERACTIVE SYSTEM CONTROL DECK -->
+      <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:18px 20px; margin-bottom:20px; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px; border-bottom:1px solid #f1f5f9; padding-bottom:12px;">
+          <div>
+            <span style="font-size:11px; font-weight:800; color:#004AAD; letter-spacing:0.06em; text-transform:uppercase;">EXECUTIVE SUPERVISORY CONTROL &amp; DATA ACQUISITION (SCADA)</span>
+            <h3 style="margin:2px 0 0; font-size:16px; color:#0f172a;">Live System Telemetry &amp; Inverter Power Flow Control</h3>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="secondary-btn" onclick="executeSystemCommand('sync')" style="font-size:12px; padding:6px 12px; border-radius:6px; font-weight:700;">🔄 Sync Telemetry</button>
+            <button class="secondary-btn" onclick="executeSystemCommand('reboot')" style="font-size:12px; padding:6px 12px; border-radius:6px; font-weight:700; color:#b91c1c; border-color:#fca5a5;">⚡ Soft Restart</button>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
+          <!-- Inverter Output Control -->
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px 14px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong style="font-size:13px; color:#0f172a; display:block;">Inverter AC Output</strong>
+              <small id="inverterStatusText" style="font-size:11px; color:#059669; font-weight:700;">● Active / Energized</small>
+            </div>
+            <label style="position:relative; display:inline-block; width:44px; height:24px; margin:0;">
+              <input type="checkbox" id="ctrlInverterPower" checked onchange="toggleInverterOutput(this.checked)" style="opacity:0; width:0; height:0;">
+              <span style="position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background-color:#059669; transition:.3s; border-radius:24px;" id="toggleInverterTrack">
+                <span style="position:absolute; content:''; height:18px; width:18px; left:3px; bottom:3px; background-color:white; transition:.3s; border-radius:50%;" id="toggleInverterKnob"></span>
+              </span>
+            </label>
+          </div>
+
+          <!-- Battery Charging Priority -->
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px 14px;">
+            <label style="font-size:12px; font-weight:700; color:#334155; display:block; margin-bottom:4px;">Battery Storage Mode</label>
+            <select id="ctrlBatteryMode" onchange="changeBatteryMode(this.value)" style="width:100%; padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:12px; background:#fff; font-weight:600;">
+              <option value="solar_first" selected>Solar Priority (Charge First)</option>
+              <option value="backup_ups">UPS Priority (Maintain 90%+)</option>
+              <option value="peak_shaving">Peak Shaving (Export to Load)</option>
+            </select>
+          </div>
+
+          <!-- Grid Relay / Island Mode -->
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px 14px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong style="font-size:13px; color:#0f172a; display:block;">Grid Synchronization</strong>
+              <small id="gridStatusText" style="font-size:11px; color:#64748b; font-weight:700;">Islanded (Zero Export)</small>
+            </div>
+            <button class="secondary-btn" id="btnToggleGridSync" onclick="toggleGridSync()" style="font-size:11px; padding:5px 10px; font-weight:700; border-radius:6px;">Connect Grid</button>
+          </div>
+
+          <!-- Manual Load Throttling -->
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px 14px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <label style="font-size:12px; font-weight:700; color:#334155;">Output Cap Limit</label>
+              <span id="loadCapLabel" style="font-size:12px; font-weight:800; color:#004AAD;">100% (Uncapped)</span>
+            </div>
+            <input type="range" id="ctrlLoadCapSlider" min="20" max="100" value="100" step="5" oninput="updateLoadCap(this.value)" style="width:100%; cursor:pointer;">
+          </div>
+        </div>
+      </div>
+
+      <div class="monitor-stats">
+        <div><span>☀ Solar Generation</span><strong id="monSolar">18.6 <small>kW</small></strong><em>↑ 4.2% today</em></div>
+        <div><span>⌂ Current Load</span><strong id="monLoad">11.4 <small>kW</small></strong><em id="monLoadSub">61% of solar</em></div>
+        <div><span>◉ Battery State</span><strong id="monBattery">82 <small>%</small></strong><em id="monBatterySub">+6.4kW charging</em></div>
+        <div><span>▣ Grid Power</span><strong id="monGrid">0.0 <small>kW</small></strong><em id="monGridSub">Zero export / isolated</em></div>
+      </div>
+
+      <div class="grid-two">
+        <div class="panel chart-panel">
+          <div class="panel-head">
+            <div><h2>Power Flow</h2><p>Telemetry snapshot</p></div>
+            <select id="chartPeriodSelect" onchange="updatePowerChartPeriod()">
+              <option value="24h">Last 24 Hours</option>
+              <option value="7d">Last 7 Days</option>
+            </select>
+          </div>
+          <div class="big-chart">
+            <div class="chart-axis">
+              <span>20kW</span><span>15kW</span><span>10kW</span><span>5kW</span><span>0</span>
+            </div>
+            <div class="bars" id="powerChartBars">
+              <i style="height:35%"></i><i style="height:48%"></i><i style="height:42%"></i>
+              <i style="height:62%"></i><i style="height:78%"></i><i style="height:92%"></i>
+              <i style="height:74%"></i><i style="height:65%"></i><i style="height:52%"></i>
+              <i style="height:58%"></i><i style="height:40%"></i><i style="height:28%"></i>
+            </div>
+          </div>
+          <div class="legend">
+            <span><i class="solar"></i> Solar Generation</span>
+            <span><i class="load"></i> Home Load</span>
+            <span><i class="battery"></i> Battery Storage</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div><h2>Equipment Health</h2><p>Connected components and firmware</p></div>
+          </div>
+          <div class="equipment">
+            <div><span>✓</span><strong>Inverter</strong><small>DEYE 16kVA Hybrid</small><b>Healthy</b></div>
+            <div><span>✓</span><strong>Battery Bank</strong><small>32kWh LiFePO4</small><b>Healthy</b></div>
+            <div><span>✓</span><strong>PV Array</strong><small>16 × 750W Canadian Solar</small><b>Healthy</b></div>
+            <div><span class="warn">!</span><strong>Grid Sensor</strong><small>RS485 Communication</small><b class="warning-text">Normal</b></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. EQUIPMENT -->
+    <section class="page" id="page-equipment">
+      <div class="page-head">
+        <div>
+          <div class="overline">ENGINEERING ASSETS</div>
+          <h1>Equipment Library</h1>
+          <p>Approved solar modules, hybrid inverters, lithium batteries and protection switchgear.</p>
+        </div>
+        <button class="primary" onclick="openAddEquipmentModal()">+ Add Equipment</button>
+      </div>
+      <div class="stats compact">
+        <div class="stat-card">
+          <div class="stat-icon blue">◇</div>
+          <div><span>Catalog SKUs</span><strong id="equipStatTotal">--</strong><small>Certified hardware</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon gold">⚡</div>
+          <div><span>Inverters</span><strong id="equipStatInverters">--</strong><small>DEYE, Felicity, Growatt</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">🔋</div>
+          <div><span>Battery Modules</span><strong id="equipStatBatteries">--</strong><small>Lithium LiFePO4</small></div>
+        </div>
+      </div>
+      <div class="filter-row">
+        <div class="search">
+          ⌕ <input id="equipmentSearch" placeholder="Search equipment name, model, capacity..." oninput="filterEquipment()">
+        </div>
+        <select id="equipmentCategoryFilter" onchange="filterEquipment()">
+          <option value="">All Categories</option>
+          <option value="Inverter">Hybrid Inverters</option>
+          <option value="Battery">Lithium Batteries</option>
+          <option value="Solar PV">Solar PV Panels</option>
+          <option value="Protection">Protection & Switchgear</option>
+        </select>
+      </div>
+      <div class="panel table-panel">
+        <table class="full-table">
+          <thead>
+            <tr>
+              <th>EQUIPMENT CODE</th><th>MODEL & SPECIFICATION</th><th>BRAND</th><th>CATEGORY</th><th>RATED CAPACITY</th><th>WARRANTY</th><th>STATUS</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="equipmentTableBody">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 12. INSTALLERS -->
+    <section class="page" id="page-installers">
+      <div class="page-head">
+        <div>
+          <div class="overline">FIELD OPERATIONS • ENGINEERING</div>
+          <h1>Installer Directory</h1>
+          <p>Manage approved installation personnel, compliance records, availability and field assignments.</p>
+        </div>
+        <button class="primary" onclick="openInstallerRegistration()">+ Register Installer</button>
+      </div>
+
+      <div class="stats installer-stats">
+        <div class="stat-card">
+          <div class="stat-icon blue">♙</div>
+          <div><span>Total Installers</span><strong id="totalInstallers">18</strong><small>Registered personnel</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✓</div>
+          <div><span>Active</span><strong id="activeInstallers">12</strong><small class="online-text">● Available / active</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon gold">▣</div>
+          <div><span>On Project</span><strong id="projectInstallers">06</strong><small>Currently assigned</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon navy">◫</div>
+          <div><span>Projects Handled</span><strong id="installerProjects">47</strong><small>Completed assignments</small></div>
+        </div>
+      </div>
+
+      <div class="installer-command panel">
+        <div class="installer-command-top">
+          <div>
+            <div class="overline">DIRECTORY CONTROL</div>
+            <h2>Search & Filter Installers</h2>
+            <p>Search by installer, registration number, specialization or field assignment.</p>
+          </div>
+          <button class="secondary-btn" onclick="clearInstallerFilters()">Reset Filters</button>
+        </div>
+        <div class="filter-row installer-filter-row">
+          <div class="search">
+            ⌕ <input type="text" id="installerSearch" placeholder="Search installer, ID, RC/BN, specialization...">
+          </div>
+          <select id="installerStateFilter">
+            <option value="">All States</option>
+            <option>Abuja</option>
+            <option>Kaduna</option>
+            <option>Kano</option>
+            <option>Nasarawa</option>
+            <option>Niger</option>
+          </select>
+          <select id="installerPositionFilter">
+            <option value="">All Positions</option>
+            <option>Lead Installer</option>
+            <option>Solar Technician</option>
+            <option>Electrical Technician</option>
+            <option>CCTV Technician</option>
+            <option>Smart Home Technician</option>
+          </select>
+          <select id="installerStatusFilter">
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="project">On Project</option>
+            <option value="inactive">Not Active</option>
+          </select>
+          <select id="installerSpecializationFilter">
+            <option value="">All Specializations</option>
+            <option>Solar & Hybrid</option>
+            <option>Solar PV</option>
+            <option>Electrical</option>
+            <option>CCTV & Security</option>
+            <option>Smart Home</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="panel table-panel installer-directory-panel">
+        <div class="panel-head">
+          <div>
+            <h2>Installer Directory</h2>
+            <p>Registered installation personnel and field teams.</p>
+          </div>
+          <button class="text-btn" onclick="exportInstallers()">Export Directory →</button>
+        </div>
+        <div class="directory-summary">
+          <span id="installerResultCount">Loading installers...</span>
+          <span>Last directory sync: <b id="installerLastSync">Today</b></span>
+        </div>
+        <div class="table-scroll">
+          <table class="full-table installer-table">
+            <thead>
+              <tr>
+                <th>INSTALLER</th><th>STATE</th><th>LGA</th><th>RC / BN NO.</th><th>POSITION</th><th>SPECIALIZATION</th><th>GROUP NO.</th><th>REGISTERED</th><th>STATUS</th><th>PROJECTS</th><th>LAST Q.NO.</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="installerTableBody"></tbody>
+          </table>
+        </div>
+        <div class="table-empty" id="installerEmptyState" hidden>
+          <div class="empty-icon">⌕</div>
+          <h3>No installers found</h3>
+          <p>Try changing the search term or filters.</p>
+          <button class="secondary-btn" onclick="clearInstallerFilters()">Clear filters</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 14. LIVE FIELD STREAM CONTROL -->
+    <section class="page" id="page-field-stream">
+      <div class="page-head">
+        <div>
+          <div class="overline">FIELD OPERATIONS • LIVE COMMUNITY FEED</div>
+          <h1>Live Field Stream</h1>
+          <p>Full administrative control over verified engineering milestones, live photo uploads, client feedback resolutions, and public stream publications.</p>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <a href="/client" target="_blank" class="secondary-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+            <span>👁️</span> View Public Feed
+          </a>
+          <button class="primary" onclick="openUploadFieldPostModal()" style="background:#004AAD; border-color:#004AAD; display:inline-flex; align-items:center; gap:6px;">
+            <span style="font-size:16px;">+</span> Upload Live Field Post
+          </button>
+        </div>
+      </div>
+
+      <div class="stats compact">
+        <div class="stat-card">
+          <div class="stat-icon blue">📡</div>
+          <div><span>Total Field Posts</span><strong id="fieldStatTotal">6</strong><small>Live on network</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">🏆</div>
+          <div><span>Verified Milestones</span><strong id="fieldStatStages">6 Stages</strong><small class="online-text">● All Stages active</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon gold">★</div>
+          <div><span>Client Rating</span><strong id="fieldStatRating">5.0 / 5.0</strong><small class="up">100% Client Satisfaction</small></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon navy">💬</div>
+          <div><span>Reactions & Shares</span><strong id="fieldStatSocial">1,400+</strong><small>Community engagement</small></div>
+        </div>
+      </div>
+
+      <div class="installer-command panel">
+        <div class="installer-command-top">
+          <div>
+            <div class="overline">STREAM FILTER & DISPATCH CONTROL</div>
+            <h2>Filter & Search Live Field Stream</h2>
+            <p>Filter by installation stage, site location, lead engineer, or hardware tags.</p>
+          </div>
+          <button class="secondary-btn" onclick="resetFieldPostFilters()">Reset Filters</button>
+        </div>
+        <div class="filter-row">
+          <div class="search">
+            ⌕ <input type="text" id="adminFieldSearch" placeholder="Search engineer, location, equipment or resolution notes..." oninput="filterAdminFieldPosts()">
+          </div>
+          <select id="adminFieldStageFilter" onchange="filterAdminFieldPosts()">
+            <option value="">All 6 Installation Stages</option>
+            <option value="stage1">Stage 1: Site Audit & Structural</option>
+            <option value="stage2">Stage 2: Trenching & Conduit</option>
+            <option value="stage3">Stage 3: PV & Inverter Mount</option>
+            <option value="stage4">Stage 4: Battery & BMS Wiring</option>
+            <option value="stage5">Stage 5: Earthing (<2Ω) & SPDs</option>
+            <option value="stage6">Stage 6: Testing & Commissioning</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="panel table-panel">
+        <div class="panel-head">
+          <div>
+            <h2>Published Field Milestones</h2>
+            <p>Real-time stream feed with instant moderation and deletion capabilities.</p>
+          </div>
+          <button class="text-btn" onclick="loadAdminFieldPosts()">Refresh Stream ↻</button>
+        </div>
+        <div id="adminFieldPostsList" style="padding:16px 20px; display:flex; flex-direction:column; gap:16px;">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 13. INSTALLER PROFILE -->
+    <section class="page" id="page-installer-profile">
+      <div class="installer-profile-head">
+        <div>
+          <button class="back" onclick="showPage('installers')">← Back to Installers</button>
+          <div class="overline">FIELD PERSONNEL • VERIFIED DOSSIER</div>
+          <h1 id="installerProfileName">Abdulrasaq Eniola</h1>
+          <p>Live operational profile, regulatory certificates, unmasked settlement accounts and engineering assignments.</p>
+        </div>
+        <div class="profile-actions" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <button class="primary" style="background:#004AAD; border-color:#004AAD; display:inline-flex; align-items:center; gap:6px;" onclick="openSendInstallerNotificationModal(AE.currentInstallerId)">
+            <span style="font-size:14px;">✉</span> Send Notification
+          </button>
+          <button class="secondary-btn" onclick="editInstaller()">Edit Record</button>
+          <button class="primary" onclick="assignInstallerProject()">Assign Project</button>
+        </div>
+      </div>
+
+      <div class="installer-profile-hero panel">
+        <div class="installer-profile-image" id="installerProfileImage">EA</div>
+        <div class="installer-profile-main">
+          <div class="profile-title-row">
+            <div>
+              <span class="overline">INSTALLER ID / CODE</span>
+              <h2 id="installerProfileId">INS-0001</h2>
+            </div>
+            <label class="badge green-b" id="installerProfileStatus">● ACTIVE</label>
+          </div>
+          <p id="installerProfileRole">Lead Installer • Solar & Hybrid Power</p>
+          <div class="profile-meta">
+            <span><small>State</small><b id="profileState">Abuja</b></span>
+            <span><small>LGA</small><b id="profileLga">AMAC</b></span>
+            <span><small>Group</small><b id="profileGroup">GRP-001</b></span>
+            <span><small>Registered</small><b id="profileRegistered">09 Aug 2026</b></span>
+          </div>
+        </div>
+        <div class="profile-quick-status">
+          <span>OPERATIONAL DEPLOYMENT</span>
+          <strong id="profileQuickStatus">Available</strong>
+          <small id="profileQuickText">Ready for field assignment</small>
+        </div>
+      </div>
+
+      <div class="installer-profile-grid">
+        <div>
+          <div class="panel profile-panel">
+            <div class="panel-head"><div><h2>Identity & Contact</h2><p>Installer personal credentials and field verification.</p></div></div>
+            <div class="info-grid" id="identityGrid"></div>
+          </div>
+
+          <div class="panel profile-panel">
+            <div class="panel-head">
+              <div><h2>Corporate Registration (CAC)</h2><p>Corporate Affairs Commission incorporation credentials.</p></div>
+              <label class="badge green-b" id="cacStatusBadge">CAC Verified</label>
+            </div>
+            <div class="info-grid" id="businessGrid"></div>
+            <div class="document-list" id="documentList" style="margin-top:14px;"></div>
+          </div>
+
+          <div class="panel profile-panel">
+            <div class="panel-head">
+              <div><h2>Technical Qualifications & Accreditations</h2><p>NEMSA certifications, renewable energy licenses and engineering compliance.</p></div>
+              <label class="badge blue-b" id="profCertStatusBadge">Certified</label>
+            </div>
+            <div class="certificate-grid" id="certificateGrid"></div>
+          </div>
+
+          <div class="panel profile-panel">
+            <div class="panel-head">
+              <div><h2>Project Assignment History</h2><p>Live projects assigned, in-progress, and completed by this engineer.</p></div>
+              <strong id="profileProjectCount" style="color:var(--primary); font-size:14px;">0 Projects</strong>
+            </div>
+            <div class="project-history" id="projectHistory"></div>
+          </div>
+        </div>
+
+        <aside>
+          <!-- 100% UNMASKED BANKING & SETTLEMENT PANEL -->
+          <div class="panel profile-panel" style="border:1px solid rgba(0,74,173,0.25); background:linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
+            <div class="panel-head">
+              <div>
+                <h2 style="color:#010a1d; display:flex; align-items:center; gap:6px;">
+                  <span>🏦</span> Settlement Account
+                </h2>
+                <p>Audited payout details for project disbursements.</p>
+              </div>
+              <span class="badge" id="bankingStatusBadge" style="font-weight:700;">VERIFIED</span>
+            </div>
+            <div class="secure-info" id="secureInfo"></div>
+            <div id="bankingActionButtons" style="display:flex; gap:8px; margin-top:14px;"></div>
+          </div>
+
+          <div class="panel profile-panel">
+            <div class="panel-head"><div><h2>Current Operational Status</h2><p>Real-time field availability & project assignment.</p></div></div>
+            <div class="status-display" id="statusDisplay"></div>
+          </div>
+
+          <div class="panel profile-panel">
+            <div class="panel-head"><div><h2>Technical Specializations</h2><p>Approved engineering expertise & equipment authorizations.</p></div></div>
+            <div class="tag-list" id="specializationTags"></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 14. SETTINGS -->
+    <section class="page" id="page-settings">
+      <div class="page-head">
+        <div>
+          <div class="overline">SYSTEM CONFIGURATION</div>
+          <h1>Settings</h1>
+          <p>Company information, engineering tariffs, user roles and security preferences.</p>
+        </div>
+        <button class="primary" onclick="saveSettings()">Save Changes</button>
+      </div>
+      <div class="grid-two">
+        <div class="panel">
+          <div class="panel-head"><div><h2>Company & Brand Profile</h2><p>Corporate identity and invoices</p></div></div>
+          <form class="settings-form" onsubmit="event.preventDefault(); saveSettings();">
+            <div class="form-field"><label>Company Legal Name</label><input value="AE Renewable Ltd" id="setCompanyName"></div>
+            <div class="form-field"><label>Head Office Address</label><input value="Maitama, Abuja, Nigeria" id="setCompanyAddress"></div>
+            <div class="form-field"><label>Official Phone Number</label><input value="+234 813 361 5132" id="setCompanyPhone"></div>
+            <div class="form-field"><label>Support Email</label><input value="AERenewablesolution@gmail.com" id="setCompanyEmail"></div>
+            <div class="form-field"><label>CAC Registration</label><input value="RC 1892301" id="setCompanyCac"></div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><div><h2>Electrical & Tariff Rates</h2><p>Simulation and quotation sizing basis</p></div></div>
+          <form class="settings-form" onsubmit="event.preventDefault(); saveSettings();">
+            <div class="form-field"><label>Grid Electricity Tariff (₦ / kWh)</label><input type="number" value="209" id="setTariff"></div>
+            <div class="form-field"><label>Solar Peak Hours / Day (Abuja average)</label><input type="number" step="0.1" value="5.2" id="setPeakSun"></div>
+            <div class="form-field"><label>VAT Rate (%)</label><input type="number" value="7.5" id="setVatRate"></div>
+            <div class="form-field"><label>Default Currency</label><input value="NGN (₦)" readonly></div>
+            <div class="form-field"><label>Auto-sync Telemetry Interval</label><select id="setSyncInterval"><option>Every 10 Seconds</option><option>Every 30 Seconds</option><option>Every Minute</option></select></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- =========================================================
+     NOTIFICATIONS DRAWER
+========================================================== -->
+<div class="drawer-overlay" id="notifDrawerOverlay" onclick="closeNotificationsDrawer()"></div>
+<aside class="side-drawer" id="notifDrawer">
+  <div class="drawer-header">
+    <div>
+      <h3>Notifications</h3>
+      <p>Operational alerts & system events</p>
+    </div>
+    <button class="close-btn" onclick="closeNotificationsDrawer()">×</button>
+  </div>
+  <div class="drawer-actions">
+    <button class="text-btn" onclick="markAllNotificationsRead()">Mark all as read</button>
+  </div>
+  <div class="drawer-list" id="notifList">
+    <div style="padding:24px;text-align:center;color:var(--muted);font-size:13px;">Connecting to notification feed...</div>
+  </div>
+</aside>
+
+<!-- =========================================================
+     MESSAGES MODAL / DRAWER
+========================================================== -->
+<div class="modal-overlay" id="messagesModal" aria-hidden="true">
+  <div class="messages-dialog">
+    <div class="messages-head">
+      <div>
+        <h2>Communications & Messages</h2>
+        <p>Direct field engineering and client message dispatch</p>
+      </div>
+      <button class="modal-close" onclick="closeMessagesModal()">×</button>
+    </div>
+    <div class="messages-body">
+      <div class="messages-threads">
+        <div class="thread-item active" onclick="selectThread(0)">
+          <div class="avatar small">EA</div>
+          <div>
+            <strong>AbdulRasaq Eniola</strong>
+            <small>Client • Maitama Project</small>
+          </div>
+        </div>
+        <div class="thread-item" onclick="selectThread(1)">
+          <div class="avatar small green">IM</div>
+          <div>
+            <strong>Ibrahim Musa</strong>
+            <small>Lead Installer • Field Team</small>
+          </div>
+        </div>
+        <div class="thread-item" onclick="selectThread(2)">
+          <div class="avatar small gold">GR</div>
+          <div>
+            <strong>Greenfield Residence</strong>
+            <small>Guzape Commercial Client</small>
+          </div>
+        </div>
+      </div>
+      <div class="messages-conversation">
+        <div class="chat-header" id="chatHeader">
+          <strong id="chatPartnerName">AbdulRasaq Eniola</strong>
+          <span class="online-pill">● Online</span>
+        </div>
+        <div class="chat-bubbles" id="chatBubbles">
+          <div class="bubble partner">Good day AE Renewable team. We are ready for the initial site survey tomorrow.</div>
+          <div class="bubble me">Hello Mr. Eniola, our technical engineer and lead installer are confirmed for 10:00 AM.</div>
+          <div class="bubble partner">Great! We have prepared access to the main distribution panel and roof terrace.</div>
+        </div>
+        <form class="chat-input-row" onsubmit="sendChatMessage(event)">
+          <input id="chatInput" placeholder="Type a message to client or installer..." required>
+          <button type="submit" class="primary">Send</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     NEW CONSULTATION MODAL
+========================================================== -->
+<div class="modal-overlay" id="newConsultationModal" aria-hidden="true">
+  <div class="generic-modal">
+    <div class="generic-modal-head">
+      <div>
+        <div class="overline">CLIENT INTAKE</div>
+        <h2>New Consultation</h2>
+        <p>Record a new client requirement for technical sizing and survey.</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('newConsultationModal')">×</button>
+    </div>
+    <form id="newConsultationForm" onsubmit="handleNewConsultationSubmit(event)">
+      <div class="form-grid">
+        <div class="form-field"><label>Client Full Name *</label><input id="ncName" required placeholder="e.g. Chief Oluwaseun Adeleke"></div>
+        <div class="form-field"><label>Phone Number *</label><input id="ncPhone" required placeholder="+234 800 000 0000"></div>
+        <div class="form-field"><label>Email Address</label><input id="ncEmail" type="email" placeholder="client@example.com"></div>
+        <div class="form-field"><label>Location (City / State) *</label><input id="ncLocation" required placeholder="e.g. Asokoro, Abuja"></div>
+        <div class="form-field"><label>Property Type</label><select id="ncProperty"><option>Residential</option><option>Commercial</option><option>Industrial</option></select></div>
+        <div class="form-field"><label>Primary Service</label><select id="ncService"><option>Solar & Hybrid Power</option><option>Electrical Engineering</option><option>CCTV Surveillance</option><option>Smart Home Automation</option></select></div>
+        <div class="form-field full"><label>System Notes & Capacity Requirement</label><textarea id="ncNotes" placeholder="Client requires 20kVA hybrid system with 40kWh lithium battery storage..."></textarea></div>
+      </div>
+      <div class="generic-modal-footer">
+        <button type="button" class="secondary-btn" onclick="closeModal('newConsultationModal')">Cancel</button>
+        <button type="submit" class="primary">Create Consultation</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- =========================================================
+     CREATE QUOTATION MODAL
+========================================================== -->
+<div class="modal-overlay" id="createQuotationModal" aria-hidden="true">
+  <div class="generic-modal">
+    <div class="generic-modal-head">
+      <div>
+        <div class="overline">COMMERCIAL SIZING</div>
+        <h2>Create Quotation</h2>
+        <p>Generate bill of engineering materials and pricing schedule.</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('createQuotationModal')">×</button>
+    </div>
+    <form id="createQuotationForm" onsubmit="handleCreateQuotationSubmit(event)">
+      <div class="form-grid">
+        <div class="form-field"><label>Client Name *</label><input id="qClient" required placeholder="e.g. Maitama Residence"></div>
+        <div class="form-field"><label>System Description *</label><input id="qSystem" required placeholder="e.g. 16kVA Hybrid / 32kWh Lithium"></div>
+        <div class="form-field"><label>Inverter & Panels Subtotal (₦) *</label><input id="qHardware" type="number" required placeholder="12500000" oninput="calculateQuotationTotal()"></div>
+        <div class="form-field"><label>Battery Storage Subtotal (₦) *</label><input id="qBattery" type="number" required placeholder="8000000" oninput="calculateQuotationTotal()"></div>
+        <div class="form-field"><label>Installation & Commissioning (₦) *</label><input id="qLabor" type="number" required placeholder="1500000" oninput="calculateQuotationTotal()"></div>
+        <div class="form-field"><label>Status</label><select id="qStatus"><option value="Issued">Issued</option><option value="Draft">Draft</option></select></div>
+        <div class="form-field full">
+          <div class="total-quote-display">
+            <span>Estimated Total Project Value:</span>
+            <strong id="qTotalDisplay">₦0</strong>
+          </div>
+        </div>
+      </div>
+      <div class="generic-modal-footer">
+        <button type="button" class="secondary-btn" onclick="closeModal('createQuotationModal')">Cancel</button>
+        <button type="submit" class="primary">Issue Quotation</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- =========================================================
+     INSTALLER REGISTRATION MODAL
+========================================================== -->
+<div class="modal-overlay" id="installerRegistrationModal" aria-hidden="true">
+  <div class="installer-modal" role="dialog" aria-modal="true" aria-labelledby="installerModalTitle">
+    <div class="installer-modal-head">
+      <div>
+        <div class="overline">FIELD PERSONNEL • REGISTRATION</div>
+        <h2 id="installerModalTitle">Register Installer</h2>
+        <p>Create a verified installer record for project assignment and compliance tracking.</p>
+      </div>
+      <button class="modal-close" type="button" onclick="closeInstallerRegistration()" aria-label="Close">×</button>
+    </div>
+
+    <form id="installerRegistrationForm" onsubmit="handleInstallerRegistration(event)">
+      <div class="form-section">
+        <div class="form-section-title"><span>01</span> Identity & Contact</div>
+        <div class="installer-photo-area">
+          <div class="installer-photo-preview" id="installerPhotoPreview">EA</div>
+          <div>
+            <strong>Installer Profile Photo</strong>
+            <p>Use a clear professional headshot. JPG or PNG, up to 5MB.</p>
+            <label class="upload-btn">Upload Photo<input type="file" id="installerPhoto" accept="image/*" hidden onchange="previewInstallerPhoto(this)"></label>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field"><label>Full Name *</label><input id="regFullName" required placeholder="e.g. Abdulrasaq Eniola"></div>
+          <div class="form-field"><label>Phone Number *</label><input id="regPhone" required placeholder="+234 800 000 0000"></div>
+          <div class="form-field"><label>Email Address</label><input id="regEmail" type="email" placeholder="installer@example.com"></div>
+          <div class="form-field"><label>Installer ID</label><input id="regInstallerId" readonly value="Auto-generated"></div>
+          <div class="form-field"><label>State *</label><select id="regState" required><option value="">Select state</option><option>Abuja</option><option>Kaduna</option><option>Kano</option><option>Nasarawa</option><option>Niger</option></select></div>
+          <div class="form-field"><label>LGA *</label><input id="regLga" required placeholder="e.g. AMAC"></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title"><span>02</span> Professional Profile</div>
+        <div class="form-grid">
+          <div class="form-field"><label>Position *</label><select id="regPosition" required><option value="">Select position</option><option>Lead Installer</option><option>Solar Technician</option><option>Electrical Technician</option><option>CCTV Technician</option><option>Smart Home Technician</option></select></div>
+          <div class="form-field"><label>Primary Specialization *</label><select id="regSpecialization" required><option value="">Select specialization</option><option>Solar & Hybrid</option><option>Solar PV</option><option>Electrical</option><option>CCTV & Security</option><option>Smart Home</option></select></div>
+          <div class="form-field"><label>Group Number</label><input id="regGroup" placeholder="GRP-001"></div>
+          <div class="form-field"><label>Experience</label><select id="regExperience"><option>1–2 Years</option><option>3–5 Years</option><option>6–10 Years</option><option>10+ Years</option></select></div>
+          <div class="form-field full"><label>Additional Specializations</label><input id="regAdditionalSpecs" placeholder="e.g. Battery Storage, Inverter Systems, Electrical Protection"></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title"><span>03</span> Business Registration</div>
+        <div class="form-grid">
+          <div class="form-field"><label>RC / BN Number *</label><input id="regRcBn" required placeholder="RC-2026-00000 or BN-2026-00000"></div>
+          <div class="form-field"><label>CAC Registration Date</label><input id="regCacDate" type="date"></div>
+          <div class="form-field full"><label>CAC Certificate</label><label class="document-upload"><span>PDF</span><div><strong>Upload CAC Certificate</strong><small>PDF, JPG or PNG • Maximum 10MB</small></div><input type="file" id="regCacFile" accept=".pdf,image/*" hidden></label></div>
+          <div class="form-field full"><label>Professional Certificates</label><label class="document-upload"><span>DOC</span><div><strong>Upload professional certificates</strong><small>Multiple PDF or image files supported</small></div><input type="file" id="regProfessionalFiles" accept=".pdf,image/*" multiple hidden></label></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title"><span>04</span> Banking & Verification</div>
+        <div class="form-grid">
+          <div class="form-field"><label>Bank Name</label><input id="regBankName" placeholder="Bank name"></div>
+          <div class="form-field"><label>Account Name</label><input id="regAccountName" placeholder="Account holder name"></div>
+          <div class="form-field"><label>Account Number</label><input id="regAccountNumber" inputmode="numeric" maxlength="10" placeholder="10-digit account number"></div>
+          <div class="form-field"><label>BVN</label><input id="regBvn" inputmode="numeric" maxlength="11" placeholder="11-digit BVN"></div>
+        </div>
+        <div class="verification-note">
+          <span>✓</span>
+          <div><strong>Verification required</strong><small>Banking information is restricted and only visible to authorized administrators with security passcode.</small></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title"><span>05</span> Availability & Notes</div>
+        <div class="form-grid">
+          <div class="form-field full">
+            <div class="status-control">
+              <label class="toggle"><input id="regActive" type="checkbox" checked><span></span></label>
+              <div><strong>Installer is active</strong><small>Active installers can be considered for project assignment.</small></div>
+            </div>
+          </div>
+          <div class="form-field full">
+            <label>Internal Notes</label>
+            <textarea id="regNotes" placeholder="Add operational notes, preferred project types, restrictions or verification remarks..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="installer-modal-footer">
+        <button class="secondary-btn" type="button" onclick="closeInstallerRegistration()">Cancel</button>
+        <button class="primary" type="submit">Register Installer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- =========================================================
+     PASSCODE VERIFICATION MODAL
+========================================================== -->
+<div class="modal-overlay" id="passcodeModal" aria-hidden="true">
+  <div class="passcode-dialog">
+    <div class="passcode-head">
+      <div class="lock-icon">🔒</div>
+      <h3>Vital Information Security</h3>
+      <p>Enter administrative security passcode to reveal confidential banking credentials (Default: <b>12345</b>).</p>
+    </div>
+    <form onsubmit="handlePasscodeSubmit(event)">
+      <input type="password" id="adminPasscodeInput" maxlength="10" placeholder="Enter 5-digit passcode" required autofocus>
+      <div class="passcode-actions">
+        <button type="button" class="secondary-btn" onclick="closeModal('passcodeModal')">Cancel</button>
+        <button type="submit" class="primary">Unlock Details</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- TOAST NOTIFICATION CONTAINER -->
+
+<!-- =========================================================
+     PROJECT MANAGEMENT CONTROL MODAL (AUTHORITATIVE RECORD)
+========================================================== -->
+<div class="modal-overlay" id="projectControlModal" aria-hidden="true" style="z-index:9999;">
+  <div class="installer-modal" style="max-width:1050px; width:95%; max-height:92vh; overflow-y:auto; border-radius:16px; background:#fff; box-shadow:0 30px 90px rgba(1,10,29,0.35);">
+    <div class="installer-modal-head" style="background:linear-gradient(135deg, #010a1d 0%, #044381 100%); color:#fff; border-bottom:none; padding:24px 30px;">
+      <div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span id="pmProjectCode" style="font-family:monospace; background:rgba(244,166,0,0.25); color:#f4a600; padding:4px 10px; border-radius:6px; font-weight:800; font-size:13px;">PRJ-2026</span>
+          <span id="pmStatusBadge" class="badge blue-b" style="font-size:11px; text-transform:uppercase;">STATUS</span>
+        </div>
+        <h2 id="pmProjectTitle" style="color:#fff; margin:8px 0 4px; font-size:22px;">Project Control Centre</h2>
+        <p id="pmProjectSubtitle" style="color:#b8c7db; font-size:13px; margin:0;">Authoritative Project Record · Sizing, Installation & Payout</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('projectControlModal')" style="background:rgba(255,255,255,0.1); border:none; color:#fff; cursor:pointer; font-size:24px; border-radius:8px; width:38px; height:38px; display:flex; align-items:center; justify-content:center;">×</button>
+    </div>
+
+    <div style="padding:24px 30px;">
+      <!-- Project KPI Summary -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:14px; margin-bottom:24px;">
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px;">
+          <span style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase;">Client</span>
+          <strong id="pmClientName" style="display:block; font-size:15px; color:#0f172a; margin-top:2px;">—</strong>
+          <small id="pmClientContact" style="color:#64748b; font-size:12px;">—</small>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px;">
+          <span style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase;">System Sizing</span>
+          <strong id="pmSystemCapacity" style="display:block; font-size:15px; color:#044381; margin-top:2px;">—</strong>
+          <small id="pmSystemSpecs" style="color:#64748b; font-size:12px;">Solar / Battery / Inverter</small>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px;">
+          <span style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase;">Contract & Balance</span>
+          <strong id="pmContractValue" style="display:block; font-size:15px; color:#008000; margin-top:2px;">₦0</strong>
+          <small id="pmBalanceDue" style="color:#b91c1c; font-size:12px; font-weight:600;">Balance: ₦0</small>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px;">
+          <span style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase;">Installation Site</span>
+          <strong id="pmSiteLocation" style="display:block; font-size:14px; color:#0f172a; margin-top:2px;">—</strong>
+          <small id="pmSiteState" style="color:#64748b; font-size:12px;">State & LGA</small>
+        </div>
+      <!-- Client Bargain Proposal Review Banner -->
+      <div id="pmBargainPanel" style="background:#fffbeb; border:1.5px solid #fcd34d; border-radius:12px; padding:18px; margin-bottom:24px; display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:18px;">⚡</span>
+            <strong style="color:#92400e; font-size:15px;">Pending Client Bargain Negotiation</strong>
+          </div>
+          <span id="pmBargainDiscountBadge" class="badge amber-b" style="font-size:11px; font-weight:800;">5% Discount</span>
+        </div>
+        <p id="pmBargainDetails" style="font-size:13px; color:#78350f; margin:0 0 12px; line-height:1.5;">Loading bargain details...</p>
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+          <button id="pmRejectBargainBtn" onclick="submitBargainAction('reject')" class="secondary-btn" style="height:36px; padding:0 14px; font-size:12px; font-weight:700; color:#dc2626; border-color:#fca5a5;">
+            Decline Offer
+          </button>
+          <button id="pmAcceptBargainBtn" onclick="submitBargainAction('accept')" class="primary" style="height:36px; padding:0 18px; font-size:12px; font-weight:700; background:#16a34a; border-color:#16a34a;">
+            Accept Bargain & Adjust Contract
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Grid: Installer & Client Onboarding -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:24px;">
+        <!-- Installer Assignment Box -->
+        <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:12px; padding:18px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="background:rgba(4,67,129,0.1); color:#044381; padding:4px 8px; border-radius:6px; font-size:12px;">👷</span>
+              <strong style="color:#0f172a; font-size:14px;">Installer Assignment</strong>
+            </div>
+            <span id="pmAssignedInstallerBadge" class="badge amber-b" style="font-size:11px;">Unassigned</span>
+          </div>
+          <p id="pmAssignedInstallerDetails" style="font-size:13px; color:#475569; margin-bottom:12px;">Select certified installer from directory to assign this site.</p>
+          <div style="display:flex; gap:8px;">
+            <select id="pmInstallerSelect" style="flex:1; height:40px; border-radius:8px; border:1px solid #cbd5e1; padding:0 10px; font-size:13px;">
+              <option value="">Choose Available Installer...</option>
+            </select>
+            <button id="pmAssignInstallerBtn" onclick="submitInstallerAssignment()" class="primary" style="height:40px; padding:0 16px; font-size:13px; white-space:nowrap;">Assign</button>
+          </div>
+        </div>
+
+        <!-- Client Account Onboarding Box -->
+        <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:12px; padding:18px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="background:rgba(244,166,0,0.15); color:#d97706; padding:4px 8px; border-radius:6px; font-size:12px;">👤</span>
+              <strong style="color:#0f172a; font-size:14px;">Client Account Onboarding</strong>
+            </div>
+            <span id="pmClientAccountBadge" class="badge blue-b" style="font-size:11px;">Pending</span>
+          </div>
+          <p id="pmClientAccountInfo" style="font-size:13px; color:#475569; margin-bottom:12px;">Rule: Username = Quotation Code · Initial Password = Middle Name</p>
+          <div id="pmClientAccountActionArea">
+            <button id="pmCreateClientAccountBtn" onclick="submitClientAccountCreation()" class="secondary-btn" style="width:100%; height:40px; font-size:13px; font-weight:700; border-color:#cbd5e1;">
+              Create Client Portal Account
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Site Execution Evidence (The 6 Stages) -->
+      <div style="background:#fff; border:1px solid #cbd5e1; border-radius:12px; padding:20px; margin-bottom:24px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <div>
+            <h3 style="margin:0; font-size:16px; color:#0f172a;">Site Execution Evidence (6 Mandatory Stages)</h3>
+            <p style="margin:4px 0 0; font-size:12px; color:#64748b;">Verification required before installer milestone payout can be authorized.</p>
+          </div>
+          <span id="pmEvidenceStagesCount" class="badge blue-b" style="font-size:12px;">0 / 6 Stages</span>
+        </div>
+
+        <div id="pmEvidenceGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px;">
+          <!-- Dynamically populated 6 stages -->
+        </div>
+      </div>
+
+      <!-- Payment Milestone Approval -->
+      <div id="pmPaymentPanel" style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:18px; margin-bottom:24px; display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="color:#16a34a; font-size:18px;">💰</span>
+              <strong style="color:#166534; font-size:15px;">Installer Milestone Payment Requested</strong>
+            </div>
+            <p id="pmPaymentDetails" style="margin:4px 0 0; font-size:13px; color:#15803d;">Installer has requested completion payout of ₦150,000.</p>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button onclick="approveProjectPayment()" class="primary" style="background:#16a34a; border-color:#16a34a; height:38px; padding:0 18px; font-weight:700;">
+              Approve & Release Payment
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity Audit Trail -->
+      <div>
+        <h4 style="margin:0 0 12px; font-size:14px; color:#475569; text-transform:uppercase; letter-spacing:0.5px;">Activity Audit History</h4>
+        <div id="pmActivityTrail" style="max-height:180px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:8px; padding:12px; background:#fafafa; font-size:12px;">
+          <!-- Activity list -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     WHILE YOU SLEEP — OPERATIONAL INTELLIGENCE MODAL
+========================================================== -->
+<div class="modal-overlay" id="whileYouSleepModal" aria-hidden="true" style="z-index:9999;">
+  <div class="installer-modal" style="max-width:850px; width:92%; max-height:88vh; overflow-y:auto; border-radius:16px; background:#fff;">
+    <div class="installer-modal-head" style="background:#010a1d; color:#fff; border-bottom:1px solid rgba(255,255,255,0.1); padding:22px 28px;">
+      <div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:18px;">🌙</span>
+          <h2 style="color:#f4a600; margin:0; font-size:20px;">While You Sleep — Operations Summary</h2>
+        </div>
+        <p style="color:#94a3b8; font-size:13px; margin:4px 0 0;">Autonomous system activities and pending approvals over the last 24 hours.</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('whileYouSleepModal')" style="background:rgba(255,255,255,0.1); border:none; color:#fff; cursor:pointer; font-size:24px; border-radius:8px; width:38px; height:38px; display:flex; align-items:center; justify-content:center;">×</button>
+    </div>
+
+    <div style="padding:24px 28px;">
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin-bottom:20px;">
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; text-align:center;">
+          <span style="font-size:11px; color:#64748b; font-weight:700;">NEW PROJECTS</span>
+          <strong id="wysNewProjectsCount" style="display:block; font-size:22px; color:#044381; margin-top:2px;">0</strong>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; text-align:center;">
+          <span style="font-size:11px; color:#64748b; font-weight:700;">NEW QUOTATIONS</span>
+          <strong id="wysNewQuotationsCount" style="display:block; font-size:22px; color:#f4a600; margin-top:2px;">0</strong>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; text-align:center;">
+          <span style="font-size:11px; color:#64748b; font-weight:700;">ACTIONS REQUIRED</span>
+          <strong id="wysPendingActionsCount" style="display:block; font-size:22px; color:#b91c1c; margin-top:2px;">0</strong>
+        </div>
+      </div>
+
+      <div style="margin-bottom:18px;">
+        <h4 style="font-size:13px; color:#1e293b; margin:0 0 8px; text-transform:uppercase;">Action Required Immediately</h4>
+        <div id="wysActionRequiredList" style="border:1px solid #e2e8f0; border-radius:8px; padding:10px; background:#fff; font-size:12px;">
+          <!-- Dynamically filled -->
+        </div>
+      </div>
+
+      <div>
+        <h4 style="font-size:13px; color:#1e293b; margin:0 0 8px; text-transform:uppercase;">Recent System Automations</h4>
+        <div id="wysActivitiesList" style="max-height:160px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:8px; padding:10px; background:#f8fafc; font-size:12px;">
+          <!-- Dynamically filled -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     SEND INSTALLER NOTIFICATION MODAL
+========================================================== -->
+<div class="modal-overlay" id="sendInstallerNotificationModal" aria-hidden="true" style="z-index:9999;">
+  <div class="installer-modal" role="dialog" aria-modal="true" style="max-width:620px; width:94%; border-radius:18px; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.35);">
+    <div class="installer-modal-head" style="background:linear-gradient(135deg, #010a1d 0%, #044381 100%); color:#fff; padding:22px 28px; border-bottom:1px solid rgba(255,255,255,0.1);">
+      <div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:18px; background:rgba(244,166,0,0.2); color:#f4a600; padding:4px 8px; border-radius:6px; font-weight:bold;">✉</span>
+          <h2 style="color:#ffffff; margin:0; font-size:20px; font-weight:800;">Dispatch Installer Notification</h2>
+        </div>
+        <p style="color:#93c5fd; font-size:13px; margin:4px 0 0;">Deliver instant in-app alerts and SMS/email notifications directly to the installer portal.</p>
+      </div>
+      <button class="modal-close" type="button" onclick="closeModal('sendInstallerNotificationModal')" aria-label="Close" style="background:rgba(255,255,255,0.12); color:#fff; border:none; border-radius:8px; font-size:22px; width:36px; height:36px; cursor:pointer; display:flex; align-items:center; justify-content:center;">×</button>
+    </div>
+
+    <form id="sendInstallerNotificationForm" onsubmit="submitInstallerNotification(event)" style="padding:24px 28px; background:#ffffff;">
+      <input type="hidden" id="notifInstallerId">
+
+      <div style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:10px; padding:12px 16px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <small style="color:#64748b; font-size:11px; font-weight:700; text-transform:uppercase; display:block;">TARGET RECIPIENT</small>
+          <strong id="notifRecipientName" style="color:#0f172a; font-size:15px;">—</strong>
+        </div>
+        <span class="badge blue-b" id="notifRecipientCode" style="font-size:12px;">INS-0000</span>
+      </div>
+
+      <div class="form-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
+        <div class="form-field" style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:12px; font-weight:700; color:#334155;">Notification Type *</label>
+          <select id="notifType" required style="padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit; background:#fff;">
+            <option value="project">Project Assignment / Work Order</option>
+            <option value="verification">Verification & Regulatory Approval</option>
+            <option value="banking">Settlement & Payout Notification</option>
+            <option value="compliance">Compliance & Licensing Notice</option>
+            <option value="system" selected>System Operations Alert</option>
+          </select>
+        </div>
+
+        <div class="form-field" style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:12px; font-weight:700; color:#334155;">Priority Level *</label>
+          <select id="notifPriority" required style="padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit; background:#fff;">
+            <option value="normal">Normal Priority</option>
+            <option value="high" selected>High Priority (Alert Banner)</option>
+            <option value="urgent">Urgent / Action Required</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-field" style="display:flex; flex-direction:column; gap:6px; margin-bottom:14px;">
+        <label style="font-size:12px; font-weight:700; color:#334155;">Notification Subject / Headline *</label>
+        <input type="text" id="notifTitle" required placeholder="e.g. Work Order Dispatched: Maitama 10kW Array" style="padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit; width:100%; box-sizing:border-box;">
+      </div>
+
+      <div class="form-field" style="display:flex; flex-direction:column; gap:6px; margin-bottom:14px;">
+        <label style="font-size:12px; font-weight:700; color:#334155;">Message Content *</label>
+        <textarea id="notifMessage" required rows="4" placeholder="Provide complete instruction, site coordinates, or document verification findings..." style="padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit; width:100%; box-sizing:border-box; resize:vertical;"></textarea>
+      </div>
+
+      <div class="form-field" style="display:flex; flex-direction:column; gap:6px; margin-bottom:20px;">
+        <label style="font-size:12px; font-weight:700; color:#334155;">Portal Action Link (Optional)</label>
+        <input type="text" id="notifActionUrl" placeholder="e.g. /installer/projects or /installer/profile" style="padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit; width:100%; box-sizing:border-box;">
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid #e2e8f0; padding-top:18px;">
+        <button type="button" class="secondary-btn" onclick="closeModal('sendInstallerNotificationModal')" style="padding:10px 18px; border-radius:8px; cursor:pointer;">Cancel</button>
+        <button type="submit" id="notifSubmitBtn" class="primary" style="background:#004AAD; border-color:#004AAD; padding:10px 22px; border-radius:8px; font-weight:700; color:#fff; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+          <span>✈</span> Send Notification
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- =========================================================
+     MODAL: 👤 3. CLIENT & CONTACT PROFILING (INTAKE ACCEPTANCE)
+========================================================== -->
+<div class="modal-overlay" id="modalAcceptIntakeProfile" aria-hidden="true" style="z-index:9999;">
+  <div class="modal-card" style="max-width:620px; width:95%; background:#ffffff; border-radius:16px; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.35); text-align:left;">
+    <div style="background:linear-gradient(135deg, #020c1a 0%, #004aad 100%); color:#ffffff; padding:18px 24px; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:18px;">👤</span>
+          <h2 style="margin:0; font-size:17px; font-weight:800; color:#fff;">3. Client &amp; Contact Profiling</h2>
+        </div>
+        <p style="margin:4px 0 0; font-size:12px; color:#93c5fd;">Inbound inquiry missing contact profile. Complete details below via phone/WhatsApp call.</p>
+      </div>
+      <button type="button" onclick="closeModal('modalAcceptIntakeProfile')" style="background:rgba(255,255,255,0.15); border:none; color:#fff; border-radius:8px; width:32px; height:32px; cursor:pointer; font-size:18px;">×</button>
+    </div>
+
+    <!-- Quick Call/WhatsApp Bar -->
+    <div style="background:#f8fafc; border-bottom:1px solid #e2e8f0; padding:10px 24px; display:flex; justify-content:space-between; align-items:center; font-size:12px;">
+      <span style="color:#64748b; font-weight:600;">Ask Client Over Phone or WhatsApp:</span>
+      <div style="display:flex; gap:8px;" id="intakeModalQuickActions">
+        <a id="modalDirectWaLink" href="https://wa.me/2348133615132" target="_blank" style="text-decoration:none; background:#25D366; color:#fff; padding:4px 10px; border-radius:6px; font-weight:700; font-size:11px; display:inline-flex; align-items:center; gap:4px;">
+          💬 WhatsApp
+        </a>
+        <a id="modalDirectCallLink" href="tel:+2348133615132" style="text-decoration:none; background:#004aad; color:#fff; padding:4px 10px; border-radius:6px; font-weight:700; font-size:11px; display:inline-flex; align-items:center; gap:4px;">
+          📞 Call Directly
+        </a>
+      </div>
+    </div>
+
+    <form id="formAcceptIntakeProfile" onsubmit="submitAcceptIntakeProfile(event)" style="padding:20px 24px;">
+      <input type="hidden" id="acceptIntakeProjectId">
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;">
+        <div>
+          <label style="font-size:11.5px; font-weight:700; color:#334155; display:block; margin-bottom:4px;">Contact Person / Full Name *</label>
+          <input type="text" id="intakeFullName" placeholder="abdulrasaq Eniola" required style="width:100%; box-sizing:border-box; padding:9px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px;">
+        </div>
+        <div>
+          <label style="font-size:11.5px; font-weight:700; color:#334155; display:block; margin-bottom:4px;">Company / Organization Name</label>
+          <input type="text" id="intakeCompany" placeholder="Company / Organization Name" style="width:100%; box-sizing:border-box; padding:9px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px;">
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;">
+        <div>
+          <label style="font-size:11.5px; font-weight:700; color:#334155; display:block; margin-bottom:4px;">Email Address *</label>
+          <input type="email" id="intakeEmail" placeholder="client@example.com" required style="width:100%; box-sizing:border-box; padding:9px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px;">
+        </div>
+        <div>
+          <label style="font-size:11.5px; font-weight:700; color:#334155; display:block; margin-bottom:4px;">Phone / WhatsApp Number *</label>
+          <input type="tel" id="intakePhone" placeholder="08133000000" required style="width:100%; box-sizing:border-box; padding:9px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px;">
+        </div>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <label style="font-size:11.5px; font-weight:700; color:#334155; display:block; margin-bottom:4px;">Property Classification *</label>
+        <select id="intakePropertyType" style="width:100%; box-sizing:border-box; padding:9px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; background:#fff;">
+          <option value="Residential" selected>Residential (Duplex / Villa / Apartment)</option>
+          <option value="Commercial">Commercial (Office / Plaza / Hotel / Clinic)</option>
+          <option value="Industrial">Industrial (Factory / Warehouse / Cold Room)</option>
+          <option value="Agricultural">Agricultural (Solar Irrigation / Farming)</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <label style="font-size:11.5px; font-weight:700; color:#334155; display:block; margin-bottom:4px;">Installation Site Street Address *</label>
+        <input type="text" id="intakeAddress" placeholder="Installation Site Street Address" required style="width:100%; box-sizing:border-box; padding:9px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px;">
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:18px;">
+        <div>
+          <label style="font-size:11.5px; font-weight:700; color:#334155; display:block; margin-bottom:4px;">City / LGA *</label>
+          <input type="text" id="intakeCity" value="Abuja" required style="width:100%; box-sizing:border-box; padding:9px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px;">
+        </div>
+        <div>
+          <label style="font-size:11.5px; font-weight:700; color:#334155; display:block; margin-bottom:4px;">State / Region *</label>
+          <select id="intakeState" style="width:100%; box-sizing:border-box; padding:9px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; background:#fff;">
+            <option value="FCT" selected>FCT (Federal Capital Territory, Abuja)</option>
+            <option value="Lagos">Lagos</option>
+            <option value="Rivers">Rivers (Port Harcourt)</option>
+            <option value="Kano">Kano</option>
+            <option value="Oyo">Oyo (Ibadan)</option>
+            <option value="Kaduna">Kaduna</option>
+            <option value="Delta">Delta</option>
+            <option value="Enugu">Enugu</option>
+            <option value="Ogun">Ogun</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid #e2e8f0; padding-top:16px;">
+        <button type="button" class="secondary-btn" onclick="closeModal('modalAcceptIntakeProfile')" style="padding:10px 18px; border-radius:8px; cursor:pointer;">Cancel</button>
+        <button type="submit" id="btnSubmitAcceptIntake" class="primary" style="background:#059669; border-color:#059669; padding:10px 22px; border-radius:8px; font-weight:700; color:#fff; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+          <span>⚡ Accept &amp; Dispatch Credentials</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- =========================================================
+     MODAL: 🔑 CREDENTIALS DISPATCHED (WHATSAPP & PHONE ACTION)
+========================================================== -->
+<div class="modal-overlay" id="modalCredentialsDispatched" aria-hidden="true" style="z-index:9999;">
+  <div class="modal-card" style="max-width:540px; width:95%; background:#ffffff; border-radius:16px; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.35); text-align:left;">
+    <div style="background:linear-gradient(135deg, #059669 0%, #004aad 100%); color:#ffffff; padding:18px 24px; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:20px;">✓</span>
+          <h2 style="margin:0; font-size:17px; font-weight:800; color:#fff;">Client Access Provisioned</h2>
+        </div>
+        <p style="margin:4px 0 0; font-size:12px; color:#d1fae5;">Credentials sent to email &amp; ready to transmit via WhatsApp or phone call.</p>
+      </div>
+      <button type="button" onclick="closeModal('modalCredentialsDispatched')" style="background:rgba(255,255,255,0.15); border:none; color:#fff; border-radius:8px; width:32px; height:32px; cursor:pointer; font-size:18px;">×</button>
+    </div>
+
+    <div style="padding:22px 24px;">
+      <div style="background:#f8fafc; border:1.5px dashed #004aad; border-radius:10px; padding:16px; margin-bottom:18px;">
+        <div style="font-size:11px; font-weight:800; color:#004aad; text-transform:uppercase; margin-bottom:8px; letter-spacing:0.05em;">Generated 1-Time Credentials</div>
+        <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #e2e8f0; font-size:13px;">
+          <span style="color:#64748b; font-weight:600;">Client:</span>
+          <strong id="credModalClientName" style="color:#0f172a;">—</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #e2e8f0; font-size:13px;">
+          <span style="color:#64748b; font-weight:600;">Username:</span>
+          <strong id="credModalUsername" style="color:#0f172a; font-family:monospace;">—</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:6px 0; font-size:13px;">
+          <span style="color:#64748b; font-weight:600;">Temporary 1-Time Password:</span>
+          <strong id="credModalPassword" style="color:#059669; font-family:monospace; font-size:15px;">—</strong>
+        </div>
+      </div>
+
+      <p style="font-size:12.5px; color:#475569; margin-bottom:18px;">
+        ✉️ <strong>Notice:</strong> An automated welcome email containing their login link and temporary credentials has been dispatched. You can now immediately send it to their WhatsApp or dictate it over the phone:
+      </p>
+
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <a id="btnCredSendWhatsApp" href="#" target="_blank" style="text-decoration:none; background:#25D366; color:#fff; padding:12px; border-radius:8px; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; gap:8px;">
+          <span>💬 Send Credentials via WhatsApp Instant Chat</span>
+        </a>
+        <a id="btnCredCallDirectly" href="#" style="text-decoration:none; background:#004aad; color:#fff; padding:12px; border-radius:8px; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; gap:8px;">
+          <span>📞 Call Client Directly to Dictate Password</span>
+        </a>
+      </div>
+
+      <div style="text-align:right; margin-top:16px;">
+        <button type="button" class="secondary-btn" onclick="closeModal('modalCredentialsDispatched')">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     DOCUMENT & CERTIFICATE VIEWER MODAL
+========================================================== -->
+<div class="modal-overlay" id="documentViewerModal" aria-hidden="true" style="z-index:9999;">
+  <div class="installer-modal" role="dialog" aria-modal="true" style="max-width:880px; width:95%; max-height:92vh; border-radius:18px; overflow:hidden; box-shadow:0 30px 70px rgba(0,0,0,0.4); display:flex; flex-direction:column; background:#ffffff;">
+    <div class="installer-modal-head" style="background:#010a1d; color:#fff; padding:18px 24px; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center;">
+      <div style="overflow:hidden;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:16px;">📜</span>
+          <h2 id="docViewerTitle" style="color:#ffffff; margin:0; font-size:18px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Document Preview</h2>
+        </div>
+        <p id="docViewerSubtitle" style="color:#94a3b8; font-size:12px; margin:2px 0 0;">Official regulatory and accreditation document on file</p>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <a id="docViewerOpenTab" href="#" target="_blank" class="secondary-btn" style="color:#ffffff; border-color:rgba(255,255,255,0.3); font-size:12px; padding:6px 12px; text-decoration:none; border-radius:6px; display:inline-flex; align-items:center; gap:4px;">
+          <span>↗</span> Open Tab
+        </a>
+        <button class="modal-close" type="button" onclick="closeModal('documentViewerModal')" aria-label="Close" style="background:rgba(255,255,255,0.12); color:#fff; border:none; border-radius:8px; font-size:22px; width:34px; height:34px; cursor:pointer; display:flex; align-items:center; justify-content:center;">×</button>
+      </div>
+    </div>
+
+    <div id="docViewerContainer" style="flex:1; min-height:360px; max-height:64vh; overflow:auto; background:#0b1120; display:flex; align-items:center; justify-content:center; padding:16px;">
+      <!-- Content populated dynamically -->
+    </div>
+
+    <div style="background:#f8fafc; border-top:1px solid #e2e8f0; padding:14px 24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+      <div id="docViewerAuditStatus" style="font-size:12px; color:#475569;">
+        <!-- Verification audit status badge -->
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <button type="button" id="docViewerDenyBtn" class="secondary-btn" style="color:#b91c1c; border-color:#fecaca; background:#fff1f2; padding:8px 16px; border-radius:8px; font-weight:700; cursor:pointer;">
+          ✕ Deny Document
+        </button>
+        <button type="button" id="docViewerVerifyBtn" class="primary" style="background:#10b981; border-color:#10b981; padding:8px 18px; border-radius:8px; font-weight:700; color:#fff; cursor:pointer;">
+          ✓ Verify & Approve
+        </button>
+        <button type="button" class="secondary-btn" onclick="closeModal('documentViewerModal')" style="padding:8px 16px; border-radius:8px; cursor:pointer;">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     ADMIN UPLOAD LIVE FIELD POST MODAL
+========================================================== -->
+<div class="modal-overlay" id="uploadFieldPostModal" aria-hidden="true" style="z-index:9999;">
+  <div class="installer-modal" role="dialog" aria-modal="true" style="max-width:720px; width:95%; max-height:92vh; border-radius:18px; overflow:hidden; box-shadow:0 30px 70px rgba(0,0,0,0.4); display:flex; flex-direction:column; background:#ffffff;">
+    <div class="installer-modal-head" style="background:linear-gradient(135deg, #010a1d 0%, #044381 100%); color:#fff; padding:20px 26px; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:20px; background:rgba(244,166,0,0.2); color:#f4a600; padding:4px 8px; border-radius:6px; font-weight:bold;">📡</span>
+          <h2 style="color:#ffffff; margin:0; font-size:20px; font-weight:800;">Upload Live Field Post</h2>
+        </div>
+        <p style="color:#93c5fd; font-size:13px; margin:4px 0 0;">Publish verified engineering progress, on-site photos, and client feedback to the public live stream.</p>
+      </div>
+      <button class="modal-close" type="button" onclick="closeModal('uploadFieldPostModal')" aria-label="Close" style="background:rgba(255,255,255,0.12); color:#fff; border:none; border-radius:8px; font-size:22px; width:36px; height:36px; cursor:pointer; display:flex; align-items:center; justify-content:center;">×</button>
+    </div>
+
+    <form id="uploadFieldPostForm" onsubmit="submitFieldPost(event)" style="padding:22px 26px; overflow-y:auto; flex:1;" enctype="multipart/form-data">
+      <div class="form-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
+        <div class="form-field" style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:12px; font-weight:700; color:#334155;">Lead Field Engineer *</label>
+          <input type="text" id="fieldEngineerName" required placeholder="e.g. Engr. Eniola Abdulrasaq" style="padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit;">
+        </div>
+        <div class="form-field" style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:12px; font-weight:700; color:#334155;">Engineer Accreditation / Title *</label>
+          <input type="text" id="fieldEngineerTitle" required value="NEMSA Certified Lead Installer" placeholder="e.g. Certified Storage Specialist" style="padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit;">
+        </div>
+      </div>
+
+      <div class="form-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
+        <div class="form-field" style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:12px; font-weight:700; color:#334155;">Installation Stage *</label>
+          <select id="fieldStage" required style="padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit; background:#fff;">
+            <option value="stage1">🔍 Stage 1: Site Audit &amp; Structural Assessment</option>
+            <option value="stage2">🛠️ Stage 2: Trenching, Ingress &amp; Heavy Conduit</option>
+            <option value="stage3" selected>⚡ Stage 3: PV Array &amp; Inverter Subsystem Mount</option>
+            <option value="stage4">🔋 Stage 4: Battery Storage &amp; BMS Wiring</option>
+            <option value="stage5">⚡ Stage 5: System Earthing (&lt;2Ω) &amp; SPDs</option>
+            <option value="stage6">🏆 Stage 6: Testing, Live Sync &amp; Handover</option>
+          </select>
+        </div>
+        <div class="form-field" style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:12px; font-weight:700; color:#334155;">Project Location (City / State) *</label>
+          <input type="text" id="fieldLocation" required placeholder="e.g. Asokoro District, Abuja FCT" style="padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit;">
+        </div>
+      </div>
+
+      <div class="form-field" style="display:flex; flex-direction:column; gap:6px; margin-bottom:14px;">
+        <label style="font-size:12px; font-weight:700; color:#334155;">Milestone Technical Description *</label>
+        <textarea id="fieldDescription" required rows="3" placeholder="Detail the engineering milestone, torque settings, string configurations, inverter sync, or structural testing completed..." style="padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit; width:100%; box-sizing:border-box; resize:vertical;"></textarea>
+      </div>
+
+      <div class="form-field" style="display:flex; flex-direction:column; gap:6px; margin-bottom:14px;">
+        <label style="font-size:12px; font-weight:700; color:#334155;">Equipment &amp; Hardware Tags (Comma separated)</label>
+        <input type="text" id="fieldTags" placeholder="e.g. 24x 585W Tier-1 Mono, Dual 12kW Deye Hybrid, 30kWh LiFePO4" style="padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit; width:100%; box-sizing:border-box;">
+      </div>
+
+      <div class="form-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
+        <div class="form-field" style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:12px; font-weight:700; color:#334155;">Upload Field Photo / Evidence *</label>
+          <input type="file" id="fieldImageFile" accept="image/*" style="padding:8px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:12px;">
+          <small style="color:#64748b; font-size:11px;">Or select a default image from library</small>
+          <select id="fieldImagePreset" onchange="applyFieldImagePreset(this.value)" style="padding:8px; border:1px solid #cbd5e1; border-radius:6px; font-size:12px; background:#f8fafc;">
+            <option value="">-- Choose from Site Photo Library --</option>
+            <option value="/site-images/panelUtako1.jpeg">Panels Array (Utako)</option>
+            <option value="/site-images/utakoinverterdone.jpeg">Inverter &amp; Battery Bank (Utako)</option>
+            <option value="/site-images/electrical.jpg">Distribution &amp; Earthing</option>
+            <option value="/site-images/smartInverter.jpeg">Commissioning Telemetry Handover</option>
+            <option value="/site-images/gombe1.png">Commercial Structural Framing</option>
+            <option value="/site-images/installer1.jpeg">Trenching &amp; Underground Conduiting</option>
+          </select>
+        </div>
+
+        <div class="form-field" style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:12px; font-weight:700; color:#334155;">Client Feedback / Review</label>
+          <textarea id="fieldClientFeedback" rows="3" placeholder="Client comments, punctuality rating, or satisfaction note..." style="padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit; width:100%; box-sizing:border-box; resize:vertical;"></textarea>
+        </div>
+      </div>
+
+      <div class="form-field" style="display:flex; flex-direction:column; gap:6px; margin-bottom:20px;">
+        <label style="font-size:12px; font-weight:700; color:#334155;">Engineering Resolution / Audit Note</label>
+        <input type="text" id="fieldResolutionNote" value="Audit Status: Passed Structural & Electrical Standard Inspection" placeholder="e.g. Audit Passed: 1.48Ω Earth Resistance Verified" style="padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit; width:100%; box-sizing:border-box;">
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid #e2e8f0; padding-top:16px;">
+        <button type="button" class="secondary-btn" onclick="closeModal('uploadFieldPostModal')" style="padding:10px 18px; border-radius:8px; cursor:pointer;">Cancel</button>
+        <button type="submit" id="fieldPostSubmitBtn" class="primary" style="background:#004AAD; border-color:#004AAD; padding:10px 24px; border-radius:8px; font-weight:700; color:#fff; cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+          <span>📡</span> Publish to Live Field Stream
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- =========================================================
+     PAYMENT & RECEIPT PROOF AUDIT MODAL
+========================================================== -->
+<div class="modal" id="paymentProofModal" style="display:none; z-index:9999;">
+  <div class="modal-card" style="max-width:720px; width:95%; max-height:92vh; overflow-y:auto; border-radius:14px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.35);">
+    <div class="modal-head" style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid #e2e8f0; padding-bottom:14px; margin-bottom:16px;">
+      <div>
+        <div style="font-size:11px; font-weight:800; color:#004AAD; letter-spacing:0.08em; text-transform:uppercase;">Financial Audit &amp; Verification</div>
+        <h2 id="proofModalTitle" style="margin:2px 0 0; font-size:20px; color:#0f172a;">Payment Proof Inspection</h2>
+        <p id="proofModalSubtitle" style="margin:4px 0 0; font-size:12px; color:#64748b;">Review bank receipt slip, transaction stamp, and reconcile client ledger.</p>
+      </div>
+      <button class="close-btn" onclick="closeModal('paymentProofModal')" style="background:transparent; border:none; font-size:22px; cursor:pointer; color:#64748b; line-height:1;">✕</button>
+    </div>
+
+    <!-- Payment Metadata Summary -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px; background:#f8fafc; border:1px solid #e2e8f0; padding:12px 14px; border-radius:10px; margin-bottom:16px;">
+      <div>
+        <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase;">Reference</div>
+        <div id="proofMetaRef" style="font-size:13px; font-weight:800; color:#0f172a; margin-top:2px;">--</div>
+      </div>
+      <div>
+        <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase;">Amount</div>
+        <div id="proofMetaAmount" style="font-size:15px; font-weight:800; color:#00B140; margin-top:2px;">--</div>
+      </div>
+      <div>
+        <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase;">Client / Payer</div>
+        <div id="proofMetaClient" style="font-size:13px; font-weight:700; color:#0f172a; margin-top:2px;">--</div>
+      </div>
+      <div>
+        <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase;">Method / Channel</div>
+        <div id="proofMetaMethod" style="font-size:13px; font-weight:700; color:#004AAD; margin-top:2px;">--</div>
+      </div>
+      <div>
+        <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase;">Tx Reference</div>
+        <div id="proofMetaTxRef" style="font-size:12px; font-family:monospace; color:#334155; margin-top:2px; word-break:break-all;">--</div>
+      </div>
+      <div>
+        <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase;">Status</div>
+        <div id="proofMetaStatusBadge" style="margin-top:2px;">--</div>
+      </div>
+    </div>
+
+    <!-- Proof Image Display Area -->
+    <div style="margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <label style="font-size:12px; font-weight:700; color:#334155;">Bank Payment Slip / Receipt Image Evidence</label>
+        <a id="proofImageOpenNewTab" href="#" target="_blank" style="font-size:12px; color:#004AAD; text-decoration:none; font-weight:600; display:none;">Open Full Size ↗</a>
+      </div>
+      <div id="proofImageContainer" style="background:#0f172a; border-radius:10px; overflow:hidden; min-height:260px; max-height:480px; display:flex; align-items:center; justify-content:center; border:1px solid #334155; position:relative;">
+        <img id="proofImageElement" src="" alt="Payment Receipt Proof" style="max-width:100%; max-height:460px; object-fit:contain; display:none;">
+        <div id="proofNoImageNotice" style="color:#94a3b8; font-size:13px; text-align:center; padding:30px;">
+          <span style="font-size:32px; display:block; margin-bottom:8px;">🧾</span>
+          No uploaded slip image attached to this payment record.<br>
+          <small style="color:#64748b;">(Payment logged via direct bank portal or system milestone transaction)</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Proof Notes & Verification Controls -->
+    <div style="margin-bottom:20px;">
+      <label style="font-size:12px; font-weight:700; color:#334155;">Auditor Notes / Reconciliation Remarks</label>
+      <div id="proofNotesDisplay" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 12px; font-size:13px; color:#334155; min-height:40px; margin-top:4px;">
+        No additional notes logged.
+      </div>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #e2e8f0; padding-top:16px;">
+      <button type="button" class="secondary-btn" onclick="closeModal('paymentProofModal')" style="padding:10px 18px; border-radius:8px; cursor:pointer;">Close</button>
+      <div style="display:flex; gap:10px;">
+        <button type="button" id="proofDownloadPdfBtn" class="secondary-btn" style="padding:10px 16px; border-radius:8px; font-weight:600; display:inline-flex; align-items:center; gap:6px;">
+          <span>📄</span> Official Receipt
+        </button>
+        <button type="button" id="proofVerifyActionBtn" class="primary" style="background:#059669; border-color:#059669; padding:10px 22px; border-radius:8px; font-weight:700; color:#fff; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+          <span>✓</span> Verify Payment
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     MOBILE BOTTOM TAB NAVIGATION (iPhones, Android, Small Screens)
+========================================================== -->
+<nav class="mobile-tab-bar" id="mobileTabBar" aria-label="Mobile Bottom Navigation">
+  <button class="mobile-tab-item active" data-tab-page="dashboard" onclick="showPage('dashboard')" aria-label="Dashboard">
+    <span class="mobile-tab-icon">⌂</span>
+    <span class="mobile-tab-label">Dashboard</span>
+  </button>
+  <button class="mobile-tab-item" data-tab-page="consultations" onclick="showPage('consultations')" aria-label="Consultations">
+    <span class="mobile-tab-icon">◌</span>
+    <span class="mobile-tab-label">Consults</span>
+    <b class="mobile-tab-badge" id="mobileTabConsultBadge">08</b>
+  </button>
+  <button class="mobile-tab-item" data-tab-page="projects" onclick="showPage('projects')" aria-label="Projects">
+    <span class="mobile-tab-icon">▣</span>
+    <span class="mobile-tab-label">Projects</span>
+  </button>
+  <button class="mobile-tab-item" data-tab-page="installers" onclick="showPage('installers')" aria-label="Installers">
+    <span class="mobile-tab-icon">♙</span>
+    <span class="mobile-tab-label">Installers</span>
+  </button>
+  <button class="mobile-tab-item" id="mobileTabMenuBtn" onclick="toggleSidebarDrawer()" aria-label="Toggle Full Menu">
+    <span class="mobile-tab-icon">☰</span>
+    <span class="mobile-tab-label">Menu</span>
+  </button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<!-- ADMIN JAVASCRIPT -->
+<script src="/admin/admin.js?v=20261003-02"></script>
+</body>
+</html>

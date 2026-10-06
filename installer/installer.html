@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+    name="description"
+    content="AE Renewable Installer Network — Join a professional network of trained solar, electrical, security and smart-home installers."
+>
+
+<meta
+    name="theme-color"
+    content="#0B1F3A"
+>
+
+<meta
+    name="color-scheme"
+    content="light"
+>
+
+<title>
+    AE Renewable | Installer Network
+</title>
+
+
+<!-- =====================================================
+     FONTS
+====================================================== -->
+
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+>
+
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+>
+
+
+<!-- =====================================================
+     STYLESHEET
+====================================================== -->
+
+<link
+    rel="stylesheet"
+    href="/installer/installer.css"
+>
+
+<style>
+.ecosystem-bar {
+    background: #020814;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 8px 24px;
+    font-size: 0.8rem;
+    position: relative;
+    z-index: 1001;
+    font-family: 'Inter', sans-serif;
+}
+.ecosystem-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.ecosystem-brand-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #94a3b8;
+    font-weight: 500;
+}
+.ecosystem-brand-tag .network-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #10b981;
+    display: inline-block;
+}
+.ecosystem-portals {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.portal-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    text-decoration: none;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.25s ease;
+}
+.portal-pill:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+}
+.portal-pill.active {
+    color: #00B140;
+    background: rgba(0, 177, 64, 0.15);
+    border-color: rgba(0, 177, 64, 0.4);
+    font-weight: 600;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- =========================================================
+     PAGE LOADER
+========================================================== -->
+
+<div
+    class="page-loader"
+    id="pageLoader"
+    aria-hidden="true"
+>
+
+
+<div class="loader-content">
+
+    <div class="loader-logo">
+
+        <img
+            src="/installer/assets/logo.png"
+            alt="AE Renewable"
+        >
+
+    </div>
+
+    <div class="loader-line">
+
+        <span></span>
+
+    </div>
+
+    <p>
+        AE RENEWABLE
+    </p>
+
+    <small>
+        INSTALLER NETWORK
+    </small>
+
+</div>
+
+
+</div>
+
+<!-- ============================================================
+     01. GLOBAL ECOSYSTEM BAR (WIRED TOGETHER)
+============================================================ -->
+<div class="ecosystem-bar">
+    <div class="ecosystem-inner">
+        <div class="ecosystem-brand-tag">
+            <span class="network-dot"></span>
+            <span>AE Renewable Clean Energy Ecosystem</span>
+        </div>
+        <ul class="ecosystem-portals">
+            <li><a href="/arde" class="portal-pill" title="ARDE Design Engine">⚡ ARDE Engine</a></li>
+            <li><a href="/installer" class="portal-pill active" title="Installer Network">🛠️ Installer Network</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- =========================================================
+     SITE HEADER
+========================================================== -->
+
+<header
+    class="site-header"
+    id="siteHeader"
+>
+
+
+<div class="header-inner">
+
+
+    <!-- BRAND -->
+
+    <a
+        href="/installer/"
+        class="brand"
+        aria-label="AE Renewable Installer Network"
+    >
+
+        <span class="brand-logo">
+
+            <img
+                src="/installer/assets/logo.png"
+                alt="AE Renewable"
+            >
+
+        </span>
+
+        <span class="brand-copy">
+
+            <strong>
+                AE RENEWABLE
+            </strong>
+
+            <span>
+                INSTALLER NETWORK
+            </span>
+
+        </span>
+
+    </a>
+
+
+
+    <!-- DESKTOP NAVIGATION -->
+
+    <nav
+        class="desktop-navigation"
+        aria-label="Main navigation"
+    >
+
+        <a href="#about">
+            About
+        </a>
+
+        <a href="#work">
+            Our Work
+        </a>
+
+        <a href="#training">
+            Training
+        </a>
+
+        <a href="#benefits">
+            Benefits
+        </a>
+
+        <a href="#contact">
+            Contact
+        </a>
+
+        <a href="/arde" style="color: #f4a600; font-weight: 700;">
+            ⚡ ARDE Engine
+        </a>
+
+    </nav>
+
+
+
+    <!-- HEADER ACTIONS -->
+
+    <div class="header-actions">
+
+        <a
+            href="/installer/login.html"
+            class="header-login"
+        >
+            Installer Login
+        </a>
+
+        <a
+            href="/installer/register.html"
+            class="header-register"
+        >
+
+            <span>
+                Become an Installer
+            </span>
+
+            <span aria-hidden="true">
+                →
+            </span>
+
+        </a>
+
+    </div>
+
+
+
+    <!-- MOBILE MENU -->
+
+    <button
+        type="button"
+        class="mobile-menu-button"
+        id="mobileMenuButton"
+        aria-label="Open navigation"
+        aria-controls="mobileNavigation"
+        aria-expanded="false"
+    >
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </button>
+
+</div>
+
+
+
+<!-- MOBILE NAVIGATION -->
+
+<div
+    class="mobile-navigation"
+    id="mobileNavigation"
+>
+
+    <nav aria-label="Mobile navigation">
+
+        <a href="#about">
+            About
+        </a>
+
+        <a href="#work">
+            Our Work
+        </a>
+
+        <a href="#training">
+            Training
+        </a>
+
+        <a href="#benefits">
+            Benefits
+        </a>
+
+        <a href="#contact">
+            Contact
+        </a>
+
+        <a href="/arde" style="color: #f4a600; font-weight: 700;">
+            ⚡ ARDE Engine
+        </a>
+
+    </nav>
+
+
+    <div class="mobile-navigation-actions">
+
+        <a
+            href="/installer/login.html"
+            class="mobile-login"
+        >
+            Installer Login
+        </a>
+
+        <a
+            href="/installer/register.html"
+            class="mobile-register"
+        >
+            Become an Installer
+        </a>
+
+    </div>
+
+</div>
+
+
+</header>
+
+<!-- =========================================================
+     MAIN
+========================================================== -->
+
+<main>
+
+<!-- =========================================================
+     HERO
+========================================================== -->
+
+<section
+    class="hero"
+    id="home"
+>
+
+
+<div
+    class="hero-background"
+    aria-hidden="true"
+>
+
+    <div class="hero-orb hero-orb-one"></div>
+
+    <div class="hero-orb hero-orb-two"></div>
+
+    <div class="hero-grid"></div>
+
+    <div class="hero-glow"></div>
+
+</div>
+
+
+<div class="section-container hero-container">
+
+    <div class="hero-content">
+
+
+        <div
+            class="hero-label"
+            data-reveal
+        >
+
+            <span class="hero-label-line"></span>
+
+            <span>
+                AE RENEWABLE INSTALLER NETWORK
+            </span>
+
+        </div>
+
+
+
+        <h1 data-reveal>
+
+            Powering the Future
+
+            <span>
+                Through Skilled Installation.
+            </span>
+
+        </h1>
+
+
+
+        <p
+            class="hero-description"
+            data-reveal
+        >
+
+            Join a professional network of renewable-energy
+            installers delivering reliable solar power,
+            electrical, security and smart-energy solutions
+            across Nigeria.
+
+        </p>
+
+
+
+        <div
+            class="hero-actions"
+            data-reveal
+        >
+
+            <a
+                href="/installer/register.html"
+                class="primary-button"
+            >
+
+                <span>
+                    Join the Installer Network
+                </span>
+
+                <span
+                    class="button-arrow"
+                    aria-hidden="true"
+                >
+                    →
+                </span>
+
+            </a>
+
+
+            <a
+                href="/installer/login.html"
+                class="secondary-button"
+            >
+                Installer Login
+            </a>
+
+        </div>
+
+
+
+        <div
+            class="hero-trust"
+            data-reveal
+        >
+
+            <div class="trust-item">
+
+                <strong>
+                    PROFESSIONAL
+                </strong>
+
+                <span>
+                    INSTALLER NETWORK
+                </span>
+
+            </div>
+
+
+            <div class="trust-divider"></div>
+
+
+            <div class="trust-item">
+
+                <strong>
+                    TECHNICAL
+                </strong>
+
+                <span>
+                    DEVELOPMENT
+                </span>
+
+            </div>
+
+
+            <div class="trust-divider"></div>
+
+
+            <div class="trust-item">
+
+                <strong>
+                    QUALITY
+                </strong>
+
+                <span>
+                    INSTALLATION STANDARD
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- HERO STATUS CARD -->
+
+    <aside
+        class="hero-status-card"
+        data-reveal
+    >
+
+        <div class="status-card-top">
+
+            <span>
+                NETWORK STATUS
+            </span>
+
+            <span class="status-dot"></span>
+
+        </div>
+
+
+        <strong>
+            ACTIVE
+        </strong>
+
+
+        <p>
+            Professional Installer Ecosystem
+        </p>
+
+
+        <div class="status-card-line">
+
+            <span></span>
+
+        </div>
+
+
+        <div class="status-card-footer">
+
+            <span>
+                AE RENEWABLE LTD
+            </span>
+
+            <span>
+                01
+            </span>
+
+        </div>
+
+    </aside>
+
+</div>
+
+
+<a
+    href="#about"
+    class="hero-scroll"
+    aria-label="Explore the page"
+>
+
+    <span>
+        EXPLORE
+    </span>
+
+    <span class="hero-scroll-line"></span>
+
+</a>
+
+
+</section>
+
+<!-- =========================================================
+     INTRODUCTION
+========================================================== -->
+
+<section
+    class="intro-section"
+    id="about"
+>
+
+
+<div class="section-container">
+
+    <div class="intro-grid">
+
+
+        <div
+            class="intro-heading"
+            data-reveal
+        >
+
+            <span class="section-label">
+                THE AE RENEWABLE NETWORK
+            </span>
+
+            <h2>
+
+                More Than an Installer.
+
+                <span>
+                    You Become Part of the Network.
+                </span>
+
+            </h2>
+
+        </div>
+
+
+
+        <div
+            class="intro-copy"
+            data-reveal
+        >
+
+            <p>
+
+                AE Renewable is building a structured
+                network of professional installers,
+                technicians and renewable-energy
+                professionals capable of delivering
+                high-quality projects to modern
+                engineering standards.
+
+            </p>
+
+
+            <p>
+
+                We connect skilled installers with
+                opportunities, technical knowledge,
+                project standards and a growing
+                renewable-energy ecosystem.
+
+            </p>
+
+
+            <a
+                href="/installer/register.html"
+                class="text-link"
+            >
+
+                Become part of the network
+
+                <span aria-hidden="true">
+                    →
+                </span>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</section>
+
+<!-- =========================================================
+     NETWORK FOUNDATION
+========================================================== -->
+
+<section class="network-stats">
+
+
+<div class="section-container">
+
+    <div
+        class="stats-header"
+        data-reveal
+    >
+
+        <div>
+
+            <span class="section-label section-label-light">
+                OUR FOUNDATION
+            </span>
+
+            <h2>
+                Built on
+                <span>
+                    People &amp; Standards.
+                </span>
+            </h2>
+
+        </div>
+
+        <p>
+            A structured network built around people,
+            skills and professional delivery.
+        </p>
+
+    </div>
+
+
+
+    <div class="stats-grid">
+
+
+        <article
+            class="stat-item"
+            data-reveal
+        >
+
+            <span class="stat-number">
+                01
+            </span>
+
+            <div>
+
+                <strong>
+                    Professional Network
+                </strong>
+
+                <span>
+                    Connect with a growing ecosystem
+                    of renewable-energy professionals.
+                </span>
+
+            </div>
+
+        </article>
+
+
+        <article
+            class="stat-item"
+            data-reveal
+        >
+
+            <span class="stat-number">
+                02
+            </span>
+
+            <div>
+
+                <strong>
+                    Technical Development
+                </strong>
+
+                <span>
+                    Continue building practical and
+                    technical installation capability.
+                </span>
+
+            </div>
+
+        </article>
+
+
+        <article
+            class="stat-item"
+            data-reveal
+        >
+
+            <span class="stat-number">
+                03
+            </span>
+
+            <div>
+
+                <strong>
+                    Installation Opportunities
+                </strong>
+
+                <span>
+                    Position yourself for suitable
+                    project opportunities.
+                </span>
+
+            </div>
+
+        </article>
+
+
+        <article
+            class="stat-item"
+            data-reveal
+        >
+
+            <span class="stat-number">
+                04
+            </span>
+
+            <div>
+
+                <strong>
+                    Engineering Standards
+                </strong>
+
+                <span>
+                    Work toward consistent quality,
+                    safety and documentation.
+                </span>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</div>
+
+
+</section>
+
+<!-- =========================================================
+     OUR WORK
+========================================================== -->
+
+<section
+    class="work-section"
+    id="work"
+>
+
+
+<div class="section-container">
+
+
+    <div
+        class="section-heading"
+        data-reveal
+    >
+
+        <span class="section-label">
+            OUR WORK
+        </span>
+
+        <h2>
+
+            Built Around
+
+            <span>
+                Real Projects.
+            </span>
+
+        </h2>
+
+        <p>
+
+            From residential solar systems to
+            commercial energy infrastructure,
+            our installers contribute to projects
+            designed around reliability, safety
+            and professional execution.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="work-grid">
+
+
+        <!-- RESIDENTIAL -->
+
+        <article
+            class="work-card work-large"
+            data-reveal
+        >
+
+            <div class="work-image image-one">
+
+                <img
+                    src="/installer/assets/Victron_residential.jpeg"
+                    alt="Residential Solar Systems Installation"
+                    class="work-card-img"
+                    loading="lazy"
+                >
+
+                <div class="work-image-content">
+
+                    <span class="work-category">
+                        01
+                    </span>
+
+                    <span class="work-image-label">
+                        SOLAR
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="work-content">
+
+                <span class="work-label">
+                    SOLAR INSTALLATION
+                </span>
+
+                <h3>
+                    Residential Solar Systems
+                </h3>
+
+                <p>
+
+                    Professional installation of
+                    solar panels, hybrid inverters,
+                    lithium battery systems and
+                    complete backup solutions.
+
+                </p>
+
+
+                <a
+                    href="/installer/register.html"
+                    class="card-link"
+                >
+
+                    Join the network
+
+                    <span aria-hidden="true">
+                        →
+                    </span>
+
+                </a>
+
+            </div>
+
+        </article>
+
+
+
+        <!-- COMMERCIAL -->
+
+        <article
+            class="work-card"
+            data-reveal
+        >
+
+            <div class="work-image image-two">
+
+                <img
+                    src="/installer/assets/Victron_residential..jpeg"
+                    alt="Commercial Renewable Energy Projects"
+                    class="work-card-img"
+                    loading="lazy"
+                >
+
+                <div class="work-image-content">
+
+                    <span class="work-category">
+                        02
+                    </span>
+
+                    <span class="work-image-label">
+                        ENERGY
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="work-content">
+
+                <span class="work-label">
+                    ENERGY INFRASTRUCTURE
+                </span>
+
+                <h3>
+                    Commercial Projects
+                </h3>
+
+                <p>
+
+                    Structured renewable-energy
+                    installations for businesses,
+                    facilities and larger properties.
+
+                </p>
+
+            </div>
+
+        </article>
+
+
+
+        <!-- ELECTRICAL -->
+
+        <article
+            class="work-card"
+            data-reveal
+        >
+
+            <div class="work-image image-three">
+
+                <img
+                    src="/installer/assets/Victron_residential....jpeg"
+                    alt="Professional Electrical Engineering"
+                    class="work-card-img"
+                    loading="lazy"
+                >
+
+                <div class="work-image-content">
+
+                    <span class="work-category">
+                        03
+                    </span>
+
+                    <span class="work-image-label">
+                        ELECTRICAL
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="work-content">
+
+                <span class="work-label">
+                    ELECTRICAL ENGINEERING
+                </span>
+
+                <h3>
+                    Professional Electrical Work
+                </h3>
+
+                <p>
+
+                    Electrical distribution,
+                    protection, changeover systems
+                    and associated engineering work.
+
+                </p>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</div>
+
+
+</section>
+
+<!-- =========================================================
+     TRAINING
+========================================================== -->
+
+<section
+    class="training-section"
+    id="training"
+>
+
+
+<div class="section-container">
+
+    <div class="training-grid">
+
+
+        <div
+            class="training-visual"
+            data-reveal
+        >
+
+            <div class="training-image">
+
+                <img
+                    src="/installer/assets/Victron_residential..jpeg"
+                    alt="Technical Development Training"
+                    class="training-card-img"
+                    loading="lazy"
+                >
+
+                <div class="training-image-content">
+
+                    <span>
+                        AE RENEWABLE
+                    </span>
+
+                    <strong>
+                        TECHNICAL
+                    </strong>
+
+                    <strong>
+                        DEVELOPMENT
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="training-badge">
+
+                <strong>
+                    AE
+                </strong>
+
+                <span>
+                    TECHNICAL
+                    <br>
+                    DEVELOPMENT
+                </span>
+
+            </div>
+
+
+            <div class="training-index">
+                01 / 04
+            </div>
+
+        </div>
+
+
+
+        <div
+            class="training-content"
+            data-reveal
+        >
+
+            <span class="section-label">
+                TRAIN • DEVELOP • DEPLOY
+            </span>
+
+
+            <h2>
+
+                Grow Your Skills.
+
+                <span>
+                    Raise Your Standard.
+                </span>
+
+            </h2>
+
+
+            <p>
+
+                Renewable energy is developing rapidly.
+                Our network is designed to help installers
+                keep improving their technical knowledge
+                and professional capability.
+
+            </p>
+
+
+
+            <div class="training-list">
+
+
+                <div class="training-item">
+
+                    <div class="number">
+                        01
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Solar System Installation
+                        </strong>
+
+                        <p>
+                            Practical knowledge for
+                            professional PV installation.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="training-item">
+
+                    <div class="number">
+                        02
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Inverter &amp; Battery Systems
+                        </strong>
+
+                        <p>
+                            Learn correct system
+                            integration and commissioning.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="training-item">
+
+                    <div class="number">
+                        03
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Safety &amp; Protection
+                        </strong>
+
+                        <p>
+                            Follow professional electrical
+                            protection and safety practices.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="training-item">
+
+                    <div class="number">
+                        04
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Project Standards
+                        </strong>
+
+                        <p>
+                            Understand structured installation
+                            and project delivery requirements.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</section>
+
+<!-- =========================================================
+     BENEFITS
+========================================================== -->
+
+<section
+    class="benefits-section"
+    id="benefits"
+>
+
+
+<div class="section-container">
+
+
+    <div
+        class="section-heading centered"
+        data-reveal
+    >
+
+        <span class="section-label">
+            WHY JOIN AE RENEWABLE
+        </span>
+
+        <h2>
+
+            Build Your Career
+
+            <span>
+                With the Network.
+            </span>
+
+        </h2>
+
+        <p>
+
+            A professional platform designed to
+            help installers build credibility,
+            develop skills and access opportunities.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="benefits-grid">
+
+
+        <article
+            class="benefit-card"
+            data-reveal
+        >
+
+            <div class="benefit-top">
+
+                <span class="benefit-number">
+                    01
+                </span>
+
+                <span class="benefit-icon">
+                    ↗
+                </span>
+
+            </div>
+
+            <h3>
+                Professional Identity
+            </h3>
+
+            <p>
+                Build your profile inside a structured
+                renewable-energy installer network.
+            </p>
+
+        </article>
+
+
+
+        <article
+            class="benefit-card"
+            data-reveal
+        >
+
+            <div class="benefit-top">
+
+                <span class="benefit-number">
+                    02
+                </span>
+
+                <span class="benefit-icon">
+                    ↗
+                </span>
+
+            </div>
+
+            <h3>
+                Project Opportunities
+            </h3>
+
+            <p>
+                Position yourself for suitable
+                installation and technical opportunities
+                within the network.
+            </p>
+
+        </article>
+
+
+
+        <article
+            class="benefit-card"
+            data-reveal
+        >
+
+            <div class="benefit-top">
+
+                <span class="benefit-number">
+                    03
+                </span>
+
+                <span class="benefit-icon">
+                    ↗
+                </span>
+
+            </div>
+
+            <h3>
+                Technical Growth
+            </h3>
+
+            <p>
+                Continue developing your knowledge,
+                skills and understanding of renewable
+                energy systems.
+            </p>
+
+        </article>
+
+
+
+        <article
+            class="benefit-card"
+            data-reveal
+        >
+
+            <div class="benefit-top">
+
+                <span class="benefit-number">
+                    04
+                </span>
+
+                <span class="benefit-icon">
+                    ↗
+                </span>
+
+            </div>
+
+            <h3>
+                Professional Standards
+            </h3>
+
+            <p>
+                Work toward consistent installation,
+                documentation, safety and commissioning
+                standards.
+            </p>
+
+        </article>
+
+
+
+        <article
+            class="benefit-card"
+            data-reveal
+        >
+
+            <div class="benefit-top">
+
+                <span class="benefit-number">
+                    05
+                </span>
+
+                <span class="benefit-icon">
+                    ↗
+                </span>
+
+            </div>
+
+            <h3>
+                Installer Profile
+            </h3>
+
+            <p>
+                Maintain your professional information,
+                company details, verification and
+                banking information through your portal.
+            </p>
+
+        </article>
+
+
+
+        <article
+            class="benefit-card"
+            data-reveal
+        >
+
+            <div class="benefit-top">
+
+                <span class="benefit-number">
+                    06
+                </span>
+
+                <span class="benefit-icon">
+                    ↗
+                </span>
+
+            </div>
+
+            <h3>
+                Renewable Energy Community
+            </h3>
+
+            <p>
+                Become part of a growing community of
+                professionals working toward a stronger
+                clean-energy ecosystem.
+            </p>
+
+        </article>
+
+    </div>
+
+</div>
+
+
+</section>
+
+<!-- =========================================================
+     CTA
+========================================================== -->
+
+<section class="cta-section">
+
+
+<div class="cta-background">
+
+    <div class="cta-orb"></div>
+
+    <div class="cta-grid"></div>
+
+</div>
+
+
+<div class="section-container">
+
+    <div
+        class="cta-content"
+        data-reveal
+    >
+
+        <span class="section-label">
+            YOUR NEXT STEP
+        </span>
+
+
+        <h2>
+
+            Ready to Join the
+
+            <span>
+                AE Renewable Network?
+            </span>
+
+        </h2>
+
+
+        <p>
+
+            Register your installer profile and begin
+            your journey toward becoming part of a
+            professional renewable-energy network.
+
+        </p>
+
+
+        <div class="cta-actions">
+
+            <a
+                href="/installer/register.html"
+                class="cta-primary"
+            >
+
+                <span>
+                    Register as an Installer
+                </span>
+
+                <span>
+                    →
+                </span>
+
+            </a>
+
+
+            <a
+                href="/installer/login.html"
+                class="cta-secondary"
+            >
+                Existing Installer? Login
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</section>
+
+<!-- =========================================================
+     CONTACT
+========================================================== -->
+
+<section
+    class="contact-section"
+    id="contact"
+>
+
+
+<div class="section-container">
+
+    <div class="contact-grid">
+
+
+        <div
+            class="contact-heading"
+            data-reveal
+        >
+
+            <span class="section-label">
+                AE RENEWABLE LTD
+            </span>
+
+
+            <h2>
+
+                Powering Your Future
+
+                <span>
+                    With Sun.
+                </span>
+
+            </h2>
+
+
+            <p>
+
+                Building professional renewable-energy
+                capability through people, technology
+                and reliable project execution.
+
+            </p>
+
+        </div>
+
+
+
+        <div
+            class="contact-details"
+            data-reveal
+        >
+
+
+            <div class="contact-detail">
+
+                <span>
+                    NETWORK
+                </span>
+
+                <strong>
+                    AE Renewable Installer Network
+                </strong>
+
+            </div>
+
+
+            <div class="contact-detail">
+
+                <span>
+                    LOCATION
+                </span>
+
+                <strong>
+                    Abuja, Nigeria
+                </strong>
+
+            </div>
+
+
+            <div class="contact-detail">
+
+                <span>
+                    EMAIL
+                </span>
+
+                <a
+                    href="mailto:AERenewablesolution@gmail.com"
+                >
+                    AERenewablesolution@gmail.com
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</section>
+
+</main>
+
+<!-- =========================================================
+     FOOTER
+========================================================== -->
+
+<footer class="site-footer">
+
+
+<div class="section-container">
+
+    <div class="footer-inner">
+
+
+        <a
+            href="/installer/"
+            class="footer-brand"
+        >
+
+            <span class="footer-logo">
+
+                <img
+                    src="/installer/assets/logo.png"
+                    alt="AE Renewable"
+                >
+
+            </span>
+
+
+            <span class="footer-brand-copy">
+
+                <strong>
+                    AE RENEWABLE
+                </strong>
+
+                <small>
+                    INSTALLER NETWORK
+                </small>
+
+            </span>
+
+        </a>
+
+
+
+        <p>
+
+            ©
+            <span data-current-year>
+                2026
+            </span>
+            AE Renewable Ltd.
+            All rights reserved.
+
+        </p>
+
+
+
+        <div class="footer-links">
+
+            <a href="/installer/login.html">
+                Installer Login
+            </a>
+
+            <a href="/installer/register.html">
+                Register
+            </a>
+
+            <a href="/arde" style="color: #f4a600; font-weight: 600;">
+                ARDE Engine
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</footer>
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================== -->
+
+<script
+    src="/installer/installer.js"
+    defer
+></script>
+
+</body>
+
+</html>

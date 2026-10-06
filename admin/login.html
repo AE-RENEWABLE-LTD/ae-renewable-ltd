@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AE Renewable Ltd Administration & Operations Command Centre — Authorized Enterprise Access Only">
+    <meta name="theme-color" content="#010a1d">
+    <title>AE Renewable | Administration & Operations Command</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/admin/login.css?v=20261002-03">
+</head>
+
+<body>
+    <!-- Background Ambient Elements -->
+    <div class="bg-mesh-overlay"></div>
+    <div class="ambient-orb orb-primary"></div>
+    <div class="ambient-orb orb-secondary"></div>
+    <div class="ambient-orb orb-gold"></div>
+
+    <main class="login-wrapper">
+
+        <!-- Main Authentication Glass Card -->
+        <div class="admin-auth-card">
+            <!-- Top Gradient Accent Strip -->
+            <div class="card-accent-bar"></div>
+
+            <!-- Card Header & Branding -->
+            <header class="card-header">
+                <div class="brand-emblem-wrap">
+                    <div class="brand-logo-frame">
+                        <img src="/installer/assets/logo.png" alt="AE Renewable Ltd Logo" class="brand-logo-img">
+                    </div>
+                    <div class="emblem-pulse-ring"></div>
+                </div>
+
+                <div class="brand-text-block">
+                    <span class="security-badge">
+                        <i class="fa-solid fa-shield-check"></i> 256-BIT ENCRYPTED · EXECUTIVE ACCESS
+                    </span>
+                    <h1 class="brand-title">AE RENEWABLE</h1>
+                    <p class="brand-subtitle">Administration & Operations Command Centre</p>
+                </div>
+            </header>
+
+            <!-- Card Views Container -->
+            <div class="card-views-container">
+
+                <!-- =========================================================
+                     VIEW 1: ADMIN LOGIN FORM
+                     ========================================================= -->
+                <section class="auth-view active" id="viewLogin">
+                    <div class="view-header">
+                        <h2>Administrator Sign In</h2>
+                        <p>Authenticate with your executive credentials to access platform operations.</p>
+                    </div>
+
+                    <!-- Feedback Alert Ribbon -->
+                    <div id="loginMessage" class="feedback-ribbon" role="alert" aria-live="polite" style="display: none;"></div>
+
+                    <form id="adminLoginForm" novalidate autocomplete="on">
+                        <!-- Email Input -->
+                        <div class="form-group">
+                            <label for="adminEmail">
+                                <span>Official Admin Email</span>
+                            </label>
+                            <div class="input-field-wrap">
+                                <i class="fa-regular fa-envelope field-icon"></i>
+                                <input
+                                    type="email"
+                                    id="adminEmail"
+                                    name="email"
+                                    autocomplete="username"
+                                    placeholder="admin@aerenewablesolution.com"
+                                    required
+                                    spellcheck="false"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Password Input -->
+                        <div class="form-group">
+                            <div class="label-row">
+                                <label for="adminPassword">
+                                    <span>Console Password</span>
+                                </label>
+                                <button type="button" class="btn-text-link" id="btnForgotPwdTrigger">
+                                    Forgot Password?
+                                </button>
+                            </div>
+                            <div class="input-field-wrap">
+                                <i class="fa-solid fa-lock field-icon"></i>
+                                <input
+                                    type="password"
+                                    id="adminPassword"
+                                    name="password"
+                                    autocomplete="current-password"
+                                    placeholder="Enter your console password"
+                                    required
+                                >
+                                <button
+                                    type="button"
+                                    id="togglePassword"
+                                    class="password-eye-toggle"
+                                    aria-label="Toggle password visibility"
+                                    title="Show/Hide password"
+                                >
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Options Row (Remember Me) -->
+                        <div class="auth-options-row">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="rememberSession" checked>
+                                <span class="checkmark"></span>
+                                <span class="checkbox-text">Keep session active on this workstation</span>
+                            </label>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" id="adminLoginButton" class="btn-primary-auth">
+                            <span class="btn-spinner" id="loginSpinner" style="display: none;">
+                                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                            </span>
+                            <span class="btn-icon" id="loginIcon"><i class="fa-solid fa-arrow-right-to-bracket"></i></span>
+                            <span id="loginButtonText">Access Operations Console</span>
+                        </button>
+                    </form>
+                </section>
+
+
+                <!-- =========================================================
+                     VIEW 2: FORGOT PASSWORD / ACCOUNT RECOVERY (STEP 1)
+                     ========================================================= -->
+                <section class="auth-view" id="viewForgotStep1" style="display: none;">
+                    <div class="view-header">
+                        <div class="recovery-icon-circle">
+                            <i class="fa-solid fa-key"></i>
+                        </div>
+                        <h2>Reset Admin Password</h2>
+                        <p>Enter your verified admin email address. We will dispatch a secure 6-digit authorization code to verify your identity.</p>
+                    </div>
+
+                    <!-- Feedback Alert Ribbon -->
+                    <div id="forgotMessage" class="feedback-ribbon" role="alert" aria-live="polite" style="display: none;"></div>
+
+                    <form id="forgotRequestForm" novalidate onsubmit="return false;">
+                        <div class="form-group">
+                            <label for="recoveryEmail">
+                                <span>Registered Admin Email Address</span>
+                            </label>
+                            <div class="input-field-wrap">
+                                <i class="fa-regular fa-envelope field-icon"></i>
+                                <input
+                                    type="email"
+                                    id="recoveryEmail"
+                                    placeholder="admin@aerenewablesolution.com"
+                                    required
+                                    spellcheck="false"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="action-buttons-group">
+                            <button type="button" class="btn-secondary-auth" id="btnBackToLogin1">
+                                <i class="fa-solid fa-arrow-left"></i> Back to Sign In
+                            </button>
+                            <button type="button" id="btnSendResetCode" class="btn-primary-auth">
+                                <span class="btn-spinner" id="forgotSpinner1" style="display: none;">
+                                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                                </span>
+                                <span class="btn-icon" id="forgotIcon1"><i class="fa-solid fa-paper-plane"></i></span>
+                                <span id="forgotBtnText1">Send 6-Digit Code</span>
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+
+                <!-- =========================================================
+                     VIEW 3: VERIFY OTP CODE & SET NEW PASSWORD (STEP 2)
+                     ========================================================= -->
+                <section class="auth-view" id="viewForgotStep2" style="display: none;">
+                    <div class="view-header">
+                        <div class="recovery-icon-circle verified">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h2>Verify Code &amp; New Password</h2>
+                        <p>
+                            Enter the 6-digit code sent to <strong id="recoveryEmailDisplay" class="text-gold">admin@aerenewablesolution.com</strong> and define your new console password.
+                        </p>
+                    </div>
+
+                    <!-- Feedback Alert Ribbon -->
+                    <div id="resetMessage" class="feedback-ribbon" role="alert" aria-live="polite" style="display: none;"></div>
+
+                    <form id="resetPasswordForm" novalidate onsubmit="return false;">
+                        <!-- 6-Digit Verification Code -->
+                        <div class="form-group">
+                            <div class="label-row">
+                                <label for="resetOtpCode">
+                                    <span>6-Digit Verification Code</span>
+                                </label>
+                                <span class="timer-countdown" id="resendTimerText">
+                                    <i class="fa-regular fa-clock"></i> Expires in <strong id="otpTimerDisplay">10:00</strong>
+                                </span>
+                            </div>
+                            <div class="input-field-wrap">
+                                <i class="fa-solid fa-hashtag field-icon"></i>
+                                <input
+                                    type="text"
+                                    id="resetOtpCode"
+                                    class="mono-code-input"
+                                    maxlength="6"
+                                    placeholder="123456"
+                                    autocomplete="one-time-code"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <!-- New Password -->
+                        <div class="form-group">
+                            <label for="newConsolePassword">
+                                <span>New Console Password</span>
+                            </label>
+                            <div class="input-field-wrap">
+                                <i class="fa-solid fa-lock field-icon"></i>
+                                <input
+                                    type="password"
+                                    id="newConsolePassword"
+                                    placeholder="Minimum 8 characters"
+                                    required
+                                    minlength="8"
+                                >
+                                <button
+                                    type="button"
+                                    id="toggleNewPassword"
+                                    class="password-eye-toggle"
+                                    aria-label="Toggle password visibility"
+                                >
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+
+                            <!-- Live Password Strength Meter -->
+                            <div class="strength-meter-wrap" id="strengthMeterWrap" style="display: none;">
+                                <div class="strength-bar"><div class="strength-fill" id="strengthBarFill"></div></div>
+                                <span class="strength-label" id="strengthLabel">Password Strength</span>
+                            </div>
+                        </div>
+
+                        <!-- Confirm New Password -->
+                        <div class="form-group">
+                            <label for="confirmConsolePassword">
+                                <span>Confirm New Password</span>
+                            </label>
+                            <div class="input-field-wrap">
+                                <i class="fa-solid fa-check-double field-icon"></i>
+                                <input
+                                    type="password"
+                                    id="confirmConsolePassword"
+                                    placeholder="Re-enter your new password"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <div class="resend-row">
+                            <span>Didn't receive the code?</span>
+                            <button type="button" class="btn-resend-link" id="btnResendCode" disabled>
+                                Resend Code (<span id="resendCountdown">60s</span>)
+                            </button>
+                        </div>
+
+                        <div class="action-buttons-group">
+                            <button type="button" class="btn-secondary-auth" id="btnBackToLogin2">
+                                Cancel
+                            </button>
+                            <button type="button" id="btnCompleteReset" class="btn-primary-auth">
+                                <span class="btn-spinner" id="resetSpinner" style="display: none;">
+                                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                                </span>
+                                <span class="btn-icon" id="resetIcon"><i class="fa-solid fa-check"></i></span>
+                                <span id="resetBtnText">Update Admin Password</span>
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+
+                <!-- =========================================================
+                     VIEW 4: SUCCESS CONFIRMATION
+                     ========================================================= -->
+                <section class="auth-view" id="viewForgotSuccess" style="display: none;">
+                    <div class="success-screen-box">
+                        <div class="success-check-emblem">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <h2>Password Reset Successful!</h2>
+                        <p>
+                            Your administrative credentials have been updated securely. You can now log in to the Operations Command Centre with your new password.
+                        </p>
+
+                        <button type="button" class="btn-primary-auth" id="btnReturnToLoginSuccess">
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                            <span>Proceed to Sign In</span>
+                        </button>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Card Footer -->
+            <footer class="card-footer">
+                <div class="footer-copy">
+                    <strong>AE Renewable Ltd</strong>
+                    <span>Powering Your Future with Sun · Enterprise Infrastructure</span>
+                </div>
+                <div class="footer-badge">
+                    <span class="pulse-dot"></span> Online Systems Active
+                </div>
+            </footer>
+        </div>
+
+    </main>
+
+    <!-- Global Floating Toast Notification -->
+    <div class="admin-toast-box" id="adminToast" role="status" aria-live="polite"></div>
+
+    <!-- Scripts -->
+    <script src="/admin/login.js?v=20261002-03"></script>
+</body>
+</html>
