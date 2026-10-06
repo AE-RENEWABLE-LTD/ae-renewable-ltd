@@ -1,0 +1,535 @@
+/* ============================================================
+   AE RENEWABLE NETWORK — ARDE ENGINEERING SUITE
+   Deterministic Renewable System Sizing & BOQ Engine
+============================================================ */
+
+:root {
+    --navy: #010a1d;
+    --navy-2: #07152d;
+    --navy-light: #0d2249;
+    --blue: #044381;
+    --blue-light: #0d62b3;
+    --blue-soft: #eaf3ff;
+    --gold: #f4a600;
+    --gold-light: #fff8e7;
+    --green: #008000;
+    --green-light: #eaf8ed;
+    --red: #d32f2f;
+    --red-light: #fde8e8;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --shadow: 0 4px 16px -2px rgba(1, 10, 29, 0.08);
+    --shadow-lg: 0 10px 30px -5px rgba(1, 10, 29, 0.14);
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font);
+    background-color: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+.arde-header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+    color: #fff;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--blue);
+}
+
+.brand-block {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.brand-logo {
+    width: 42px;
+    height: 42px;
+    background: var(--blue);
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    color: #fff;
+    font-size: 1.2rem;
+    letter-spacing: -1px;
+}
+
+.brand-text h1 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.brand-text p {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.badge-version {
+    background: rgba(244, 166, 0, 0.15);
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.btn-admin-link {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 0.45rem 0.9rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.btn-admin-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+}
+
+/* MAIN LAYOUT */
+.arde-container {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+    .arde-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* CARDS */
+.arde-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.card-head {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fafcff;
+}
+
+.card-head h2 {
+    font-size: 1.1rem;
+    color: var(--navy);
+    font-weight: 700;
+}
+
+.card-head p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* PRESETS */
+.presets-bar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.preset-chip {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.preset-chip:hover, .preset-chip.active {
+    background: var(--blue-soft);
+    border-color: var(--blue);
+    color: var(--blue);
+}
+
+/* APPLIANCE TABLE */
+.load-table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+}
+
+.load-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.load-table th {
+    background: #f1f5f9;
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.load-table td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.load-table input[type="text"],
+.load-table input[type="number"] {
+    width: 100%;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+.load-table input:focus {
+    outline: none;
+    border-color: var(--blue);
+}
+
+.btn-remove-row {
+    background: transparent;
+    border: none;
+    color: var(--red);
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+.table-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.btn-add-row {
+    background: var(--blue-soft);
+    color: var(--blue);
+    border: 1px dashed var(--blue);
+    padding: 0.45rem 0.9rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-add-row:hover {
+    background: #dbeafe;
+}
+
+/* PARAMETERS GRID */
+.param-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.form-group label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.form-group input, .form-group select {
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    background: #fff;
+}
+
+/* ACTION BUTTONS */
+.btn-calculate {
+    width: 100%;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--navy-2) 100%);
+    color: #fff;
+    border: none;
+    padding: 0.9rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(4, 67, 129, 0.25);
+    transition: all 0.2s;
+}
+
+.btn-calculate:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+/* OUTPUT TILES */
+.telemetry-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.telemetry-card {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.telemetry-card.highlight {
+    background: linear-gradient(135deg, #f0fdf4 0%, #eaf8ed 100%);
+    border-color: #86efac;
+}
+
+.telemetry-card span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.telemetry-card strong {
+    font-size: 1.5rem;
+    color: var(--navy);
+    margin: 0.25rem 0;
+}
+
+.telemetry-card small {
+    font-size: 0.75rem;
+    color: var(--blue);
+}
+
+/* BOQ TABLE */
+.boq-table-wrapper {
+    margin-bottom: 1.5rem;
+    max-height: 280px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+}
+
+.boq-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+}
+
+.boq-table th {
+    background: #f1f5f9;
+    padding: 0.6rem;
+    text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.boq-table td {
+    padding: 0.5rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.boq-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* COMMERCIAL TOTALS */
+.totals-box {
+    background: #0f172a;
+    color: #fff;
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.totals-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    color: #94a3b8;
+}
+
+.totals-row.final {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--gold);
+    border-top: 1px dashed #334155;
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+}
+
+/* CLIENT FORM */
+.customer-section {
+    background: #fdfefe;
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.customer-section h3 {
+    font-size: 0.95rem;
+    color: var(--navy);
+    margin-bottom: 0.75rem;
+}
+
+.customer-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.btn-submit-project {
+    width: 100%;
+    background: linear-gradient(135deg, var(--green) 0%, #065f46 100%);
+    color: #fff;
+    border: none;
+    padding: 0.9rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 128, 0, 0.25);
+    transition: all 0.2s;
+}
+
+.btn-submit-project:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+.btn-submit-project:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* MODAL */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(1, 10, 29, 0.75);
+    display: none;
+    place-items: center;
+    z-index: 999;
+    padding: 1rem;
+}
+
+.modal-card {
+    background: #fff;
+    border-radius: 12px;
+    max-width: 550px;
+    width: 100%;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+}
+
+.modal-icon {
+    width: 64px;
+    height: 64px;
+    background: var(--green-light);
+    color: var(--green);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 2rem;
+    margin: 0 auto 1.5rem;
+}
+
+.modal-details {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    text-align: left;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn-secondary {
+    background: #e2e8f0;
+    color: var(--text);
+    border: none;
+    padding: 0.7rem 1.25rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.25rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+}

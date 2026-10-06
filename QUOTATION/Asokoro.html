@@ -1,0 +1,2424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+    Engineering Quotation | AE Renewable Ltd
+</title>
+
+<style>
+
+:root {
+
+    --navy: #071426;
+    --navy-2: #0b2340;
+    --blue: #064b86;
+    --blue-light: #0b65aa;
+
+    --gold: #d99a18;
+    --gold-light: #f5c75b;
+
+    --green: #087a4b;
+    --green-light: #eaf6f0;
+
+    --text: #172536;
+    --text-soft: #526174;
+    --text-light: #718096;
+
+    --line: #dce3eb;
+    --line-soft: #edf1f5;
+
+    --surface: #f7f9fb;
+    --surface-warm: #fbf8f1;
+
+    --white: #ffffff;
+
+}
+
+* {
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    padding: 0;
+
+}
+
+html,
+body {
+
+    width: 100%;
+
+    min-height: 100%;
+
+}
+
+body {
+
+    font-family:
+        "Segoe UI",
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #dfe4ea;
+
+    color: var(--text);
+
+    padding: 18px 0;
+
+    font-weight: 400;
+
+    -webkit-font-smoothing: antialiased;
+
+    text-rendering: optimizeLegibility;
+
+}
+
+.a4-page {
+
+    position: relative;
+
+    width: 210mm;
+
+    height: 297mm;
+
+    margin: 0 auto 15mm;
+
+    overflow: hidden;
+
+    background: var(--white);
+
+    box-shadow:
+        0 20px 55px
+        rgba(7, 20, 38, 0.18);
+
+    page-break-after: always;
+
+}
+
+.page-content {
+
+    padding:
+        9mm
+        13mm
+        17mm;
+
+}
+
+.header {
+
+    position: relative;
+
+    min-height: 47mm;
+
+    padding:
+        8.5mm
+        13mm;
+
+    overflow: hidden;
+
+    color: var(--white);
+
+    background:
+        linear-gradient(
+            120deg,
+            #06101f 0%,
+            #0a2949 52%,
+            #064b86 100%
+        );
+
+    border-bottom:
+        2mm solid var(--gold);
+
+}
+
+.header::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 78mm;
+
+    height: 78mm;
+
+    right: -35mm;
+
+    top: -48mm;
+
+    border:
+        9mm solid
+        rgba(245, 199, 91, 0.08);
+
+    border-radius: 50%;
+
+}
+
+.header::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 115mm;
+
+    height: 14mm;
+
+    right: -32mm;
+
+    bottom: -8mm;
+
+    transform: rotate(-7deg);
+
+    background:
+        rgba(8, 122, 75, 0.92);
+
+}
+
+.header-top {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12mm;
+
+}
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 4.5mm;
+
+}
+
+.logo-box {
+
+    width: 24mm;
+
+    height: 24mm;
+
+    padding: 1.8mm;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: var(--white);
+
+    border-radius: 2.5mm;
+
+    box-shadow:
+        0 3mm 8mm
+        rgba(0, 0, 0, 0.22);
+
+}
+
+.logo-box img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: contain;
+
+}
+
+.company-name {
+
+    font-size: 20px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.1px;
+
+    line-height: 1.15;
+
+}
+
+.tagline {
+
+    margin-top: 2mm;
+
+    color: var(--gold-light);
+
+    font-size: 8px;
+
+    font-weight: 600;
+
+    letter-spacing: 1.7px;
+
+}
+
+.quote-label {
+
+    text-align: right;
+
+}
+
+.quote-label span {
+
+    display: block;
+
+    margin-bottom: 1.5mm;
+
+    color: #c9d6e4;
+
+    font-size: 7.5px;
+
+    font-weight: 500;
+
+    letter-spacing: 1.4px;
+
+    text-transform: uppercase;
+
+}
+
+.quote-label h1 {
+
+    color: var(--white);
+
+    font-size: 29px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+
+    line-height: 1;
+
+}
+
+.engineering-label {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    margin-bottom: 5mm;
+
+    padding:
+        2.2mm
+        4mm;
+
+    color: var(--white);
+
+    background: var(--green);
+
+    border-radius: 1.3mm;
+
+    font-size: 8.5px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.1px;
+
+    text-transform: uppercase;
+
+}
+
+.info-section {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12mm;
+
+    padding-bottom: 5.5mm;
+
+    border-bottom:
+        1px solid var(--line);
+
+}
+
+.info-title {
+
+    margin-bottom: 2.5mm;
+
+    color: var(--blue);
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.25px;
+
+    text-transform: uppercase;
+
+}
+
+.info-row {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 4mm;
+
+    min-height: 7mm;
+
+    border-bottom:
+        1px solid var(--line-soft);
+
+}
+
+.info-row:last-child {
+
+    border-bottom: none;
+
+}
+
+.info-row .label {
+
+    color: var(--text-light);
+
+    font-size: 8.5px;
+
+    font-weight: 400;
+
+    text-transform: uppercase;
+
+}
+
+.info-row .value {
+
+    color: var(--navy);
+
+    font-size: 9.5px;
+
+    font-weight: 600;
+
+    text-align: right;
+
+}
+
+.system-banner {
+
+    position: relative;
+
+    margin: 5.5mm 0;
+
+    padding:
+        5.5mm
+        6.5mm;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fcfaf4 0%,
+            #f4f8f7 100%
+        );
+
+    border:
+        1px solid #e5e8e2;
+
+    border-left:
+        2.5mm solid var(--gold);
+
+    border-radius:
+        0
+        2.5mm
+        2.5mm
+        0;
+
+}
+
+.system-banner::after {
+
+    content: "AE";
+
+    position: absolute;
+
+    right: 5mm;
+
+    top: -7mm;
+
+    color:
+        rgba(6, 75, 134, 0.045);
+
+    font-size: 62px;
+
+    font-weight: 800;
+
+}
+
+.system-banner small {
+
+    position: relative;
+
+    z-index: 2;
+
+    color: var(--green);
+
+    font-size: 8.5px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+}
+
+.system-banner h2 {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin-top: 1.8mm;
+
+    color: var(--navy);
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    line-height: 1.25;
+
+}
+
+.system-banner p {
+
+    position: relative;
+
+    z-index: 2;
+
+    max-width: 175mm;
+
+    margin-top: 2.5mm;
+
+    color: var(--text-soft);
+
+    font-size: 10.5px;
+
+    font-weight: 400;
+
+    line-height: 1.65;
+
+}
+
+.metrics-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 3mm;
+
+    margin:
+        5mm
+        0
+        6mm;
+
+}
+
+.metric-card {
+
+    min-height: 24mm;
+
+    padding:
+        3.8mm;
+
+    background: var(--white);
+
+    border:
+        1px solid var(--line);
+
+    border-top:
+        1.2mm solid var(--blue);
+
+    border-radius: 1.8mm;
+
+}
+
+.metric-card:nth-child(2) {
+
+    border-top-color: var(--green);
+
+}
+
+.metric-card:nth-child(3) {
+
+    border-top-color: var(--gold);
+
+}
+
+.metric-card:nth-child(4) {
+
+    border-top-color: var(--blue-light);
+
+}
+
+.metric-card span {
+
+    display: block;
+
+    color: var(--text-light);
+
+    font-size: 7.5px;
+
+    font-weight: 500;
+
+    letter-spacing: 0.75px;
+
+    text-transform: uppercase;
+
+}
+
+.metric-card strong {
+
+    display: block;
+
+    margin-top: 2mm;
+
+    color: var(--navy);
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+}
+
+.table-wrapper {
+
+    width: 100%;
+
+    overflow: hidden;
+
+}
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+
+}
+
+thead {
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--navy),
+            var(--blue)
+        );
+
+    color: var(--white);
+
+    -webkit-print-color-adjust: exact;
+
+    print-color-adjust: exact;
+
+}
+
+th {
+
+    padding:
+        3.2mm
+        2mm;
+
+    color: var(--white);
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.55px;
+
+    text-transform: uppercase;
+
+}
+
+th:nth-child(1) {
+
+    width: 7%;
+
+}
+
+th:nth-child(2) {
+
+    width: 46%;
+
+}
+
+th:nth-child(3) {
+
+    width: 11%;
+
+}
+
+th:nth-child(4) {
+
+    width: 18%;
+
+}
+
+th:nth-child(5) {
+
+    width: 18%;
+
+}
+
+th.center,
+td.center {
+
+    text-align: center;
+
+}
+
+th.right,
+td.right {
+
+    text-align: right;
+
+}
+
+tbody tr {
+
+    border-bottom:
+        1px solid var(--line);
+
+    break-inside: avoid;
+
+    page-break-inside: avoid;
+
+}
+
+tbody tr:nth-child(even) {
+
+    background: #fafbfd;
+
+    -webkit-print-color-adjust: exact;
+
+    print-color-adjust: exact;
+
+}
+
+td {
+
+    padding:
+        3.2mm
+        2mm;
+
+    color: var(--text);
+
+    font-size: 9.5px;
+
+    font-weight: 400;
+
+    vertical-align: middle;
+
+}
+
+.item-name {
+
+    display: block;
+
+    color: var(--navy);
+
+    font-size: 11.5px;
+
+    font-weight: 650;
+
+    line-height: 1.3;
+
+}
+
+.description {
+
+    display: block;
+
+    margin-top: 1.2mm;
+
+    color: var(--text-soft);
+
+    font-size: 8.8px;
+
+    font-weight: 400;
+
+    line-height: 1.55;
+
+}
+
+.amount {
+
+    color: var(--blue);
+
+    font-size: 9px;
+
+    font-weight: 650;
+
+    white-space: nowrap;
+
+}
+
+.continuation-header {
+
+    min-height: 18mm;
+
+    padding:
+        3.5mm
+        13mm;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    color: var(--white);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--navy),
+            var(--blue)
+        );
+
+    border-bottom:
+        1.5mm solid var(--gold);
+
+    -webkit-print-color-adjust: exact;
+
+    print-color-adjust: exact;
+
+}
+
+.continuation-brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 3mm;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.6px;
+
+}
+
+.continuation-brand img {
+
+    width: 10mm;
+
+    height: 10mm;
+
+    padding: 1mm;
+
+    object-fit: contain;
+
+    background: var(--white);
+
+    border-radius: 1.5mm;
+
+}
+
+.page-number {
+
+    color: var(--gold-light);
+
+    font-size: 7px;
+
+    font-weight: 600;
+
+    letter-spacing: 1px;
+
+}
+
+.page-section-title {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    margin-bottom: 4.5mm;
+
+    padding-bottom: 2.8mm;
+
+    border-bottom:
+        1.5px solid var(--navy);
+
+}
+
+.page-section-title h2 {
+
+    color: var(--navy);
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    letter-spacing: -0.2px;
+
+}
+
+.page-section-title span {
+
+    color: var(--green);
+
+    font-size: 7.5px;
+
+    font-weight: 600;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+}
+
+.summary-section {
+
+    margin-top: 5.5mm;
+
+    padding: 4.5mm;
+
+    background: var(--surface);
+
+    border:
+        1px solid var(--line);
+
+    border-radius: 2.5mm;
+
+    -webkit-print-color-adjust: exact;
+
+    print-color-adjust: exact;
+
+}
+
+.section-heading {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 2.5mm;
+
+    margin-bottom: 3.5mm;
+
+    color: var(--navy);
+
+    font-size: 10.5px;
+
+    font-weight: 700;
+
+}
+
+.section-heading::before {
+
+    content: "";
+
+    width: 1.6mm;
+
+    height: 6mm;
+
+    background:
+        linear-gradient(
+            var(--green),
+            var(--gold)
+        );
+
+    border-radius: 2mm;
+
+    -webkit-print-color-adjust: exact;
+
+    print-color-adjust: exact;
+
+}
+
+.summary-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 2.5mm;
+
+}
+
+.summary-card {
+
+    min-height: 17mm;
+
+    padding: 3mm;
+
+    background: var(--white);
+
+    border:
+        1px solid var(--line);
+
+    border-radius: 1.8mm;
+
+}
+
+.summary-card span {
+
+    display: block;
+
+    color: var(--text-light);
+
+    font-size: 6.8px;
+
+    font-weight: 500;
+
+    letter-spacing: 0.65px;
+
+    text-transform: uppercase;
+
+}
+
+.summary-card strong {
+
+    display: block;
+
+    margin-top: 1.3mm;
+
+    color: var(--blue);
+
+    font-size: 9px;
+
+    font-weight: 650;
+
+    line-height: 1.35;
+
+}
+
+.total-section {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    margin-top: 5.5mm;
+
+    width: 100%;
+
+}
+
+.total-box {
+
+    width: 82mm;
+
+}
+
+.total-row {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 6mm;
+
+    padding:
+        2.2mm
+        0;
+
+    border-bottom:
+        1px solid var(--line);
+
+    color: var(--text-soft);
+
+    font-size: 8.5px;
+
+    font-weight: 400;
+
+}
+
+.total-row strong {
+
+    color: var(--navy);
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+}
+
+.grand-total {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 5mm;
+
+    margin-top: 2.5mm;
+
+    padding:
+        4.5mm
+        5mm;
+
+    color: var(--white);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--navy),
+            var(--blue)
+        );
+
+    border-radius: 2.3mm;
+
+    box-shadow:
+        0 2.5mm 7mm
+        rgba(7, 20, 38, 0.15);
+
+    -webkit-print-color-adjust: exact;
+
+    print-color-adjust: exact;
+
+}
+
+.grand-total span {
+
+    font-size: 7.8px;
+
+    font-weight: 650;
+
+    letter-spacing: 0.75px;
+
+}
+
+.grand-total strong {
+
+    color: var(--gold-light);
+
+    font-size: 16px;
+
+    font-weight: 750;
+
+    white-space: nowrap;
+
+}
+
+.thank-you {
+
+    margin-top: 6mm;
+
+    padding:
+        4mm
+        5mm;
+
+    background: var(--green-light);
+
+    border-left:
+        2mm solid var(--green);
+
+    border-radius:
+        0
+        2mm
+        2mm
+        0;
+
+    color: var(--text);
+
+    font-size: 8.5px;
+
+    font-weight: 400;
+
+    line-height: 1.6;
+
+    -webkit-print-color-adjust: exact;
+
+    print-color-adjust: exact;
+
+}
+
+.thank-you strong {
+
+    margin-right: 1mm;
+
+    color: var(--navy);
+
+    font-weight: 700;
+
+}
+
+.footer {
+
+    position: absolute;
+
+    left: 0;
+
+    bottom: 0;
+
+    width: 100%;
+
+    min-height: 12mm;
+
+    padding:
+        3.2mm
+        13mm;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 5mm;
+
+    color:
+        rgba(255,255,255,0.82);
+
+    background: var(--navy);
+
+    font-size: 7px;
+
+    font-weight: 400;
+
+    -webkit-print-color-adjust: exact;
+
+    print-color-adjust: exact;
+
+}
+
+.footer strong {
+
+    color: var(--gold);
+
+    font-weight: 700;
+
+}
+
+.page-2-footer {
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--navy),
+            var(--blue)
+        );
+
+    -webkit-print-color-adjust: exact;
+
+    print-color-adjust: exact;
+
+}
+
+@page {
+
+    size: A4 portrait;
+
+    margin: 0;
+
+}
+
+@media print {
+
+    html,
+    body {
+
+        width: 210mm;
+
+        min-height: auto;
+
+        margin: 0;
+
+        padding: 0;
+
+        background: var(--white);
+
+    }
+
+    body {
+
+        -webkit-print-color-adjust: exact;
+
+        print-color-adjust: exact;
+
+    }
+
+    .a4-page {
+
+        width: 210mm;
+
+        height: 297mm;
+
+        min-height: 297mm;
+
+        margin: 0;
+
+        box-shadow: none;
+
+        overflow: hidden;
+
+        page-break-after: always;
+
+        break-after: page;
+
+    }
+
+    .a4-page:last-child {
+
+        page-break-after: auto;
+
+        break-after: auto;
+
+    }
+
+    .header,
+    .continuation-header,
+    .footer,
+    .page-2-footer,
+    .grand-total,
+    thead,
+    .summary-section,
+    .system-banner,
+    .thank-you {
+
+        -webkit-print-color-adjust: exact !important;
+
+        print-color-adjust: exact !important;
+
+    }
+
+    table {
+
+        page-break-inside: auto;
+
+    }
+
+    tr,
+    td,
+    th {
+
+        page-break-inside: avoid;
+
+        break-inside: avoid;
+
+    }
+
+    .table-wrapper,
+    .summary-section,
+    .total-section {
+
+        page-break-inside: avoid;
+
+        break-inside: avoid;
+
+    }
+
+}
+
+@media screen and (max-width: 850px) {
+
+    body {
+
+        padding: 0;
+
+        background: var(--white);
+
+    }
+
+    .a4-page {
+
+        width: 100%;
+
+        height: auto;
+
+        min-height: 100vh;
+
+        margin: 0;
+
+        box-shadow: none;
+
+        overflow: visible;
+
+    }
+
+    .header-top {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+    .quote-label {
+
+        text-align: left;
+
+    }
+
+    .info-section {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .metrics-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+    .summary-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+    .footer {
+
+        position: relative;
+
+        margin-top: 10mm;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- =========================================================
+     PAGE 1
+========================================================= -->
+
+<section class="a4-page">
+
+
+<header class="header">
+
+<div class="header-top">
+
+
+<div class="brand">
+
+<div class="logo-box">
+
+<img
+    src="/LETS_GO/images/logodark.png"
+    alt="AE Renewable Ltd Logo"
+>
+
+</div>
+
+<div>
+
+<div class="company-name">
+AE RENEWABLE LTD
+</div>
+
+<div class="tagline">
+POWERING YOUR FUTURE WITH SUN
+</div>
+
+</div>
+
+</div>
+
+
+<div class="quote-label">
+
+<span>
+ENGINEERING & COMMERCIAL DOCUMENT
+</span>
+
+<h1>
+QUOTATION
+</h1>
+
+</div>
+
+
+</div>
+
+</header>
+
+
+<div class="page-content">
+
+
+<div class="engineering-label">
+
+PREMIUM RESIDENTIAL HYBRID ENERGY SYSTEM
+
+</div>
+
+
+<!-- =========================================================
+     CLIENT INFORMATION
+========================================================= -->
+
+<section class="info-section">
+
+
+<div>
+
+<div class="info-title">
+Prepared For
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+Client Name
+</span>
+
+<span class="value">
+ENGR KAMAL
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+Project Location
+</span>
+
+<span class="value">
+Abuja, Nigeria
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+Project Type
+</span>
+
+<span class="value">
+Residential
+</span>
+
+</div>
+
+</div>
+
+
+<div>
+
+<div class="info-title">
+Quotation Details
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+Quotation No.
+</span>
+
+<span class="value">
+AE-20260827-001
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span class="label">
+Date
+</span>
+
+<span class="value">
+27 August 2026
+</span>
+
+</div>
+
+<!-- 
+<div class="info-row">
+
+<span class="label">
+Validity
+</span>
+
+<span class="value">
+14 Days
+</span>
+
+</div> -->
+
+</div>
+
+
+</section>
+
+
+<!-- =========================================================
+     SYSTEM DESCRIPTION
+========================================================= -->
+
+<section class="system-banner">
+
+<small>
+Proposed Residential Energy Solution
+</small>
+
+<h2>
+12kVA Hybrid Solar Power & Energy Management System
+</h2>
+
+<p>
+
+A professionally engineered residential hybrid energy system comprising one 12kVA hybrid inverter, a 45kWh lithium energy storage bank and a 14.8kWp Jinko photovoltaic array. The system is designed to provide reliable backup power, maximize daytime solar utilization and support controlled operation of residential loads.
+
+</p>
+
+</section>
+
+
+<!-- =========================================================
+     SYSTEM METRICS
+========================================================= -->
+
+<div class="metrics-grid">
+
+
+<div class="metric-card">
+
+<span>
+Inverter Capacity
+</span>
+
+<strong>
+12 kVA
+</strong>
+
+</div>
+
+
+<div class="metric-card">
+
+<span>
+Battery Bank
+</span>
+
+<strong>
+45 kWh
+</strong>
+
+</div>
+
+
+<div class="metric-card">
+
+<span>
+Solar PV Array
+</span>
+
+<strong>
+14.88 kWp
+</strong>
+
+</div>
+
+
+<div class="metric-card">
+
+<span>
+PV Modules
+</span>
+
+<strong>
+24 × 620W
+</strong>
+
+</div>
+
+
+</div>
+
+
+<!-- =========================================================
+     PAGE 1 BILL OF MATERIALS
+========================================================= -->
+
+<section class="table-wrapper">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th class="center">
+S/N
+</th>
+
+<th>
+Engineering Item / Description
+</th>
+
+<th class="center">
+Qty
+</th>
+
+<th class="right">
+Unit Price
+</th>
+
+<th class="right">
+Amount
+</th>
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
+
+<!-- INVERTER -->
+
+<tr>
+
+<td class="center">
+01
+</td>
+
+<td>
+
+<span class="item-name">
+12kVA Hybrid Solar Inverter
+</span>
+
+<span class="description">
+
+High-performance hybrid inverter designed for residential energy management, solar PV integration, lithium battery storage, utility backup and reliable inverter-backed load operation.
+
+</span>
+
+</td>
+
+<td class="center">
+1
+</td>
+
+<td class="right">
+₦ 1,100,000
+</td>
+
+<td class="right amount">
+₦ 1,100,000
+</td>
+
+</tr>
+
+
+<!-- BATTERY -->
+
+<tr>
+
+<td class="center">
+02
+</td>
+
+<td>
+
+<span class="item-name">
+15kWh Lithium Battery Energy Storage
+</span>
+
+<span class="description">
+
+Three lithium battery modules configured as a nominal 45kWh energy storage bank for backup operation, night-time supply and solar energy storage.
+
+</span>
+
+</td>
+
+<td class="center">
+3
+</td>
+
+<td class="right">
+₦ 2,300,000
+</td>
+
+<td class="right amount">
+₦ 6,900,000
+</td>
+
+</tr>
+
+
+<!-- SOLAR PANELS -->
+
+<tr>
+
+<td class="center">
+03
+</td>
+
+<td>
+
+<span class="item-name">
+Jinko 620W High-Efficiency Solar PV Module
+</span>
+
+<span class="description">
+
+High-output monocrystalline photovoltaic modules providing a total installed PV capacity of 14.8kWp.
+
+</span>
+
+</td>
+
+<td class="center">
+24
+</td>
+
+<td class="right">
+₦ 140,000
+</td>
+
+<td class="right amount">
+₦ 3,360,000
+</td>
+
+</tr>
+
+
+<!-- MOUNTING -->
+
+<tr>
+
+<td class="center">
+04
+</td>
+
+<td>
+
+<span class="item-name">
+Solar PV Mounting Structure
+</span>
+
+<span class="description">
+
+Engineered mounting framework including rails, clamps, fasteners, brackets and structural accessories.
+
+</span>
+
+</td>
+
+<td class="center">
+Lot Set
+</td>
+
+<td class="right">
+₦ 180,000
+</td>
+
+<td class="right amount">
+₦ 180,000
+</td>
+
+</tr>
+
+
+</tbody>
+
+</table>
+
+</section>
+
+
+</div>
+
+
+<footer class="footer">
+
+<div>
+
+<strong>
+AE RENEWABLE LTD
+</strong>
+
+&nbsp; | &nbsp;
+
+Solar Energy • CCTV • Electric Fence • Electrical Engineering
+
+</div>
+
+<div>
+PAGE 1 OF 2
+</div>
+
+</footer>
+
+
+</section>
+
+
+
+<!-- =========================================================
+     PAGE 2
+========================================================= -->
+
+<section class="a4-page">
+
+
+<header class="continuation-header">
+
+
+<div class="continuation-brand">
+
+<img
+    src="/LETS_GO/images/logodark.png"
+    alt="AE Renewable Ltd Logo"
+>
+
+AE RENEWABLE LTD
+— ENGINEERING QUOTATION
+
+</div>
+
+
+<div class="page-number">
+PAGE 2 OF 2
+</div>
+
+
+</header>
+
+
+<div class="page-content">
+
+
+<div class="page-section-title">
+
+<h2>
+Engineering Bill of Materials
+</h2>
+
+<span>
+System Schedule
+</span>
+
+</div>
+
+
+<section class="table-wrapper">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th class="center">
+S/N
+</th>
+
+<th>
+Item Description
+</th>
+
+<th class="center">
+Qty
+</th>
+
+<th class="right">
+Unit Price
+</th>
+
+<th class="right">
+Amount
+</th>
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
+
+<!-- AC PROTECTION -->
+
+<tr>
+
+<td class="center">
+06
+</td>
+
+<td>
+
+<span class="item-name">
+AC Cable, Inverter Protection & Mounting
+</span>
+
+<span class="description">
+
+AC output distribution breakers, isolators, protective devices, cable and dedicated inverter-backed distribution components.
+
+</span>
+
+</td>
+
+<td class="center">
+Lot Set
+</td>
+
+<td class="right">
+₦ 504,000
+</td>
+
+<td class="right amount">
+₦ 504,000
+</td>
+
+</tr>
+
+
+<!-- PV ACCESSORIES -->
+
+<tr>
+
+<td class="center">
+09
+</td>
+
+<td>
+
+<span class="item-name">
+PV DC Cable, MC4 & PV Interconnection Accessories
+</span>
+
+<span class="description">
+
+UV-resistant PV cable, MC4-compatible connectors, cable management, terminations and interconnection accessories.
+
+</span>
+
+</td>
+
+<td class="center">
+Lot Set
+</td>
+
+<td class="right">
+₦ 597,000
+</td>
+
+<td class="right amount">
+₦ 597,000
+</td>
+
+</tr>
+
+
+<!-- BATTERY CABLE -->
+
+<tr>
+
+<td class="center">
+10
+</td>
+
+<td>
+
+<span class="item-name">
+75mm² High-Current Battery DC Cable / Lug
+</span>
+
+<span class="description">
+
+Heavy-duty battery cable, appropriately rated lugs, terminals, insulation, protective sleeving and interconnection materials.
+
+</span>
+
+</td>
+
+<td class="center">
+24 m
+</td>
+
+<td class="right">
+₦ 24,000
+</td>
+
+<td class="right amount">
+₦ 547,000
+</td>
+
+</tr>
+
+
+<!-- CHANGEOVER -->
+
+<tr>
+
+<td class="center">
+11
+</td>
+
+<td>
+
+<span class="item-name">
+Utility / Inverter Changeover
+</span>
+
+<span class="description">
+
+Source-transfer equipment for controlled transition between utility supply and inverter-backed distribution.
+
+</span>
+
+</td>
+
+<td class="center">
+1 Set
+</td>
+
+<td class="right">
+₦ 65,000
+</td>
+
+<td class="right amount">
+₦ 65,000
+</td>
+
+</tr>
+
+
+<!-- EARTHING -->
+
+<tr>
+
+<td class="center">
+12
+</td>
+
+<td>
+
+<span class="item-name">
+Earthing, Bonding & Lightning Protection Materials
+</span>
+
+<span class="description">
+
+Protective earth conductors, bonding accessories, earth electrodes, clamps, lugs and grounding materials.
+
+</span>
+
+</td>
+
+<td class="center">
+Lot Set
+</td>
+
+<td class="right">
+₦ 120,000
+</td>
+
+<td class="right amount">
+₦ 120,000
+</td>
+
+</tr>
+
+
+<!-- INSTALLATION -->
+
+<tr>
+
+<td class="center">
+13
+</td>
+
+<td>
+
+<span class="item-name">
+Installation, Testing & Commissioning
+</span>
+
+<span class="description">
+
+Professional installation, inverter configuration, battery integration, PV commissioning, protection testing, system programming, functional testing and handover.
+
+</span>
+
+</td>
+
+<td class="center">
+1 Job
+</td>
+
+<td class="right">
+₦ 500,000
+</td>
+
+<td class="right amount">
+₦ 500,000
+</td>
+
+</tr>
+
+
+</tbody>
+
+</table>
+
+</section>
+
+
+<!-- =========================================================
+     SYSTEM CONFIGURATION
+========================================================= -->
+
+<section class="summary-section">
+
+
+<h3 class="section-heading">
+System Configuration
+</h3>
+
+
+<div class="summary-grid">
+
+
+<div class="summary-card">
+
+<span>
+Inverter
+</span>
+
+<strong>
+12kVA — 1 × 12kVA
+</strong>
+
+</div>
+
+
+<div class="summary-card">
+
+<span>
+Battery
+</span>
+
+<strong>
+45kWh — 3 × 15kWh
+</strong>
+
+</div>
+
+
+<div class="summary-card">
+
+<span>
+PV Generation
+</span>
+
+<strong>
+14.88kWp
+</strong>
+
+</div>
+
+
+<div class="summary-card">
+
+<span>
+PV Modules
+</span>
+
+<strong>
+Jinko 620W × 24
+</strong>
+
+</div>
+
+
+<div class="summary-card">
+
+<span>
+PV Capacity
+</span>
+
+<strong>
+24 × 620W
+</strong>
+
+</div>
+
+
+<div class="summary-card">
+
+<span>
+System Type
+</span>
+
+<strong>
+Residential Hybrid
+</strong>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     PROJECT TOTAL
+========================================================= -->
+
+<section class="total-section">
+
+
+<div class="total-box">
+
+
+<div class="total-row">
+
+<span>
+Equipment & Materials
+</span>
+
+<strong>
+₦ 12,373,000
+</strong>
+
+</div>
+
+
+<div class="total-row">
+
+<span>
+Installation & Commissioning
+</span>
+
+<strong>
+₦ 500,000
+</strong>
+
+</div>
+
+
+<div class="total-row">
+
+<span>
+Transportation / Logistics
+</span>
+
+<strong>
+₦ 130,000
+</strong>
+
+</div>
+
+
+<div class="grand-total">
+
+<span>
+TOTAL PROJECT VALUE
+</span>
+
+<strong>
+₦ 14,003,000
+</strong>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     CLOSING NOTE
+========================================================= -->
+
+<div class="thank-you">
+
+<strong>
+Thank you for choosing AE Renewable Ltd.
+</strong>
+
+We appreciate the opportunity to engineer and deliver a reliable residential renewable-energy solution.
+
+</div>
+
+
+</div>
+
+
+<footer class="footer page-2-footer">
+
+<div>
+
+<strong>
+AE RENEWABLE LTD
+</strong>
+
+&nbsp; | &nbsp;
+
+POWERING YOUR FUTURE WITH SUN
+
+</div>
+
+<div>
+AERenewablesolution.com
+</div>
+
+</footer>
+
+
+</section>
+
+
+</body>
+
+</html>

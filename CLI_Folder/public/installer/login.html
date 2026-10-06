@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="AE Renewable Network Installer Login"
+    >
+
+    <title>Installer Login | AE Renewable Network</title>
+
+    <link
+        rel="stylesheet"
+        href="/installer/login.css"
+    >
+</head>
+
+<body>
+
+    <div class="login-page">
+
+        <!-- ================================================
+             BACKGROUND
+        ================================================= -->
+
+        <div class="login-background"></div>
+
+
+        <!-- ================================================
+             LOGIN CONTAINER
+        ================================================= -->
+
+        <main class="login-container">
+
+            <!-- ============================================
+                 BRAND
+            ============================================= -->
+
+            <div class="brand">
+
+                <div class="brand-mark">
+                    AE
+                </div>
+
+                <div class="brand-text">
+
+                    <h1>AE RENEWABLE</h1>
+
+                    <span>
+                        INSTALLER NETWORK
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ============================================
+                 LOGIN CARD
+            ============================================= -->
+
+            <section class="login-card">
+
+                <div class="login-header">
+
+                    <span class="eyebrow">
+                        INSTALLER PORTAL
+                    </span>
+
+                    <h2>
+                        Welcome Back
+                    </h2>
+
+                    <p>
+                        Sign in to access your installer dashboard.
+                    </p>
+
+                </div>
+
+
+                <!-- ========================================
+                     MESSAGE
+                ========================================= -->
+
+                <div
+                    id="loginMessage"
+                    class="login-message"
+                    hidden
+                ></div>
+
+
+                <!-- ========================================
+                     FORM
+                ========================================= -->
+
+                <form
+                    id="loginForm"
+                    autocomplete="on"
+                >
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            autocomplete="username"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- PASSWORD -->
+
+                    <div class="form-group">
+
+                        <div class="label-row">
+
+                            <label for="password">
+                                Password
+                            </label>
+
+                        </div>
+
+                        <div class="password-field">
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                id="togglePassword"
+                            >
+                                Show
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SUBMIT -->
+
+                    <button
+                        type="submit"
+                        id="loginButton"
+                        class="login-button"
+                    >
+                        <span id="loginButtonText">
+                            Sign In
+                        </span>
+                    </button>
+
+                </form>
+
+
+                <!-- ========================================
+                     FOOTER
+                ========================================= -->
+
+                <div class="login-footer">
+
+                    <p>
+                        Don't have an installer account?
+                    </p>
+
+                    <a href="/installer/register.html">
+                        Create Installer Account
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- ============================================
+                 BACK TO PORTAL
+            ============================================= -->
+
+            <a
+                href="/installer/"
+                class="back-link"
+            >
+                ← Back to Installer Portal
+            </a>
+
+
+            <!-- ============================================
+                 COPYRIGHT
+            ============================================= -->
+
+            <div class="copyright">
+
+                AE Renewable Network
+
+                <span>•</span>
+
+                Installer Platform
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <!-- ================================================
+         LOGIN JAVASCRIPT
+    ================================================= -->
+
+    <script>
+
+        "use strict";
+
+
+        const API_ENDPOINT =
+            "/api/auth/login";
+
+
+        const form =
+            document.getElementById(
+                "loginForm"
+            );
+
+
+        const emailInput =
+            document.getElementById(
+                "email"
+            );
+
+
+        const passwordInput =
+            document.getElementById(
+                "password"
+            );
+
+
+        const loginButton =
+            document.getElementById(
+                "loginButton"
+            );
+
+
+        const loginButtonText =
+            document.getElementById(
+                "loginButtonText"
+            );
+
+
+        const message =
+            document.getElementById(
+                "loginMessage"
+            );
+
+
+        const togglePassword =
+            document.getElementById(
+                "togglePassword"
+            );
+
+
+        /* =================================================
+           MESSAGE
+        ================================================= */
+
+        function showMessage(
+            text,
+            type = "error"
+        ) {
+
+            message.textContent = text;
+
+            message.className =
+                `login-message ${type}`;
+
+            message.hidden = false;
+
+        }
+
+
+        function hideMessage() {
+
+            message.hidden = true;
+
+            message.textContent = "";
+
+        }
+
+
+        /* =================================================
+           PASSWORD TOGGLE
+        ================================================= */
+
+        togglePassword.addEventListener(
+            "click",
+            () => {
+
+                if (
+                    passwordInput.type ===
+                    "password"
+                ) {
+
+                    passwordInput.type =
+                        "text";
+
+                    togglePassword.textContent =
+                        "Hide";
+
+                } else {
+
+                    passwordInput.type =
+                        "password";
+
+                    togglePassword.textContent =
+                        "Show";
+
+                }
+
+            }
+        );
+
+
+        /* =================================================
+           LOGIN
+        ================================================= */
+
+        form.addEventListener(
+            "submit",
+            async (event) => {
+
+                event.preventDefault();
+
+                hideMessage();
+
+
+                const email =
+                    emailInput.value.trim();
+
+                const password =
+                    passwordInput.value;
+
+
+                if (!email) {
+
+                    showMessage(
+                        "Please enter your email address."
+                    );
+
+                    emailInput.focus();
+
+                    return;
+                }
+
+
+                if (!password) {
+
+                    showMessage(
+                        "Please enter your password."
+                    );
+
+                    passwordInput.focus();
+
+                    return;
+                }
+
+
+                loginButton.disabled =
+                    true;
+
+                loginButtonText.textContent =
+                    "Signing In...";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            API_ENDPOINT,
+                            {
+                                method: "POST",
+
+                                credentials:
+                                    "include",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json",
+
+                                    "Accept":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify({
+                                        email,
+                                        password
+                                    })
+                            }
+                        );
+
+
+                    let data = null;
+
+
+                    try {
+
+                        data =
+                            await response.json();
+
+                    } catch {
+
+                        data = null;
+
+                    }
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            data?.message ||
+                            "Invalid email or password."
+                        );
+
+                    }
+
+
+                    /*
+                     * Support both common response
+                     * formats used by the backend.
+                     */
+
+                    const token =
+                        data?.token ||
+                        data?.accessToken ||
+                        data?.data?.token ||
+                        data?.data?.accessToken;
+
+
+                    if (token) {
+
+                        localStorage.setItem(
+                            "token",
+                            token
+                        );
+
+                    }
+
+
+                    showMessage(
+                        "Login successful. Opening your dashboard...",
+                        "success"
+                    );
+
+
+                    setTimeout(
+                        () => {
+
+                            window.location.href =
+                                "/installer/";
+
+                        },
+                        700
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Installer login error:",
+                        error
+                    );
+
+
+                    showMessage(
+                        error.message ||
+                        "Unable to sign in. Please try again."
+                    );
+
+
+                } finally {
+
+                    loginButton.disabled =
+                        false;
+
+                    loginButtonText.textContent =
+                        "Sign In";
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+<script src="/installer/login.js"></script>
+</html>

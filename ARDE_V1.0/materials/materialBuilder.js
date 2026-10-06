@@ -7,9 +7,25 @@
 // materialBuilder.js
 //
 // PURPOSE
-// Build Complete Bill of Quantities (BOQ) Schedule
+// Build Complete Bill of Quantities (BOQ) Schedule with Dynamic Admin Pricing
 //
 // ======================================================
+
+import { getActivePrices, getCustomMaterials } from "../data/prices.js";
+
+function getPrice(name, fallback = 0) {
+    if (!name) return fallback;
+    const prices = getActivePrices();
+    if (prices[name] !== undefined) return prices[name];
+    const clean = String(name).toLowerCase().trim();
+    for (const [key, val] of Object.entries(prices)) {
+        const kClean = key.toLowerCase().trim();
+        if (clean === kClean || clean.includes(kClean) || kClean.includes(clean)) {
+            return val;
+        }
+    }
+    return fallback;
+}
 
 
 // ======================================================
@@ -1579,9 +1595,40 @@ export function buildMaterialList(system) {
 
 
     // ==================================================
-    // RETURN BOQ
+    // MAP ACCURATE PRICES & TOTAL AMOUNTS
     // ==================================================
+    const pricedBoq = boq.map(item => {
+        const unitPrice = item.unitPrice > 0 ? item.unitPrice : getPrice(item.description, item.unitPrice || 0);
+        const quantity = item.quantity || 0;
+        const totalPrice = Math.round(quantity * unitPrice);
+        return {
+            ...item,
+            unitPrice,
+            totalPrice
+        };
+    });
 
-    return boq;
+    // ==================================================
+    // APPEND ACTIVE CUSTOM MATERIALS (IF ANY)
+    // ==================================================
+    try {
+        const customMats = getCustomMaterials();
+        customMats.forEach(cm => {
+            pricedBoq.push({
+                description: cm.name,
+                unit: cm.unit || "pcs",
+                quantity: cm.quantity || 1,
+                unitPrice: cm.unitPrice || getPrice(cm.name, 0),
+                totalPrice: Math.round((cm.quantity || 1) * (cm.unitPrice || getPrice(cm.name, 0))),
+                isCustom: true
+            });
+        });
+    } catch (e) {
+        console.warn("Could not load custom materials:", e);
+    }
 
+    // ==================================================
+    // RETURN PRICED BOQ
+    // ==================================================
+    return pricedBoq;
 }

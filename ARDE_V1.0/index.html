@@ -1,936 +1,637 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARDE V1.0 | AE Renewable Engineering Studio</title>
 
-<meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-ARDE V1.0 | AE Renewable Design Engine
-</title>
-
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link
-rel="stylesheet"
-href="style.css">
-
+  <link rel="stylesheet" href="style.css">
+  <script>
+    (function() {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var hasClientParam = params.get("clientName") || params.get("projectCode") || params.get("clientEmail");
+        var activeClientRaw = localStorage.getItem("ae_active_client");
+        var hasActiveClient = false;
+        if (activeClientRaw) {
+          try {
+            var c = JSON.parse(activeClientRaw);
+            if (c && (c.fullName || c.projectCode)) hasActiveClient = true;
+          } catch(e) {}
+        }
+        // If neither URL parameters nor stored active intake exists, route to intake landing page first
+        if (!hasClientParam && !hasActiveClient) {
+          window.location.replace("/arde");
+        }
+      } catch(err) {
+        window.location.replace("/arde");
+      }
+    })();
+  </script>
 </head>
-
 <body>
 
-<!-- ========================================================= -->
-<!-- APPLICATION -->
-<!-- ========================================================= -->
-
-<div class="app">
-
-<!-- ========================================================= -->
-<!-- HEADER -->
-<!-- ========================================================= -->
-
-<header class="header">
-
-<div class="logo-area">
-
-<h1>
-
-AE Renewable
-
-<span>
-
-Design Engine
-
-</span>
-
-</h1>
-
-<p>
-
-ARDE Version 1.0
-
-</p>
-
-</div>
-
-<div class="header-right">
-
-<span class="status">
-
-Engineering Mode
-
-</span>
-
-</div>
-
-</header>
-
-<!-- ========================================================= -->
-<!-- NAVIGATION -->
-<!-- ========================================================= -->
-
-<nav class="navigation">
-
-<button>
-
-Dashboard
-
-</button>
-
-<button>
-
-Design
-
-</button>
-
-<button>
-
-Quotation
-
-</button>
-
-<button>
-
-Material
-
-</button>
-
-<button>
-
-Reports
-
-</button>
-
-</nav>
-
-<!-- ========================================================= -->
-<!-- MAIN -->
-<!-- ========================================================= -->
-
-<main class="main">
-
-<!-- ========================================================= -->
-<!-- SYSTEM INPUT -->
-<!-- ========================================================= -->
-
-<section class="card">
-
-<div class="card-header">
-
-<h2>
-
-System Input
-
-</h2>
-
-<p>
-
-Enter all required design information.
-
-</p>
-
-</div>
-
-<form id="designForm">
-
-<div class="grid">
-
-<!-- LOAD -->
-
-<div class="form-group">
-
-<label>
-
-Load Power (W)
-
-</label>
-
-<input
-
-type="number"
-
-id="load"
-
-placeholder="10000"
-
-required>
-
-</div>
-
-<!-- BACKUP -->
-
-<div class="form-group">
-
-<label>
-
-Backup Time (Hours)
-
-</label>
-
-<input
-
-type="number"
-
-id="backup"
-
-value="8"
-
-required>
-
-</div>
-
-<!-- PSH -->
-
-<div class="form-group">
-
-<label>
-
-Peak Sun Hours
-
-</label>
-
-<input
-
-type="number"
-
-id="psh"
-
-value="5"
-
-step="0.1">
-
-</div>
-
-<!-- PANEL FACTOR -->
-
-<div class="form-group">
-
-<label>
-
-Panel Factor
-
-</label>
-
-<input
-
-type="number"
-
-id="panelFactor"
-
-value="1.3"
-
-step="0.1">
-
-</div>
-
-<!-- DOD -->
-
-<div class="form-group">
-
-<label>
-
-Depth of Discharge
-
-</label>
-
-<input
-
-type="number"
-
-id="dod"
-
-value="0.8"
-
-step="0.1">
-
-</div>
-
-<!-- LOSSES -->
-
-<div class="form-group">
-
-<label>
-
-System Losses
-
-</label>
-
-<input
-
-type="number"
-
-id="losses"
-
-value="0.8"
-
-step="0.1">
-
-</div>
-
-<!-- BATTERY -->
-
-<div class="form-group">
-
-<label>
-
-Load Percentage% on Battery 
-
-</label>
-
-<input
-
-type="number"
-
-id="batteryPercent"
-
-value="100">
-
-</div>
-
-</div>
-
-<!-- ACTION BUTTONS -->
-
-<div class="button-group">
-
-<button
-
-type="submit"
-
-class="primary">
-
-⚡ Compute Design
-
-</button>
-
-<button
-
-type="reset"
-
-class="secondary">
-
-Reset
-
-</button>
-
-<button
-
-type="button"
-
-id="generateQuotation">
-
-Quotation
-
-</button>
-
-<button
-
-type="button"
-
-id="generateBOQ">
-
-BOQ
-
-</button>
-
-<button
-
-type="button"
-
-id="printReport">
-
-Print
-
-</button>
-
-<button
-
-type="button"
-
-id="exportPDF">
-
-Export PDF
-
-</button>
-
-</div>
-
-</form>
-
-</section>
-
-
-<!-- ////////////////////////////// -->
-          <!-- PART 2 -->
- <!-- /////////////////////////////  -->
-
- <!-- ========================================================= -->
-<!-- SYSTEM DESIGN RESULT -->
-<!-- ========================================================= -->
-
-<section class="card">
-
-    <div class="card-header">
-
-        <h2>System Design Result</h2>
-
-        <p>
-            Calculated system sizing and equipment selection.
-        </p>
-
+  <!-- ========================================================= -->
+  <!-- TOP INTAKE & SYSTEM STATUS BAR -->
+  <!-- ========================================================= -->
+  <div class="studio-topbar">
+    <div class="topbar-left">
+      <a href="/arde" class="topbar-link">
+        <i data-lucide="arrow-left"></i> Client Intake & Sizing Assessment
+      </a>
+      <span class="topbar-divider">|</span>
+      <span class="topbar-title">AE Renewable Engineering Studio</span>
     </div>
-
-    <div class="result-grid">
-
-        <div class="result-item">
-            <span>Load Power</span>
-            <strong id="resultLoadPower">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>Backup Time</span>
-            <strong id="resultBackupTime">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>Daily Energy</span>
-            <strong id="resultDailyEnergy">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>Battery Requirement</span>
-            <strong id="resultBatteryEnergy">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>Solar PV Required</span>
-            <strong id="resultSolarPV">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>Selected Panel</span>
-            <strong id="resultPanelModel">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>Panel Quantity</span>
-            <strong id="resultPanelQuantity">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>Selected Inverter</span>
-            <strong id="resultInverterModel">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>Inverter Quantity</span>
-            <strong id="resultInverterQuantity">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>Battery Model</span>
-            <strong id="resultBatteryModel">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>Battery Quantity</span>
-            <strong id="resultBatteryQuantity">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>Installed Battery</span>
-            <strong id="resultInstalledBattery">-</strong>
-        </div>
-
+    <div class="topbar-right">
+      <a href="/admin" target="_blank" class="admin-link">
+        Operations Admin ↗
+      </a>
+      <span class="engine-badge">
+        <i data-lucide="zap"></i> ARDE V1.0 Engineering Engine
+      </span>
     </div>
+  </div>
 
-</section>
-
-<!-- ========================================================= -->
-<!-- PROTECTION DESIGN -->
-<!-- ========================================================= -->
-
-<!-- ========================================================= -->
-<!-- PROTECTION DESIGN -->
-<!-- ========================================================= -->
-
-<section class="card">
-
-    <div class="card-header">
-
-        <h2>Protection Design</h2>
-
-        <p>
-            Automatic breaker and protection sizing.
-        </p>
-
+  <!-- ========================================================= -->
+  <!-- ACTIVE CLIENT ASSESSMENT BANNER -->
+  <!-- ========================================================= -->
+  <div class="active-assessment-banner" id="activeAssessmentBanner">
+    <div class="assessment-info">
+      <span class="pulse-tag">
+        <span class="pulse-dot"></span> Active Client Assessment
+      </span>
+      <span class="info-pill">
+        <strong>Client:</strong> <span id="bannerClientName">Eniola Abdulrasaq</span>
+      </span>
+      <span class="topbar-divider">|</span>
+      <span class="info-pill">
+        <strong>Project Code:</strong> <span id="bannerProjectCode">PRJ-202610-4757</span>
+      </span>
+      <span class="topbar-divider">|</span>
+      <span class="info-pill">
+        <strong>Property:</strong> <span id="bannerPropertyType">Residential</span>
+      </span>
     </div>
-
-
-    <div class="result-grid">
-
-
-        <!-- ================================================= -->
-        <!-- AC OUTPUT CURRENT -->
-        <!-- ================================================= -->
-
-        <div class="result-item">
-
-            <span>
-                AC Output Current
-            </span>
-
-            <strong id="resultOutputCurrent">
-                -
-            </strong>
-
-        </div>
-
-
-        <!-- ================================================= -->
-        <!-- OUTPUT BREAKER -->
-        <!-- ================================================= -->
-
-       <!-- AC OUTPUT BREAKER -->
-        <div class="result-item">
-            <span>AC Output Breaker</span>
-            <strong id="resultOutputBreaker">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>AC Output Breaker Quantity</span>
-            <strong id="resultOutputBreakerQuantity">-</strong>
-        </div>
-
-
-        <!-- ================================================= -->
-        <!-- PHASE -->
-        <!-- ================================================= -->
-
-        <div class="result-item">
-
-            <span>
-                Phase
-            </span>
-
-            <strong id="phase">
-                -
-            </strong>
-
-        </div>
-
-
-        <!-- ================================================= -->
-        <!-- AC INPUT CURRENT -->
-        <!-- ================================================= -->
-
-        <div class="result-item">
-
-            <span>
-                AC Input Current
-            </span>
-
-            <strong id="resultInputCurrent">
-                -
-            </strong>
-
-        </div>
-
-
-        <!-- ================================================= -->
-        <!-- INPUT BREAKER -->
-        <!-- ================================================= -->
-
-        <!-- AC INPUT BREAKER -->
-        <div class="result-item">
-            <span>AC Input Breaker</span>
-            <strong id="resultInputBreaker">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>AC Input Breaker Quantity</span>
-            <strong id="resultInputBreakerQuantity">-</strong>
-        </div>  
-
-        <!-- ========================================= -->
-            <div class="result-item">
-        <span>Changeover</span>
-        <strong id="resultChangeover">-</strong>
+    <div class="assessment-actions">
+      <a href="/arde" class="btn-switch-assessment">
+        <i data-lucide="refresh-cw"></i> Switch / Edit Assessment
+      </a>
     </div>
+  </div>
 
-    <div class="result-item">
-        <span>Changeover Quantity</span>
-        <strong id="resultChangeoverQuantity">-</strong>
-    </div>
+  <!-- ========================================================= -->
+  <!-- STUDIO APP SHELL (SIDEBAR + MAIN CANVAS) -->
+  <!-- ========================================================= -->
+  <div class="studio-layout">
 
-        <!-- 
-        ================================================= -->
-        <!-- PV CURRENT -->
-        <!-- ================================================= -->
+    <!-- ======================================================= -->
+    <!-- SIDEBAR -->
+    <!-- ======================================================= -->
+    <aside class="studio-sidebar" id="studioSidebar">
+      
+      <!-- Brand & Studio Profile -->
+      <div class="sidebar-brand">
+        <div class="brand-badge-logo">AE</div>
+        <div class="brand-text">
+          <h2>AE Renewable</h2>
+          <span>Design Engine • ARDE 1.0</span>
+        </div>
+      </div>
 
-        <div class="result-item">
+      <!-- Mode & Status Indicator -->
+      <div class="sidebar-status-box">
+        <div class="status-indicator-dot"></div>
+        <div class="status-label-group">
+          <strong>Engineering Mode</strong>
+          <small>Real-time Calculation Ready</small>
+        </div>
+      </div>
 
-            <span>
-                PV Current
-            </span>
+      <!-- Client Credentials Dispatch Status -->
+      <div class="client-account-card" id="clientAccountCard">
+        <div class="card-mini-title">
+          <i data-lucide="user-check"></i> Client Portal Account
+        </div>
+        <div class="account-details">
+          <div class="account-row">
+            <span>Username:</span>
+            <strong id="sidebarUsername">PRJ-202610-4757</strong>
+          </div>
+          <div class="account-row">
+            <span>Password:</span>
+            <strong id="sidebarPassword">Eniola</strong>
+          </div>
+          <div class="account-row">
+            <span>Email:</span>
+            <span id="sidebarClientEmail" class="email-truncate">eniola@aerenewable.com</span>
+          </div>
+        </div>
+        <div class="account-status-badge" id="accountStatusBadge">
+          <i data-lucide="mail"></i> Email Notification Ready
+        </div>
+      </div>
 
-            <strong id="resultPVCurrent">
-                -
-            </strong>
+      <!-- Quick Sizing Presets -->
+      <div class="sidebar-section-title">ENGINEERING PRESETS</div>
+      <div class="sidebar-presets">
+        <button type="button" class="preset-pill active" data-preset="res3bed">
+          <i data-lucide="home"></i>
+          <div>
+            <strong>3-Bed Residence</strong>
+            <small>5,000 W • 8h Backup</small>
+          </div>
+        </button>
+        <button type="button" class="preset-pill" data-preset="villa">
+          <i data-lucide="building"></i>
+          <div>
+            <strong>Executive Mansion</strong>
+            <small>10,000 W • 10h Backup</small>
+          </div>
+        </button>
+        <button type="button" class="preset-pill" data-preset="commercial">
+          <i data-lucide="briefcase"></i>
+          <div>
+            <strong>Commercial Plaza</strong>
+            <small>16,000 W • 12h Backup</small>
+          </div>
+        </button>
+        <button type="button" class="preset-pill" data-preset="industrial">
+          <i data-lucide="cpu"></i>
+          <div>
+            <strong>Industrial Mini-Grid</strong>
+            <small>30,000 W • 12h Backup</small>
+          </div>
+        </button>
+      </div>
 
+      <!-- Studio Utilities & Pricing Navigation -->
+      <div class="sidebar-section-title">STUDIO SHORTCUTS</div>
+      <div class="sidebar-menu">
+        <a href="/admin/prices.html" target="_blank" class="sidebar-link">
+          <i data-lucide="database"></i>
+          <span>Price & Material Manager</span>
+          <span class="badge-new">Tariffs</span>
+        </a>
+      </div>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <small>© 2026 AE Renewable Ltd • ARDE V1.0</small>
+      </div>
+    </aside>
+
+    <!-- ======================================================= -->
+    <!-- MAIN STUDIO WORKSPACE -->
+    <!-- ======================================================= -->
+    <main class="studio-main">
+
+      <!-- ON-SCREEN SIGN / NOTIFICATION (Gives client sign to check mail) -->
+      <div class="mail-alert-strip" id="mailAlertStrip">
+        <div class="alert-icon-wrap">
+          <i data-lucide="send"></i>
+        </div>
+        <div class="alert-content">
+          <strong>Client Provisioned & Quotation Settled!</strong>
+          <p id="mailAlertText">Login credentials sent to client mail. Client ID: <strong>PRJ-202610-4757</strong> | Password: <strong>Eniola</strong>. Direct portal link dispatched.</p>
+        </div>
+        <div class="alert-actions">
+          <a href="/client/login" target="_blank" class="btn-portal-direct">
+            Open Client Login <i data-lucide="external-link"></i>
+          </a>
+          <button type="button" class="btn-dismiss-alert" id="btnDismissMailAlert">×</button>
+        </div>
+      </div>
+
+      <!-- SYSTEM INPUT CARD -->
+      <section class="studio-card main-input-card">
+        <div class="card-header-clean">
+          <div>
+            <h1 class="card-title">System Input</h1>
+            <p class="card-subtitle">Enter all required design information to compute full engineering architecture and generate live quotations.</p>
+          </div>
+          <div class="card-header-badge">
+            <i data-lucide="sliders"></i> Sizing Parameters
+          </div>
         </div>
 
+        <form id="designForm" class="design-form">
+          <div class="input-grid">
 
-        <!-- ================================================= -->
-        <!-- PV BREAKER -->
-        <!-- ================================================= -->
+            <!-- LOAD POWER -->
+            <div class="input-group">
+              <label for="load">
+                <i data-lucide="zap"></i> Load Power (W)
+              </label>
+              <div class="input-field-wrap">
+                <input type="number" id="load" placeholder="10000" value="5000" min="100" step="50" required>
+                <span class="unit-tag">Watts</span>
+              </div>
+            </div>
 
-  <!-- PV BREAKER -->
-    <div class="result-item">
-        <span>PV Breaker</span>
-        <strong id="resultPVBreaker">-</strong>
-    </div>
+            <!-- BACKUP TIME -->
+            <div class="input-group">
+              <label for="backup">
+                <i data-lucide="clock"></i> Backup Time (Hours)
+              </label>
+              <div class="input-field-wrap">
+                <input type="number" id="backup" placeholder="8" value="8" min="1" max="72" step="0.5" required>
+                <span class="unit-tag">Hrs</span>
+              </div>
+            </div>
 
-    <div class="result-item">
-        <span>PV Breaker Quantity</span>
-        <strong id="resultPVBreakerQuantity">-</strong>
-    </div>
+            <!-- PEAK SUN HOURS -->
+            <div class="input-group">
+              <label for="psh">
+                <i data-lucide="sun"></i> Peak Sun Hours
+              </label>
+              <div class="input-field-wrap">
+                <input type="number" id="psh" value="5.0" step="0.1" min="1" max="10">
+                <span class="unit-tag">PSH</span>
+              </div>
+            </div>
 
+            <!-- PANEL FACTOR -->
+            <div class="input-group">
+              <label for="panelFactor">
+                <i data-lucide="percent"></i> Panel Factor
+              </label>
+              <div class="input-field-wrap">
+                <input type="number" id="panelFactor" value="1.3" step="0.05" min="1" max="2.5">
+                <span class="unit-tag">Ratio</span>
+              </div>
+            </div>
 
-        <!-- ================================================= -->
-        <!-- BATTERY CURRENT -->
-        <!-- ================================================= -->
+            <!-- DEPTH OF DISCHARGE -->
+            <div class="input-group">
+              <label for="dod">
+                <i data-lucide="battery-charging"></i> Depth of Discharge
+              </label>
+              <div class="input-field-wrap">
+                <input type="number" id="dod" value="0.8" step="0.05" min="0.1" max="1.0">
+                <span class="unit-tag">DoD</span>
+              </div>
+            </div>
 
-        <div class="result-item">
+            <!-- SYSTEM LOSSES -->
+            <div class="input-group">
+              <label for="losses">
+                <i data-lucide="trending-down"></i> System Losses
+              </label>
+              <div class="input-field-wrap">
+                <input type="number" id="losses" value="0.8" step="0.05" min="0.1" max="1.0">
+                <span class="unit-tag">Eff.</span>
+              </div>
+            </div>
 
-            <span>
-                Battery Current
-            </span>
+            <!-- LOAD PERCENTAGE ON BATTERY -->
+            <div class="input-group">
+              <label for="batteryPercent">
+                <i data-lucide="pie-chart"></i> Load Percentage% on Battery
+              </label>
+              <div class="input-field-wrap">
+                <input type="number" id="batteryPercent" value="100" min="1" max="100" step="1">
+                <span class="unit-tag">%</span>
+              </div>
+            </div>
 
-            <strong id="resultBatteryCurrent">
-                -
-            </strong>
+          </div>
 
+          <!-- ACTION BUTTONS -->
+          <div class="studio-action-row">
+            <button type="submit" class="btn-btn btn-compute" id="btnCompute">
+              <i data-lucide="zap"></i> ⚡ Compute Design
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- PV STRING CONFIGURATION & MC4 CONNECTOR PAIR SUMMARY CARD -->
+      <section class="studio-card pv-summary-card">
+        <div class="card-header-clean">
+          <div>
+            <h2 class="card-title-sm">
+              <i data-lucide="git-branch" style="color:#F4A600;"></i> PV String Configuration & Protection Overview
+            </h2>
+            <p class="card-subtitle">Real-time array topology with calculated remaining panels and MC4 connector pairs.</p>
+          </div>
+          <div class="summary-status-tag" id="liveStatusTag">
+            <span>●</span> Computation Ready
+          </div>
         </div>
 
-
-        <!-- ================================================= -->
-        <!-- BATTERY BREAKER -->
-        <!-- ================================================= -->
-
-        <div class="result-item">
-
-            <span>
-                Battery Breaker
-            </span>
-
-            <strong id="resultBatteryBreaker">
-                -
-            </strong>
-            <span id="resultBatteryBreakerQuantity">-</span>
-
+        <div class="pv-summary-grid">
+          <div class="pv-item">
+            <span class="pv-label">Panels on Series</span>
+            <strong class="pv-value" id="resultPanelsPerString">0</strong>
+          </div>
+          <div class="pv-item">
+            <span class="pv-label">Total Strings</span>
+            <strong class="pv-value" id="resultTotalStrings">0</strong>
+          </div>
+          <div class="pv-item">
+            <span class="pv-label">Strings / MPPT</span>
+            <strong class="pv-value" id="resultStringsPerMPPT">0</strong>
+          </div>
+          <div class="pv-item highlight-item">
+            <span class="pv-label">Remaining Panels</span>
+            <strong class="pv-value" id="resultRemainingPanels" style="color:#38BDF8;">0</strong>
+          </div>
+          <div class="pv-item highlight-item">
+            <span class="pv-label">MC4 Connector Pairs</span>
+            <strong class="pv-value" id="resultMC4" style="color:#F4A600;">0 Pairs</strong>
+          </div>
+          <div class="pv-item">
+            <span class="pv-label">Grand Total Estimated</span>
+            <strong class="pv-value" id="summaryGrandTotal" style="color:#00B140;">₦0.00</strong>
+          </div>
         </div>
+      </section>
 
-        
-
-
-        <!-- ================================================= -->
-        <!-- DC SPD -->
-        <!-- ================================================= -->
-
-    <!-- DC SURGE PROTECTION -->
-    <div class="result-item">
-        <span>DC Surge Protection</span>
-        <strong id="resultDCSPD">-</strong>
-    </div>
-
-    <div class="result-item">
-        <span>DC Surge Quantity</span>
-        <strong id="resultDCSPDQuantity">-</strong>
-    </div>
-
-
-        <!-- ================================================= -->
-        <!-- AC SPD -->
-        <!-- ================================================= -->
-
-     <!-- AC SURGE PROTECTION -->
-    <div class="result-item">
-        <span>AC Surge Protection</span>
-        <strong id="resultACSPD">-</strong>
-    </div>
-
-    <div class="result-item">
-        <span>AC Surge Quantity</span>
-        <strong id="resultACSPDQuantity">-</strong>
-    </div>
-
-
-        <!-- ================================================= -->
-        <!-- EARTH CABLE -->
-        <!-- ================================================= -->
-
-        <div class="result-item">
-
-            <span>
-                Earth Cable
-            </span>
-
-            <strong id="ear">
-                -
-            </strong>
-
-        </div>
-
-
-    </div>
-
-</section>
-
-
-
-<!-- //////////////////////////////////// -->
-                
-<!-- ///////////////////////////////////// -->
-
-<div class="result-section">
-
-
-    <h3>PV String Configuration</h3>
-
-    <div class="result-grid">
-
-        <div class="result-item">
-            <span>Panels on Series</span>
-            <strong id="resultPanelsPerString">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>Total Strings</span>
-            <strong id="resultTotalStrings">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>Strings / MPPT</span>
-            <strong id="resultStringsPerMPPT">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>Remaining Panels</span>
-            <strong id="resultRemainingPanels">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>PV Combiner</span>
-            <strong id="resultCombiner">-</strong>
-        </div>
-
-        <div class="result-item">
-            <span>MC4 Connector Pairs</span>
-            <strong id="resultMC4">-</strong>
-        </div>
-
-    </div>
-
-</div>
-
-<!-- ========================================================= -->
-<!-- BILL OF MATERIALS -->
-<!-- ========================================================= -->
-
-<section class="card">
-
-    <div class="card-header">
-
-        <h2>Bill of Materials (BOQ)</h2>
-
-        <p>
-            Complete material schedule generated automatically.
-        </p>
-
-    </div>
-
-    <div class="table-wrapper">
-
+      <!-- HIDDEN ENGINEERING ENGINE DATA CONTAINERS (Preserved for accurate calculation & export) -->
+      <div id="engineStateVault" style="display:none;" aria-hidden="true">
+        <span id="resultLoadPower">-</span>
+        <span id="resultBackupTime">-</span>
+        <span id="resultDailyEnergy">-</span>
+        <span id="resultBatteryEnergy">-</span>
+        <span id="resultSolarPV">-</span>
+        <span id="resultPanelModel">-</span>
+        <span id="resultPanelQuantity">-</span>
+        <span id="resultInverterModel">-</span>
+        <span id="resultInverterQuantity">-</span>
+        <span id="resultBatteryModel">-</span>
+        <span id="resultBatteryQuantity">-</span>
+        <span id="resultInstalledBattery">-</span>
+        <span id="resultOutputCurrent">-</span>
+        <span id="resultOutputBreaker">-</span>
+        <span id="resultOutputBreakerQuantity">-</span>
+        <span id="phase">-</span>
+        <span id="resultInputCurrent">-</span>
+        <span id="resultInputBreaker">-</span>
+        <span id="resultInputBreakerQuantity">-</span>
+        <span id="resultChangeover">-</span>
+        <span id="resultChangeoverQuantity">-</span>
+        <span id="resultPVCurrent">-</span>
+        <span id="resultPVBreaker">-</span>
+        <span id="resultPVBreakerQuantity">-</span>
+        <span id="resultBatteryCurrent">-</span>
+        <span id="resultBatteryBreaker">-</span>
+        <span id="resultBatteryBreakerQuantity">-</span>
+        <span id="resultDCSPD">-</span>
+        <span id="resultDCSPDQuantity">-</span>
+        <span id="resultACSPD">-</span>
+        <span id="resultACSPDQuantity">-</span>
+        <span id="ear">-</span>
+        <span id="resultCombiner">-</span>
+        <span id="materialCost">₦0</span>
+        <span id="labourCost">₦0</span>
+        <span id="transportCost">₦0</span>
+        <span id="installationCost">₦0</span>
+        <span id="vatCost">₦0</span>
+        <span id="profitCost">₦0</span>
+        <span id="grandTotal">₦0</span>
         <table id="materialTable">
-
-            <thead>
-
-                <tr>
-
-                    <th>SN</th>
-
-                    <th>Material</th>
-
-                    <th>Unit</th>
-
-                    <th>Quantity</th>
-
-                    <th>Unit Price</th>
-
-                    <th>Total</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody id="materialTableBody">
-
-            </tbody>
-
+          <tbody id="materialTableBody"></tbody>
         </table>
+      </div>
 
+    </main>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- ANIMATED BOTTOM-UP "PRINT UP" QUOTATION VIEWER -->
+  <!-- ========================================================= -->
+  <div class="print-up-modal-backdrop" id="printUpModal">
+    <div class="print-up-sheet">
+      
+      <!-- Sleek Floating Back to Studio Bar -->
+      <div class="sheet-floating-controls">
+        <button type="button" class="btn-back-studio" id="sheetBackBtn">
+          <i data-lucide="arrow-left"></i> ← Back to Studio
+        </button>
+      </div>
+
+      <!-- Sheet Scrollable Viewport -->
+      <div class="sheet-viewport">
+
+        <!-- VIEW 1: A4 ENGINEERING QUOTATION (AE.html format with Client Credentials) -->
+        <div class="document-view active" id="quotationView">
+          <div class="a4-document-page">
+            
+            <!-- A4 Header -->
+            <header class="doc-header">
+              <div class="doc-header-top">
+                <div class="doc-brand">
+                  <div class="doc-logo-box">
+                    <img src="assets/images/logo.png" alt="AE Renewable Ltd" class="doc-logo-img">
+                  </div>
+                  <div class="doc-brand-text">
+                    <h1>AE RENEWABLE LTD</h1>
+                    <p class="slogan">POWERING YOUR FUTURE WITH SUN</p>
+                    <p class="sub-address">RC: 1849204 • Abuja, Nigeria • info@aerenewable.com</p>
+                  </div>
+                </div>
+                <div class="doc-meta-badge">
+                  <span class="doc-type-label">ENGINEERING QUOTATION</span>
+                  <div class="doc-code" id="docQuotationNumber">AE-202610-4757</div>
+                  <div class="doc-date" id="docDate">--</div>
+                </div>
+              </div>
+
+              <!-- Attached Client Portal Access Strip -->
+              <div class="doc-client-credentials-strip">
+                <div class="strip-left">
+                  <i data-lucide="shield-check"></i>
+                  <span><strong>CLIENT PORTAL SECURE ACCESS:</strong> Save this PDF. Your account is provisioned:</span>
+                </div>
+                <div class="strip-creds">
+                  <span>Username (Client ID): <strong id="docUsername">PRJ-202610-4757</strong></span>
+                  <span>Password: <strong id="docPassword">Eniola</strong></span>
+                  <a href="/client/login" target="_blank" class="strip-link">Client Portal ↗</a>
+                </div>
+              </div>
+            </header>
+
+            <!-- Client & Project Info Bar -->
+            <div class="doc-client-section">
+              <div class="doc-client-col">
+                <span class="col-title">PREPARED FOR CLIENT:</span>
+                <strong class="client-name" id="docClientName">Eniola Abdulrasaq</strong>
+                <p id="docClientProperty">Residential Solar Installation • Abuja, FCT</p>
+                <p id="docClientEmail">eniola@aerenewable.com</p>
+              </div>
+              <div class="doc-client-col">
+                <span class="col-title">SYSTEM SPECIFICATION:</span>
+                <strong class="system-spec" id="docSystemSpec">5.0 kW Solar PV / 10.0 kWh Storage</strong>
+              </div>
+            </div>
+
+            <!-- Itemized Equipment Table -->
+            <div class="doc-table-section">
+              <h3 class="section-title">BILL OF QUANTITIES (BOQ) & TECHNICAL SCHEDULE</h3>
+              <table class="doc-table">
+                <thead>
+                  <tr>
+                    <th style="width:5%;">SN</th>
+                    <th style="width:45%;">Item Description & Specification</th>
+                    <th style="width:12%; text-align:center;">Unit</th>
+                    <th style="width:10%; text-align:center;">Qty</th>
+                    <th style="width:14%; text-align:right;">Rate (₦)</th>
+                    <th style="width:14%; text-align:right;">Amount (₦)</th>
+                  </tr>
+                </thead>
+                <tbody id="docQuotationTableBody">
+                  <!-- Injected by script.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Financial Summary & Cost Breakdown -->
+            <div class="doc-summary-grid">
+              <div class="doc-notes-box">
+                <h4>Engineering & Payment Terms</h4>
+                <ul>
+                  <li>70% Mobilization Deposit upon order confirmation.</li>
+                  <li>20% upon delivery of equipment to site.</li>
+                  <li>10% upon complete testing, commissioning and handover.</li>
+                  <li>Tier-1 Jinko solar panels with 25-year performance warranty.</li>
+                  <li>LiFePO4 Lithium storage with 5-year replacement warranty.</li>
+                </ul>
+              </div>
+              <div class="doc-totals-box">
+                <div class="total-row">
+                  <span>Materials Subtotal:</span>
+                  <strong id="docMaterialSubtotal">₦0.00</strong>
+                </div>
+                <div class="total-row">
+                  <span>Transportation & Logistics (5%):</span>
+                  <strong id="docTransport">₦0.00</strong>
+                </div>
+                <div class="total-row">
+                  <span>Engineering Labour & Workmanship (18%):</span>
+                  <strong id="docLabour">₦0.00</strong>
+                </div>
+                <div class="total-row">
+                  <span>Value Added Tax (VAT 7.5%):</span>
+                  <strong id="docVat">₦0.00</strong>
+                </div>
+                <div class="total-row grand-total-row">
+                  <span>GRAND TOTAL:</span>
+                  <strong id="docGrandTotal">₦0.00</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Signatures Footer with Stylized Signature and AE Stamp -->
+            <div class="doc-signature-footer">
+              <div class="sig-block">
+                <div class="ae-signature-container">
+                  <span class="ae-sig-monogram">AE</span>
+                  <span class="ae-sig-cursive">Stephen Akolade</span>
+                  <div class="ae-sig-stamp">CERTIFIED RENEWABLE ENGINEER</div>
+                </div>
+                <div class="sig-line"></div>
+                <p><strong>Engr. Stephen Akolade</strong> (Lead Solar Engineer)</p>
+                <small>AE Renewable Ltd Technical Design Office</small>
+              </div>
+              <div class="sig-block">
+                <div class="client-sig-placeholder">
+                  <span>Awaiting Client Sign-off</span>
+                </div>
+                <div class="sig-line"></div>
+                <p>Client Acceptance Signature</p>
+                <small id="docAcceptanceDate">Date: ________________________</small>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- VIEW 2: RESIDENTIAL BOQ SCHEDULE (Residential_Quotation.html format) -->
+        <div class="document-view" id="boqView">
+          <div class="residential-boq-page">
+            
+            <div class="res-top-accent"></div>
+            
+            <div class="res-header">
+              <div class="res-logo-area">
+                <div class="res-logo-icon">☀️</div>
+                <div class="res-logo-text">
+                  <h1>AE RENEWABLE LTD</h1>
+                  <p>Residential Clean Energy Solutions • Abuja, Nigeria</p>
+                </div>
+              </div>
+              <div class="res-meta-area">
+                <div class="res-badge">RESIDENTIAL BOQ</div>
+                <div class="res-date" id="resDocDate">October 4, 2026</div>
+              </div>
+            </div>
+
+            <div class="res-section">
+              <div class="res-section-title">
+                <span class="icon-wrap">⚡</span> 1. System Engineering Specifications
+              </div>
+              <p class="description-text">
+                This Bill of Quantities (BOQ) represents the complete material schedule designed specifically for residential continuous energy autonomy. All protection components comply with IEEE & NEMSA regulatory standards.
+              </p>
+            </div>
+
+            <div class="res-section">
+              <div class="res-section-title">
+                <span class="icon-wrap">📦</span> 2. Material Schedule Breakdown
+              </div>
+              <table class="res-table">
+                <thead>
+                  <tr>
+                    <th>SN</th>
+                    <th>Material Description</th>
+                    <th style="text-align:center;">Unit</th>
+                    <th style="text-align:center;">Quantity</th>
+                    <th style="text-align:right;">Unit Price</th>
+                    <th style="text-align:right;">Total Amount</th>
+                  </tr>
+                </thead>
+                <tbody id="resBoqTableBody">
+                  <!-- Injected by script.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="res-section">
+              <div class="res-section-title">
+                <span class="icon-wrap">💰</span> 3. Residential Cost Summary
+              </div>
+              <div class="res-cost-summary">
+                <div class="cost-item">
+                  <span>Equipment Base Cost</span>
+                  <strong id="resCostEquipment">₦0.00</strong>
+                </div>
+                <div class="cost-item">
+                  <span>Logistics & Transport</span>
+                  <strong id="resCostTransport">₦0.00</strong>
+                </div>
+                <div class="cost-item">
+                  <span>Installation Workmanship</span>
+                  <strong id="resCostLabour">₦0.00</strong>
+                </div>
+                <div class="cost-item grand">
+                  <span>Total Project Investment</span>
+                  <strong id="resCostGrand">₦0.00</strong>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
     </div>
+  </div>
 
-</section>
-
-<!-- ========================================================= -->
-<!-- COST SUMMARY -->
-<!-- ========================================================= -->
-
-<section class="card">
-
-    <div class="card-header">
-
-        <h2>Cost Summary</h2>
-
-        <p>
-
-            Automatic project costing.
-
-        </p>
-
-    </div>
-
-    <div class="result-grid">
-
-        <div class="result-item">
-
-            <span>Material Cost</span>
-
-            <strong id="materialCost">₦0</strong>
-
-        </div>
-
-        <div class="result-item">
-
-            <span>Labour Cost</span>
-
-            <strong id="labourCost">₦0</strong>
-
-        </div>
-
-        <div class="result-item">
-
-            <span>Transportation</span>
-
-            <strong id="transportCost">₦0</strong>
-
-        </div>
-
-        <div class="result-item">
-
-            <span>Installation</span>
-
-            <strong id="installationCost">₦0</strong>
-
-        </div>
-
-        <div class="result-item">
-
-            <span>VAT</span>
-
-            <strong id="vatCost">₦0</strong>
-
-        </div>
-
-        <div class="result-item">
-
-            <span>Profit</span>
-
-            <strong id="profitCost">₦0</strong>
-
-        </div>
-
-        <div class="result-item">
-
-            <span>Grand Total</span>
-
-            <strong id="grandTotal">₦0</strong>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ========================================================= -->
-<!-- ENGINEERING NOTES -->
-<!-- ========================================================= -->
-
-<section class="card">
-
-    <div class="card-header">
-
-        <h2>Engineering Notes</h2>
-
-    </div>
-
-    <div id="engineeringNotes">
-
-        <ul>
-
-            <li>System calculations follow the selected design parameters.</li>
-
-            <li>Verify site conditions before installation.</li>
-
-            <li>Confirm cable routes and lengths during site survey.</li>
-
-            <li>Ensure PV strings remain within inverter voltage limits.</li>
-
-            <li>Verify protection devices comply with applicable electrical standards.</li>
-
-        </ul>
-
-    </div>
-
-</section>
-
-</main>
-
-<!-- ========================================================= -->
-<!-- FOOTER -->
-<!-- ========================================================= -->
-
-<footer class="footer">
-
-    <p>
-
-        AE Renewable Ltd • ARDE V1.0 • Professional Solar Engineering Design Software
-
-    </p>
-
-</footer>
-
-</div>
-
-<script type="module" src="script.js"></script>
-
+  <script type="module" src="script.js"></script>
 </body>
-
 </html>

@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="AE Renewable Installer Network Portal"
+    >
+
+    <title>AE Renewable | Installer Portal</title>
+
+    <link
+        rel="stylesheet"
+        href="./installer.css"
+    >
+</head>
+
+<body>
+
+    <!-- =====================================================
+         AE RENEWABLE INSTALLER PORTAL
+    ====================================================== -->
+
+    <div class="app-shell" id="appShell">
+
+        <!-- =================================================
+             SIDEBAR
+        ================================================== -->
+
+        <aside class="sidebar" id="sidebar">
+
+            <div class="brand">
+
+                <div class="brand-logo">
+                    AE
+                </div>
+
+                <div class="brand-name">
+                    <strong>AE RENEWABLE</strong>
+                    <span>INSTALLER NETWORK</span>
+                </div>
+
+            </div>
+
+
+            <nav class="sidebar-navigation">
+
+                <button
+                    type="button"
+                    class="nav-link active"
+                    data-section="dashboard"
+                >
+                    <span class="nav-icon">⌂</span>
+                    <span>Dashboard</span>
+                </button>
+
+                <button
+                    type="button"
+                    class="nav-link"
+                    data-section="profile"
+                >
+                    <span class="nav-icon">◉</span>
+                    <span>My Profile</span>
+                </button>
+
+                <button
+                    type="button"
+                    class="nav-link"
+                    data-section="company"
+                >
+                    <span class="nav-icon">▣</span>
+                    <span>Company</span>
+                </button>
+
+                <button
+                    type="button"
+                    class="nav-link"
+                    data-section="verification"
+                >
+                    <span class="nav-icon">✓</span>
+                    <span>Verification</span>
+                </button>
+
+                <button
+                    type="button"
+                    class="nav-link"
+                    data-section="banking"
+                >
+                    <span class="nav-icon">₦</span>
+                    <span>Banking</span>
+                </button>
+
+            </nav>
+
+
+            <div class="sidebar-bottom">
+
+                <button
+                    type="button"
+                    class="logout-button"
+                    id="logoutButton"
+                >
+                    <span>↪</span>
+                    <span>Logout</span>
+                </button>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             MAIN AREA
+        ================================================== -->
+
+        <main class="main-content">
+
+            <!-- TOP BAR -->
+
+            <header class="topbar">
+
+                <button
+                    type="button"
+                    class="menu-button"
+                    id="menuButton"
+                    aria-label="Toggle navigation"
+                >
+                    ☰
+                </button>
+
+
+                <div class="page-heading">
+
+                    <span class="page-eyebrow">
+                        AE RENEWABLE NETWORK
+                    </span>
+
+                    <h1 id="pageTitle">
+                        Installer Dashboard
+                    </h1>
+
+                </div>
+
+
+                <div class="user-area">
+
+                    <div
+                        class="user-avatar"
+                        id="userAvatar"
+                    >
+                        AE
+                    </div>
+
+                    <div class="user-details">
+
+                        <strong id="headerInstallerName">
+                            Installer
+                        </strong>
+
+                        <span id="headerInstallerCode">
+                            —
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- =================================================
+                 SYSTEM MESSAGE
+            ================================================== -->
+
+            <div
+                class="message-container"
+                id="messageContainer"
+                aria-live="polite"
+            ></div>
+
+
+            <!-- =================================================
+                 LOADING
+            ================================================== -->
+
+            <div
+                class="loading-state"
+                id="loadingState"
+            >
+
+                <div class="loader"></div>
+
+                <p>
+                    Loading installer profile...
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 PORTAL CONTENT
+            ================================================== -->
+
+            <div
+                class="portal-content hidden"
+                id="portalContent"
+            >
+
+
+                <!-- =============================================
+                     DASHBOARD
+                ============================================== -->
+
+                <section
+                    class="portal-section active"
+                    id="section-dashboard"
+                >
+
+                    <div class="welcome-card">
+
+                        <div class="welcome-content">
+
+                            <span class="section-label">
+                                INSTALLER PORTAL
+                            </span>
+
+                            <h2>
+                                Welcome back,
+                                <span id="welcomeName">
+                                    Installer
+                                </span>
+                            </h2>
+
+                            <p>
+                                Manage your installer profile,
+                                company information, verification
+                                and payment details.
+                            </p>
+
+                        </div>
+
+
+                        <div
+                            class="status-badge"
+                            id="welcomeStatus"
+                        >
+                            Pending
+                        </div>
+
+                    </div>
+
+
+                    <!-- DASHBOARD STATS -->
+
+                    <div class="stats-grid">
+
+                        <article class="stat-card">
+
+                            <span>
+                                Installer Code
+                            </span>
+
+                            <strong id="statInstallerCode">
+                                —
+                            </strong>
+
+                        </article>
+
+
+                        <article class="stat-card">
+
+                            <span>
+                                Verification
+                            </span>
+
+                            <strong id="statVerification">
+                                Pending
+                            </strong>
+
+                        </article>
+
+
+                        <article class="stat-card">
+
+                            <span>
+                                Network Status
+                            </span>
+
+                            <strong id="statStatus">
+                                Pending
+                            </strong>
+
+                        </article>
+
+
+                        <article class="stat-card">
+
+                            <span>
+                                Registration Date
+                            </span>
+
+                            <strong id="statRegistrationDate">
+                                —
+                            </strong>
+
+                        </article>
+
+                    </div>
+
+
+                    <!-- DASHBOARD PANELS -->
+
+                    <div class="dashboard-grid">
+
+
+                        <!-- PROFILE SUMMARY -->
+
+                        <article class="panel">
+
+                            <div class="panel-header">
+
+                                <div>
+
+                                    <span class="section-label">
+                                        PROFILE
+                                    </span>
+
+                                    <h3>
+                                        Installer Information
+                                    </h3>
+
+                                </div>
+
+                                <button
+                                    type="button"
+                                    class="secondary-button"
+                                    data-section-target="profile"
+                                >
+                                    View Profile
+                                </button>
+
+                            </div>
+
+
+                            <div class="info-grid">
+
+                                <div class="info-item">
+
+                                    <span>
+                                        Contact Name
+                                    </span>
+
+                                    <strong id="infoContactName">
+                                        —
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="info-item">
+
+                                    <span>
+                                        Email
+                                    </span>
+
+                                    <strong id="infoEmail">
+                                        —
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="info-item">
+
+                                    <span>
+                                        Phone
+                                    </span>
+
+                                    <strong id="infoPhone">
+                                        —
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="info-item">
+
+                                    <span>
+                                        Location
+                                    </span>
+
+                                    <strong id="infoLocation">
+                                        —
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- COMPANY SUMMARY -->
+
+                        <article class="panel">
+
+                            <div class="panel-header">
+
+                                <div>
+
+                                    <span class="section-label">
+                                        COMPANY
+                                    </span>
+
+                                    <h3>
+                                        Company Details
+                                    </h3>
+
+                                </div>
+
+                                <button
+                                    type="button"
+                                    class="secondary-button"
+                                    data-section-target="company"
+                                >
+                                    Manage
+                                </button>
+
+                            </div>
+
+
+                            <div class="info-list">
+
+                                <div class="info-row">
+
+                                    <span>
+                                        Company
+                                    </span>
+
+                                    <strong id="infoCompanyName">
+                                        —
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="info-row">
+
+                                    <span>
+                                        RC Number
+                                    </span>
+
+                                    <strong id="infoRcNumber">
+                                        —
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="info-row">
+
+                                    <span>
+                                        State
+                                    </span>
+
+                                    <strong id="infoState">
+                                        —
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="info-row">
+
+                                    <span>
+                                        Local Government
+                                    </span>
+
+                                    <strong id="infoLocalGovernment">
+                                        —
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+
+                    <!-- SPECIALIZATIONS -->
+
+                    <article class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <span class="section-label">
+                                    PROFESSIONAL CAPABILITIES
+                                </span>
+
+                                <h3>
+                                    Specializations
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="tag-list"
+                            id="specializationsList"
+                        >
+
+                            <span class="empty-state">
+                                No specializations added.
+                            </span>
+
+                        </div>
+
+                    </article>
+
+                </section>
+
+
+                <!-- =============================================
+                     MY PROFILE
+                ============================================== -->
+
+                <section
+                    class="portal-section"
+                    id="section-profile"
+                >
+
+                    <div class="section-header">
+
+                        <span class="section-label">
+                            MY PROFILE
+                        </span>
+
+                        <h2>
+                            Personal Information
+                        </h2>
+
+                        <p>
+                            Manage your installer contact
+                            information.
+                        </p>
+
+                    </div>
+
+
+                    <form
+                        class="form-card"
+                        id="profileForm"
+                    >
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label for="contactName">
+                                    Contact Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="contactName"
+                                    name="contactName"
+                                    autocomplete="name"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="installerEmail">
+                                    Email
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="installerEmail"
+                                    name="email"
+                                    autocomplete="email"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="installerPhone">
+                                    Phone
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    id="installerPhone"
+                                    name="phone"
+                                    autocomplete="tel"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="installerCode">
+                                    Installer Code
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="installerCode"
+                                    name="installerCode"
+                                    readonly
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-actions">
+
+                            <button
+                                type="submit"
+                                class="primary-button"
+                                id="profileSaveButton"
+                            >
+                                Save Changes
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <!-- =============================================
+                     COMPANY
+                ============================================== -->
+
+                <section
+                    class="portal-section"
+                    id="section-company"
+                >
+
+                    <div class="section-header">
+
+                        <span class="section-label">
+                            COMPANY
+                        </span>
+
+                        <h2>
+                            Company Information
+                        </h2>
+
+                        <p>
+                            Manage your registered company details.
+                        </p>
+
+                    </div>
+
+
+                    <form
+                        class="form-card"
+                        id="companyForm"
+                    >
+
+                        <div class="form-grid">
+
+                            <div class="form-group form-group-wide">
+
+                                <label for="companyName">
+                                    Company Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="companyName"
+                                    name="companyName"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="rcNumber">
+                                    RC Number
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="rcNumber"
+                                    name="rcNumber"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="companyEmail">
+                                    Company Email
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="companyEmail"
+                                    name="email"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="companyPhone">
+                                    Company Phone
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    id="companyPhone"
+                                    name="phone"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="country">
+                                    Country
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="country"
+                                    name="country"
+                                    value="Nigeria"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="state">
+                                    State
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="state"
+                                    name="state"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="localGovernment">
+                                    Local Government
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="localGovernment"
+                                    name="localGovernment"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="city">
+                                    City
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="city"
+                                    name="city"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group form-group-wide">
+
+                                <label for="address">
+                                    Address
+                                </label>
+
+                                <textarea
+                                    id="address"
+                                    name="address"
+                                    rows="4"
+                                ></textarea>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-actions">
+
+                            <button
+                                type="submit"
+                                class="primary-button"
+                                id="companySaveButton"
+                            >
+                                Save Company Details
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <!-- =============================================
+                     VERIFICATION
+                ============================================== -->
+
+                <section
+                    class="portal-section"
+                    id="section-verification"
+                >
+
+                    <div class="section-header">
+
+                        <span class="section-label">
+                            VERIFICATION
+                        </span>
+
+                        <h2>
+                            Installer Verification
+                        </h2>
+
+                        <p>
+                            Review your AE Renewable Network
+                            verification status.
+                        </p>
+
+                    </div>
+
+
+                    <div class="verification-grid">
+
+                        <article class="verification-card">
+
+                            <span>
+                                Verification Status
+                            </span>
+
+                            <strong id="verificationStatus">
+                                Pending
+                            </strong>
+
+                        </article>
+
+
+                        <article class="verification-card">
+
+                            <span>
+                                Registration Date
+                            </span>
+
+                            <strong id="verificationRegistrationDate">
+                                —
+                            </strong>
+
+                        </article>
+
+
+                        <article class="verification-card">
+
+                            <span>
+                                Approval Date
+                            </span>
+
+                            <strong id="verificationApprovalDate">
+                                —
+                            </strong>
+
+                        </article>
+
+                    </div>
+
+
+                    <article class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <span class="section-label">
+                                    DOCUMENTS
+                                </span>
+
+                                <h3>
+                                    Verification Documents
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="document-list">
+
+                            <div class="document-row">
+
+                                <div>
+
+                                    <strong>
+                                        CAC Certificate
+                                    </strong>
+
+                                    <span>
+                                        Company registration document
+                                    </span>
+
+                                </div>
+
+                                <a
+                                    href="#"
+                                    id="cacCertificateLink"
+                                    class="document-link disabled"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    View
+                                </a>
+
+                            </div>
+
+
+                            <div class="document-row">
+
+                                <div>
+
+                                    <strong>
+                                        Professional Certificate
+                                    </strong>
+
+                                    <span>
+                                        Professional qualification
+                                    </span>
+
+                                </div>
+
+                                <a
+                                    href="#"
+                                    id="professionalCertificateLink"
+                                    class="document-link disabled"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    View
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </section>
+
+
+                <!-- =============================================
+                     BANKING
+                ============================================== -->
+
+                <section
+                    class="portal-section"
+                    id="section-banking"
+                >
+
+                    <div class="section-header">
+
+                        <span class="section-label">
+                            BANKING
+                        </span>
+
+                        <h2>
+                            Payment Information
+                        </h2>
+
+                        <p>
+                            Manage the bank account used for
+                            installer payments.
+                        </p>
+
+                    </div>
+
+
+                    <form
+                        class="form-card"
+                        id="bankingForm"
+                    >
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label for="bankName">
+                                    Bank Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="bankName"
+                                    name="bankName"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="accountName">
+                                    Account Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="accountName"
+                                    name="accountName"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="accountNumber">
+                                    Account Number
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="accountNumber"
+                                    name="accountNumber"
+                                    inputmode="numeric"
+                                    autocomplete="off"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-actions">
+
+                            <button
+                                type="submit"
+                                class="primary-button"
+                                id="bankingSaveButton"
+                            >
+                                Save Banking Details
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         AUTHENTICATION OVERLAY
+    ====================================================== -->
+
+    <div
+        class="auth-overlay hidden"
+        id="authOverlay"
+    >
+
+        <div class="auth-message">
+
+            <div class="auth-icon">
+                !
+            </div>
+
+            <h2>
+                Installer Login Required
+            </h2>
+
+            <p id="authMessage">
+                Your installer session is unavailable.
+            </p>
+
+            <button
+                type="button"
+                class="primary-button"
+                id="loginRedirectButton"
+            >
+                Go to Login
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script src="./installer.js"></script>
+
+</body>
+</html>

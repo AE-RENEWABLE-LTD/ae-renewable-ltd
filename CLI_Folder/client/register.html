@@ -1,0 +1,684 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Create your AE Renewable client account."
+    >
+
+    <meta
+        name="theme-color"
+        content="#010a1d"
+    >
+
+    <title>
+        Client Registration | AE Renewable Ltd
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="./client.css"
+    >
+
+</head>
+
+
+<body class="client-auth-page">
+
+
+    <!-- =====================================================
+         AUTHENTICATION BACKGROUND
+    ====================================================== -->
+
+    <div class="auth-background">
+
+        <div class="auth-grid"></div>
+
+        <div class="auth-glow auth-glow-one"></div>
+
+        <div class="auth-glow auth-glow-two"></div>
+
+    </div>
+
+
+    <!-- =====================================================
+         AUTHENTICATION HEADER
+    ====================================================== -->
+
+    <header class="auth-header">
+
+        <a
+            href="/"
+            class="auth-brand"
+            aria-label="AE Renewable Ltd"
+        >
+
+            <div class="auth-brand-mark">
+                AE
+            </div>
+
+            <div class="auth-brand-text">
+
+                <strong>
+                    AE RENEWABLE
+                </strong>
+
+                <span>
+                    POWERING YOUR FUTURE WITH SUN
+                </span>
+
+            </div>
+
+        </a>
+
+        <div class="auth-header-label">
+            CLIENT NETWORK
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         REGISTRATION CONTAINER
+    ====================================================== -->
+
+    <main class="auth-main">
+
+        <section class="auth-card register-card">
+
+
+            <!-- =================================================
+                 CARD INTRODUCTION
+            ================================================== -->
+
+            <div class="auth-card-header">
+
+                <div class="auth-status-indicator">
+                    <span></span>
+                    SECURE CLIENT ACCESS
+                </div>
+
+                <h1>
+                    Create Your
+                    <span>Client Account</span>
+                </h1>
+
+                <p>
+                    Join the AE Renewable Network to manage your
+                    projects, quotations, payments, documents and
+                    renewable energy services from one secure portal.
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 REGISTRATION ALERT
+            ================================================== -->
+
+            <div
+                id="registerAlert"
+                class="auth-alert"
+                hidden
+            ></div>
+
+
+            <!-- =================================================
+                 REGISTRATION FORM
+            ================================================== -->
+
+            <form
+                id="clientRegisterForm"
+                class="auth-form"
+                novalidate
+            >
+
+
+                <!-- =============================================
+                     PERSONAL INFORMATION
+                ============================================== -->
+
+                <div class="form-section-heading">
+
+                    <span class="section-number">
+                        01
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Personal Information
+                        </strong>
+
+                        <small>
+                            Tell us who you are
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid two-columns">
+
+
+                    <div class="form-group">
+
+                        <label for="firstName">
+                            First Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="firstName"
+                            name="firstName"
+                            autocomplete="given-name"
+                            placeholder="Enter first name"
+                            maxlength="100"
+                            required
+                        >
+
+                        <small
+                            class="field-error"
+                            id="firstNameError"
+                        ></small>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="lastName">
+                            Last Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="lastName"
+                            name="lastName"
+                            autocomplete="family-name"
+                            placeholder="Enter last name"
+                            maxlength="100"
+                            required
+                        >
+
+                        <small
+                            class="field-error"
+                            id="lastNameError"
+                        ></small>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="form-grid two-columns">
+
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            autocomplete="email"
+                            placeholder="you@example.com"
+                            maxlength="255"
+                            required
+                        >
+
+                        <small
+                            class="field-error"
+                            id="emailError"
+                        ></small>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="phone">
+                            Phone Number
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            autocomplete="tel"
+                            placeholder="+234 800 000 0000"
+                            maxlength="30"
+                            required
+                        >
+
+                        <small
+                            class="field-error"
+                            id="phoneError"
+                        ></small>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =============================================
+                     ACCOUNT INFORMATION
+                ============================================== -->
+
+                <div class="form-section-heading">
+
+                    <span class="section-number">
+                        02
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Account Security
+                        </strong>
+
+                        <small>
+                            Protect your client account
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid two-columns">
+
+
+                    <div class="form-group">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <div class="password-field">
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                autocomplete="new-password"
+                                placeholder="Create a secure password"
+                                minlength="8"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                data-target="password"
+                                aria-label="Show password"
+                            >
+                                SHOW
+                            </button>
+
+                        </div>
+
+                        <div
+                            class="password-strength"
+                            id="passwordStrength"
+                        >
+
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+
+                        </div>
+
+                        <small
+                            class="password-hint"
+                            id="passwordHint"
+                        >
+                            Use at least 8 characters.
+                        </small>
+
+                        <small
+                            class="field-error"
+                            id="passwordError"
+                        ></small>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="confirmPassword">
+                            Confirm Password
+                        </label>
+
+                        <div class="password-field">
+
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                autocomplete="new-password"
+                                placeholder="Confirm your password"
+                                minlength="8"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                data-target="confirmPassword"
+                                aria-label="Show password"
+                            >
+                                SHOW
+                            </button>
+
+                        </div>
+
+                        <small
+                            class="field-error"
+                            id="confirmPasswordError"
+                        ></small>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =============================================
+                     CLIENT TYPE
+                ============================================== -->
+
+                <div class="form-section-heading">
+
+                    <span class="section-number">
+                        03
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Client Profile
+                        </strong>
+
+                        <small>
+                            Help us identify your account
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="clientType">
+                        Account Type
+                    </label>
+
+                    <select
+                        id="clientType"
+                        name="clientType"
+                        required
+                    >
+
+                        <option
+                            value=""
+                            selected
+                            disabled
+                        >
+                            Select account type
+                        </option>
+
+                        <option value="individual">
+                            Individual
+                        </option>
+
+                        <option value="business">
+                            Business
+                        </option>
+
+                        <option value="corporate">
+                            Corporate
+                        </option>
+
+                        <option value="government">
+                            Government
+                        </option>
+
+                        <option value="organization">
+                            Organization
+                        </option>
+
+                    </select>
+
+                    <small
+                        class="field-error"
+                        id="clientTypeError"
+                    ></small>
+
+                </div>
+
+
+                <!-- =================================================
+                     BUSINESS INFORMATION
+                ================================================== -->
+
+                <div
+                    id="businessFields"
+                    class="conditional-fields"
+                    hidden
+                >
+
+                    <div class="form-grid two-columns">
+
+
+                        <div class="form-group">
+
+                            <label for="companyName">
+                                Company / Organization Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="companyName"
+                                name="companyName"
+                                placeholder="Company name"
+                                maxlength="255"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="registrationNumber">
+                                Registration Number
+                            </label>
+
+                            <input
+                                type="text"
+                                id="registrationNumber"
+                                name="registrationNumber"
+                                placeholder="RC / registration number"
+                                maxlength="100"
+                            >
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     TERMS
+                ================================================== -->
+
+                <div class="terms-container">
+
+                    <label class="checkbox-label">
+
+                        <input
+                            type="checkbox"
+                            id="terms"
+                            name="terms"
+                            required
+                        >
+
+                        <span class="checkbox-custom"></span>
+
+                        <span class="terms-text">
+
+                            I agree to the AE Renewable
+                            <a href="#" target="_blank">
+                                Terms of Service
+                            </a>
+                            and acknowledge the
+                            <a href="#" target="_blank">
+                                Privacy Policy
+                            </a>.
+
+                        </span>
+
+                    </label>
+
+                    <small
+                        class="field-error"
+                        id="termsError"
+                    ></small>
+
+                </div>
+
+
+                <!-- =================================================
+                     SUBMIT
+                ================================================== -->
+
+                <button
+                    type="submit"
+                    id="registerButton"
+                    class="auth-submit-button"
+                >
+
+                    <span
+                        class="button-text"
+                    >
+                        CREATE CLIENT ACCOUNT
+                    </span>
+
+                    <span
+                        class="button-loader"
+                        hidden
+                    >
+                        <span class="loader-spinner"></span>
+                        CREATING ACCOUNT...
+                    </span>
+
+                    <span class="button-arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+            </form>
+
+
+            <!-- =================================================
+                 LOGIN LINK
+            ================================================== -->
+
+            <div class="auth-switch">
+
+                <span>
+                    Already have an account?
+                </span>
+
+                <a href="/client/login">
+                    Sign in to Client Portal
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 SECURITY FOOTER
+            ================================================== -->
+
+            <div class="auth-security">
+
+                <div class="security-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Secure Registration
+                    </strong>
+
+                    <span>
+                        Your account information is protected
+                        by AE Renewable Network security.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="auth-footer">
+
+        <span>
+            © <span id="currentYear"></span>
+            AE Renewable Ltd
+        </span>
+
+        <span>
+            Abuja, Nigeria
+        </span>
+
+        <span>
+            POWERING YOUR FUTURE WITH SUN
+        </span>
+
+    </footer>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="./register.js"></script>
+
+</body>
+
+</html>
+

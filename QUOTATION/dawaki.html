@@ -1,0 +1,1690 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AE Renewable - Solar Quotation</title>
+
+    <style>
+        /* =========================================================
+           AE RENEWABLE LTD
+           PREMIUM A4 SOLAR QUOTATION
+           ========================================================= */
+
+        :root {
+            --navy: #010a1d;
+            --blue: #044381;
+            --gold: #f4a600;
+            --green: #008000;
+
+            --light: #f5f7fa;
+            --border: #dfe4ea;
+            --text: #1d2733;
+            --muted: #687585;
+
+            --white: #ffffff;
+
+            --shadow:
+                0 18px 50px rgba(1, 10, 29, 0.12);
+        }
+
+
+        /* =========================================================
+           RESET
+           ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            background: #e9edf2;
+
+            color: var(--text);
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            line-height: 1.45;
+
+            padding: 25px 0 40px;
+        }
+
+
+        /* =========================================================
+           PRINT CONTROL
+           ========================================================= */
+
+        .print-controls {
+            width: 210mm;
+
+            margin: 0 auto 18px;
+
+            display: flex;
+
+            justify-content: flex-end;
+        }
+
+
+        .print-button {
+            border: 0;
+
+            background: var(--navy);
+
+            color: var(--white);
+
+            padding: 12px 22px;
+
+            border-radius: 6px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            font-family: Arial, Helvetica, sans-serif;
+
+            cursor: pointer;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 9px;
+
+            box-shadow:
+                0 7px 20px rgba(1, 10, 29, 0.20);
+
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+
+        .print-button:hover {
+            background: var(--blue);
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 25px rgba(1, 10, 29, 0.24);
+        }
+
+
+        .print-button:active {
+            transform: translateY(0);
+
+            box-shadow:
+                0 4px 10px rgba(1, 10, 29, 0.15);
+        }
+
+
+        /* =========================================================
+           A4 PAGE
+           ========================================================= */
+
+        .quotation-page {
+            width: 210mm;
+
+            min-height: 297mm;
+
+            margin: 0 auto;
+
+            padding:
+                16mm
+                15mm
+                13mm;
+
+            background: var(--white);
+
+            box-shadow: var(--shadow);
+
+            position: relative;
+        }
+
+
+        /* =========================================================
+           HEADER
+           ========================================================= */
+
+        .quotation-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            gap: 20px;
+
+            padding-bottom: 17px;
+
+            border-bottom: 3px solid var(--navy);
+        }
+
+
+        .brand {
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+        }
+
+
+        .company-logo {
+            width: 65px;
+
+            height: 65px;
+
+            object-fit: contain;
+        }
+
+
+        .brand-text h1 {
+            color: var(--navy);
+
+            font-size: 21px;
+
+            line-height: 1.1;
+
+            font-weight: 800;
+
+            letter-spacing: 0.7px;
+        }
+
+
+        .brand-text p {
+            margin-top: 5px;
+
+            color: var(--green);
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        /* =========================================================
+           QUOTATION META
+           ========================================================= */
+
+        .quotation-meta {
+            width: 195px;
+        }
+
+
+        .quotation-title {
+            background: var(--navy);
+
+            color: var(--white);
+
+            padding: 9px 14px;
+
+            text-align: center;
+
+            margin-bottom: 8px;
+
+            border-left: 4px solid var(--gold);
+        }
+
+
+        .quotation-title span {
+            font-size: 16px;
+
+            font-weight: 800;
+
+            letter-spacing: 1.6px;
+        }
+
+
+        .meta-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 12px;
+
+            padding: 3px 0;
+
+            font-size: 9px;
+        }
+
+
+        .meta-row strong {
+            color: var(--blue);
+        }
+
+
+        .meta-row span {
+            color: var(--text);
+
+            text-align: right;
+        }
+
+
+        /* =========================================================
+           CUSTOMER / SYSTEM SUMMARY
+           ========================================================= */
+
+        .customer-section {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 13px;
+
+            margin:
+                18px 0
+                19px;
+        }
+
+
+        .customer-box,
+        .system-summary {
+            border: 1px solid var(--border);
+
+            padding: 12px 14px;
+
+            background: #fbfcfd;
+        }
+
+
+        .label {
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: var(--muted);
+
+            font-size: 7.5px;
+
+            font-weight: 800;
+
+            letter-spacing: 1.2px;
+        }
+
+
+        .customer-box h2 {
+            color: var(--navy);
+
+            font-size: 15px;
+        }
+
+
+        .customer-box p {
+            margin-top: 2px;
+
+            color: var(--muted);
+
+            font-size: 9px;
+        }
+
+
+        .summary-items {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 8px;
+        }
+
+
+        .summary-item {
+            padding: 7px 8px;
+
+            background: var(--white);
+
+            border-left: 3px solid var(--gold);
+        }
+
+
+        .summary-item strong {
+            display: block;
+
+            color: var(--blue);
+
+            font-size: 12px;
+        }
+
+
+        .summary-item span {
+            display: block;
+
+            margin-top: 1px;
+
+            color: var(--muted);
+
+            font-size: 7.5px;
+        }
+
+
+        /* =========================================================
+           QUOTATION TABLE
+           ========================================================= */
+
+        .quotation-table-section {
+            margin-top: 3px;
+        }
+
+
+        .quotation-table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            table-layout: fixed;
+
+            font-size: 8.5px;
+        }
+
+
+        .quotation-table thead th {
+            padding: 9px 7px;
+
+            background: var(--navy);
+
+            color: var(--white);
+
+            text-align: left;
+
+            font-size: 7.5px;
+
+            font-weight: 800;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.45px;
+
+            border-right:
+                1px solid
+                rgba(255,255,255,0.15);
+        }
+
+
+        .quotation-table thead th:last-child {
+            border-right: 0;
+        }
+
+
+        .quotation-table tbody td {
+            padding: 8px 7px;
+
+            border:
+                1px solid
+                var(--border);
+
+            vertical-align: middle;
+
+            color: var(--text);
+        }
+
+
+        .quotation-table tbody tr:nth-child(even) {
+            background: #fafbfc;
+        }
+
+
+        /* =========================================================
+           TABLE COLUMN WIDTHS
+           ========================================================= */
+
+        .quotation-table .sn {
+            width: 6%;
+        }
+
+
+        .quotation-table th:nth-child(2) {
+            width: 27%;
+        }
+
+
+        .quotation-table th:nth-child(3) {
+            width: 27%;
+        }
+
+
+        .quotation-table .qty {
+            width: 8%;
+        }
+
+
+        .quotation-table .price {
+            width: 16%;
+        }
+
+
+        .quotation-table .amount {
+            width: 16%;
+        }
+
+
+        /* =========================================================
+           TABLE TEXT
+           ========================================================= */
+
+        .quotation-table td strong {
+            display: block;
+
+            color: var(--navy);
+
+            font-size: 8.5px;
+
+            font-weight: 700;
+        }
+
+
+        .quotation-table td small {
+            display: block;
+
+            margin-top: 2px;
+
+            color: var(--muted);
+
+            font-size: 7px;
+        }
+
+
+        .center {
+            text-align: center !important;
+        }
+
+
+        .money {
+            text-align: right;
+
+            white-space: nowrap;
+
+            color: var(--navy);
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-size: 8px;
+
+            font-weight: 600;
+        }
+
+
+        .brand-badge {
+            display: inline-block;
+
+            padding: 2px 5px;
+
+            margin-right: 3px;
+
+            border-radius: 2px;
+
+            background:
+                rgba(0, 128, 0, 0.09);
+
+            color: var(--green);
+
+            font-size: 6px;
+
+            font-weight: 800;
+
+            letter-spacing: 0.45px;
+        }
+
+
+        /* =========================================================
+           BOTTOM AREA
+           ========================================================= */
+
+        .bottom-section {
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                250px;
+
+            gap: 22px;
+
+            margin-top: 19px;
+
+            align-items: start;
+        }
+
+
+        /* =========================================================
+           NOTES
+           ========================================================= */
+
+        .notes {
+            padding:
+                3px 0
+                3px 13px;
+
+            border-left:
+                4px solid
+                var(--green);
+        }
+
+
+        .notes h3 {
+            margin-bottom: 7px;
+
+            color: var(--navy);
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.7px;
+        }
+
+
+        .notes ul {
+            padding-left: 15px;
+        }
+
+
+        .notes li {
+            margin-bottom: 4px;
+
+            color: var(--muted);
+
+            font-size: 7.5px;
+        }
+
+
+        /* =========================================================
+           TOTALS
+           ========================================================= */
+
+        .totals-box {
+            border:
+                1px solid
+                var(--border);
+
+            background: #fafbfc;
+        }
+
+
+        .total-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 8px 11px;
+
+            border-bottom:
+                1px solid
+                var(--border);
+
+            font-size: 8.5px;
+        }
+
+
+        .total-row span {
+            color: var(--muted);
+        }
+
+
+        .total-row strong {
+            color: var(--navy);
+
+            font-size: 8.5px;
+        }
+
+
+        .grand-total {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 12px 11px;
+
+            background: var(--navy);
+
+            color: var(--white);
+        }
+
+
+        .grand-total span {
+            font-size: 9px;
+
+            font-weight: 800;
+
+            letter-spacing: 0.7px;
+        }
+
+
+        .grand-total strong {
+            color: var(--gold);
+
+            font-size: 14px;
+        }
+
+
+        /* =========================================================
+           FOOTER
+           ========================================================= */
+
+        .quotation-footer {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-end;
+
+            margin-top: 25px;
+
+            padding-top: 12px;
+
+            border-top:
+                1px solid
+                var(--border);
+        }
+
+
+        .footer-company strong {
+            display: block;
+
+            color: var(--navy);
+
+            font-size: 8.5px;
+
+            letter-spacing: 0.6px;
+        }
+
+
+        .footer-company span {
+            display: block;
+
+            margin-top: 2px;
+
+            color: var(--green);
+
+            font-size: 7px;
+        }
+
+
+        .footer-contact {
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: flex-end;
+
+            gap: 2px;
+
+            color: var(--muted);
+
+            font-size: 6.8px;
+        }
+
+
+        /* =========================================================
+           PRINT
+           ========================================================= */
+
+        @media print {
+
+            @page {
+                size: A4;
+
+                margin: 0;
+            }
+
+
+            html,
+            body {
+                width: 210mm;
+
+                min-height: 297mm;
+
+                background: var(--white);
+
+                padding: 0;
+
+                margin: 0;
+            }
+
+
+            .print-controls {
+                display: none !important;
+            }
+
+
+            .quotation-page {
+                width: 210mm;
+
+                min-height: 297mm;
+
+                margin: 0;
+
+                padding:
+                    16mm
+                    15mm
+                    13mm;
+
+                box-shadow: none;
+            }
+
+
+            .quotation-table tbody tr:hover {
+                background: inherit;
+            }
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+        @media screen and (max-width: 900px) {
+
+            body {
+                padding:
+                    15px 0 30px;
+            }
+
+
+            .print-controls {
+                width: 95%;
+
+                margin:
+                    0 auto 15px;
+            }
+
+
+            .print-button {
+                width: 100%;
+            }
+
+
+            .quotation-page {
+                width: 95%;
+
+                min-height: auto;
+
+                padding: 25px 20px;
+            }
+
+
+            .quotation-header {
+                flex-direction: column;
+            }
+
+
+            .quotation-meta {
+                width: 100%;
+            }
+
+
+            .customer-section {
+                grid-template-columns: 1fr;
+            }
+
+
+            .bottom-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        @media screen and (max-width: 650px) {
+
+            .quotation-page {
+                width: 100%;
+
+                padding:
+                    18px 12px;
+            }
+
+
+            .brand-text h1 {
+                font-size: 17px;
+            }
+
+
+            .summary-items {
+                grid-template-columns:
+                    repeat(3, 1fr);
+            }
+
+
+            .quotation-table {
+                font-size: 7px;
+            }
+
+
+            .quotation-table
+            thead th,
+            .quotation-table
+            tbody td {
+                padding:
+                    6px 4px;
+            }
+
+
+            .quotation-table
+            th:nth-child(3),
+            .quotation-table
+            td:nth-child(3) {
+                display: none;
+            }
+
+
+            .quotation-table
+            th:nth-child(2) {
+                width: 40%;
+            }
+
+
+            .quotation-table
+            .qty {
+                width: 10%;
+            }
+
+
+            .quotation-table
+            .price {
+                width: 20%;
+            }
+
+
+            .quotation-table
+            .amount {
+                width: 24%;
+            }
+
+
+            .footer-contact {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <!-- =========================================================
+         PRINT BUTTON
+         ========================================================= -->
+
+    <div class="print-controls">
+
+        <button
+            type="button"
+            class="print-button"
+            onclick="window.print()"
+        >
+            <span>🖨</span>
+            <span>Print Quotation</span>
+        </button>
+
+    </div>
+
+
+    <!-- =========================================================
+         A4 QUOTATION
+         ========================================================= -->
+
+    <main class="quotation-page">
+
+
+        <!-- =====================================================
+             HEADER
+             ===================================================== -->
+
+        <header class="quotation-header">
+
+            <div class="brand">
+
+                <img
+                    src="logo_NoBackgrouund.jpeg"
+                    alt="AE Renewable Logo"
+                    class="company-logo"
+                >
+
+                <div class="brand-text">
+
+                    <h1>
+                        AE RENEWABLE LTD
+                    </h1>
+
+                    <p>
+                        POWERING YOUR FUTURE WITH SUN
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="quotation-meta">
+
+                <div class="quotation-title">
+                    <span>QUOTATION</span>
+                </div>
+
+
+                <div class="meta-row">
+                    <strong>Quote No:</strong>
+                    <span>AE/2026/____</span>
+                </div>
+
+
+                <div class="meta-row">
+                    <strong>Date:</strong>
+                    <span>24 September 2026</span>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =====================================================
+             CUSTOMER INFORMATION
+             ===================================================== -->
+
+        <section class="customer-section">
+
+
+            <div class="customer-box">
+
+                <span class="label">
+                    PREPARED FOR
+                </span>
+
+                <h2>
+                    Mr Peter
+                </h2>
+
+                <p>
+                    Abuja, Nigeria
+                </p>
+
+            </div>
+
+
+            <div class="system-summary">
+
+                <span class="label">
+                    SYSTEM CONFIGURATION
+                </span>
+
+
+                <div class="summary-items">
+
+
+                    <div class="summary-item">
+
+                        <strong>
+                            6kVA
+                        </strong>
+
+                        <span>
+                            Felicity Inverter
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-item">
+
+                        <strong>
+                            10kWh
+                        </strong>
+
+                        <span>
+                            Felicity Battery
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-item">
+
+                        <strong>
+                            3kWp
+                        </strong>
+
+                        <span>
+                            Solar PV
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             QUOTATION TABLE
+             ===================================================== -->
+
+        <section class="quotation-table-section">
+
+
+            <table class="quotation-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th class="sn">
+                            S/N
+                        </th>
+
+                        <th>
+                            Description
+                        </th>
+
+                        <th>
+                            Brand / Specification
+                        </th>
+
+                        <th class="qty">
+                            Qty
+                        </th>
+
+                        <th class="price">
+                            Unit Price (₦)
+                        </th>
+
+                        <th class="amount">
+                            Amount (₦)
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <!-- ITEM 01 -->
+
+                    <tr>
+
+                        <td class="center">
+                            01
+                        </td>
+
+                        <td>
+
+                            <strong>
+                                Hybrid Solar Inverter
+                            </strong>
+
+                            <small>
+                                Complete inverter unit
+                            </small>
+
+                        </td>
+
+                        <td>
+
+                            <span class="brand-badge">
+                                FELICITY
+                            </span>
+
+                            6kVA Hybrid Inverter
+
+                        </td>
+
+                        <td class="center">
+                            1
+                        </td>
+
+                        <td class="money">
+                            600,000
+                        </td>
+
+                        <td class="money">
+                            600,000
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ITEM 02 -->
+
+                    <tr>
+
+                        <td class="center">
+                            02
+                        </td>
+
+                        <td>
+
+                            <strong>
+                                Lithium Battery
+                            </strong>
+
+                            <small>
+                                Energy storage system
+                            </small>
+
+                        </td>
+
+                        <td>
+
+                            <span class="brand-badge">
+                                FELICITY
+                            </span>
+
+                            10kWh Lithium Battery
+
+                        </td>
+
+                        <td class="center">
+                            1
+                        </td>
+
+                        <td class="money">
+                            1,700,000
+                        </td>
+
+                        <td class="money">
+                            1,700,000
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ITEM 03 -->
+
+                    <tr>
+
+                        <td class="center">
+                            03
+                        </td>
+
+                        <td>
+
+                            <strong>
+                                Solar Panel
+                            </strong>
+
+                            <small>
+                                High-efficiency solar module
+                            </small>
+
+                        </td>
+
+                        <td>
+                            750W Mono Solar Panel
+                        </td>
+
+                        <td class="center">
+                            4
+                        </td>
+
+                        <td class="money">
+                            130,000
+                        </td>
+
+                        <td class="money">
+                            520,000
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ITEM 04 -->
+
+                    <tr>
+
+                        <td class="center">
+                            04
+                        </td>
+
+                        <td>
+
+                            <strong>
+                                Battery Cable
+                            </strong>
+
+                            <small>
+                                Heavy-duty battery connection
+                            </small>
+
+                        </td>
+
+                        <td>
+                            Suitable Heavy-Duty Cable
+                        </td>
+
+                        <td class="center">
+                            3 m
+                        </td>
+
+                        <td class="money">
+                            15,000
+                        </td>
+
+                        <td class="money">
+                            40,000
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ITEM 05 -->
+
+                    <tr>
+
+                        <td class="center">
+                            05
+                        </td>
+
+                        <td>
+
+                            <strong>
+                                MC4 Connectors
+                            </strong>
+
+                            <small>
+                                Solar PV connectors
+                            </small>
+
+                        </td>
+
+                        <td>
+                            Standard MC4 Pair
+                        </td>
+
+                        <td class="center">
+                            6 Set
+                        </td>
+
+                        <td class="money">
+                            1,500
+                        </td>
+
+                        <td class="money">
+                            9,000
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ITEM 06 -->
+
+                    <tr>
+
+                        <td class="center">
+                            06
+                        </td>
+
+                        <td>
+
+                            <strong>
+                                PV Cable
+                            </strong>
+
+                            <small>
+                                Solar DC cable
+                            </small>
+
+                        </td>
+
+                        <td>
+                            Solar PV Cable
+                        </td>
+
+                        <td class="center">
+                            30
+                        </td>
+
+                        <td class="money">
+                            3,700
+                        </td>
+
+                        <td class="money">
+                            111,000
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ITEM 07 -->
+
+                    <tr>
+
+                        <td class="center">
+                            07
+                        </td>
+
+                        <td>
+
+                            <strong>
+                                DC Protection
+                            </strong>
+
+                            <small>
+                                PV protection and isolation
+                            </small>
+
+                        </td>
+
+                        <td>
+                            DC Breaker / Isolator
+                        </td>
+
+                        <td class="center">
+                            2 Set
+                        </td>
+
+                        <td class="money">
+                            15,000
+                        </td>
+
+                        <td class="money">
+                            30,000
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ITEM 08 -->
+
+                    <tr>
+
+                        <td class="center">
+                            08
+                        </td>
+
+                        <td>
+
+                            <strong>
+                                AC Protection
+                            </strong>
+
+                            <small>
+                                Output protection
+                            </small>
+
+                        </td>
+
+                        <td>
+                            AC Breaker / Protection
+                        </td>
+
+                        <td class="center">
+                            2 Set
+                        </td>
+
+                        <td class="money">
+                            20,000
+                        </td>
+
+                        <td class="money">
+                            40,000
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ITEM 09 -->
+
+                    <tr>
+
+                        <td class="center">
+                            09
+                        </td>
+
+                        <td>
+
+                            <strong>
+                                Mounting Materials
+                            </strong>
+
+                            <small>
+                                Solar panel mounting system
+                            </small>
+
+                        </td>
+
+                        <td>
+                            Rails, Clamps & Brackets
+                        </td>
+
+                        <td class="center">
+                            3 Set
+                        </td>
+
+                        <td class="money">
+                            40,000
+                        </td>
+
+                        <td class="money">
+                            40,000
+                        </td>
+
+                    </tr>
+
+
+                    <!-- ITEM 10 -->
+
+                    <tr>
+
+                        <td class="center">
+                            10
+                        </td>
+
+                        <td>
+
+                            <strong>
+                                Installation & Commissioning
+                            </strong>
+
+                            <small>
+                                Professional system installation
+                            </small>
+
+                        </td>
+
+                        <td>
+                            Complete Installation
+                        </td>
+
+                        <td class="center">
+                            1
+                        </td>
+
+                        <td class="money">
+                            150,000
+                        </td>
+
+                        <td class="money">
+                            150,000
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+
+        <!-- =====================================================
+             NOTES + TOTALS
+             ===================================================== -->
+
+        <section class="bottom-section">
+
+
+            <div class="notes">
+
+                <h3>
+                    System Notes
+                </h3>
+
+
+                <ul>
+
+                    <li>
+                        6kVA Felicity hybrid solar inverter.
+                    </li>
+
+                    <li>
+                        10kWh Felicity lithium battery storage.
+                    </li>
+
+                    <li>
+                        4 × 750W solar panels.
+                    </li>
+
+                    <li>
+                        Total solar PV capacity:
+                        <strong>3kWp</strong>.
+                    </li>
+
+                    <li>
+                        Installation and commissioning included as specified.
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <div class="totals-box">
+
+
+                <div class="total-row">
+
+                    <span>
+                        Equipment / Materials
+                    </span>
+
+                    <strong>
+                        ₦ 3,090,000
+                    </strong>
+
+                </div>
+
+
+                <div class="total-row">
+
+                    <span>
+                        Installation
+                    </span>
+
+                    <strong>
+                        ₦ 150,000
+                    </strong>
+
+                </div>
+
+
+                <div class="grand-total">
+
+                    <span>
+                        TOTAL
+                    </span>
+
+                    <strong>
+                        ₦ 3,240,000
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             FOOTER
+             ===================================================== -->
+
+        <footer class="quotation-footer">
+
+
+            <div class="footer-company">
+
+                <strong>
+                    AE RENEWABLE LTD
+                </strong>
+
+                <span>
+                    Powering Your Future with Sun
+                </span>
+
+            </div>
+
+
+            <div class="footer-contact">
+
+                <span>
+                    Abuja, Nigeria
+                </span>
+
+                <span>
+                    0813 361 5132
+                </span>
+
+                <span>
+                    AERenewablesolution@gmail.com
+                </span>
+
+                <span>
+                    AERenewablesolution.com
+                </span>
+
+            </div>
+
+
+        </footer>
+
+
+    </main>
+
+
+    <!-- =========================================================
+         PRINT SCRIPT
+         ========================================================= -->
+
+    <script>
+
+        function printQuotation() {
+            window.print();
+        }
+
+    </script>
+
+</body>
+</html>
+

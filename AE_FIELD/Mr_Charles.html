@@ -1,0 +1,2071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="AE Renewable Ltd Engineering Quotation for Mr. Charles - Kabba, Kogi State"
+    >
+
+    <title>
+        Engineering Quotation | AE Renewable Ltd | Mr. Charles
+    </title>
+
+    <style>
+        /* =========================================================
+           AE RENEWABLE LTD
+           PREMIUM ENGINEERING QUOTATION
+           SINGLE-FILE HTML + CSS
+        ========================================================= */
+
+        :root {
+            --navy: #010a1d;
+            --navy-2: #07152d;
+            --blue: #044381;
+            --blue-light: #0b5c9e;
+            --gold: #f4a600;
+            --gold-light: #ffc84a;
+            --green: #008000;
+            --text: #172033;
+            --muted: #687386;
+            --line: #dfe5ec;
+            --soft: #f5f7fa;
+            --white: #ffffff;
+        }
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family:
+                Inter,
+                "Segoe UI",
+                Roboto,
+                Arial,
+                sans-serif;
+
+            background:
+                #e9edf2;
+
+            color: var(--text);
+
+            line-height: 1.55;
+
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        /* =========================================================
+           PAGE
+        ========================================================= */
+
+        .page {
+            width: min(100%, 920px);
+
+            margin: 32px auto;
+
+            background: var(--white);
+
+            box-shadow:
+                0 18px 60px rgba(1, 10, 29, 0.12);
+
+            overflow: hidden;
+        }
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .header {
+            position: relative;
+
+            padding: 42px 54px 38px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--navy) 0%,
+                    #031a3d 52%,
+                    var(--blue) 100%
+                );
+
+            color: var(--white);
+
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: "";
+
+            position: absolute;
+
+            width: 360px;
+            height: 360px;
+
+            right: -170px;
+            top: -210px;
+
+            border-radius: 50%;
+
+            border:
+                1px solid rgba(244, 166, 0, 0.25);
+        }
+
+        .header::after {
+            content: "";
+
+            position: absolute;
+
+            width: 240px;
+            height: 240px;
+
+            right: -100px;
+            bottom: -175px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(244, 166, 0, 0.08);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            gap: 30px;
+        }
+
+        .brand {
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        .brand-mark {
+            width: 58px;
+            height: 58px;
+
+            border:
+                2px solid rgba(244, 166, 0, 0.9);
+
+            border-radius: 14px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+            font-weight: 900;
+
+            color: var(--gold);
+
+            background:
+                rgba(255, 255, 255, 0.04);
+
+            box-shadow:
+                inset 0 0 20px rgba(244, 166, 0, 0.04);
+        }
+
+        .brand-name {
+            font-size: 25px;
+
+            font-weight: 900;
+
+            letter-spacing: 0.04em;
+
+            line-height: 1.05;
+        }
+
+        .brand-tagline {
+            margin-top: 5px;
+
+            font-size: 10px;
+
+            letter-spacing: 0.18em;
+
+            text-transform: uppercase;
+
+            color:
+                rgba(255, 255, 255, 0.65);
+        }
+
+        .document-label {
+            text-align: right;
+        }
+
+        .document-label .eyebrow {
+            display: block;
+
+            color: var(--gold);
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            letter-spacing: 0.18em;
+
+            text-transform: uppercase;
+
+            margin-bottom: 5px;
+        }
+
+        .document-label h1 {
+            font-size: 25px;
+
+            font-weight: 800;
+
+            letter-spacing: -0.02em;
+        }
+
+        .header-divider {
+            position: relative;
+            z-index: 2;
+
+            height: 1px;
+
+            margin-top: 34px;
+
+            background:
+                rgba(255, 255, 255, 0.14);
+        }
+
+        .header-meta {
+            position: relative;
+            z-index: 2;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-top: 24px;
+        }
+
+        .meta-item span {
+            display: block;
+
+            color:
+                rgba(255, 255, 255, 0.55);
+
+            font-size: 9px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.13em;
+
+            font-weight: 700;
+
+            margin-bottom: 4px;
+        }
+
+        .meta-item strong {
+            display: block;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            color: var(--white);
+        }
+
+        /* =========================================================
+           CLIENT BANNER
+        ========================================================= */
+
+        .client-banner {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding: 24px 54px;
+
+            border-bottom:
+                1px solid var(--line);
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #f9fbfd,
+                    #ffffff
+                );
+        }
+
+        .prepared-for {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            letter-spacing: 0.15em;
+
+            text-transform: uppercase;
+        }
+
+        .client-name {
+            margin-top: 3px;
+
+            font-size: 22px;
+
+            font-weight: 800;
+
+            color: var(--navy);
+        }
+
+        .location-pill {
+            padding: 9px 15px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(0, 128, 0, 0.08);
+
+            color: var(--green);
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            white-space: nowrap;
+        }
+
+        /* =========================================================
+           CONTENT
+        ========================================================= */
+
+        .content {
+            padding: 42px 54px 55px;
+        }
+
+        .section {
+            margin-bottom: 38px;
+        }
+
+        .section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-heading {
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            margin-bottom: 17px;
+        }
+
+        .section-number {
+            width: 30px;
+            height: 30px;
+
+            flex:
+                0 0 30px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 9px;
+
+            background:
+                var(--navy);
+
+            color: var(--gold);
+
+            font-size: 11px;
+
+            font-weight: 900;
+        }
+
+        .section-title {
+            font-size: 15px;
+
+            color: var(--navy);
+
+            font-weight: 850;
+
+            letter-spacing: 0.01em;
+        }
+
+        .section-line {
+            flex: 1;
+
+            height: 1px;
+
+            background:
+                var(--line);
+        }
+
+        /* =========================================================
+           TABLES
+        ========================================================= */
+
+        .table-wrap {
+            border:
+                1px solid var(--line);
+
+            border-radius: 10px;
+
+            overflow: hidden;
+        }
+
+        .quotation-table thead {
+            background:
+                var(--navy);
+        }
+
+        .quotation-table th {
+            padding: 12px 14px;
+
+            color: var(--white);
+
+            text-align: left;
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.09em;
+        }
+
+        .quotation-table th:first-child,
+        .quotation-table td:first-child {
+            width: 55px;
+
+            text-align: center;
+        }
+
+        .quotation-table th:last-child,
+        .quotation-table td:last-child {
+            width: 100px;
+
+            text-align: center;
+        }
+
+        .quotation-table tbody tr {
+            border-bottom:
+                1px solid var(--line);
+        }
+
+        .quotation-table tbody tr:last-child {
+            border-bottom: 0;
+        }
+
+        .quotation-table tbody tr:nth-child(even) {
+            background:
+                #fafbfd;
+        }
+
+        .quotation-table td {
+            padding: 12px 14px;
+
+            font-size: 11px;
+
+            vertical-align: middle;
+        }
+
+        .quotation-table td:first-child {
+            color: var(--muted);
+
+            font-weight: 700;
+        }
+
+        .item-name {
+            font-weight: 700;
+
+            color: var(--text);
+        }
+
+        .specification {
+            color: var(--muted);
+        }
+
+        .qty {
+            font-weight: 700;
+
+            color: var(--navy);
+        }
+
+        /* =========================================================
+           INSTALLATION SERVICE
+        ========================================================= */
+
+        .service-card {
+            border:
+                1px solid var(--line);
+
+            border-radius: 12px;
+
+            overflow: hidden;
+        }
+
+        .service-row {
+            display: grid;
+
+            grid-template-columns: 55px 1fr 150px;
+
+            align-items: center;
+        }
+
+        .service-row > div {
+            padding: 16px;
+        }
+
+        .service-row .number {
+            text-align: center;
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            border-right:
+                1px solid var(--line);
+        }
+
+        .service-row .service-name {
+            font-size: 12px;
+
+            font-weight: 750;
+        }
+
+        .service-row .amount {
+            text-align: right;
+
+            font-size: 14px;
+
+            font-weight: 900;
+
+            color: var(--navy);
+
+            border-left:
+                1px solid var(--line);
+
+            background:
+                #fafbfd;
+        }
+
+        /* =========================================================
+           INSTALLATION SCOPE
+        ========================================================= */
+
+        .scope-box {
+            margin-top: 15px;
+
+            padding: 20px;
+
+            border-radius: 10px;
+
+            background:
+                var(--soft);
+
+            border:
+                1px solid var(--line);
+        }
+
+        .scope-title {
+            font-size: 11px;
+
+            font-weight: 850;
+
+            color: var(--navy);
+
+            margin-bottom: 13px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.08em;
+        }
+
+        .scope-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap:
+                8px 24px;
+        }
+
+        .scope-item {
+            display: flex;
+
+            gap: 9px;
+
+            align-items: flex-start;
+
+            font-size: 10.5px;
+
+            color: #4d586a;
+        }
+
+        .scope-item::before {
+            content: "✓";
+
+            flex:
+                0 0 auto;
+
+            color: var(--green);
+
+            font-weight: 900;
+        }
+
+        /* =========================================================
+           TRANSPORTATION NOTICE
+        ========================================================= */
+
+        .transport-card {
+            display: flex;
+
+            gap: 16px;
+
+            align-items: flex-start;
+
+            padding: 19px 20px;
+
+            border:
+                1px solid rgba(0, 128, 0, 0.18);
+
+            border-left:
+                4px solid var(--green);
+
+            border-radius: 10px;
+
+            background:
+                rgba(0, 128, 0, 0.045);
+        }
+
+        .transport-icon {
+            width: 36px;
+            height: 36px;
+
+            flex:
+                0 0 36px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 9px;
+
+            background:
+                rgba(0, 128, 0, 0.1);
+
+            color: var(--green);
+
+            font-weight: 900;
+
+            font-size: 16px;
+        }
+
+        .transport-card strong {
+            display: block;
+
+            margin-bottom: 3px;
+
+            color: var(--navy);
+
+            font-size: 12px;
+        }
+
+        .transport-card p {
+            font-size: 10.5px;
+
+            color: #566174;
+        }
+
+        /* =========================================================
+           COMMERCIAL SUMMARY
+        ========================================================= */
+
+        .summary-box {
+            border:
+                1px solid var(--line);
+
+            border-radius: 12px;
+
+            overflow: hidden;
+
+            background:
+                #ffffff;
+        }
+
+        .summary-row {
+            display: grid;
+
+            grid-template-columns: 1fr 230px;
+
+            border-bottom:
+                1px solid var(--line);
+        }
+
+        .summary-row:last-child {
+            border-bottom: 0;
+        }
+
+        .summary-row > div {
+            padding: 13px 17px;
+
+            font-size: 11px;
+        }
+
+        .summary-label {
+            color: #4d586a;
+        }
+
+        .summary-value {
+            text-align: right;
+
+            font-weight: 750;
+
+            border-left:
+                1px solid var(--line);
+        }
+
+        .summary-row.installation {
+            background:
+                rgba(244, 166, 0, 0.06);
+        }
+
+        .summary-row.installation .summary-value {
+            color: var(--navy);
+
+            font-weight: 900;
+        }
+
+        .summary-row.transportation {
+            background:
+                #fafbfd;
+        }
+
+        .summary-row.transportation .summary-value {
+            color: var(--green);
+
+            font-size: 10px;
+        }
+
+        .summary-row.total {
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--navy),
+                    var(--blue)
+                );
+
+            color: var(--white);
+        }
+
+        .summary-row.total .summary-label {
+            color: var(--white);
+
+            font-weight: 850;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.05em;
+        }
+
+        .summary-row.total .summary-value {
+            color: var(--gold);
+
+            font-size: 16px;
+
+            font-weight: 900;
+        }
+
+        /* =========================================================
+           PAYMENT TERMS
+        ========================================================= */
+
+        .terms-card {
+            padding: 21px;
+
+            border:
+                1px solid var(--line);
+
+            border-radius: 10px;
+
+            background:
+                #fbfcfe;
+        }
+
+        .term {
+            display: grid;
+
+            grid-template-columns: 180px 1fr;
+
+            gap: 20px;
+
+            padding: 8px 0;
+
+            font-size: 11px;
+        }
+
+        .term-label {
+            font-weight: 800;
+
+            color: var(--navy);
+        }
+
+        .term-text {
+            color: #566174;
+        }
+
+        .commencement {
+            margin-top: 10px;
+
+            padding-top: 15px;
+
+            border-top:
+                1px dashed var(--line);
+
+            font-size: 10.5px;
+
+            color: var(--muted);
+        }
+
+        /* =========================================================
+           PROJECT NOTES
+        ========================================================= */
+
+        .notes {
+            padding: 20px 22px;
+
+            border:
+                1px solid var(--line);
+
+            border-radius: 10px;
+
+            background:
+                #ffffff;
+        }
+
+        .notes ol {
+            padding-left: 20px;
+        }
+
+        .notes li {
+            padding-left: 5px;
+
+            margin-bottom: 8px;
+
+            font-size: 10.5px;
+
+            color: #566174;
+        }
+
+        .notes li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* =========================================================
+           SIGNATURE / FOOTER
+        ========================================================= */
+
+        .closing {
+            margin-top: 45px;
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 45px;
+
+            align-items: end;
+        }
+
+        .signature-area {
+            padding-top: 35px;
+
+            border-top:
+                1px solid var(--text);
+
+            max-width: 280px;
+        }
+
+        .signature-label {
+            font-size: 9px;
+
+            color: var(--muted);
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.12em;
+
+            font-weight: 800;
+        }
+
+        .signature-name {
+            margin-top: 4px;
+
+            font-size: 12px;
+
+            font-weight: 850;
+
+            color: var(--navy);
+        }
+
+        .company-closing {
+            text-align: right;
+        }
+
+        .closing-company {
+            font-size: 16px;
+
+            font-weight: 900;
+
+            color: var(--navy);
+
+            letter-spacing: 0.03em;
+        }
+
+        .closing-tagline {
+            margin-top: 4px;
+
+            color: var(--gold);
+
+            font-size: 9px;
+
+            font-weight: 900;
+
+            letter-spacing: 0.14em;
+
+            text-transform: uppercase;
+        }
+
+        .services {
+            margin-top: 7px;
+
+            color: var(--muted);
+
+            font-size: 9px;
+        }
+
+        .email {
+            margin-top: 5px;
+
+            color: var(--blue);
+
+            font-size: 9px;
+
+            font-weight: 700;
+        }
+
+        /* =========================================================
+           PRINT
+        ========================================================= */
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        @media print {
+
+            html,
+            body {
+                background: #ffffff;
+
+                margin: 0;
+
+                padding: 0;
+            }
+
+            .page {
+                width: 100%;
+
+                margin: 0;
+
+                box-shadow: none;
+            }
+
+            .header {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .quotation-table thead,
+            .section-number,
+            .summary-row.total {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .section,
+            .service-card,
+            .table-wrap,
+            .summary-box,
+            .terms-card,
+            .notes,
+            .transport-card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .header {
+                break-after: avoid;
+                page-break-after: avoid;
+            }
+
+            .client-banner {
+                break-after: avoid;
+                page-break-after: avoid;
+            }
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 720px) {
+
+            .page {
+                margin: 0;
+
+                width: 100%;
+            }
+
+            .header {
+                padding:
+                    30px 24px;
+            }
+
+            .header-content {
+                flex-direction: column;
+            }
+
+            .document-label {
+                text-align: left;
+            }
+
+            .header-meta {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .client-banner {
+                padding:
+                    20px 24px;
+
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .content {
+                padding:
+                    30px 24px 40px;
+            }
+
+            .quotation-table {
+                min-width: 600px;
+            }
+
+            .table-wrap {
+                overflow-x: auto;
+            }
+
+            .scope-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .service-row {
+                grid-template-columns:
+                    45px 1fr 120px;
+            }
+
+            .summary-row {
+                grid-template-columns:
+                    1fr 170px;
+            }
+
+            .term {
+                grid-template-columns: 1fr;
+
+                gap: 3px;
+            }
+
+            .closing {
+                grid-template-columns: 1fr;
+
+                gap: 35px;
+            }
+
+            .company-closing {
+                text-align: left;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .header-meta {
+                grid-template-columns: 1fr;
+            }
+
+            .brand-name {
+                font-size: 21px;
+            }
+
+            .document-label h1 {
+                font-size: 21px;
+            }
+
+            .client-name {
+                font-size: 19px;
+            }
+
+            .summary-row {
+                grid-template-columns:
+                    1fr 135px;
+            }
+
+            .summary-row > div {
+                padding:
+                    12px 11px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="page">
+
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
+
+        <!-- <header class="header">
+
+            <div class="header-content">
+
+                <div class="brand">
+
+                    <div class="brand-mark">
+                        AE
+                    </div>
+
+                    <div>
+
+                        <div class="brand-name">
+                            AE RENEWABLE LTD
+                        </div>
+
+                        <div class="brand-tagline">
+                            Powering Your Future With Sun
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="document-label">
+
+                    <span class="eyebrow">
+                        Professional Document
+                    </span>
+
+                    <h1>
+                        Engineering Quotation
+                    </h1>
+
+                </div>
+
+            </div>
+
+            <div class="header-divider"></div>
+
+            <div class="header-meta">
+
+                <div class="meta-item">
+
+                    <span>
+                        Quotation Reference
+                    </span>
+
+                    <strong>
+                        AE-20260901-001
+                    </strong>
+
+                </div>
+
+                <div class="meta-item">
+
+                    <span>
+                        Date
+                    </span>
+
+                    <strong>
+                        01 September 2026
+                    </strong>
+
+                </div>
+
+                <div class="meta-item">
+
+                    <span>
+                        Project
+                    </span>
+
+                    <strong>
+                        Felicity Solar Power System
+                    </strong>
+
+                </div>
+
+                <div class="meta-item">
+
+                    <span>
+                        Location
+                    </span>
+
+                    <strong>
+                        Kabba, Kogi State
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </header> -->
+
+
+        <!-- =====================================================
+             CLIENT
+        ====================================================== -->
+
+        <section class="client-banner">
+
+            <div>
+
+                <div class="prepared-for">
+                    Prepared For
+                </div>
+
+                <div class="client-name">
+                    Mr. Charles
+                </div>
+
+            </div>
+
+            <div class="location-pill">
+                Kabba, Kogi State
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CONTENT
+        ====================================================== -->
+
+        <div class="content">
+
+
+            <!-- =================================================
+                 SYSTEM CONFIGURATION
+            ================================================== -->
+
+            <section class="section">
+
+                <div class="section-heading">
+
+                    <div class="section-number">
+                        01
+                    </div>
+
+                    <h2 class="section-title">
+                        System Configuration
+                    </h2>
+
+                    <div class="section-line"></div>
+
+                </div>
+
+
+                <div class="table-wrap">
+
+                    <table class="quotation-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    S/N
+                                </th>
+
+                                <th>
+                                    Equipment
+                                </th>
+
+                                <th>
+                                    Specification
+                                </th>
+
+                                <th>
+                                    Qty
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+
+                                <td>
+                                    1
+                                </td>
+
+                                <td class="item-name">
+                                    Felicity Hybrid Inverter
+                                </td>
+
+                                <td class="specification">
+                                    5kVA
+                                </td>
+
+                                <td class="qty">
+                                    1
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>
+                                    2
+                                </td>
+
+                                <td class="item-name">
+                                    Felicity Lithium Battery
+                                </td>
+
+                                <td class="specification">
+                                    15kWh
+                                </td>
+
+                                <td class="qty">
+                                    1
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>
+                                    3
+                                </td>
+
+                                <td class="item-name">
+                                    jinko panel
+                                </td>
+
+                                <td class="specification">
+                                    750w
+                                </td>
+
+                                <td class="qty">
+                                    9
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 INSTALLATION MATERIALS
+            ================================================== -->
+
+            <section class="section">
+
+                <div class="section-heading">
+
+                    <div class="section-number">
+                        02
+                    </div>
+
+                    <h2 class="section-title">
+                        Installation Materials &amp; Accessories
+                    </h2>
+
+                    <div class="section-line"></div>
+
+                </div>
+
+
+                <div class="table-wrap">
+
+                    <table class="quotation-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    S/N
+                                </th>
+
+                                <th>
+                                    Description
+                                </th>
+
+                                <th>
+                                    Specification
+                                </th>
+
+                                <th>
+                                    Qty
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>1</td>
+                                <td class="item-name">Solar Panel Rail</td>
+                                <td class="specification">Aluminium mounting rail</td>
+                                <td class="qty">4 lengths</td>
+                            </tr>
+
+                            <tr>
+                                <td>2</td>
+                                <td class="item-name">Rail Bolt &amp; Nut</td>
+                                <td class="specification">Size 17, stainless steel, with washer</td>
+                                <td class="qty">20 pcs</td>
+                            </tr>
+
+                            <tr>
+                                <td>3</td>
+                                <td class="item-name">Electrical Cable</td>
+                                <td class="specification">10mm</td>
+                                <td class="qty">25 m</td>
+                            </tr>
+
+                            <tr>
+                                <td>4</td>
+                                <td class="item-name">Solar Cable</td>
+                                <td class="specification">4mm</td>
+                                <td class="qty">25 m</td>
+                            </tr>
+
+                            <tr>
+                                <td>5</td>
+                                <td class="item-name">Earthing Cable</td>
+                                <td class="specification">2.5mm</td>
+                                <td class="qty">10 m</td>
+                            </tr>
+
+                            <tr>
+                                <td>6</td>
+                                <td class="item-name">Tube Silicon</td>
+                                <td class="specification">Solar installation sealant</td>
+                                <td class="qty">1</td>
+                            </tr>
+
+                            <tr>
+                                <td>7</td>
+                                <td class="item-name">AC Breaker</td>
+                                <td class="specification">63A</td>
+                                <td class="qty">2</td>
+                            </tr>
+
+                            <tr>
+                                <td>8</td>
+                                <td class="item-name">DC Breaker</td>
+                                <td class="specification">40A</td>
+                                <td class="qty">1</td>
+                            </tr>
+
+                            <tr>
+                                <td>9</td>
+                                <td class="item-name">AC SPD</td>
+                                <td class="specification">Surge Protection Device</td>
+                                <td class="qty">1</td>
+                            </tr>
+
+                            <tr>
+                                <td>10</td>
+                                <td class="item-name">DC SPD</td>
+                                <td class="specification">Surge Protection Device</td>
+                                <td class="qty">1</td>
+                            </tr>
+
+                            <tr>
+                                <td>11</td>
+                                <td class="item-name">Breaker Box</td>
+                                <td class="specification">16-Way</td>
+                                <td class="qty">1</td>
+                            </tr>
+
+                            <tr>
+                                <td>12</td>
+                                <td class="item-name">AVS</td>
+                                <td class="specification">Automatic Voltage Switcher</td>
+                                <td class="qty">1</td>
+                            </tr>
+
+                            <tr>
+                                <td>13</td>
+                                <td class="item-name">Trunk Pipe</td>
+                                <td class="specification">50/75</td>
+                                <td class="qty">2 lengths</td>
+                            </tr>
+
+                            <tr>
+                                <td>14</td>
+                                <td class="item-name">Changeover Breaker</td>
+                                <td class="specification">100A</td>
+                                <td class="qty">1</td>
+                            </tr>
+
+                            <tr>
+                                <td>15</td>
+                                <td class="item-name">Wall Plug / Peg</td>
+                                <td class="specification">Size 12</td>
+                                <td class="qty">1 packet</td>
+                            </tr>
+
+                            <tr>
+                                <td>16</td>
+                                <td class="item-name">Flexible Pipe</td>
+                                <td class="specification">25mm</td>
+                                <td class="qty">15 m</td>
+                            </tr>
+
+                            <tr>
+                                <td>17</td>
+                                <td class="item-name">Cable Clip</td>
+                                <td class="specification">25mm</td>
+                                <td class="qty">1 packet</td>
+                            </tr>
+
+                            <tr>
+                                <td>18</td>
+                                <td class="item-name">MC4 Connector</td>
+                                <td class="specification">Pair</td>
+                                <td class="qty">2 pairs</td>
+                            </tr>
+
+                            <tr>
+                                <td>19</td>
+                                <td class="item-name">Electrical Tape</td>
+                                <td class="specification">Red &amp; Black</td>
+                                <td class="qty">1 set</td>
+                            </tr>
+
+                            <tr>
+                                <td>20</td>
+                                <td class="item-name">Screws</td>
+                                <td class="specification">Installation screws</td>
+                                <td class="qty">1 packet</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 INSTALLATION
+            ================================================== -->
+
+            <section class="section">
+
+                <div class="section-heading">
+
+                    <div class="section-number">
+                        03
+                    </div>
+
+                    <h2 class="section-title">
+                        Installation &amp; Commissioning
+                    </h2>
+
+                    <div class="section-line"></div>
+
+                </div>
+
+
+                <div class="service-card">
+
+                    <div class="service-row">
+
+                        <div class="number">
+                            01
+                        </div>
+
+                        <div class="service-name">
+                            Solar System Installation &amp; Commissioning
+                        </div>
+
+                        <div class="amount">
+                            ₦250,000
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- <div class="scope-box">
+
+                    <div class="scope-title">
+                        Installation Scope
+                    </div>
+
+                    <div class="scope-grid">
+
+                        <div class="scope-item">
+                            Solar panel mounting and rail installation
+                        </div>
+
+                        <div class="scope-item">
+                            Inverter installation
+                        </div>
+
+                        <div class="scope-item">
+                            Battery installation
+                        </div>
+
+                        <div class="scope-item">
+                            AC/DC cable routing and termination
+                        </div>
+
+                        <div class="scope-item">
+                            AC and DC protection installation
+                        </div>
+
+                        <div class="scope-item">
+                            SPD installation
+                        </div>
+
+                        <div class="scope-item">
+                            Earthing connection
+                        </div>
+
+                        <div class="scope-item">
+                            Changeover installation
+                        </div>
+
+                        <div class="scope-item">
+                            Breaker box installation
+                        </div>
+
+                        <div class="scope-item">
+                            AVS installation
+                        </div>
+
+                        <div class="scope-item">
+                            MC4 termination
+                        </div>
+
+                        <div class="scope-item">
+                            Cable management and trunking
+                        </div>
+
+                        <div class="scope-item">
+                            System configuration
+                        </div>
+
+                        <div class="scope-item">
+                            Testing and commissioning
+                        </div>
+
+                        <div class="scope-item">
+                            Basic operational demonstration
+                        </div>
+
+                    </div>
+
+                </div> -->
+
+            </section>
+
+
+            <!-- =================================================
+                 TRANSPORTATION
+            ================================================== -->
+
+            <!-- <section class="section">
+
+                <div class="section-heading">
+
+                    <div class="section-number">
+                        04
+                    </div>
+
+                    <h2 class="section-title">
+                        Transportation
+                    </h2>
+
+                    <div class="section-line"></div>
+
+                </div> -->
+
+
+                <!-- <div class="transport-card">
+
+                    <div class="transport-icon">
+                        →
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Client-Provided Transportation
+                        </strong>
+
+                        <p>
+                            Transportation to and from Kabba, Kogi State
+                            shall be provided and paid for by the client.
+                            Transportation is therefore excluded from the
+                            AE Renewable Ltd installation charge.
+                        </p>
+
+                    </div>
+
+                </div> -->
+
+            </section>
+
+
+            <!-- =================================================
+                 COMMERCIAL SUMMARY
+            ================================================== -->
+
+            <!-- <section class="section">
+
+                <div class="section-heading">
+
+                    <div class="section-number">
+                        05
+                    </div>
+
+                    <h2 class="section-title">
+                        Commercial Summary
+                    </h2>
+
+                    <div class="section-line"></div>
+
+                </div>
+
+
+                <div class="summary-box">
+
+                    <div class="summary-row">
+
+                        <div class="summary-label">
+                            Solar Equipment
+                        </div>
+
+                        <div class="summary-value">
+                            ₦________________
+                        </div>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <div class="summary-label">
+                            Installation Materials &amp; Accessories
+                        </div>
+
+                        <div class="summary-value">
+                            ₦________________
+                        </div>
+
+                    </div>
+
+
+                    <div class="summary-row installation">
+
+                        <div class="summary-label">
+                            Installation &amp; Commissioning
+                        </div>
+
+                        <div class="summary-value">
+                            ₦180,000
+                        </div>
+
+                    </div>
+
+
+                    <div class="summary-row transportation">
+
+                        <div class="summary-label">
+                            Transportation
+                        </div>
+
+                        <div class="summary-value">
+                            Client's Responsibility
+                        </div>
+
+                    </div>
+
+
+                    <div class="summary-row total">
+
+                        <div class="summary-label">
+                            Total Project Value
+                        </div>
+
+                        <div class="summary-value">
+                            ₦________________
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section> -->
+
+
+            <!-- =================================================
+                 PAYMENT TERMS
+            ================================================== -->
+<!-- 
+            <section class="section">
+
+                <div class="section-heading">
+
+                    <div class="section-number">
+                        06
+                    </div>
+
+                    <h2 class="section-title">
+                        Payment Terms
+                    </h2>
+
+                    <div class="section-line"></div>
+
+                </div>
+
+
+                <div class="terms-card">
+
+                    <div class="term">
+
+                        <div class="term-label">
+                            Equipment &amp; Materials
+                        </div>
+
+                        <div class="term-text">
+                            As agreed before mobilization and procurement.
+                        </div>
+
+                    </div>
+
+
+                    <div class="term">
+
+                        <div class="term-label">
+                            Installation &amp; Commissioning
+                        </div>
+
+                        <div class="term-text">
+                            ₦180,000.
+                        </div>
+
+                    </div>
+
+
+                    <div class="commencement">
+
+                        Installation commencement is subject to
+                        confirmation of equipment availability,
+                        required materials and agreed payment terms.
+
+                    </div>
+
+                </div>
+
+            </section> -->
+
+
+            <!-- =================================================
+                 PROJECT NOTES
+            ================================================== -->
+
+            <!-- <section class="section">
+
+                <div class="section-heading">
+
+                    <div class="section-number">
+                        07
+                    </div>
+
+                    <h2 class="section-title">
+                        Project Notes
+                    </h2>
+
+                    <div class="section-line"></div>
+
+                </div>
+
+
+                <div class="notes">
+
+                    <ol>
+
+                        <li>
+                            Final cable sizes and protection ratings shall
+                            be verified against the actual equipment
+                            specifications and installation requirements.
+                        </li>
+
+                        <li>
+                            AC/DC protection devices shall be installed
+                            in accordance with the system configuration.
+                        </li>
+
+                        <li>
+                            Proper earthing shall be provided for the
+                            solar installation and applicable protective
+                            equipment.
+                        </li>
+
+                        <li>
+                            All installed equipment and connections shall
+                            be tested prior to commissioning.
+                        </li>
+
+                        <li>
+                            Any additional materials required due to
+                            unforeseen site conditions shall be communicated
+                            to and approved by the client before additional
+                            costs are incurred.
+                        </li>
+
+                        <li>
+                            Transportation to and from Kabba, Kogi State
+                            shall be provided by the client.
+                        </li>
+
+                    </ol>
+
+                </div>
+
+            </section> -->
+
+
+            <!-- =================================================
+                 CLOSING
+            ================================================== -->
+
+            <!-- <div class="closing">
+
+                <div class="signature-area">
+
+                    <div class="signature-label">
+                        Prepared By
+                    </div>
+
+                    <div class="signature-name">
+                        AE Renewable Ltd
+                    </div>
+
+                </div>
+
+
+                <div class="company-closing">
+
+                    <div class="closing-company">
+                        AE RENEWABLE LTD
+                    </div>
+
+                    <div class="closing-tagline">
+                        Powering Your Future With Sun
+                    </div>
+
+                    <div class="services">
+                        Solar Energy &nbsp;|&nbsp;
+                        CCTV &nbsp;|&nbsp;
+                        Electric Fence &nbsp;|&nbsp;
+                        Electrical Engineering
+                    </div>
+
+                    <div class="email">
+                        AERenewablesolution@gmail.com
+                    </div>
+
+                    <div class="services">
+                        Abuja, Nigeria
+                    </div>
+
+                </div>
+
+            </div> -->
+
+        </div>
+
+    </main>
+
+</body>
+</html>

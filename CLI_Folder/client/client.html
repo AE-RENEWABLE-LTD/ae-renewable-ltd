@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Client Portal | AE Network</title>
+
+    <script>
+        (function() {
+            try {
+                if (sessionStorage.getItem("ae_client_logged_in") !== "true") {
+                    document.documentElement.style.display = "none";
+                    window.location.replace("/client/login");
+                    throw new Error("Access Denied: Client authentication required");
+                }
+                var token = localStorage.getItem("aeClientToken") || localStorage.getItem("token") || localStorage.getItem("accessToken") || localStorage.getItem("aeRenewableToken") || localStorage.getItem("aeAdminToken") || "";
+                var rawUser = localStorage.getItem("aeClientUser") || localStorage.getItem("user") || localStorage.getItem("aeRenewableUser") || localStorage.getItem("aeAdminUser") || "{}";
+                var user = {};
+                try { user = JSON.parse(rawUser) || {}; } catch(e) {}
+                var role = user && user.role ? String(user.role).toLowerCase() : "";
+                var allowed = ["client", "admin", "staff", "installer"];
+                if (!token || !role || !allowed.includes(role)) {
+                    document.documentElement.style.display = "none";
+                    window.location.replace("/client/login");
+                    throw new Error("Access Denied: Client authentication required");
+                }
+            } catch(err) {
+                document.documentElement.style.display = "none";
+                window.location.replace("/client/login");
+                throw err;
+            }
+        })();
+    </script>
+
+    <meta
+        name="description"
+        content="AE Network Client Portal — Manage projects, quotations, payments, documents and solar system monitoring."
+    >
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="/client/client.css?v=20260926-02">
+</head>
+
+<body>
+
+<!-- =========================================================
+     APP
+========================================================= -->
+
+<div class="app">
+<div class="sidebar-backdrop" id="clientSidebarOverlay"></div>
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-mark" style="background:#020c1a; border:1px solid #f4a600; padding:2px; overflow:hidden;">
+                <img src="/images/logo.png" alt="AE Renewable" style="width:100%;height:100%;object-fit:contain;border-radius:8px;">
+            </div>
+
+            <div class="brand-text">
+                <strong>AE RENEWABLE</strong>
+                <span>CLIENT PORTAL</span>
+            </div>
+
+        </div>
+
+        <div class="client-mini-profile">
+
+            <div class="avatar">
+                EA
+            </div>
+
+            <div>
+                <strong>Eniola Abdulrasaq</strong>
+                <span>Client Account</span>
+            </div>
+
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <button class="nav-item active" data-page="dashboard">
+                <span class="nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </button>
+
+            <button class="nav-item" data-page="projects">
+                <span class="nav-icon">▣</span>
+                <span>My Projects</span>
+                <span class="nav-badge">2</span>
+            </button>
+
+            <button class="nav-item" data-page="quotations">
+                <span class="nav-icon">▤</span>
+                <span>Quotations</span>
+                <span class="nav-badge warning">1</span>
+            </button>
+
+            <button class="nav-item" data-page="payments">
+                <span class="nav-icon">₦</span>
+                <span>Payments</span>
+            </button>
+
+            <button class="nav-item" data-page="monitoring">
+                <span class="nav-icon">◉</span>
+                <span>Installation Monitoring</span>
+                <span class="online-dot"></span>
+            </button>
+
+            <button class="nav-item" data-page="requests">
+                <span class="nav-icon">＋</span>
+                <span>Requests</span>
+            </button>
+
+            <button class="nav-item" data-page="documents">
+                <span class="nav-icon">▧</span>
+                <span>Documents</span>
+            </button>
+
+            <button class="nav-item" data-page="support">
+                <span class="nav-icon">?</span>
+                <span>Support</span>
+            </button>
+
+            <div style="margin: 14px 12px 6px; font-size: 10px; font-weight: 700; color: #64748b; letter-spacing: 0.05em; text-transform: uppercase;">
+                Ecosystem
+            </div>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <button class="nav-item" data-page="profile">
+                <span class="nav-icon">⚙</span>
+                <span>Profile</span>
+            </button>
+
+            <button class="logout-btn" id="logoutBtn">
+                <span>⇥</span>
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN AREA
+    ====================================================== -->
+
+    <main class="main">
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button class="mobile-menu" id="mobileMenu">
+                    ☰
+                </button>
+
+                <div>
+                    <span class="eyebrow">AE NETWORK</span>
+                    <h1 id="pageTitle">Client Dashboard</h1>
+                </div>
+
+            </div>
+
+            <div class="topbar-actions">
+
+                <button class="header-icon" id="searchBtn" title="Search">
+                    ⌕
+                </button>
+
+                <button
+                    class="header-icon notification-button"
+                    id="notificationBtn"
+                    title="Notifications"
+                >
+                    ♢
+                    <span class="notification-count">3</span>
+                </button>
+
+                <button class="profile-button" id="profileButton">
+
+                    <div class="avatar small">
+                        EA
+                    </div>
+
+                    <div class="profile-button-text">
+                        <strong>Eniola</strong>
+                        <span>Client</span>
+                    </div>
+
+                    <span>⌄</span>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- SEARCH -->
+
+        <div class="search-panel" id="searchPanel">
+
+            <div class="search-input-wrapper">
+
+                <span>⌕</span>
+
+                <input
+                    type="search"
+                    id="globalSearch"
+                    placeholder="Search projects, quotations, documents..."
+                >
+
+                <button id="closeSearch">ESC</button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PAGE CONTAINER
+        ================================================== -->
+
+        <section class="page-container">
+
+
+            <!-- =================================================
+                 DASHBOARD
+            ================================================== -->
+
+            <section class="page active" id="dashboardPage">
+
+                <div class="welcome-row">
+
+                    <div>
+
+                        <span class="eyebrow">FRIDAY, AUGUST 14, 2026</span>
+
+                        <h2>
+                            Welcome back, Eniola
+                        </h2>
+
+                        <p>
+                            Here is the latest update on your AE Network projects.
+                        </p>
+
+                    </div>
+
+                    <button class="primary-btn" data-action="new-request">
+                        + New Request
+                    </button>
+
+                </div>
+
+
+                <!-- WEEKLY MAINTENANCE HEALTH CHECK-IN BANNER -->
+                <div class="weekly-checkup-card" id="clientWeeklyCheckupBanner" style="display:none; background:linear-gradient(135deg, #022c22 0%, #064e3b 100%); border:1px solid #10b981; border-radius:14px; padding:20px 24px; margin-bottom:24px; color:#ffffff; box-shadow:0 8px 24px rgba(6,78,59,0.25);">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
+                        <div style="flex:1; min-width:280px;">
+                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                                <span style="font-size:18px;">📋</span>
+                                <strong style="color:#a7f3d0; font-size:14px; letter-spacing:0.04em; text-transform:uppercase;">Weekly Solar System Health Consultation</strong>
+                                <span style="background:#10b981; color:#022c22; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px;">Action Requested</span>
+                            </div>
+                            <h3 style="margin:0 0 6px; font-size:16px; color:#ffffff;">How has your solar power system performed this week?</h3>
+                            <p style="margin:0; font-size:13px; color:#d1fae5; line-height:1.5;">
+                                Our engineering team is performing our scheduled weekly check-in. Please submit your operational write-up or notes on inverter readings, load performance, or issues.
+                            </p>
+                        </div>
+                        <button type="button" class="primary-btn" onclick="openClientWeeklyCheckupModal()" style="background:#10b981; border-color:#10b981; color:#022c22; font-weight:800; padding:12px 20px; border-radius:8px; cursor:pointer;">
+                            Submit Weekly Write-up →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STATS -->
+
+                <div class="stats-grid">
+
+                    <article class="stat-card">
+
+                        <div class="stat-icon blue">▣</div>
+
+                        <div>
+                            <span>Active Projects</span>
+                            <strong id="dashStatProjects">—</strong>
+                            <small id="dashStatProjectsSub">Loading...</small>
+                        </div>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <div class="stat-icon gold">₦</div>
+
+                        <div>
+                            <span>Outstanding</span>
+                            <strong id="dashStatOutstanding">₦—</strong>
+                            <small id="dashStatOutstandingSub">Next payment milestone</small>
+                        </div>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <div class="stat-icon green">◉</div>
+
+                        <div>
+                            <span>System Status</span>
+                            <strong id="dashStatStatus" class="status-online">
+                                —
+                            </strong>
+                            <small id="dashStatStatusSub">Project status</small>
+                        </div>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <div class="stat-icon purple">▧</div>
+
+                        <div>
+                            <span>Quotations</span>
+                            <strong id="dashStatQuotations">—</strong>
+                            <small id="dashStatQuotationsSub">Loading...</small>
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- MAIN DASHBOARD GRID -->
+
+                <div class="dashboard-grid">
+
+                    <!-- PROJECT -->
+
+                    <article class="panel project-overview">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <span class="eyebrow">ACTIVE PROJECT</span>
+                                <h3 id="dashActiveProjectName">Residential Hybrid Solar System</h3>
+                            </div>
+
+                            <span class="status-pill progress" id="dashActiveProjectStatus">
+                                In Installation
+                            </span>
+
+                        </div>
+
+
+                        <div class="project-meta">
+
+                            <div>
+                                <span>Project ID</span>
+                                <strong id="dashActiveProjectId">PRJ-2026</strong>
+                            </div>
+
+                            <div>
+                                <span>Capacity</span>
+                                <strong id="dashActiveProjectCapacity">5.0 kVA</strong>
+                            </div>
+
+                            <div>
+                                <span>Location</span>
+                                <strong id="dashActiveProjectLocation">Abuja</strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="progress-section">
+
+                            <div class="progress-label">
+
+                                <span>Project Completion</span>
+
+                                <strong id="dashActiveProjectProgress">60%</strong>
+
+                            </div>
+
+                            <div class="progress-bar">
+
+                                <span id="dashActiveProjectProgressBar" style="width:60%"></span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="timeline">
+
+                            <div class="timeline-item completed">
+
+                                <span></span>
+
+                                <div>
+                                    <strong>Consultation</strong>
+                                    <small>Completed</small>
+                                </div>
+
+                            </div>
+
+
+                            <div class="timeline-item completed">
+
+                                <span></span>
+
+                                <div>
+                                    <strong>Site Survey</strong>
+                                    <small>Completed</small>
+                                </div>
+
+                            </div>
+
+
+                            <div class="timeline-item completed">
+
+                                <span></span>
+
+                                <div>
+                                    <strong>Design & Approval</strong>
+                                    <small>Completed</small>
+                                </div>
+
+                            </div>
+
+
+                            <div class="timeline-item current">
+
+                                <span></span>
+
+                                <div>
+                                    <strong>Installation</strong>
+                                    <small>Currently in progress</small>
+                                </div>
+
+                            </div>
+
+
+                            <div class="timeline-item">
+
+                                <span></span>
+
+                                <div>
+                                    <strong>Commissioning</strong>
+                                    <small>Pending</small>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            class="secondary-btn full-width"
+                            data-action="view-project"
+                        >
+                            View Project
+                        </button>
+
+                    </article>
+
+
+                    <!-- INSTALLATION MONITORING DASHBOARD WIDGET -->
+                    <article class="panel monitoring-card install-dash-card">
+
+                        <div class="panel-header">
+                            <div>
+                                <span class="eyebrow">LIVE SITE TRACKING</span>
+                                <h3>Installation Progress</h3>
+                            </div>
+                            <span class="live-status" id="dashInstallLiveBadge">
+                                <i></i>
+                                LIVE
+                            </span>
+                        </div>
+
+                        <div class="install-dash-body" id="dashInstallBody">
+                            <div class="install-dash-progress-wrap">
+                                <div class="install-dash-stage-info">
+                                    <span class="stage-tag" id="dashInstallStageTag">Stage 1 of 6</span>
+                                    <strong id="dashInstallStageName">Starting Site</strong>
+                                </div>
+                                <div class="install-dash-percent" id="dashInstallPercent">0%</div>
+                            </div>
+
+                            <div class="progress-bar" style="margin: 10px 0 14px 0;">
+                                <span id="dashInstallProgressBar" style="width: 0%;"></span>
+                            </div>
+
+                            <div class="install-dash-media-preview" id="dashInstallMediaPreview">
+                                <div class="install-thumb-box" id="dashInstallThumbBox">
+                                    <div class="thumb-overlay-badge" id="dashInstallThumbBadge">Latest Evidence</div>
+                                    <img id="dashInstallThumbImg" src="" alt="Installation Progress" style="display:none;" />
+                                    <div class="install-thumb-placeholder" id="dashInstallThumbPlaceholder">
+                                        <span style="font-size:24px;">📸</span>
+                                        <small id="dashInstallPlaceholderText">Awaiting initial site evidence</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="monitor-grid install-meta-grid" style="margin-top: 12px;">
+                                <div class="monitor-item">
+                                    <span>Assigned Installer</span>
+                                    <strong id="dashInstallInstallerName">AE Network Installer</strong>
+                                </div>
+                                <div class="monitor-item">
+                                    <span>Evidence Photos</span>
+                                    <strong id="dashInstallEvidenceCount" class="green-text">0 Verified</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button
+                            class="secondary-btn full-width"
+                            data-action="monitoring"
+                            style="margin-top: 14px; font-weight: 700;"
+                        >
+                            Track Live Installation & Photos →
+                        </button>
+
+                    </article>
+
+                </div>
+
+
+                <!-- LOWER GRID -->
+
+                <div class="lower-grid">
+
+                    <!-- QUOTATION -->
+
+                    <article class="panel" id="dashPendingQuotationPanel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <span class="eyebrow" id="dashQuotationEyebrow">QUOTATIONS</span>
+                                <h3 id="dashQuotationTitle">Loading...</h3>
+                            </div>
+
+                            <span class="status-pill pending" id="dashQuotationStatusBadge">
+                                —
+                            </span>
+
+                        </div>
+
+                        <div class="quotation-summary">
+
+                            <div class="quotation-number">
+                                <span>Quotation</span>
+                                <strong id="dashQuotationCode">—</strong>
+                            </div>
+
+                            <div class="quotation-price">
+                                <span>Total</span>
+                                <strong id="dashQuotationAmount">—</strong>
+                            </div>
+
+                        </div>
+
+                        <p id="dashQuotationDesc">Loading quotation details...</p>
+
+                        <div class="button-row" id="dashQuotationActions">
+                            <button
+                                class="secondary-btn"
+                                data-action="view-quotation"
+                            >
+                                Review
+                            </button>
+                        </div>
+
+                    </article>
+
+
+                    <!-- RECENT ACTIVITY -->
+
+                    <article class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <span class="eyebrow">RECENT ACTIVITY</span>
+                                <h3>Project Updates</h3>
+                            </div>
+
+                            <button
+                                class="text-btn"
+                                data-page-link="projects"
+                            >
+                                View All
+                            </button>
+
+                        </div>
+
+
+                        <div class="activity-list" id="dashActivityList">
+
+                            <div class="activity-item">
+                                <div class="activity-icon blue">⇅</div>
+                                <div>
+                                    <strong>Loading project activity...</strong>
+                                    <span>Please wait</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PROJECTS
+            ================================================== -->
+
+            <section class="page" id="projectsPage">
+
+                <div class="page-heading">
+
+                    <div>
+                        <span class="eyebrow">PROJECT MANAGEMENT</span>
+                        <h2>My Projects</h2>
+                        <p>Track every project from consultation to commissioning.</p>
+                    </div>
+
+                    <button class="primary-btn" data-action="new-request">
+                        + New Project Request
+                    </button>
+
+                </div>
+
+
+                <div class="projects-grid" id="projectsContainer">
+
+                    <div style="text-align:center; padding:40px; color:#64748b;">
+                        <div style="font-size:32px; margin-bottom:12px;">☀️</div>
+                        <strong>Loading your projects...</strong>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 QUOTATIONS
+            ================================================== -->
+
+            <section class="page" id="quotationsPage">
+
+                <div class="page-heading">
+
+                    <div>
+                        <span class="eyebrow">COMMERCIAL DOCUMENTS</span>
+                        <h2>Quotations</h2>
+                        <p>Review and manage your AE Network quotations.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="table-panel">
+
+                    <div class="table-responsive">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Quotation</th>
+                                    <th>Description</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="quotationsTableBody">
+
+                                <tr>
+                                    <td colspan="6" style="text-align:center; padding:24px; color:#64748b;">
+                                        Loading quotations...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PAYMENTS
+            ================================================== -->
+
+            <section class="page" id="paymentsPage">
+
+                <div class="page-heading">
+
+                    <div>
+                        <span class="eyebrow">FINANCIAL MANAGEMENT</span>
+                        <h2>Payments</h2>
+                        <p>Track project payments, balances and receipts.</p>
+                    </div>
+
+                    <div>
+                        <button class="primary-btn" onclick="openMakePaymentModal()" style="display:flex; align-items:center; gap:6px; padding:9px 18px; font-weight:700;">
+                            💳 Make Payment / Upload Proof
+                        </button>
+                    </div>
+
+                </div>
+
+
+                <div class="payment-summary-grid">
+
+                    <div class="finance-card">
+                        <span>Total Project Value</span>
+                        <strong id="payStatTotalValue">₦0.00</strong>
+                    </div>
+
+                    <div class="finance-card">
+                        <span>Total Paid</span>
+                        <strong id="payStatTotalPaid">₦0.00</strong>
+                    </div>
+
+                    <div class="finance-card outstanding">
+                        <span>Outstanding Balance</span>
+                        <strong id="payStatBalanceDue">₦0.00</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="table-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <span class="eyebrow">TRANSACTIONS</span>
+                            <h3>Payment History</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Reference</th>
+                                    <th>Date</th>
+                                    <th>Project</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Receipt</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="clientPaymentsTableBody">
+                                <tr>
+                                    <td colspan="6" style="text-align:center; padding:24px; color:#64748B;">
+                                        Loading verified payments from AE Renewable network...
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 MONITORING
+            ================================================== -->
+
+            <!-- =================================================
+                 INSTALLATION MONITORING
+            ================================================== -->
+
+            <section class="page" id="monitoringPage">
+
+                <div class="page-heading">
+
+                    <div>
+                        <span class="eyebrow">PROJECT EXECUTION</span>
+                        <h2>Installation Monitoring</h2>
+                        <p>Live site progress, photographic evidence, and stage milestones uploaded by your assigned installer.</p>
+                    </div>
+
+                    <span class="live-status large" id="installPageLiveBadge">
+                        <i></i>
+                        LIVE SITE TRACKING
+                    </span>
+
+                </div>
+
+                <!-- PROJECT SUMMARY HERO -->
+                <div class="panel install-summary-panel">
+                    <div class="install-hero-top">
+                        <div class="install-proj-select-wrap">
+                            <label for="installProjectSelect">Active Project:</label>
+                            <select id="installProjectSelect" class="install-project-dropdown">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                        <div class="install-overall-badge" id="installOverallStatusBadge">
+                            <span class="status-pill active" id="installStatusPill">In Progress</span>
+                        </div>
+                    </div>
+
+                    <div class="install-hero-details" id="installHeroDetails">
+                        <div class="install-stat-block">
+                            <span>System Sizing</span>
+                            <strong id="installHeroCapacity">—</strong>
+                        </div>
+                        <div class="install-stat-block">
+                            <span>Storage</span>
+                            <strong id="installHeroBattery">—</strong>
+                        </div>
+                        <div class="install-stat-block">
+                            <span>Assigned Installer</span>
+                            <strong id="installHeroInstaller">AE Certified Team</strong>
+                        </div>
+                        <div class="install-stat-block">
+                            <span>Site Location</span>
+                            <strong id="installHeroLocation">—</strong>
+                        </div>
+                    </div>
+
+                    <div class="install-hero-progress-section">
+                        <div class="progress-label">
+                            <span id="installHeroStageSummary">Stage 1 of 6: Starting Site</span>
+                            <strong id="installHeroPercent">0% Completed</strong>
+                        </div>
+                        <div class="progress-bar large">
+                            <span id="installHeroProgressBar" style="width: 0%;"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ASSIGNED INSTALLER PROFILE CARD -->
+                <div class="panel installer-profile-panel" id="assignedInstallerProfileCard">
+                    <div class="installer-card-inner">
+                        <div class="installer-avatar-wrap">
+                            <img id="installCardPhoto" src="/uploads/installer-AEI-B7122F5A-1790967877945-532980.jpg" alt="Lead Installer Photo" class="installer-avatar-img" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';" style="object-fit:cover; width:80px; height:80px; border-radius:12px; border:2px solid #004AAD;" />
+                            <span class="installer-verified-badge" title="AE Certified & Registered">✓ Verified</span>
+                        </div>
+                        <div class="installer-details-wrap">
+                            <div class="installer-name-row">
+                                <div>
+                                    <span class="eyebrow" style="margin-bottom:2px; color:#004AAD;">ASSIGNED LEAD INSTALLER & ENGINEER</span>
+                                    <h3 id="installCardName" style="margin:0; font-size:17px; color:#0F172A;">Eniola Abdulrasaq</h3>
+                                    <span class="installer-badge-tag" id="installCardCompany">AE Renewable Engineering Network · Lead Solar Installer</span>
+                                </div>
+                                <div class="installer-rating-pill" id="installCardRating">
+                                    ⭐ 4.96 · Master Installer
+                                </div>
+                            </div>
+                            <div class="installer-contact-grid">
+                                <div class="inst-contact-item">
+                                    <span>Direct Phone</span>
+                                    <strong id="installCardPhoneWrap"><a id="installCardPhone" href="tel:08133615132" style="color:#004AAD; text-decoration:none;">0813 361 5132</a></strong>
+                                </div>
+                                <div class="inst-contact-item">
+                                    <span>Email Address</span>
+                                    <strong id="installCardEmailWrap"><a id="installCardEmail" href="mailto:a.e.renewablesolution@gmail.com" style="color:#004AAD; text-decoration:none;">a.e.renewablesolution@gmail.com</a></strong>
+                                </div>
+                                <div class="inst-contact-item">
+                                    <span>Operating Location</span>
+                                    <strong id="installCardLocation">Central Area / AMAC, Abuja FCT</strong>
+                                </div>
+                                <div class="inst-contact-item">
+                                    <span>Direct Actions</span>
+                                    <div class="installer-quick-actions" id="installCardActions">
+                                        <a id="installCallBtn" href="tel:08133615132" class="btn-inst-call">📞 Call Installer</a>
+                                        <a id="installEmailBtn" href="mailto:AERenewablesolution@gmail.com" class="btn-inst-email">✉️ Email</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6 REQUIRED MILESTONES -->
+                <div class="panel install-milestones-panel">
+                    <div class="panel-header">
+                        <div>
+                            <span class="eyebrow">MILESTONE TRACKING</span>
+                            <h3>6 Required Installation Stages</h3>
+                        </div>
+                        <span class="badge" id="installMilestonesCompletedCount">0 / 6 Stages Verified</span>
+                    </div>
+
+                    <div class="install-milestones-grid" id="installMilestonesGrid">
+                        <!-- 6 Stage Cards rendered dynamically -->
+                    </div>
+                </div>
+
+                <!-- LIVE PHOTOGRAPHIC EVIDENCE FEED -->
+                <div class="panel install-evidence-panel">
+                    <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
+                        <div>
+                            <span class="eyebrow">VERIFIED SITE DOCUMENTATION</span>
+                            <h3>Installer Work Progress Photos</h3>
+                        </div>
+                        <div class="gallery-filter-tabs" id="evidenceFilterTabs">
+                            <button class="filter-chip active" data-filter="all">All Photos (<span id="filterCountAll">0</span>)</button>
+                            <button class="filter-chip" data-filter="starting">Starting Site</button>
+                            <button class="filter-chip" data-filter="working">Work Progress</button>
+                            <button class="filter-chip" data-filter="panels">Solar Panels</button>
+                            <button class="filter-chip" data-filter="inverter">Inverter</button>
+                            <button class="filter-chip" data-filter="battery">Battery</button>
+                            <button class="filter-chip" data-filter="finishing">Commissioning</button>
+                        </div>
+                    </div>
+
+                    <div class="install-evidence-grid" id="installEvidenceGrid">
+                        <!-- Evidence photos rendered dynamically -->
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 REQUESTS
+            ================================================== -->
+
+            <section class="page" id="requestsPage">
+
+                <div class="page-heading">
+
+                    <div>
+                        <span class="eyebrow">SERVICE REQUESTS</span>
+                        <h2>Requests</h2>
+                        <p>Submit and track requests with AE Network.</p>
+                    </div>
+
+                    <button class="primary-btn" data-action="new-request">
+                        + New Request
+                    </button>
+
+                </div>
+
+
+                <div class="request-grid">
+
+                    <button class="request-card" data-request-type="Solar Consultation">
+                        <span>☀</span>
+                        <strong>Solar Consultation</strong>
+                        <small>Discuss a new solar project.</small>
+                    </button>
+
+                    <button class="request-card" data-request-type="Maintenance">
+                        <span>⚙</span>
+                        <strong>Maintenance</strong>
+                        <small>Request system maintenance.</small>
+                    </button>
+
+                    <button class="request-card" data-request-type="System Upgrade">
+                        <span>↑</span>
+                        <strong>System Upgrade</strong>
+                        <small>Increase your system capacity.</small>
+                    </button>
+
+                    <button class="request-card" data-request-type="Site Survey">
+                        <span>⌖</span>
+                        <strong>Site Survey</strong>
+                        <small>Request a professional site survey.</small>
+                    </button>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <span class="eyebrow">REQUEST HISTORY</span>
+                            <h3>Recent Requests</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="activity-list" id="clientRequestHistoryList">
+
+                        <div class="activity-item">
+                            <div class="activity-icon blue">#</div>
+                            <div>
+                                <strong>System Upgrade Request</strong>
+                                <span>AE-REQ-2026-018 · Awaiting Engineering Call</span>
+                            </div>
+                            <span class="status-pill active">In Review</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 DOCUMENTS & MANUALS
+            ================================================== -->
+
+            <section class="page" id="documentsPage">
+
+                <div class="page-heading">
+
+                    <div>
+                        <span class="eyebrow">DOCUMENT VAULT</span>
+                        <h2>Documents & Manuals</h2>
+                        <p>Access your project documentation, official system manuals, and company technical guides securely.</p>
+                    </div>
+
+                </div>
+
+                <!-- OFFICIAL COMPANY & SYSTEM MANUALS -->
+                <div class="panel" style="margin-bottom: 24px;">
+
+                    <div class="panel-header">
+                        <div>
+                            <span class="eyebrow">OFFICIAL MANUALS & GUIDES</span>
+                            <h3>AE Engineering & Operations Manuals</h3>
+                        </div>
+                        <span class="badge" style="background:#EFF6FF; color:#004AAD; font-weight:800;">2026 Edition</span>
+                    </div>
+
+                    <div class="document-grid" style="margin-top: 16px;">
+
+                        <article class="document-card featured-manual">
+                            <span class="document-icon green-icon">📘</span>
+                            <div>
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                                    <strong>AE Solar System User & Operations Manual</strong>
+                                    <span class="doc-badge-pill system-pill">System Manual</span>
+                                </div>
+                                <small>Official client guide for inverter operation, daily solar yield monitoring, lithium battery care, and safety protocols · 4.8 MB</small>
+                            </div>
+                            <button class="table-btn primary-doc-btn" onclick="openDocumentViewer('system-manual')">View Manual</button>
+                        </article>
+
+                        <article class="document-card featured-manual">
+                            <span class="document-icon blue-icon">📙</span>
+                            <div>
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                                    <strong>AE Renewable Ltd — Company Technical Manual</strong>
+                                    <span class="doc-badge-pill tech-pill">Company Technical Manual</span>
+                                </div>
+                                <small>Engineering specifications, standard array topology, surge protection guidelines, MC4 stringing protocols, and earthing standards · 8.2 MB</small>
+                            </div>
+                            <button class="table-btn primary-doc-btn" onclick="openDocumentViewer('technical-manual')">View Manual</button>
+                        </article>
+
+                        <article class="document-card featured-manual">
+                            <span class="document-icon gold-icon">📜</span>
+                            <div>
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                                    <strong>Warranty & Quality Assurance Certificate</strong>
+                                    <span class="doc-badge-pill warranty-pill">Warranty SLA</span>
+                                </div>
+                                <small>25-Year Tier-1 PV Module Performance Warranty, 5-Year Inverter Guarantee, and AE Emergency Coverage · 1.5 MB</small>
+                            </div>
+                            <button class="table-btn primary-doc-btn" onclick="openDocumentViewer('warranty')">View Policy</button>
+                        </article>
+
+                        <article class="document-card featured-manual">
+                            <span class="document-icon red-icon">🛡️</span>
+                            <div>
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                                    <strong>Lithium BMS & Fire Safety Compliance Protocol</strong>
+                                    <span class="doc-badge-pill safety-pill">Safety Standard</span>
+                                </div>
+                                <small>Safe operating temperatures, emergency shutdown procedure, high voltage DC isolation, and rapid disconnect checklist · 2.1 MB</small>
+                            </div>
+                            <button class="table-btn primary-doc-btn" onclick="openDocumentViewer('safety')">View Protocol</button>
+                        </article>
+
+                    </div>
+
+                </div>
+
+                <!-- PROJECT-SPECIFIC ENGINEERING DOCUMENTS -->
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <span class="eyebrow">PROJECT RECORDS</span>
+                            <h3>Project Engineering Documents</h3>
+                        </div>
+                        <span class="badge">Verified Records</span>
+                    </div>
+
+                    <div class="document-grid" style="margin-top: 16px;" id="clientProjectDocumentsGrid">
+
+                        <article class="document-card">
+                            <span class="document-icon red-icon">PDF</span>
+                            <div>
+                                <strong>Formal Sizing Quotation & BOQ Breakdown</strong>
+                                <small>System capacity specifications, component pricing, and contractual terms · 1.2 MB</small>
+                            </div>
+                            <button class="table-btn" onclick="openDocumentViewer('quotation')">View</button>
+                        </article>
+
+                        <article class="document-card">
+                            <span class="document-icon red-icon">PDF</span>
+                            <div>
+                                <strong>Site Survey & Structural Assessment Report</strong>
+                                <small>Roof azimuth, tilt angle, structural integrity verification, and shade analysis · 2.8 MB</small>
+                            </div>
+                            <button class="table-btn" onclick="openDocumentViewer('site-survey')">View</button>
+                        </article>
+
+                        <article class="document-card">
+                            <span class="document-icon red-icon">PDF</span>
+                            <div>
+                                <strong>Installation & Commissioning Sign-Off Certificate</strong>
+                                <small>6-stage verified photographic evidence, VOC/ISC test report, and handover sign-off · 3.1 MB</small>
+                            </div>
+                            <button class="table-btn" onclick="openDocumentViewer('installation-report')">View</button>
+                        </article>
+
+                        <article class="document-card">
+                            <span class="document-icon red-icon">PDF</span>
+                            <div>
+                                <strong>Official Payment & Settlement Receipt</strong>
+                                <small>Verified transaction reference, payment allocation, and balance clearance record · 840 KB</small>
+                            </div>
+                            <button class="table-btn" onclick="openDocumentViewer('receipt')">View</button>
+                        </article>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 SUPPORT
+            ================================================== -->
+
+            <section class="page" id="supportPage">
+
+                <div class="page-heading">
+
+                    <div>
+                        <span class="eyebrow">CLIENT SUPPORT</span>
+                        <h2>Support Center</h2>
+                        <p>We're here to help with your AE Network project.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="support-grid">
+
+                    <button class="support-card" data-action="support">
+                        <span>◉</span>
+                        <strong>System Issue</strong>
+                        <small>Report a problem with your solar system.</small>
+                    </button>
+
+                    <button class="support-card" data-action="support">
+                        <span>?</span>
+                        <strong>General Support</strong>
+                        <small>Ask a question about your account.</small>
+                    </button>
+
+                    <button class="support-card" data-action="support">
+                        <span>▣</span>
+                        <strong>Project Support</strong>
+                        <small>Get help with an ongoing project.</small>
+                    </button>
+
+                </div>
+
+
+                <div class="panel contact-panel">
+
+                    <span class="eyebrow">AE RENEWABLE LTD</span>
+
+                    <h3>Need immediate assistance?</h3>
+
+                    <p>
+                        Contact the AE Network support team for project,
+                        installation and system assistance.
+                    </p>
+
+                    <div class="contact-actions">
+
+                        <a href="tel:08133615132" class="primary-btn">
+                            Call Support
+                        </a>
+
+                        <a
+                            href="mailto:AERenewablesolution@gmail.com"
+                            class="secondary-btn"
+                        >
+                            Email Support
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PROFILE
+            ================================================== -->
+
+            <section class="page" id="profilePage">
+
+                <div class="page-heading">
+
+                    <div>
+                        <span class="eyebrow">VERIFIED ACCOUNT & CREDENTIALS</span>
+                        <h2>My Profile</h2>
+                        <p>Your client identity and project ownership parameters.</p>
+                    </div>
+
+                    <button class="btn-request-update" data-action="request-profile-update" style="background:#004AAD; color:#fff; border:none; padding:10px 18px; border-radius:8px; font-weight:700; cursor:pointer;">
+                        🔒 Request Profile Update
+                    </button>
+
+                </div>
+
+
+                <div class="profile-layout">
+
+                    <div class="panel profile-card-large">
+
+                        <div class="large-avatar">
+                            EA
+                        </div>
+
+                        <h3>Eniola Abdulrasaq</h3>
+
+                        <p>AE Network Client</p>
+
+                        <span class="status-pill completed">
+                            ✓ Verified Client
+                        </span>
+
+                        <div style="margin-top:16px; font-size:11px; color:#64748b; line-height:1.5;">
+                            Account ID: <strong>AE-CLI-2026-081</strong><br>
+                            Status: <strong style="color:#008000;">Active & Compliant</strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="form-grid">
+
+                            <div style="display:flex; flex-direction:column; gap:6px;">
+                                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:#334155;">
+                                    <span>Full Name</span>
+                                    <span style="font-size:10.5px; color:#64748b; background:#f1f5f9; padding:2px 8px; border-radius:4px;">🔒 Locked</span>
+                                </div>
+                                <input
+                                    type="text"
+                                    value="Eniola Abdulrasaq"
+                                    readonly
+                                    style="background:#f8fafc; color:#1e293b; border:1px solid #cbd5e1; cursor:not-allowed; padding:12px 14px; border-radius:8px; font-weight:600;"
+                                >
+                            </div>
+
+                            <div style="display:flex; flex-direction:column; gap:6px;">
+                                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:#334155;">
+                                    <span>Email Address (Gmail)</span>
+                                    <span style="font-size:10.5px; color:#64748b; background:#f1f5f9; padding:2px 8px; border-radius:4px;">🔒 Locked</span>
+                                </div>
+                                <input
+                                    type="email"
+                                    value="AERenewablesolution@gmail.com"
+                                    readonly
+                                    style="background:#f8fafc; color:#1e293b; border:1px solid #cbd5e1; cursor:not-allowed; padding:12px 14px; border-radius:8px; font-weight:600;"
+                                >
+                            </div>
+
+                            <div style="display:flex; flex-direction:column; gap:6px;">
+                                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:#334155;">
+                                    <span>Phone Number</span>
+                                    <span style="font-size:10.5px; color:#64748b; background:#f1f5f9; padding:2px 8px; border-radius:4px;">🔒 Locked</span>
+                                </div>
+                                <input
+                                    type="tel"
+                                    value="0813 361 5132"
+                                    readonly
+                                    style="background:#f8fafc; color:#1e293b; border:1px solid #cbd5e1; cursor:not-allowed; padding:12px 14px; border-radius:8px; font-weight:600;"
+                                >
+                            </div>
+
+                            <div style="display:flex; flex-direction:column; gap:6px;">
+                                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:#334155;">
+                                    <span>Operating / Site Location</span>
+                                    <span style="font-size:10.5px; color:#64748b; background:#f1f5f9; padding:2px 8px; border-radius:4px;">🔒 Locked</span>
+                                </div>
+                                <input
+                                    type="text"
+                                    value="Abuja FCT, Nigeria"
+                                    readonly
+                                    style="background:#f8fafc; color:#1e293b; border:1px solid #cbd5e1; cursor:not-allowed; padding:12px 14px; border-radius:8px; font-weight:600;"
+                                >
+                            </div>
+
+                        </div>
+
+                        <!-- WRITE-UP: PROFILE EDITING POLICY & INSTRUCTIONS -->
+                        <div style="background:linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%); border:1px solid #bfdbfe; border-left:5px solid #004AAD; border-radius:12px; padding:20px; margin-top:24px;">
+                            <h4 style="color:#003380; font-size:15px; font-weight:800; margin-bottom:8px;">
+                                🛡️ Verified Identity & Contract Integrity Notice
+                            </h4>
+                            <p style="color:#334155; font-size:13px; line-height:1.65; margin-bottom:14px;">
+                                Your <strong>Full Name</strong>, <strong>Email (Gmail)</strong>, <strong>Phone Number</strong>, and <strong>Site Location</strong> are cryptographically locked and bound to your legal Solar Energy Purchase Agreements, Warranty Guarantee Certificates, and COREN/NEMSA Installation Permits.
+                            </p>
+                            <p style="color:#334155; font-size:13px; line-height:1.65; margin-bottom:16px;">
+                                <strong>Need to update or transfer your profile details?</strong><br>
+                                If your legal name has changed, your email or phone requires updating, or you are relocating your solar installation site, click the <strong>"Request Profile Update"</strong> button below. Our client verification desk will verify your identity and process the update within <strong>2 to 4 business hours</strong>.
+                            </p>
+                            <button class="primary-btn" data-action="request-profile-update" style="padding:10px 18px; font-size:12px;">
+                                📝 Submit Profile Update Request
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     NOTIFICATION DRAWER
+========================================================= -->
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="notification-drawer" id="notificationDrawer">
+
+    <div class="drawer-header">
+
+        <div>
+            <span class="eyebrow">ACCOUNT</span>
+            <h3>Notifications</h3>
+        </div>
+
+        <button id="closeNotifications">×</button>
+
+    </div>
+
+
+    <div class="notification-list">
+
+        <div class="notification-item unread">
+
+            <div class="notification-dot"></div>
+
+            <div>
+                <strong>Installation Update</strong>
+                <p>
+                    Solar panel installation has been completed.
+                </p>
+                <small>2 hours ago</small>
+            </div>
+
+        </div>
+
+
+        <div class="notification-item unread">
+
+            <div class="notification-dot"></div>
+
+            <div>
+                <strong>Quotation Ready</strong>
+                <p>
+                    Quotation AE-QUO-2026-042 is awaiting your approval.
+                </p>
+                <small>5 hours ago</small>
+            </div>
+
+        </div>
+
+
+        <div class="notification-item">
+
+            <div class="notification-dot"></div>
+
+            <div>
+                <strong>Payment Confirmed</strong>
+                <p>
+                    Your ₦4,000,000 payment has been confirmed.
+                </p>
+                <small>2 days ago</small>
+            </div>
+
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- MODAL: CLIENT WEEKLY WRITE-UP SUBMISSION -->
+<div class="modal-overlay" id="modalClientWeeklyCheckup" style="display:none; position:fixed; inset:0; background:rgba(2,12,26,0.7); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#ffffff; border-radius:16px; max-width:540px; width:92%; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.4);">
+        <div style="background:linear-gradient(135deg, #022c22, #064e3b); color:#fff; padding:18px 24px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <h3 style="margin:0; font-size:16px; color:#fff;">Weekly System Health Consultation</h3>
+                <p style="margin:4px 0 0; font-size:12px; color:#a7f3d0;">Submit your weekly operational write-up to our engineering team.</p>
+            </div>
+            <button type="button" onclick="closeClientWeeklyCheckupModal()" style="background:rgba(255,255,255,0.15); border:none; color:#fff; border-radius:6px; width:28px; height:28px; font-size:18px; cursor:pointer;">×</button>
+        </div>
+        <form id="formClientWeeklyCheckup" onsubmit="submitClientWeeklyReport(event)" style="padding:22px 24px;">
+            <input type="hidden" id="clientWeeklyCheckupId">
+            <div style="margin-bottom:14px;">
+                <label style="display:block; font-size:12px; font-weight:700; color:#334155; margin-bottom:6px;">Current System Operating Condition *</label>
+                <select id="clientWeeklyCondition" style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; background:#fff;">
+                    <option value="Optimal - Peak Performance" selected>Optimal - Peak Performance (No Issues)</option>
+                    <option value="Good - Minor Load Fluctuations">Good - Minor Load Fluctuations</option>
+                    <option value="Observation - Battery Discharge Fast">Observation - Battery Discharging Fast</option>
+                    <option value="Technical Inquiry Needed">Technical Inquiry Needed - Engineer Contact</option>
+                </select>
+            </div>
+            <div style="margin-bottom:18px;">
+                <label style="display:block; font-size:12px; font-weight:700; color:#334155; margin-bottom:6px;">Your Operational Write-up / Comments *</label>
+                <textarea id="clientWeeklyWriteup" rows="4" placeholder="e.g. System has provided 24/7 power all week. Inverter peak load was 4.2kW on Wednesday during laundry. Generator was not needed..." required style="width:100%; box-sizing:border-box; padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit; resize:vertical;"></textarea>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid #e2e8f0; padding-top:16px;">
+                <button type="button" class="secondary-btn" onclick="closeClientWeeklyCheckupModal()" style="padding:9px 16px; border-radius:6px; cursor:pointer;">Cancel</button>
+                <button type="submit" id="btnSubmitWeeklyReport" class="primary-btn" style="background:#059669; border-color:#059669; color:#fff; font-weight:700; padding:9px 20px; border-radius:6px; cursor:pointer;">
+                    Submit Write-up Report →
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- =========================================================
+     MODAL
+========================================================= -->
+
+<div class="modal-overlay" id="modalOverlay">
+
+    <div class="modal" id="modal">
+
+        <button class="modal-close" id="modalClose">
+            ×
+        </button>
+
+        <div id="modalContent"></div>
+
+    </div>
+
+</div>
+
+
+<script src="/client/client.js?v=20260926-02"></script>
+
+<div class="client-toast" id="clientToast"></div>
+</body>
+</html>

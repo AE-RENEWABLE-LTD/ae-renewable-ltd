@@ -1,0 +1,99 @@
+now inside the studio we need a real life work logic and some removal first reduce the header to breath if possible we introduce sidebar
+
+ (← Client Intake & Sizing Assessment|AE Renewable Engineering Studio
+
+
+
+Operations Admin ↗⚡ ARDE V1.0 Engineering Engine
+
+
+
+Active Client AssessmentClient:Eniola Abdulrasaq|Project Code:PRJ-202610-4757|Property:Residential
+
+
+
+← Switch / Edit Assessment)
+
+
+
+then our studio layout must be real unique modern and aesthetics our color but our blue is trusteable for background
+
+
+
+this section (AE RenewableDesign Engine
+
+ARDE Version 1.0
+
+
+
+Engineering Mode
+
+
+
+remove(DashboardDesignQuotationMaterialReports)  )
+
+
+
+
+
+
+
+
+
+System Input
+
+Enter all required design information.
+
+
+
+Load Power (W)
+
+
+
+Backup Time (Hours)
+
+
+
+Peak Sun Hours
+
+
+
+Panel Factor
+
+
+
+Depth of Discharge
+
+
+
+System Losses
+
+
+
+Load Percentage% on Battery
+
+
+
+⚡ Compute Design = do overall work in the studio and print out the quotation after the settle of "System Design Result""Protection Design""PV String Configuration only the MC4 Connector Pairs  " and settled "Bill of Materials (BOQ)""Cost Summary" load then it sent username which is client id and password which is the first name to the client mail and give a sign to client to check mail for account login as account opening and and inside the mail put a link direct to open the login page for client, and ask the client to save pdf but attach username and password the the pdf own,  for the quotation use the format of "AE.html" and refine it we are using A4 size   Reset = remain, Quotation BOQ=format like Residential_Quotation.html and it come animatic from bottoom comming up like print up, Print = this only on bigger screen , Export PDF = only on bigger screen
+
+
+
+so we dont need to see the other section like 
+
+System Design Result
+
+Protection Design
+
+
+
+Bill of Materials (BOQ)
+
+
+
+then dont change any logic of inverter battery solarpanel and Protection Design you can just only refine it small 
+
+and on "Remaining Panels   " should calculate base on the calculation panel quantity and panel on series
+
+
+
+all the price we create a file inside the admin for price update and a room for other materials that can be added later wired them 

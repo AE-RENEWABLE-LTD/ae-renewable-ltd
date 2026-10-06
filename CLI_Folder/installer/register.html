@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="AE Renewable Network Installer Registration"
+    >
+
+    <meta
+        name="theme-color"
+        content="#010a1d"
+    >
+
+    <meta
+        name="color-scheme"
+        content="dark light"
+    >
+
+    <title>
+        Installer Registration | AE Renewable Ltd
+    </title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="register.css"
+    >
+
+</head>
+
+
+<body>
+
+    <!-- =====================================================
+         PAGE SHELL
+    ====================================================== -->
+
+    <main class="registration-page">
+
+        <!-- =================================================
+             BRAND PANEL
+        ================================================== -->
+
+        <aside class="brand-panel">
+
+            <div class="brand-panel-inner">
+
+                <a
+                    href="/installer/"
+                    class="brand"
+                    aria-label="AE Renewable Ltd Installer Network"
+                >
+
+                    <div class="brand-mark">
+                        AE
+                    </div>
+
+                    <div class="brand-copy">
+
+                        <span class="brand-name">
+                            AE RENEWABLE
+                        </span>
+
+                        <span class="brand-network">
+                            INSTALLER NETWORK
+                        </span>
+
+                    </div>
+
+                </a>
+
+
+                <div class="brand-content">
+
+                    <span class="eyebrow">
+                        PROFESSIONAL INSTALLER NETWORK
+                    </span>
+
+                    <h1>
+                        Build with
+                        <span>AE Renewable.</span>
+                    </h1>
+
+                    <p>
+                        Join a professional network of verified
+                        renewable energy installers delivering
+                        reliable energy solutions across Nigeria.
+                    </p>
+
+
+                    <div class="brand-features">
+
+                        <div class="brand-feature">
+
+                            <span class="feature-icon">
+                                ✓
+                            </span>
+
+                            <div>
+                                <strong>
+                                    Verified Network
+                                </strong>
+
+                                <span>
+                                    Work within a trusted installer ecosystem.
+                                </span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="brand-feature">
+
+                            <span class="feature-icon">
+                                ✓
+                            </span>
+
+                            <div>
+                                <strong>
+                                    Project Opportunities
+                                </strong>
+
+                                <span>
+                                    Connect with suitable AE Renewable projects.
+                                </span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="brand-feature">
+
+                            <span class="feature-icon">
+                                ✓
+                            </span>
+
+                            <div>
+                                <strong>
+                                    Professional Profile
+                                </strong>
+
+                                <span>
+                                    Build your installer profile and credentials.
+                                </span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="brand-footer">
+
+                    <div class="brand-status">
+
+                        <span class="status-dot"></span>
+
+                        <span>
+                            Installer Network
+                            <strong>Operational</strong>
+                        </span>
+
+                    </div>
+
+                    <span class="brand-location">
+                        Abuja · Nigeria
+                    </span>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             REGISTRATION WORKSPACE
+        ================================================== -->
+
+        <section class="registration-workspace">
+
+            <div class="registration-container">
+
+
+                <!-- =============================================
+                     HEADER
+                ============================================== -->
+
+                <header class="registration-header">
+
+                    <a
+                        href="/installer/login"
+                        class="mobile-login-link"
+                    >
+                        Already registered?
+                        <strong>Sign in</strong>
+                    </a>
+
+
+                    <div class="header-label">
+                        INSTALLER ONBOARDING
+                    </div>
+
+                    <h2>
+                        Join the AE Renewable
+                        Installer Network
+                    </h2>
+
+                    <p>
+                        Create your installer account to begin
+                        your professional onboarding.
+                    </p>
+
+                </header>
+
+
+                <!-- =============================================
+                     PROGRESS
+                ============================================== -->
+
+                <div
+                    class="registration-progress"
+                    id="registrationProgress"
+                    aria-label="Registration progress"
+                >
+
+                    <div
+                        class="progress-step active"
+                        data-step="1"
+                    >
+
+                        <span class="progress-number">
+                            01
+                        </span>
+
+                        <div class="progress-copy">
+
+                            <strong>
+                                Registration
+                            </strong>
+
+                            <span>
+                                Account details
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="progress-line"></div>
+
+
+                    <div
+                        class="progress-step"
+                        data-step="2"
+                    >
+
+                        <span class="progress-number">
+                            02
+                        </span>
+
+                        <div class="progress-copy">
+
+                            <strong>
+                                Email verification
+                            </strong>
+
+                            <span>
+                                Confirm your email
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =============================================
+                     MESSAGE CONTAINER
+                ============================================== -->
+
+                <div
+                    id="messageContainer"
+                    class="message-container"
+                    hidden
+                    role="alert"
+                    aria-live="polite"
+                ></div>
+
+
+                <!-- =============================================
+                     REGISTRATION STEP
+                ============================================== -->
+
+                <section
+                    id="registrationStep"
+                    class="registration-step"
+                >
+
+                    <form
+                        id="registrationForm"
+                        novalidate
+                    >
+
+
+                        <!-- =====================================
+                             ACCOUNT INFORMATION
+                        ====================================== -->
+
+                        <div class="form-section">
+
+                            <div class="section-heading">
+
+                                <div class="section-number">
+                                    01
+                                </div>
+
+                                <div>
+
+                                    <h3>
+                                        Account information
+                                    </h3>
+
+                                    <p>
+                                        Tell us who will manage
+                                        this installer account.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-grid">
+
+
+                                <!-- Full Name -->
+
+                                <div class="form-field full-width">
+
+                                    <label for="fullName">
+                                        Full name
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <div class="input-wrapper">
+
+                                        <span
+                                            class="input-icon"
+                                            aria-hidden="true"
+                                        >
+                                            ID
+                                        </span>
+
+                                        <input
+                                            type="text"
+                                            id="fullName"
+                                            name="fullName"
+                                            placeholder="Enter your full name"
+                                            autocomplete="name"
+                                            maxlength="150"
+                                            required
+                                        >
+
+                                    </div>
+
+                                    <small class="field-hint">
+                                        Enter your first and last name.
+                                    </small>
+
+                                </div>
+
+
+                                <!-- Phone -->
+
+                                <div class="form-field">
+
+                                    <label for="phone">
+                                        Phone number
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <div class="input-wrapper">
+
+                                        <span
+                                            class="input-prefix"
+                                            aria-hidden="true"
+                                        >
+                                            +234
+                                        </span>
+
+                                        <input
+                                            type="tel"
+                                            id="phone"
+                                            name="phone"
+                                            placeholder="801 234 5678"
+                                            autocomplete="tel"
+                                            inputmode="tel"
+                                            maxlength="30"
+                                            required
+                                        >
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Email -->
+
+                                <div class="form-field">
+
+                                    <label for="email">
+                                        Email address
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <div class="input-wrapper">
+
+                                        <span
+                                            class="input-icon"
+                                            aria-hidden="true"
+                                        >
+                                            @
+                                        </span>
+
+                                        <input
+                                            type="email"
+                                            id="email"
+                                            name="email"
+                                            placeholder="you@example.com"
+                                            autocomplete="email"
+                                            maxlength="255"
+                                            required
+                                        >
+
+                                    </div>
+
+                                    <small class="field-hint">
+                                        A verification code will be sent here.
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =====================================
+                             COMPANY INFORMATION
+                        ====================================== -->
+
+                        <div class="form-section">
+
+                            <div class="section-heading">
+
+                                <div class="section-number">
+                                    02
+                                </div>
+
+                                <div>
+
+                                    <h3>
+                                        Company information
+                                    </h3>
+
+                                    <p>
+                                        Provide the business details
+                                        associated with your installer profile.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-grid">
+
+
+                                <!-- Company Name -->
+
+                                <div class="form-field">
+
+                                    <label for="companyName">
+                                        Company / business name
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <div class="input-wrapper">
+
+                                        <span
+                                            class="input-icon"
+                                            aria-hidden="true"
+                                        >
+                                            CO
+                                        </span>
+
+                                        <input
+                                            type="text"
+                                            id="companyName"
+                                            name="companyName"
+                                            placeholder="Enter company or business name"
+                                            autocomplete="organization"
+                                            maxlength="255"
+                                            required
+                                        >
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- RC Number -->
+
+                                <div class="form-field">
+
+                                    <label for="rcNumber">
+                                        RC number
+                                        <span class="optional">
+                                            Optional
+                                        </span>
+                                    </label>
+
+                                    <div class="input-wrapper">
+
+                                        <span
+                                            class="input-icon"
+                                            aria-hidden="true"
+                                        >
+                                            RC
+                                        </span>
+
+                                        <input
+                                            type="text"
+                                            id="rcNumber"
+                                            name="rcNumber"
+                                            placeholder="e.g. RC123456"
+                                            maxlength="100"
+                                            autocomplete="off"
+                                        >
+
+                                    </div>
+
+                                    <small class="field-hint">
+                                        Leave blank if your business is not registered.
+                                    </small>
+
+                                </div>
+
+
+                                <!-- Specialization -->
+
+                                <div class="form-field">
+
+                                    <label for="specialization">
+                                        Primary specialization
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <div class="input-wrapper select-wrapper">
+
+                                        <span
+                                            class="input-icon"
+                                            aria-hidden="true"
+                                        >
+                                            SP
+                                        </span>
+
+                                        <select
+                                            id="specialization"
+                                            name="specialization"
+                                            required
+                                        >
+
+                                            <option
+                                                value=""
+                                                selected
+                                                disabled
+                                            >
+                                                Select specialization
+                                            </option>
+
+                                            <option value="Solar Installation">
+                                                Solar Installation
+                                            </option>
+
+                                            <option value="Electrical Engineering">
+                                                Electrical Engineering
+                                            </option>
+
+                                            <option value="CCTV Installation">
+                                                CCTV Installation
+                                            </option>
+
+                                            <option value="Electric Fence Installation">
+                                                Electric Fence Installation
+                                            </option>
+
+                                            <option value="Solar & Electrical Engineering">
+                                                Solar & Electrical Engineering
+                                            </option>
+
+                                            <option value="Solar Maintenance">
+                                                Solar Maintenance
+                                            </option>
+
+                                            <option value="Other">
+                                                Other
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Other Specialization -->
+
+                                <div
+                                    class="form-field hidden"
+                                    id="otherSpecializationGroup"
+                                >
+
+                                    <label for="otherSpecialization">
+                                        Describe your specialization
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <div class="input-wrapper">
+
+                                        <span
+                                            class="input-icon"
+                                            aria-hidden="true"
+                                        >
+                                            +
+                                        </span>
+
+                                        <input
+                                            type="text"
+                                            id="otherSpecialization"
+                                            name="otherSpecialization"
+                                            placeholder="Enter your specialization"
+                                            maxlength="150"
+                                        >
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =====================================
+                             BUSINESS LOCATION
+                        ====================================== -->
+
+                        <div class="form-section">
+
+                            <div class="section-heading">
+
+                                <div class="section-number">
+                                    03
+                                </div>
+
+                                <div>
+
+                                    <h3>
+                                        Business location
+                                    </h3>
+
+                                    <p>
+                                        Tell us where your installer
+                                        operations are based.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-grid">
+
+
+                                <!-- State -->
+
+                                <div class="form-field">
+
+                                    <label for="state">
+                                        State
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <div class="input-wrapper">
+
+                                        <span
+                                            class="input-icon"
+                                            aria-hidden="true"
+                                        >
+                                            ST
+                                        </span>
+
+                                        <input
+                                            type="text"
+                                            id="state"
+                                            name="state"
+                                            placeholder="e.g. Abuja"
+                                            maxlength="100"
+                                            autocomplete="address-level1"
+                                            required
+                                        >
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- LGA -->
+
+                                <div class="form-field">
+
+                                    <label for="localGovernment">
+                                        Local Government Area
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <div class="input-wrapper">
+
+                                        <span
+                                            class="input-icon"
+                                            aria-hidden="true"
+                                        >
+                                            LG
+                                        </span>
+
+                                        <input
+                                            type="text"
+                                            id="localGovernment"
+                                            name="localGovernment"
+                                            placeholder="Enter your LGA"
+                                            maxlength="150"
+                                            required
+                                        >
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- City -->
+
+                                <div class="form-field">
+
+                                    <label for="city">
+                                        City
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <div class="input-wrapper">
+
+                                        <span
+                                            class="input-icon"
+                                            aria-hidden="true"
+                                        >
+                                            CT
+                                        </span>
+
+                                        <input
+                                            type="text"
+                                            id="city"
+                                            name="city"
+                                            placeholder="Enter your city"
+                                            maxlength="100"
+                                            autocomplete="address-level2"
+                                            required
+                                        >
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Address -->
+
+                                <div class="form-field full-width">
+
+                                    <label for="address">
+                                        Business address
+                                        <span class="optional">
+                                            Optional
+                                        </span>
+                                    </label>
+
+                                    <div class="input-wrapper textarea-wrapper">
+
+                                        <span
+                                            class="input-icon textarea-icon"
+                                            aria-hidden="true"
+                                        >
+                                            AD
+                                        </span>
+
+                                        <textarea
+                                            id="address"
+                                            name="address"
+                                            rows="3"
+                                            maxlength="500"
+                                            placeholder="Enter your business or operating address"
+                                            autocomplete="street-address"
+                                        ></textarea>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =====================================
+                             SECURITY
+                        ====================================== -->
+
+                        <div class="form-section">
+
+                            <div class="section-heading">
+
+                                <div class="section-number">
+                                    04
+                                </div>
+
+                                <div>
+
+                                    <h3>
+                                        Account security
+                                    </h3>
+
+                                    <p>
+                                        Create a secure password for your
+                                        installer account.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-grid">
+
+
+                                <!-- Password -->
+
+                                <div class="form-field">
+
+                                    <label for="password">
+                                        Password
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <div class="input-wrapper password-wrapper">
+
+                                        <span
+                                            class="input-icon"
+                                            aria-hidden="true"
+                                        >
+                                            **
+                                        </span>
+
+                                        <input
+                                            type="password"
+                                            id="password"
+                                            name="password"
+                                            placeholder="Create a password"
+                                            autocomplete="new-password"
+                                            minlength="8"
+                                            maxlength="128"
+                                            required
+                                        >
+
+                                        <button
+                                            type="button"
+                                            class="password-toggle"
+                                            id="togglePassword"
+                                            aria-label="Show password"
+                                            aria-pressed="false"
+                                        >
+                                            Show
+                                        </button>
+
+                                    </div>
+
+
+                                    <div class="password-strength">
+
+                                        <div class="strength-header">
+
+                                            <span>
+                                                Password strength
+                                            </span>
+
+                                            <strong
+                                                id="passwordStrengthLabel"
+                                            >
+                                                —
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div
+                                            class="strength-volume"
+                                            id="strengthVolume"
+                                            aria-hidden="true"
+                                        >
+
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+
+                                        </div>
+
+
+                                        <p
+                                            id="strengthDescription"
+                                            class="strength-description"
+                                        ></p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Repeat Password -->
+
+                                <div class="form-field">
+
+                                    <label for="repeatPassword">
+                                        Confirm password
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <div class="input-wrapper password-wrapper">
+
+                                        <span
+                                            class="input-icon"
+                                            aria-hidden="true"
+                                        >
+                                            **
+                                        </span>
+
+                                        <input
+                                            type="password"
+                                            id="repeatPassword"
+                                            name="repeatPassword"
+                                            placeholder="Repeat your password"
+                                            autocomplete="new-password"
+                                            minlength="8"
+                                            maxlength="128"
+                                            required
+                                        >
+
+                                        <button
+                                            type="button"
+                                            class="password-toggle"
+                                            id="toggleRepeatPassword"
+                                            aria-label="Show password"
+                                            aria-pressed="false"
+                                        >
+                                            Show
+                                        </button>
+
+                                    </div>
+
+
+                                    <div
+                                        id="passwordMatch"
+                                        class="password-match"
+                                        aria-live="polite"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =====================================
+                             TERMS
+                        ====================================== -->
+
+                        <div class="terms-section">
+
+                            <label
+                                class="terms-check"
+                                for="terms"
+                            >
+
+                                <input
+                                    type="checkbox"
+                                    id="terms"
+                                    name="terms"
+                                    required
+                                >
+
+                                <span class="custom-checkbox">
+                                    <span>✓</span>
+                                </span>
+
+                                <span class="terms-text">
+
+                                    I confirm that the information
+                                    provided is accurate and complete,
+                                    and I agree to the AE Renewable
+                                    Installer Network onboarding
+                                    requirements.
+
+                                </span>
+
+                            </label>
+
+                        </div>
+
+
+                        <!-- =====================================
+                             SUBMIT
+                        ====================================== -->
+
+                        <div class="form-actions">
+
+                            <button
+                                type="submit"
+                                id="registerButton"
+                                class="primary-button"
+                            >
+
+                                <span class="button-text">
+                                    Create installer account
+                                </span>
+
+                                <span
+                                    class="button-arrow"
+                                    aria-hidden="true"
+                                >
+                                    →
+                                </span>
+
+                            </button>
+
+
+                            <p class="login-prompt">
+
+                                Already have an installer account?
+
+                                <a href="/installer/login">
+                                    Sign in
+                                </a>
+
+                            </p>
+
+                        </div>
+
+
+                    </form>
+
+                </section>
+
+
+                <!-- =============================================
+                     OTP VERIFICATION STEP
+                ============================================== -->
+
+                <section
+                    id="otpStep"
+                    class="otp-step hidden"
+                    aria-labelledby="otpHeading"
+                >
+
+                    <div class="otp-card">
+
+                        <div class="otp-icon">
+                            @
+                        </div>
+
+
+                        <div class="otp-header">
+
+                            <span class="eyebrow">
+                                EMAIL VERIFICATION
+                            </span>
+
+                            <h2 id="otpHeading">
+                                Verify your email
+                            </h2>
+
+                            <p>
+                                We sent a 6-digit verification code
+                                to
+                                <strong id="otpEmail">
+                                    your email address
+                                </strong>.
+                            </p>
+
+                        </div>
+
+
+                        <form
+                            id="otpForm"
+                            class="otp-form"
+                            novalidate
+                        >
+
+                            <div class="otp-field">
+
+                                <label for="otpCode">
+                                    Verification code
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="otpCode"
+                                    name="otpCode"
+                                    inputmode="numeric"
+                                    autocomplete="one-time-code"
+                                    pattern="[0-9]{6}"
+                                    maxlength="6"
+                                    minlength="6"
+                                    placeholder="000000"
+                                    aria-label="6-digit verification code"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div
+                                class="otp-timer"
+                                id="otpTimer"
+                            >
+
+                                <span>
+                                    Code expires in
+                                </span>
+
+                                <strong id="otpCountdown">
+                                    10:00
+                                </strong>
+
+                            </div>
+
+
+                            <button
+                                type="submit"
+                                id="verifyOtpButton"
+                                class="primary-button"
+                            >
+
+                                <span class="button-text">
+                                    Verify email
+                                </span>
+
+                                <span
+                                    class="button-arrow"
+                                    aria-hidden="true"
+                                >
+                                    →
+                                </span>
+
+                            </button>
+
+                        </form>
+
+
+                        <div class="otp-actions">
+
+                            <button
+                                type="button"
+                                id="resendOtpButton"
+                                class="secondary-button"
+                            >
+                                Resend code
+                            </button>
+
+                            <button
+                                type="button"
+                                id="changeEmailButton"
+                                class="text-button"
+                            >
+                                Change email
+                            </button>
+
+                        </div>
+
+
+                        <p
+                            id="resendStatus"
+                            class="resend-status"
+                            aria-live="polite"
+                        >
+                            You can request another code in 60s.
+                        </p>
+
+
+                        <div class="verification-security">
+
+                            <span
+                                class="security-icon"
+                                aria-hidden="true"
+                            >
+                                ✓
+                            </span>
+
+                            <div>
+
+                                <strong>
+                                    Keep your code secure
+                                </strong>
+
+                                <p>
+                                    Never share your verification
+                                    code with anyone.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     REGISTRATION SUCCESS
+                ============================================== -->
+
+                <section
+                    id="registrationSuccess"
+                    class="registration-success hidden"
+                    aria-labelledby="successHeading"
+                >
+
+                    <div class="success-card">
+
+                        <div class="success-icon">
+                            ✓
+                        </div>
+
+
+                        <span class="eyebrow">
+                            REGISTRATION COMPLETE
+                        </span>
+
+
+                        <h2 id="successHeading">
+                            Email verified successfully
+                        </h2>
+
+
+                        <p class="success-description">
+                            Your AE Renewable installer account has
+                            been created successfully. Your profile
+                            is now awaiting network review and approval.
+                        </p>
+
+
+                        <div class="status-list">
+
+
+                            <div class="status-row">
+
+                                <div class="status-label">
+
+                                    <span class="status-symbol">
+                                        ✓
+                                    </span>
+
+                                    <span>
+                                        Email verification
+                                    </span>
+
+                                </div>
+
+                                <span class="status-badge verified">
+                                    Verified
+                                </span>
+
+                            </div>
+
+
+                            <div class="status-row">
+
+                                <div class="status-label">
+
+                                    <span class="status-symbol pending">
+                                        •
+                                    </span>
+
+                                    <span>
+                                        Account status
+                                    </span>
+
+                                </div>
+
+                                <span class="status-badge pending">
+                                    Pending review
+                                </span>
+
+                            </div>
+
+
+                            <div class="status-row">
+
+                                <div class="status-label">
+
+                                    <span class="status-symbol pending">
+                                        •
+                                    </span>
+
+                                    <span>
+                                        Payment verification
+                                    </span>
+
+                                </div>
+
+                                <span class="status-badge pending">
+                                    Pending
+                                </span>
+
+                            </div>
+
+
+                            <div class="status-row">
+
+                                <div class="status-label">
+
+                                    <span class="status-symbol pending">
+                                        •
+                                    </span>
+
+                                    <span>
+                                        Network approval
+                                    </span>
+
+                                </div>
+
+                                <span class="status-badge pending">
+                                    Pending
+                                </span>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="success-actions">
+
+                            <a
+                                href="/installer/portal"
+                                id="portalButton"
+                                class="primary-button"
+                            >
+
+                                <span class="button-text">
+                                    Continue to installer portal
+                                </span>
+
+                                <span
+                                    class="button-arrow"
+                                    aria-hidden="true"
+                                >
+                                    →
+                                </span>
+
+                            </a>
+
+
+                            <a
+                                href="/installer/login"
+                                class="secondary-button"
+                            >
+                                Sign in instead
+                            </a>
+
+                        </div>
+
+
+                        <p class="success-note">
+                            Your installer profile may require
+                            additional verification before project
+                            assignments become available.
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     FOOTER
+                ============================================== -->
+
+                <footer class="registration-footer">
+
+                    <div class="footer-brand">
+                        <span class="footer-mark">
+                            AE
+                        </span>
+
+                        <span>
+                            AE RENEWABLE LTD
+                        </span>
+                    </div>
+
+
+                    <div class="footer-links">
+
+                        <a href="/installer/">
+                            Installer Network
+                        </a>
+
+                        <span>·</span>
+
+                        <a href="/installer/login">
+                            Login
+                        </a>
+
+                    </div>
+
+
+                    <p>
+                        © 2026 AE Renewable Ltd.
+                        Powering your future with sun.
+                    </p>
+
+                </footer>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         IMPORTANT:
+         defer ensures the DOM exists before register.js
+         attempts to collect the elements above.
+    ====================================================== -->
+
+    <script
+        src="register.js"
+        defer
+    ></script>
+
+</body>
+
+</html>

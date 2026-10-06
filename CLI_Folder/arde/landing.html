@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>AE Renewable Ltd | Client Intake Assessment Notepad</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/arde/intake.css?v=20261004-02">
+</head>
+<body class="notepad-page">
+
+  <!-- =========================================================
+       MAIN INTAKE NOTEPAD CONTAINER (NO HEADER)
+  ========================================================== -->
+  <main class="intake-container notepad-container">
+
+    <!-- Notepad Title Strip -->
+    <div class="notepad-header">
+      <div class="notepad-badge-strip">
+        <span class="notepad-tag">📋 AE RENEWABLE • CLIENT INTAKE</span>
+      </div>
+      <h1 class="notepad-title">Client Assessment</h1>
+    </div>
+
+    <!-- INTAKE FORM -->
+    <form id="clientIntakeForm" onsubmit="return false;">
+      <div class="intake-grid">
+
+        <!-- =====================================================
+             CARD 1: ENERGY PROFILING & SIZING TARGETS
+        ====================================================== -->
+        <section class="intake-card" id="sectionCard1">
+          <div class="card-title-row">
+            <h2>
+              <span>⚡</span>
+              <span>1. Energy Profiling & Sizing Targets</span>
+            </h2>
+            <span class="card-step-badge">Section 1</span>
+          </div>
+
+          <!-- Interactive Appliance Load Profiler -->
+          <div class="appliance-box">
+            <div class="appliance-header">
+              <strong>
+                <span>🧮</span>
+                <span>Interactive Appliance Load Profiler</span>
+              </strong>
+              <span class="appliance-total-badge" id="applianceTotalBadge">0 W (0.00 kW)</span>
+            </div>
+
+            <div class="appliance-grid">
+              <div class="appliance-item" data-name="Inverter AC (1.5 HP)" data-watts="1100">
+                <div class="appliance-info">
+                  <span class="appliance-name">❄️ Inverter AC (1.5 HP)</span>
+                  <span class="appliance-watts">1,100 W each</span>
+                </div>
+                <div class="appliance-stepper">
+                  <button type="button" class="btn-step btn-step-minus" aria-label="Decrease">−</button>
+                  <span class="step-qty">0</span>
+                  <button type="button" class="btn-step btn-step-plus" aria-label="Increase">+</button>
+                </div>
+              </div>
+
+              <div class="appliance-item" data-name="Standard AC (1.5 HP)" data-watts="1500">
+                <div class="appliance-info">
+                  <span class="appliance-name">❄️ Standard AC (1.5 HP)</span>
+                  <span class="appliance-watts">1,500 W each</span>
+                </div>
+                <div class="appliance-stepper">
+                  <button type="button" class="btn-step btn-step-minus" aria-label="Decrease">−</button>
+                  <span class="step-qty">0</span>
+                  <button type="button" class="btn-step btn-step-plus" aria-label="Increase">+</button>
+                </div>
+              </div>
+
+              <div class="appliance-item" data-name="Refrigerator / Freezer" data-watts="350">
+                <div class="appliance-info">
+                  <span class="appliance-name">🧊 Refrigerator / Freezer</span>
+                  <span class="appliance-watts">350 W each</span>
+                </div>
+                <div class="appliance-stepper">
+                  <button type="button" class="btn-step btn-step-minus" aria-label="Decrease">−</button>
+                  <span class="step-qty">0</span>
+                  <button type="button" class="btn-step btn-step-plus" aria-label="Increase">+</button>
+                </div>
+              </div>
+
+              <div class="appliance-item" data-name="Borehole Water Pump" data-watts="1500">
+                <div class="appliance-info">
+                  <span class="appliance-name">💧 Borehole Water Pump</span>
+                  <span class="appliance-watts">1,500 W each</span>
+                </div>
+                <div class="appliance-stepper">
+                  <button type="button" class="btn-step btn-step-minus" aria-label="Decrease">−</button>
+                  <span class="step-qty">0</span>
+                  <button type="button" class="btn-step btn-step-plus" aria-label="Increase">+</button>
+                </div>
+              </div>
+
+              <div class="appliance-item" data-name="Water Heater" data-watts="2000">
+                <div class="appliance-info">
+                  <span class="appliance-name">🚿 Water Heater</span>
+                  <span class="appliance-watts">2,000 W each</span>
+                </div>
+                <div class="appliance-stepper">
+                  <button type="button" class="btn-step btn-step-minus" aria-label="Decrease">−</button>
+                  <span class="step-qty">0</span>
+                  <button type="button" class="btn-step btn-step-plus" aria-label="Increase">+</button>
+                </div>
+              </div>
+
+              <div class="appliance-item" data-name="TV & Workstations" data-watts="250">
+                <div class="appliance-info">
+                  <span class="appliance-name">📺 TV & Workstations</span>
+                  <span class="appliance-watts">250 W each</span>
+                </div>
+                <div class="appliance-stepper">
+                  <button type="button" class="btn-step btn-step-minus" aria-label="Decrease">−</button>
+                  <span class="step-qty">0</span>
+                  <button type="button" class="btn-step btn-step-plus" aria-label="Increase">+</button>
+                </div>
+              </div>
+
+              <div class="appliance-item" data-name="LED Lighting Circuit" data-watts="200">
+                <div class="appliance-info">
+                  <span class="appliance-name">💡 LED Lighting Circuit</span>
+                  <span class="appliance-watts">200 W per zone</span>
+                </div>
+                <div class="appliance-stepper">
+                  <button type="button" class="btn-step btn-step-minus" aria-label="Decrease">−</button>
+                  <span class="step-qty">0</span>
+                  <button type="button" class="btn-step btn-step-plus" aria-label="Increase">+</button>
+                </div>
+              </div>
+
+              <div class="appliance-item" data-name="Heavy Motor / Machine" data-watts="3500">
+                <div class="appliance-info">
+                  <span class="appliance-name">🏭 Heavy Motor / Machine</span>
+                  <span class="appliance-watts">3,500 W each</span>
+                </div>
+                <div class="appliance-stepper">
+                  <button type="button" class="btn-step btn-step-minus" aria-label="Decrease">−</button>
+                  <span class="step-qty">0</span>
+                  <button type="button" class="btn-step btn-step-plus" aria-label="Increase">+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Battery Storage Chemistry (Retained chip-grid) -->
+          <div class="form-group" style="margin-top: 20px;">
+            <label>
+              <span>Battery Storage Chemistry</span>
+            </label>
+            <div class="chip-grid" style="grid-template-columns: repeat(2, 1fr);">
+              <div class="chip-option chip-battery active" data-value="lithium">
+                <span class="chip-icon">🔋</span>
+                <span class="chip-label">Lithium LiFePO4</span>
+                <span class="chip-sub">15+ Yr • 90% DoD • Recommended</span>
+              </div>
+              <div class="chip-option chip-battery" data-value="gel">
+                <span class="chip-icon">🪫</span>
+                <span class="chip-label">Tubular Deep Cycle</span>
+                <span class="chip-sub">Economical • 60% DoD</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Engineering Notes & Specific Client Instructions -->
+          <div class="form-group no-mb">
+            <label for="generalNotes">
+              <span>Engineering Notes & Specific Client Instructions</span>
+            </label>
+            <textarea id="generalNotes" class="form-textarea" placeholder="Client needs zero generator noise during work hours. Preference for Tier-1 bifacial panels."></textarea>
+          </div>
+        </section>
+
+
+        <!-- =====================================================
+             CARD 2: SITE SURVEY & INFRASTRUCTURE ASSESSMENT
+        ====================================================== -->
+        <section class="intake-card" id="sectionCard2">
+          <div class="card-title-row">
+            <h2>
+              <span>🏗️</span>
+              <span>2. Site Survey & Infrastructure Assessment</span>
+            </h2>
+            <span class="card-step-badge">Section 2</span>
+          </div>
+
+          <!-- Utility Grid Reliability (DISCO / NEPA) -->
+          <div class="form-group">
+            <label>
+              <span>Public Grid Availability (DISCO / NEPA Tier)</span>
+            </label>
+            <div class="chip-grid">
+              <div class="chip-option chip-grid-tier" data-value="Band A (20+ hrs/day)">
+                <span class="chip-icon">⚡</span>
+                <span class="chip-label">Band A</span>
+                <span class="chip-sub">20+ hrs/day</span>
+              </div>
+              <div class="chip-option chip-grid-tier active" data-value="Band B (16-20h/day)">
+                <span class="chip-icon">⚡</span>
+                <span class="chip-label">Band B</span>
+                <span class="chip-sub">16–20 hrs/day</span>
+              </div>
+              <div class="chip-option chip-grid-tier" data-value="Band C (12-16h/day)">
+                <span class="chip-icon">⚡</span>
+                <span class="chip-label">Band C</span>
+                <span class="chip-sub">12–16 hrs/day</span>
+              </div>
+              <div class="chip-option chip-grid-tier" data-value="Band D/E (<8 hrs/day)">
+                <span class="chip-icon">⚠️</span>
+                <span class="chip-label">Band D/E</span>
+                <span class="chip-sub">Unstable &lt;8 hrs</span>
+              </div>
+              <div class="chip-option chip-grid-tier" data-value="Pure Off-Grid (Zero Grid)">
+                <span class="chip-icon">🚫</span>
+                <span class="chip-label">Pure Off-Grid</span>
+                <span class="chip-sub">Zero Grid Supply</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Generator & Inverter Existing Details & Physical Notes -->
+          <div class="form-row-3">
+            <div class="form-group">
+              <label for="generatorKva">
+                <span>Existing Generator (kVA)</span>
+              </label>
+              <input type="number" id="generatorKva" class="form-input" placeholder="e.g. 5 kVA 10 kVA..." min="0">
+            </div>
+            <div class="form-group">
+              <label for="existingInverter">
+                <span>Existing Inverter / Battery?</span>
+              </label>
+              <select id="existingInverter" class="form-select">
+                <option value="None" selected>None (Fresh Solar Installation)</option>
+                <option value="Old Inverter Present (Needs Replacement)">Old Inverter Present (Needs Replacement)</option>
+                <option value="Existing System Expansion Required">Existing System Expansion Required</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="siteNotes">
+                <span>Site Physical Notes (Electrical room, DB)</span>
+              </label>
+              <input type="text" id="siteNotes" class="form-input" placeholder="Site Physical Notes (Electrical room, DB)">
+            </div>
+          </div>
+        </section>
+
+
+        <!-- =====================================================
+             CARD 3: CLIENT & CONTACT PROFILING
+        ====================================================== -->
+        <section class="intake-card" id="sectionCard3">
+          <div class="card-title-row">
+            <h2>
+              <span>👤</span>
+              <span>3. Client & Contact Profiling</span>
+            </h2>
+            <span class="card-step-badge" id="card3StepBadge">Section 3</span>
+          </div>
+
+          <div class="card-error-banner" id="card3ErrorBanner">
+            <span>⚠️</span>
+            <span>Please complete required contact details below to proceed.</span>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="custFullName">
+                <span>Contact Person / Full Name <span class="req">*</span></span>
+              </label>
+              <input type="text" id="custFullName" class="form-input" placeholder="abdulrasaq Eniola" required>
+            </div>
+            <div class="form-group">
+              <label for="custCompany">
+                <span>Company / Organization Name <span class="hint">(If commercial/corporate)</span></span>
+              </label>
+              <input type="text" id="custCompany" class="form-input" placeholder="Company / Organization Name (If commercial/corporate)">
+            </div>
+          </div>
+
+          <div class="form-row-3">
+            <div class="form-group">
+              <label for="custEmail">
+                <span>Email Address <span class="req">*</span></span>
+              </label>
+              <input type="email" id="custEmail" class="form-input" placeholder="Email Address" required>
+            </div>
+            <div class="form-group">
+              <label for="custPhone">
+                <span>Phone / WhatsApp Number <span class="req">*</span></span>
+              </label>
+              <input type="tel" id="custPhone" class="form-input" placeholder="08133000000" required>
+            </div>
+            <div class="form-group">
+              <label for="custPropertyType">
+                <span>Property Classification <span class="req">*</span></span>
+              </label>
+              <select id="custPropertyType" class="form-select">
+                <option value="Residential" selected>Residential (Duplex / Villa / Apartment)</option>
+                <option value="Commercial">Commercial (Office / Plaza / Hotel / Clinic)</option>
+                <option value="Industrial">Industrial (Factory / Warehouse / Cold Room)</option>
+                <option value="Mini-Grid">Mini-Grid / Estate / Community</option>
+                <option value="Agricultural">Agricultural (Solar Irrigation / Farming)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-3">
+            <div class="form-group" style="grid-column: span 2;">
+              <label for="custAddress">
+                <span>Installation Site Street Address <span class="req">*</span></span>
+              </label>
+              <input type="text" id="custAddress" class="form-input" placeholder="Installation Site Street Address" required>
+            </div>
+            <div class="form-group">
+              <label for="custCity">
+                <span>City / LGA <span class="req">*</span></span>
+              </label>
+              <input type="text" id="custCity" class="form-input" placeholder="City / LGA" value="Abuja" required>
+            </div>
+          </div>
+
+          <div class="form-row-1">
+            <div class="form-group no-mb">
+              <label for="custState">
+                <span>State / Region <span class="req">*</span></span>
+              </label>
+              <select id="custState" class="form-select">
+                <option value="FCT" selected>FCT (Federal Capital Territory, Abuja)</option>
+                <option value="Lagos">Lagos</option>
+                <option value="Rivers">Rivers (Port Harcourt)</option>
+                <option value="Kano">Kano</option>
+                <option value="Oyo">Oyo (Ibadan)</option>
+                <option value="Kaduna">Kaduna</option>
+                <option value="Delta">Delta (Warri / Asaba)</option>
+                <option value="Enugu">Enugu</option>
+                <option value="Ogun">Ogun (Abeokuta / Ota)</option>
+                <option value="Anambra">Anambra (Onitsha / Awka)</option>
+                <option value="Edo">Edo (Benin City)</option>
+                <option value="Plateau">Plateau (Jos)</option>
+                <option value="Akwa Ibom">Akwa Ibom (Uyo)</option>
+                <option value="Imo">Imo (Owerri)</option>
+                <option value="Kwara">Kwara (Ilorin)</option>
+                <option value="Abia">Abia (Aba / Umuahia)</option>
+                <option value="Ondo">Ondo (Akure)</option>
+                <option value="Cross River">Cross River (Calabar)</option>
+                <option value="Other">Other State</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- =====================================================
+             PROCEED ACTION (ONLY PROCEED BUTTON)
+        ====================================================== -->
+        <div class="proceed-action-box">
+          <button type="button" class="btn-proceed" id="btnProceed">
+            <span>Proceed →</span>
+          </button>
+        </div>
+
+      </div>
+    </form>
+  </main>
+
+
+  <!-- =========================================================
+       MODAL: SITE SURVEY DIRECT WHATSAPP / CALL INQUIRY
+  ========================================================== -->
+  <div class="modal-overlay" id="siteSurveyModal">
+    <div class="modal-card">
+      <div class="modal-icon-badge">🏗️</div>
+      <h3>Site Survey Received</h3>
+      <p style="color:var(--text-secondary); font-size:14px; margin-bottom: 20px;">
+        Your structural &amp; grid infrastructure assessment is logged in Operations. Connect directly with our engineering team:
+      </p>
+
+      <div class="modal-direct-actions">
+        <a href="https://wa.me/2348133615132?text=I%20need%20someone%20to%20attend%20to%20me%20for%20my%20energy%20profile" target="_blank" class="btn-direct-wa" id="btnSiteWhatsApp">
+          <span>💬 WhatsApp Instant Chat</span>
+        </a>
+        <a href="tel:+2348133615132" class="btn-direct-call" id="btnSiteCall">
+          <span>📞 Call Directly</span>
+        </a>
+      </div>
+      <button type="button" class="btn-fill-contact-form" id="btnOpenSection3FromSite" onclick="window.openSection3Profiling && window.openSection3Profiling()" style="width:100%; margin-top:12px; padding:12px; background:linear-gradient(135deg, #004aad, #0284c7); color:#fff; border:none; border-radius:8px; font-weight:700; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <span>👤 Fill Contact Profile Now (Section 3)</span>
+      </button>
+      <button type="button" class="btn-modal-cancel" id="btnCloseSiteModal" style="margin-top:8px;">Close</button>
+    </div>
+  </div>
+
+
+  <!-- =========================================================
+       MODAL: ENERGY PROFILING CALL REMINDER
+  ========================================================== -->
+  <div class="modal-overlay" id="energyInquiryModal">
+    <div class="modal-card">
+      <div class="modal-icon-badge">⚡</div>
+      <h3>Energy Sizing Profile Received</h3>
+      <p style="color:var(--text-secondary); font-size:14px; margin-bottom: 20px;">
+        Your appliance tally and load calculations have been saved in our Operations database.
+      </p>
+
+      <div class="call-reminder-box">
+        <span style="font-size: 13px; color: var(--emerald-400); font-weight: 700;">✓ Admin Notification Dispatched:</span>
+        <p style="font-size: 13px; color: #fff; margin-top: 6px; line-height: 1.5;">
+          Reach to us here or fill the form then we call you.
+        </p>
+      </div>
+
+      <div class="modal-direct-actions">
+        <a href="https://wa.me/2348133615132?text=I%20need%20someone%20to%20attend%20to%20me%20for%20my%20energy%20profile" target="_blank" class="btn-direct-wa">
+          <span>💬 WhatsApp Instant Chat</span>
+        </a>
+        <a href="tel:+2348133615132" class="btn-direct-call">
+          <span>📞 Call Directly</span>
+        </a>
+      </div>
+      <button type="button" class="btn-fill-contact-form" id="btnOpenSection3FromEnergy" onclick="window.openSection3Profiling && window.openSection3Profiling()" style="width:100%; margin-top:12px; padding:12px; background:linear-gradient(135deg, #004aad, #0284c7); color:#fff; border:none; border-radius:8px; font-weight:700; font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <span>👤 Fill Contact Profile Now (Section 3)</span>
+      </button>
+      <button type="button" class="btn-modal-cancel" id="btnCloseEnergyModal" style="margin-top:8px;">Close</button>
+    </div>
+  </div>
+
+
+  <!-- =========================================================
+       STUDIO LAUNCH LOADING OVERLAY (NO INTERMEDIATE MODALS)
+  ========================================================== -->
+  <div class="studio-launch-overlay" id="studioLaunchOverlay">
+    <div class="launch-loader-box">
+      <div class="launch-spinner"></div>
+      <div class="launch-text">Opening ARDE Studio...</div>
+      <div class="launch-sub">Setting up client profile &amp; engineering workspace</div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div class="toast" id="toast"></div>
+
+  <!-- INTAKE CONTROLLER SCRIPT -->
+  <script src="/arde/intake.js?v=20261004-02"></script>
+</body>
+</html>

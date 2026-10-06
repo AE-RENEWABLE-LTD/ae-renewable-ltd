@@ -6,6 +6,33 @@
 
     <title>Client Portal | AE Network</title>
 
+    <script>
+        (function() {
+            try {
+                if (sessionStorage.getItem("ae_client_logged_in") !== "true") {
+                    document.documentElement.style.display = "none";
+                    window.location.replace("/client/login");
+                    throw new Error("Access Denied: Client authentication required");
+                }
+                var token = localStorage.getItem("aeClientToken") || localStorage.getItem("token") || localStorage.getItem("accessToken") || localStorage.getItem("aeRenewableToken") || "";
+                var rawUser = localStorage.getItem("aeClientUser") || localStorage.getItem("user") || localStorage.getItem("aeRenewableUser") || "{}";
+                var user = {};
+                try { user = JSON.parse(rawUser) || {}; } catch(e) {}
+                var role = user && user.role ? String(user.role).toLowerCase() : "";
+                var allowed = ["client", "admin", "staff", "installer"];
+                if (!token || !role || !allowed.includes(role)) {
+                    document.documentElement.style.display = "none";
+                    window.location.replace("/client/login");
+                    throw new Error("Access Denied: Client authentication required");
+                }
+            } catch(err) {
+                document.documentElement.style.display = "none";
+                window.location.replace("/client/login");
+                throw err;
+            }
+        })();
+    </script>
+
     <meta
         name="description"
         content="AE Network Client Portal — Manage projects, quotations, payments, documents and solar system monitoring."
@@ -19,7 +46,7 @@
         rel="stylesheet"
     >
 
-    <link rel="stylesheet" href="client.css">
+    <link rel="stylesheet" href="/client/client.css?v=20260926-02">
 </head>
 
 <body>
@@ -29,6 +56,7 @@
 ========================================================= -->
 
 <div class="app">
+<div class="sidebar-backdrop" id="clientSidebarOverlay"></div>
 
     <!-- =====================================================
          SIDEBAR
@@ -38,12 +66,12 @@
 
         <div class="brand">
 
-            <div class="brand-mark">
-                AE
+            <div class="brand-mark" style="background:#020c1a; border:1px solid #f4a600; padding:2px; overflow:hidden;">
+                <img src="/images/logo.png" alt="AE Renewable" style="width:100%;height:100%;object-fit:contain;border-radius:8px;">
             </div>
 
             <div class="brand-text">
-                <strong>AE NETWORK</strong>
+                <strong>AE RENEWABLE</strong>
                 <span>CLIENT PORTAL</span>
             </div>
 
@@ -88,7 +116,7 @@
 
             <button class="nav-item" data-page="monitoring">
                 <span class="nav-icon">◉</span>
-                <span>Monitoring</span>
+                <span>Installation Monitoring</span>
                 <span class="online-dot"></span>
             </button>
 
@@ -106,6 +134,10 @@
                 <span class="nav-icon">?</span>
                 <span>Support</span>
             </button>
+
+            <div style="margin: 14px 12px 6px; font-size: 10px; font-weight: 700; color: #64748b; letter-spacing: 0.05em; text-transform: uppercase;">
+                Ecosystem
+            </div>
 
         </nav>
 
@@ -251,8 +283,8 @@
 
                         <div>
                             <span>Active Projects</span>
-                            <strong>2</strong>
-                            <small>1 currently in installation</small>
+                            <strong id="dashStatProjects">—</strong>
+                            <small id="dashStatProjectsSub">Loading...</small>
                         </div>
 
                     </article>
@@ -264,8 +296,8 @@
 
                         <div>
                             <span>Outstanding</span>
-                            <strong>₦2.40m</strong>
-                            <small>Next payment milestone</small>
+                            <strong id="dashStatOutstanding">₦—</strong>
+                            <small id="dashStatOutstandingSub">Next payment milestone</small>
                         </div>
 
                     </article>
@@ -277,10 +309,10 @@
 
                         <div>
                             <span>System Status</span>
-                            <strong class="status-online">
-                                Online
+                            <strong id="dashStatStatus" class="status-online">
+                                —
                             </strong>
-                            <small>Solar system operating normally</small>
+                            <small id="dashStatStatusSub">Project status</small>
                         </div>
 
                     </article>
@@ -291,9 +323,9 @@
                         <div class="stat-icon purple">▧</div>
 
                         <div>
-                            <span>Documents</span>
-                            <strong>14</strong>
-                            <small>3 recently uploaded</small>
+                            <span>Quotations</span>
+                            <strong id="dashStatQuotations">—</strong>
+                            <small id="dashStatQuotationsSub">Loading...</small>
                         </div>
 
                     </article>
@@ -313,10 +345,10 @@
 
                             <div>
                                 <span class="eyebrow">ACTIVE PROJECT</span>
-                                <h3>Residential Hybrid Solar System</h3>
+                                <h3 id="dashActiveProjectName">Residential Hybrid Solar System</h3>
                             </div>
 
-                            <span class="status-pill progress">
+                            <span class="status-pill progress" id="dashActiveProjectStatus">
                                 In Installation
                             </span>
 
@@ -327,17 +359,17 @@
 
                             <div>
                                 <span>Project ID</span>
-                                <strong>AE-PRJ-2026-018</strong>
+                                <strong id="dashActiveProjectId">PRJ-2026</strong>
                             </div>
 
                             <div>
                                 <span>Capacity</span>
-                                <strong>16kVA</strong>
+                                <strong id="dashActiveProjectCapacity">5.0 kVA</strong>
                             </div>
 
                             <div>
                                 <span>Location</span>
-                                <strong>Abuja</strong>
+                                <strong id="dashActiveProjectLocation">Abuja</strong>
                             </div>
 
                         </div>
@@ -349,13 +381,13 @@
 
                                 <span>Project Completion</span>
 
-                                <strong>72%</strong>
+                                <strong id="dashActiveProjectProgress">60%</strong>
 
                             </div>
 
                             <div class="progress-bar">
 
-                                <span style="width:72%"></span>
+                                <span id="dashActiveProjectProgressBar" style="width:60%"></span>
 
                             </div>
 
@@ -436,70 +468,62 @@
                     </article>
 
 
-                    <!-- MONITORING -->
-
-                    <article class="panel monitoring-card">
+                    <!-- INSTALLATION MONITORING DASHBOARD WIDGET -->
+                    <article class="panel monitoring-card install-dash-card">
 
                         <div class="panel-header">
-
                             <div>
-                                <span class="eyebrow">LIVE MONITORING</span>
-                                <h3>Solar System</h3>
+                                <span class="eyebrow">LIVE SITE TRACKING</span>
+                                <h3>Installation Progress</h3>
                             </div>
-
-                            <span class="live-status">
+                            <span class="live-status" id="dashInstallLiveBadge">
                                 <i></i>
                                 LIVE
                             </span>
-
                         </div>
 
-
-                        <div class="energy-display">
-
-                            <span>Current Solar Generation</span>
-
-                            <strong>
-                                8.42 <small>kW</small>
-                            </strong>
-
-                            <div class="energy-change">
-                                ↑ 12.4% today
+                        <div class="install-dash-body" id="dashInstallBody">
+                            <div class="install-dash-progress-wrap">
+                                <div class="install-dash-stage-info">
+                                    <span class="stage-tag" id="dashInstallStageTag">Stage 1 of 6</span>
+                                    <strong id="dashInstallStageName">Starting Site</strong>
+                                </div>
+                                <div class="install-dash-percent" id="dashInstallPercent">0%</div>
                             </div>
 
+                            <div class="progress-bar" style="margin: 10px 0 14px 0;">
+                                <span id="dashInstallProgressBar" style="width: 0%;"></span>
+                            </div>
+
+                            <div class="install-dash-media-preview" id="dashInstallMediaPreview">
+                                <div class="install-thumb-box" id="dashInstallThumbBox">
+                                    <div class="thumb-overlay-badge" id="dashInstallThumbBadge">Latest Evidence</div>
+                                    <img id="dashInstallThumbImg" src="" alt="Installation Progress" style="display:none;" />
+                                    <div class="install-thumb-placeholder" id="dashInstallThumbPlaceholder">
+                                        <span style="font-size:24px;">📸</span>
+                                        <small id="dashInstallPlaceholderText">Awaiting initial site evidence</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="monitor-grid install-meta-grid" style="margin-top: 12px;">
+                                <div class="monitor-item">
+                                    <span>Assigned Installer</span>
+                                    <strong id="dashInstallInstallerName">AE Network Installer</strong>
+                                </div>
+                                <div class="monitor-item">
+                                    <span>Evidence Photos</span>
+                                    <strong id="dashInstallEvidenceCount" class="green-text">0 Verified</strong>
+                                </div>
+                            </div>
                         </div>
-
-
-                        <div class="monitor-grid">
-
-                            <div class="monitor-item">
-                                <span>Battery</span>
-                                <strong>86%</strong>
-                            </div>
-
-                            <div class="monitor-item">
-                                <span>Load</span>
-                                <strong>4.21 kW</strong>
-                            </div>
-
-                            <div class="monitor-item">
-                                <span>Grid</span>
-                                <strong class="green-text">Available</strong>
-                            </div>
-
-                            <div class="monitor-item">
-                                <span>Inverter</span>
-                                <strong class="green-text">Normal</strong>
-                            </div>
-
-                        </div>
-
 
                         <button
                             class="secondary-btn full-width"
                             data-action="monitoring"
+                            style="margin-top: 14px; font-weight: 700;"
                         >
-                            Open Monitoring
+                            Track Live Installation & Photos →
                         </button>
 
                     </article>
@@ -513,17 +537,17 @@
 
                     <!-- QUOTATION -->
 
-                    <article class="panel">
+                    <article class="panel" id="dashPendingQuotationPanel">
 
                         <div class="panel-header">
 
                             <div>
-                                <span class="eyebrow">ACTION REQUIRED</span>
-                                <h3>Pending Quotation</h3>
+                                <span class="eyebrow" id="dashQuotationEyebrow">QUOTATIONS</span>
+                                <h3 id="dashQuotationTitle">Loading...</h3>
                             </div>
 
-                            <span class="status-pill pending">
-                                Awaiting Approval
+                            <span class="status-pill pending" id="dashQuotationStatusBadge">
+                                —
                             </span>
 
                         </div>
@@ -532,37 +556,25 @@
 
                             <div class="quotation-number">
                                 <span>Quotation</span>
-                                <strong>AE-QUO-2026-042</strong>
+                                <strong id="dashQuotationCode">—</strong>
                             </div>
 
                             <div class="quotation-price">
                                 <span>Total</span>
-                                <strong>₦8,750,000</strong>
+                                <strong id="dashQuotationAmount">—</strong>
                             </div>
 
                         </div>
 
-                        <p>
-                            20kVA Hybrid Solar Power System including
-                            installation, protection and commissioning.
-                        </p>
+                        <p id="dashQuotationDesc">Loading quotation details...</p>
 
-                        <div class="button-row">
-
+                        <div class="button-row" id="dashQuotationActions">
                             <button
                                 class="secondary-btn"
                                 data-action="view-quotation"
                             >
                                 Review
                             </button>
-
-                            <button
-                                class="primary-btn"
-                                data-action="accept-quotation"
-                            >
-                                Accept Quotation
-                            </button>
-
                         </div>
 
                     </article>
@@ -589,62 +601,14 @@
                         </div>
 
 
-                        <div class="activity-list">
+                        <div class="activity-list" id="dashActivityList">
 
                             <div class="activity-item">
-
-                                <div class="activity-icon green">
-                                    ✓
-                                </div>
-
+                                <div class="activity-icon blue">⇅</div>
                                 <div>
-                                    <strong>
-                                        Solar panels installation completed
-                                    </strong>
-
-                                    <span>
-                                        Today · 2 hours ago
-                                    </span>
+                                    <strong>Loading project activity...</strong>
+                                    <span>Please wait</span>
                                 </div>
-
-                            </div>
-
-
-                            <div class="activity-item">
-
-                                <div class="activity-icon blue">
-                                    ↑
-                                </div>
-
-                                <div>
-                                    <strong>
-                                        Site installation report uploaded
-                                    </strong>
-
-                                    <span>
-                                        Yesterday
-                                    </span>
-                                </div>
-
-                            </div>
-
-
-                            <div class="activity-item">
-
-                                <div class="activity-icon gold">
-                                    ₦
-                                </div>
-
-                                <div>
-                                    <strong>
-                                        Payment milestone recorded
-                                    </strong>
-
-                                    <span>
-                                        Aug 12, 2026
-                                    </span>
-                                </div>
-
                             </div>
 
                         </div>
@@ -677,114 +641,12 @@
                 </div>
 
 
-                <div class="projects-grid">
+                <div class="projects-grid" id="projectsContainer">
 
-                    <article class="project-card">
-
-                        <div class="project-card-top">
-
-                            <span class="status-pill progress">
-                                In Installation
-                            </span>
-
-                            <span class="project-code">
-                                AE-PRJ-2026-018
-                            </span>
-
-                        </div>
-
-                        <h3>Residential Hybrid Solar System</h3>
-
-                        <p>
-                            16kVA Deye Hybrid Inverter · 32kWh Lithium
-                            · 16 × 750W Panels
-                        </p>
-
-                        <div class="project-details">
-
-                            <div>
-                                <span>Location</span>
-                                <strong>Abuja</strong>
-                            </div>
-
-                            <div>
-                                <span>Progress</span>
-                                <strong>72%</strong>
-                            </div>
-
-                            <div>
-                                <span>Installer</span>
-                                <strong>AE Network</strong>
-                            </div>
-
-                        </div>
-
-                        <div class="progress-bar">
-                            <span style="width:72%"></span>
-                        </div>
-
-                        <button
-                            class="secondary-btn full-width"
-                            data-action="view-project"
-                        >
-                            Open Project
-                        </button>
-
-                    </article>
-
-
-                    <article class="project-card">
-
-                        <div class="project-card-top">
-
-                            <span class="status-pill completed">
-                                Completed
-                            </span>
-
-                            <span class="project-code">
-                                AE-PRJ-2026-009
-                            </span>
-
-                        </div>
-
-                        <h3>Home Backup Solar System</h3>
-
-                        <p>
-                            12kVA Felicity Hybrid Inverter · 15kWh Lithium
-                            · 12 × 750W Panels
-                        </p>
-
-                        <div class="project-details">
-
-                            <div>
-                                <span>Location</span>
-                                <strong>Abuja</strong>
-                            </div>
-
-                            <div>
-                                <span>Progress</span>
-                                <strong>100%</strong>
-                            </div>
-
-                            <div>
-                                <span>Status</span>
-                                <strong class="green-text">Online</strong>
-                            </div>
-
-                        </div>
-
-                        <div class="progress-bar">
-                            <span style="width:100%"></span>
-                        </div>
-
-                        <button
-                            class="secondary-btn full-width"
-                            data-action="view-project"
-                        >
-                            Open Project
-                        </button>
-
-                    </article>
+                    <div style="text-align:center; padding:40px; color:#64748b;">
+                        <div style="font-size:32px; margin-bottom:12px;">☀️</div>
+                        <strong>Loading your projects...</strong>
+                    </div>
 
                 </div>
 
@@ -817,7 +679,7 @@
                             <thead>
                                 <tr>
                                     <th>Quotation</th>
-                                    <th>Project</th>
+                                    <th>Description</th>
                                     <th>Date</th>
                                     <th>Amount</th>
                                     <th>Status</th>
@@ -825,60 +687,11 @@
                                 </tr>
                             </thead>
 
-                            <tbody>
+                            <tbody id="quotationsTableBody">
 
                                 <tr>
-                                    <td>
-                                        <strong>AE-QUO-2026-042</strong>
-                                    </td>
-
-                                    <td>20kVA Hybrid Solar</td>
-
-                                    <td>14 Aug 2026</td>
-
-                                    <td>₦8,750,000</td>
-
-                                    <td>
-                                        <span class="status-pill pending">
-                                            Awaiting Approval
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <button
-                                            class="table-btn"
-                                            data-action="view-quotation"
-                                        >
-                                            Review
-                                        </button>
-                                    </td>
-                                </tr>
-
-
-                                <tr>
-                                    <td>
-                                        <strong>AE-QUO-2026-018</strong>
-                                    </td>
-
-                                    <td>16kVA Solar System</td>
-
-                                    <td>05 Aug 2026</td>
-
-                                    <td>₦12,400,000</td>
-
-                                    <td>
-                                        <span class="status-pill accepted">
-                                            Accepted
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <button
-                                            class="table-btn"
-                                            data-action="view-quotation"
-                                        >
-                                            View
-                                        </button>
+                                    <td colspan="6" style="text-align:center; padding:24px; color:#64748b;">
+                                        Loading quotations...
                                     </td>
                                 </tr>
 
@@ -907,6 +720,12 @@
                         <p>Track project payments, balances and receipts.</p>
                     </div>
 
+                    <div>
+                        <button class="primary-btn" onclick="openMakePaymentModal()" style="display:flex; align-items:center; gap:6px; padding:9px 18px; font-weight:700;">
+                            💳 Make Payment / Upload Proof
+                        </button>
+                    </div>
+
                 </div>
 
 
@@ -914,17 +733,17 @@
 
                     <div class="finance-card">
                         <span>Total Project Value</span>
-                        <strong>₦12,400,000</strong>
+                        <strong id="payStatTotalValue">₦0.00</strong>
                     </div>
 
                     <div class="finance-card">
                         <span>Total Paid</span>
-                        <strong>₦10,000,000</strong>
+                        <strong id="payStatTotalPaid">₦0.00</strong>
                     </div>
 
                     <div class="finance-card outstanding">
                         <span>Outstanding Balance</span>
-                        <strong>₦2,400,000</strong>
+                        <strong id="payStatBalanceDue">₦0.00</strong>
                     </div>
 
                 </div>
@@ -956,42 +775,12 @@
                                 </tr>
                             </thead>
 
-                            <tbody>
-
+                            <tbody id="clientPaymentsTableBody">
                                 <tr>
-                                    <td>PAY-001842</td>
-                                    <td>12 Aug 2026</td>
-                                    <td>AE-PRJ-2026-018</td>
-                                    <td>₦4,000,000</td>
-                                    <td>
-                                        <span class="status-pill completed">
-                                            Confirmed
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <button class="table-btn">
-                                            Download
-                                        </button>
+                                    <td colspan="6" style="text-align:center; padding:24px; color:#64748B;">
+                                        Loading verified payments from AE Renewable network...
                                     </td>
                                 </tr>
-
-                                <tr>
-                                    <td>PAY-001671</td>
-                                    <td>05 Aug 2026</td>
-                                    <td>AE-PRJ-2026-018</td>
-                                    <td>₦6,000,000</td>
-                                    <td>
-                                        <span class="status-pill completed">
-                                            Confirmed
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <button class="table-btn">
-                                            Download
-                                        </button>
-                                    </td>
-                                </tr>
-
                             </tbody>
 
                         </table>
@@ -1007,107 +796,150 @@
                  MONITORING
             ================================================== -->
 
+            <!-- =================================================
+                 INSTALLATION MONITORING
+            ================================================== -->
+
             <section class="page" id="monitoringPage">
 
                 <div class="page-heading">
 
                     <div>
-                        <span class="eyebrow">ENERGY MANAGEMENT</span>
-                        <h2>System Monitoring</h2>
-                        <p>Monitor your installed solar energy system.</p>
+                        <span class="eyebrow">PROJECT EXECUTION</span>
+                        <h2>Installation Monitoring</h2>
+                        <p>Live site progress, photographic evidence, and stage milestones uploaded by your assigned installer.</p>
                     </div>
 
-                    <span class="live-status large">
+                    <span class="live-status large" id="installPageLiveBadge">
                         <i></i>
-                        SYSTEM ONLINE
+                        LIVE SITE TRACKING
                     </span>
 
                 </div>
 
-
-                <div class="monitoring-main">
-
-                    <div class="monitor-hero">
-
-                        <span>Solar Generation</span>
-
-                        <strong>
-                            8.42
-                            <small>kW</small>
-                        </strong>
-
-                        <p>
-                            Current PV output
-                        </p>
-
+                <!-- PROJECT SUMMARY HERO -->
+                <div class="panel install-summary-panel">
+                    <div class="install-hero-top">
+                        <div class="install-proj-select-wrap">
+                            <label for="installProjectSelect">Active Project:</label>
+                            <select id="installProjectSelect" class="install-project-dropdown">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                        <div class="install-overall-badge" id="installOverallStatusBadge">
+                            <span class="status-pill active" id="installStatusPill">In Progress</span>
+                        </div>
                     </div>
 
-
-                    <div class="monitor-stat-grid">
-
-                        <div class="monitor-stat">
-                            <span>Battery SOC</span>
-                            <strong>86%</strong>
-                            <div class="mini-progress">
-                                <span style="width:86%"></span>
-                            </div>
+                    <div class="install-hero-details" id="installHeroDetails">
+                        <div class="install-stat-block">
+                            <span>System Sizing</span>
+                            <strong id="installHeroCapacity">—</strong>
                         </div>
-
-                        <div class="monitor-stat">
-                            <span>Load Consumption</span>
-                            <strong>4.21 kW</strong>
+                        <div class="install-stat-block">
+                            <span>Storage</span>
+                            <strong id="installHeroBattery">—</strong>
                         </div>
-
-                        <div class="monitor-stat">
-                            <span>Grid Status</span>
-                            <strong class="green-text">Available</strong>
+                        <div class="install-stat-block">
+                            <span>Assigned Installer</span>
+                            <strong id="installHeroInstaller">AE Certified Team</strong>
                         </div>
-
-                        <div class="monitor-stat">
-                            <span>Inverter</span>
-                            <strong class="green-text">Normal</strong>
+                        <div class="install-stat-block">
+                            <span>Site Location</span>
+                            <strong id="installHeroLocation">—</strong>
                         </div>
-
                     </div>
 
+                    <div class="install-hero-progress-section">
+                        <div class="progress-label">
+                            <span id="installHeroStageSummary">Stage 1 of 6: Starting Site</span>
+                            <strong id="installHeroPercent">0% Completed</strong>
+                        </div>
+                        <div class="progress-bar large">
+                            <span id="installHeroProgressBar" style="width: 0%;"></span>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- ASSIGNED INSTALLER PROFILE CARD -->
+                <div class="panel installer-profile-panel" id="assignedInstallerProfileCard">
+                    <div class="installer-card-inner">
+                        <div class="installer-avatar-wrap">
+                            <img id="installCardPhoto" src="/uploads/installer-AEI-B7122F5A-1790967877945-532980.jpg" alt="Lead Installer Photo" class="installer-avatar-img" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';" style="object-fit:cover; width:80px; height:80px; border-radius:12px; border:2px solid #004AAD;" />
+                            <span class="installer-verified-badge" title="AE Certified & Registered">✓ Verified</span>
+                        </div>
+                        <div class="installer-details-wrap">
+                            <div class="installer-name-row">
+                                <div>
+                                    <span class="eyebrow" style="margin-bottom:2px; color:#004AAD;">ASSIGNED LEAD INSTALLER & ENGINEER</span>
+                                    <h3 id="installCardName" style="margin:0; font-size:17px; color:#0F172A;">Eniola Abdulrasaq</h3>
+                                    <span class="installer-badge-tag" id="installCardCompany">AE Renewable Engineering Network · Lead Solar Installer</span>
+                                </div>
+                                <div class="installer-rating-pill" id="installCardRating">
+                                    ⭐ 4.96 · Master Installer
+                                </div>
+                            </div>
+                            <div class="installer-contact-grid">
+                                <div class="inst-contact-item">
+                                    <span>Direct Phone</span>
+                                    <strong id="installCardPhoneWrap"><a id="installCardPhone" href="tel:08133615132" style="color:#004AAD; text-decoration:none;">0813 361 5132</a></strong>
+                                </div>
+                                <div class="inst-contact-item">
+                                    <span>Email Address</span>
+                                    <strong id="installCardEmailWrap"><a id="installCardEmail" href="mailto:a.e.renewablesolution@gmail.com" style="color:#004AAD; text-decoration:none;">a.e.renewablesolution@gmail.com</a></strong>
+                                </div>
+                                <div class="inst-contact-item">
+                                    <span>Operating Location</span>
+                                    <strong id="installCardLocation">Central Area / AMAC, Abuja FCT</strong>
+                                </div>
+                                <div class="inst-contact-item">
+                                    <span>Direct Actions</span>
+                                    <div class="installer-quick-actions" id="installCardActions">
+                                        <a id="installCallBtn" href="tel:08133615132" class="btn-inst-call">📞 Call Installer</a>
+                                        <a id="installEmailBtn" href="mailto:AERenewablesolution@gmail.com" class="btn-inst-email">✉️ Email</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <div class="panel">
-
+                <!-- 6 REQUIRED MILESTONES -->
+                <div class="panel install-milestones-panel">
                     <div class="panel-header">
-
                         <div>
-                            <span class="eyebrow">SYSTEM INFORMATION</span>
-                            <h3>Installed System</h3>
+                            <span class="eyebrow">MILESTONE TRACKING</span>
+                            <h3>6 Required Installation Stages</h3>
                         </div>
-
+                        <span class="badge" id="installMilestonesCompletedCount">0 / 6 Stages Verified</span>
                     </div>
 
-                    <div class="system-info-grid">
+                    <div class="install-milestones-grid" id="installMilestonesGrid">
+                        <!-- 6 Stage Cards rendered dynamically -->
+                    </div>
+                </div>
 
+                <!-- LIVE PHOTOGRAPHIC EVIDENCE FEED -->
+                <div class="panel install-evidence-panel">
+                    <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
                         <div>
-                            <span>Inverter</span>
-                            <strong>Deye 16kVA Hybrid</strong>
+                            <span class="eyebrow">VERIFIED SITE DOCUMENTATION</span>
+                            <h3>Installer Work Progress Photos</h3>
                         </div>
-
-                        <div>
-                            <span>Battery</span>
-                            <strong>32kWh Lithium</strong>
+                        <div class="gallery-filter-tabs" id="evidenceFilterTabs">
+                            <button class="filter-chip active" data-filter="all">All Photos (<span id="filterCountAll">0</span>)</button>
+                            <button class="filter-chip" data-filter="starting">Starting Site</button>
+                            <button class="filter-chip" data-filter="working">Work Progress</button>
+                            <button class="filter-chip" data-filter="panels">Solar Panels</button>
+                            <button class="filter-chip" data-filter="inverter">Inverter</button>
+                            <button class="filter-chip" data-filter="battery">Battery</button>
+                            <button class="filter-chip" data-filter="finishing">Commissioning</button>
                         </div>
-
-                        <div>
-                            <span>Solar Array</span>
-                            <strong>12kW PV</strong>
-                        </div>
-
-                        <div>
-                            <span>Panels</span>
-                            <strong>16 × 750W</strong>
-                        </div>
-
                     </div>
 
+                    <div class="install-evidence-grid" id="installEvidenceGrid">
+                        <!-- Evidence photos rendered dynamically -->
+                    </div>
                 </div>
 
             </section>
@@ -1174,23 +1006,15 @@
 
                     </div>
 
-                    <div class="activity-list">
+                    <div class="activity-list" id="clientRequestHistoryList">
 
                         <div class="activity-item">
-
-                            <div class="activity-icon blue">
-                                #
-                            </div>
-
+                            <div class="activity-icon blue">#</div>
                             <div>
-                                <strong>Maintenance Request</strong>
-                                <span>AE-REQ-2026-018 · In Review</span>
+                                <strong>System Upgrade Request</strong>
+                                <span>AE-REQ-2026-018 · Awaiting Engineering Call</span>
                             </div>
-
-                            <span class="status-pill progress">
-                                In Review
-                            </span>
-
+                            <span class="status-pill active">In Review</span>
                         </div>
 
                     </div>
@@ -1201,7 +1025,7 @@
 
 
             <!-- =================================================
-                 DOCUMENTS
+                 DOCUMENTS & MANUALS
             ================================================== -->
 
             <section class="page" id="documentsPage">
@@ -1210,50 +1034,127 @@
 
                     <div>
                         <span class="eyebrow">DOCUMENT VAULT</span>
-                        <h2>Documents</h2>
-                        <p>Access your project documents securely.</p>
+                        <h2>Documents & Manuals</h2>
+                        <p>Access your project documentation, official system manuals, and company technical guides securely.</p>
                     </div>
 
                 </div>
 
+                <!-- OFFICIAL COMPANY & SYSTEM MANUALS -->
+                <div class="panel" style="margin-bottom: 24px;">
 
-                <div class="document-grid">
-
-                    <article class="document-card">
-                        <span class="document-icon">PDF</span>
+                    <div class="panel-header">
                         <div>
-                            <strong>Quotation AE-QUO-2026-042</strong>
-                            <small>14 Aug 2026 · 1.2 MB</small>
+                            <span class="eyebrow">OFFICIAL MANUALS & GUIDES</span>
+                            <h3>AE Engineering & Operations Manuals</h3>
                         </div>
-                        <button class="table-btn">View</button>
-                    </article>
+                        <span class="badge" style="background:#EFF6FF; color:#004AAD; font-weight:800;">2026 Edition</span>
+                    </div>
 
-                    <article class="document-card">
-                        <span class="document-icon">PDF</span>
-                        <div>
-                            <strong>Site Survey Report</strong>
-                            <small>10 Aug 2026 · 2.8 MB</small>
-                        </div>
-                        <button class="table-btn">View</button>
-                    </article>
+                    <div class="document-grid" style="margin-top: 16px;">
 
-                    <article class="document-card">
-                        <span class="document-icon">PDF</span>
-                        <div>
-                            <strong>Installation Report</strong>
-                            <small>13 Aug 2026 · 3.1 MB</small>
-                        </div>
-                        <button class="table-btn">View</button>
-                    </article>
+                        <article class="document-card featured-manual">
+                            <span class="document-icon green-icon">📘</span>
+                            <div>
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                                    <strong>AE Solar System User & Operations Manual</strong>
+                                    <span class="doc-badge-pill system-pill">System Manual</span>
+                                </div>
+                                <small>Official client guide for inverter operation, daily solar yield monitoring, lithium battery care, and safety protocols · 4.8 MB</small>
+                            </div>
+                            <button class="table-btn primary-doc-btn" onclick="openDocumentViewer('system-manual')">View Manual</button>
+                        </article>
 
-                    <article class="document-card">
-                        <span class="document-icon">PDF</span>
+                        <article class="document-card featured-manual">
+                            <span class="document-icon blue-icon">📙</span>
+                            <div>
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                                    <strong>AE Renewable Ltd — Company Technical Manual</strong>
+                                    <span class="doc-badge-pill tech-pill">Company Technical Manual</span>
+                                </div>
+                                <small>Engineering specifications, standard array topology, surge protection guidelines, MC4 stringing protocols, and earthing standards · 8.2 MB</small>
+                            </div>
+                            <button class="table-btn primary-doc-btn" onclick="openDocumentViewer('technical-manual')">View Manual</button>
+                        </article>
+
+                        <article class="document-card featured-manual">
+                            <span class="document-icon gold-icon">📜</span>
+                            <div>
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                                    <strong>Warranty & Quality Assurance Certificate</strong>
+                                    <span class="doc-badge-pill warranty-pill">Warranty SLA</span>
+                                </div>
+                                <small>25-Year Tier-1 PV Module Performance Warranty, 5-Year Inverter Guarantee, and AE Emergency Coverage · 1.5 MB</small>
+                            </div>
+                            <button class="table-btn primary-doc-btn" onclick="openDocumentViewer('warranty')">View Policy</button>
+                        </article>
+
+                        <article class="document-card featured-manual">
+                            <span class="document-icon red-icon">🛡️</span>
+                            <div>
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                                    <strong>Lithium BMS & Fire Safety Compliance Protocol</strong>
+                                    <span class="doc-badge-pill safety-pill">Safety Standard</span>
+                                </div>
+                                <small>Safe operating temperatures, emergency shutdown procedure, high voltage DC isolation, and rapid disconnect checklist · 2.1 MB</small>
+                            </div>
+                            <button class="table-btn primary-doc-btn" onclick="openDocumentViewer('safety')">View Protocol</button>
+                        </article>
+
+                    </div>
+
+                </div>
+
+                <!-- PROJECT-SPECIFIC ENGINEERING DOCUMENTS -->
+                <div class="panel">
+
+                    <div class="panel-header">
                         <div>
-                            <strong>Payment Receipt</strong>
-                            <small>12 Aug 2026 · 840 KB</small>
+                            <span class="eyebrow">PROJECT RECORDS</span>
+                            <h3>Project Engineering Documents</h3>
                         </div>
-                        <button class="table-btn">View</button>
-                    </article>
+                        <span class="badge">Verified Records</span>
+                    </div>
+
+                    <div class="document-grid" style="margin-top: 16px;" id="clientProjectDocumentsGrid">
+
+                        <article class="document-card">
+                            <span class="document-icon red-icon">PDF</span>
+                            <div>
+                                <strong>Formal Sizing Quotation & BOQ Breakdown</strong>
+                                <small>System capacity specifications, component pricing, and contractual terms · 1.2 MB</small>
+                            </div>
+                            <button class="table-btn" onclick="openDocumentViewer('quotation')">View</button>
+                        </article>
+
+                        <article class="document-card">
+                            <span class="document-icon red-icon">PDF</span>
+                            <div>
+                                <strong>Site Survey & Structural Assessment Report</strong>
+                                <small>Roof azimuth, tilt angle, structural integrity verification, and shade analysis · 2.8 MB</small>
+                            </div>
+                            <button class="table-btn" onclick="openDocumentViewer('site-survey')">View</button>
+                        </article>
+
+                        <article class="document-card">
+                            <span class="document-icon red-icon">PDF</span>
+                            <div>
+                                <strong>Installation & Commissioning Sign-Off Certificate</strong>
+                                <small>6-stage verified photographic evidence, VOC/ISC test report, and handover sign-off · 3.1 MB</small>
+                            </div>
+                            <button class="table-btn" onclick="openDocumentViewer('installation-report')">View</button>
+                        </article>
+
+                        <article class="document-card">
+                            <span class="document-icon red-icon">PDF</span>
+                            <div>
+                                <strong>Official Payment & Settlement Receipt</strong>
+                                <small>Verified transaction reference, payment allocation, and balance clearance record · 840 KB</small>
+                            </div>
+                            <button class="table-btn" onclick="openDocumentViewer('receipt')">View</button>
+                        </article>
+
+                    </div>
 
                 </div>
 
@@ -1340,13 +1241,13 @@
                 <div class="page-heading">
 
                     <div>
-                        <span class="eyebrow">ACCOUNT SETTINGS</span>
+                        <span class="eyebrow">VERIFIED ACCOUNT & CREDENTIALS</span>
                         <h2>My Profile</h2>
-                        <p>Manage your client account information.</p>
+                        <p>Your client identity and project ownership parameters.</p>
                     </div>
 
-                    <button class="primary-btn" id="saveProfile">
-                        Save Changes
+                    <button class="btn-request-update" data-action="request-profile-update" style="background:#004AAD; color:#fff; border:none; padding:10px 18px; border-radius:8px; font-weight:700; cursor:pointer;">
+                        🔒 Request Profile Update
                     </button>
 
                 </div>
@@ -1365,8 +1266,13 @@
                         <p>AE Network Client</p>
 
                         <span class="status-pill completed">
-                            Verified Client
+                            ✓ Verified Client
                         </span>
+
+                        <div style="margin-top:16px; font-size:11px; color:#64748b; line-height:1.5;">
+                            Account ID: <strong>AE-CLI-2026-081</strong><br>
+                            Status: <strong style="color:#008000;">Active & Compliant</strong>
+                        </div>
 
                     </div>
 
@@ -1375,38 +1281,75 @@
 
                         <div class="form-grid">
 
-                            <label>
-                                Full Name
+                            <div style="display:flex; flex-direction:column; gap:6px;">
+                                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:#334155;">
+                                    <span>Full Name</span>
+                                    <span style="font-size:10.5px; color:#64748b; background:#f1f5f9; padding:2px 8px; border-radius:4px;">🔒 Locked</span>
+                                </div>
                                 <input
                                     type="text"
                                     value="Eniola Abdulrasaq"
+                                    readonly
+                                    style="background:#f8fafc; color:#1e293b; border:1px solid #cbd5e1; cursor:not-allowed; padding:12px 14px; border-radius:8px; font-weight:600;"
                                 >
-                            </label>
+                            </div>
 
-                            <label>
-                                Email
+                            <div style="display:flex; flex-direction:column; gap:6px;">
+                                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:#334155;">
+                                    <span>Email Address (Gmail)</span>
+                                    <span style="font-size:10.5px; color:#64748b; background:#f1f5f9; padding:2px 8px; border-radius:4px;">🔒 Locked</span>
+                                </div>
                                 <input
                                     type="email"
                                     value="AERenewablesolution@gmail.com"
+                                    readonly
+                                    style="background:#f8fafc; color:#1e293b; border:1px solid #cbd5e1; cursor:not-allowed; padding:12px 14px; border-radius:8px; font-weight:600;"
                                 >
-                            </label>
+                            </div>
 
-                            <label>
-                                Phone
+                            <div style="display:flex; flex-direction:column; gap:6px;">
+                                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:#334155;">
+                                    <span>Phone Number</span>
+                                    <span style="font-size:10.5px; color:#64748b; background:#f1f5f9; padding:2px 8px; border-radius:4px;">🔒 Locked</span>
+                                </div>
                                 <input
                                     type="tel"
                                     value="0813 361 5132"
+                                    readonly
+                                    style="background:#f8fafc; color:#1e293b; border:1px solid #cbd5e1; cursor:not-allowed; padding:12px 14px; border-radius:8px; font-weight:600;"
                                 >
-                            </label>
+                            </div>
 
-                            <label>
-                                Location
+                            <div style="display:flex; flex-direction:column; gap:6px;">
+                                <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:#334155;">
+                                    <span>Operating / Site Location</span>
+                                    <span style="font-size:10.5px; color:#64748b; background:#f1f5f9; padding:2px 8px; border-radius:4px;">🔒 Locked</span>
+                                </div>
                                 <input
                                     type="text"
-                                    value="Abuja"
+                                    value="Abuja FCT, Nigeria"
+                                    readonly
+                                    style="background:#f8fafc; color:#1e293b; border:1px solid #cbd5e1; cursor:not-allowed; padding:12px 14px; border-radius:8px; font-weight:600;"
                                 >
-                            </label>
+                            </div>
 
+                        </div>
+
+                        <!-- WRITE-UP: PROFILE EDITING POLICY & INSTRUCTIONS -->
+                        <div style="background:linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%); border:1px solid #bfdbfe; border-left:5px solid #004AAD; border-radius:12px; padding:20px; margin-top:24px;">
+                            <h4 style="color:#003380; font-size:15px; font-weight:800; margin-bottom:8px;">
+                                🛡️ Verified Identity & Contract Integrity Notice
+                            </h4>
+                            <p style="color:#334155; font-size:13px; line-height:1.65; margin-bottom:14px;">
+                                Your <strong>Full Name</strong>, <strong>Email (Gmail)</strong>, <strong>Phone Number</strong>, and <strong>Site Location</strong> are cryptographically locked and bound to your legal Solar Energy Purchase Agreements, Warranty Guarantee Certificates, and COREN/NEMSA Installation Permits.
+                            </p>
+                            <p style="color:#334155; font-size:13px; line-height:1.65; margin-bottom:16px;">
+                                <strong>Need to update or transfer your profile details?</strong><br>
+                                If your legal name has changed, your email or phone requires updating, or you are relocating your solar installation site, click the <strong>"Request Profile Update"</strong> button below. Our client verification desk will verify your identity and process the update within <strong>2 to 4 business hours</strong>.
+                            </p>
+                            <button class="primary-btn" data-action="request-profile-update" style="padding:10px 18px; font-size:12px;">
+                                📝 Submit Profile Update Request
+                            </button>
                         </div>
 
                     </div>
@@ -1512,7 +1455,8 @@
 </div>
 
 
-<script src="client.js"></script>
+<script src="/client/client.js?v=20260926-02"></script>
 
+<div class="client-toast" id="clientToast"></div>
 </body>
 </html>

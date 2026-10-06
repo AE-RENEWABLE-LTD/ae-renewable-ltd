@@ -1,0 +1,2468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#010a1d"
+    >
+
+    <title>
+        AE Network — Installer Portal
+    </title>
+
+    <script>
+        (function() {
+            try {
+                if (sessionStorage.getItem("ae_installer_logged_in") !== "true") {
+                    document.documentElement.style.display = "none";
+                    window.location.replace("/installer/login");
+                    throw new Error("Access Denied: Installer authentication required");
+                }
+                var token = localStorage.getItem("aeInstallerToken") || localStorage.getItem("token") || localStorage.getItem("accessToken") || localStorage.getItem("aeRenewableToken") || "";
+                var rawUser = localStorage.getItem("aeInstallerUser") || localStorage.getItem("user") || localStorage.getItem("aeRenewableUser") || "{}";
+                var user = {};
+                try { user = JSON.parse(rawUser) || {}; } catch(e) {}
+                var role = user && user.role ? String(user.role).toLowerCase() : "";
+                var allowed = ["installer", "admin", "staff"];
+                if (!token || !role || !allowed.includes(role)) {
+                    document.documentElement.style.display = "none";
+                    window.location.replace("/installer/login");
+                    throw new Error("Access Denied: Installer authentication required");
+                }
+            } catch(err) {
+                document.documentElement.style.display = "none";
+                window.location.replace("/installer/login");
+                throw err;
+            }
+        })();
+    </script>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="installerPortal.css"
+    >
+</head>
+
+<body>
+
+<div class="portal-shell">
+
+    <!-- =====================================================
+         MOBILE OVERLAY
+         ===================================================== -->
+
+    <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+    ></div>
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
+
+        <div class="sidebar-top">
+
+            <a
+                href="/installer/portal"
+                class="brand"
+                aria-label="AE Network Installer Portal"
+            >
+
+                <div class="brand-logo">
+                    <img
+                        src="ae-renewable-dashboard/assets/logo.jpeg"
+                        alt="AE Network"
+                    >
+                </div>
+
+                <div class="brand-copy">
+                    <strong>AE NETWORK</strong>
+                    <span>INSTALLER PORTAL</span>
+                </div>
+
+            </a>
+
+
+            <div class="installer-mini-profile">
+
+                <div class="mini-avatar">
+                    <span id="sidebarAvatarInitials">
+                        EA
+                    </span>
+                </div>
+
+                <div class="mini-profile-copy">
+                    <strong id="sidebarInstallerName">
+                        Installer
+                    </strong>
+
+                    <span>
+                        Field Operations
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             NAVIGATION
+             ================================================= -->
+
+        <nav class="sidebar-nav">
+
+            <div class="nav-section">
+
+                <span class="nav-label">
+                    WORKSPACE
+                </span>
+
+                <button
+                    class="nav-item active"
+                    type="button"
+                    data-page="dashboard"
+                >
+                    <span class="nav-icon">
+                        <i class="fa-solid fa-grid-2"></i>
+                    </span>
+
+                    <span class="nav-text">
+                        Dashboard
+                    </span>
+                </button>
+
+
+                <button
+                    class="nav-item"
+                    type="button"
+                    data-page="available-jobs"
+                >
+                    <span class="nav-icon">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </span>
+
+                    <span class="nav-text">
+                        Available Jobs
+                    </span>
+
+                    <span
+                        class="nav-count"
+                        id="availableJobsNavCount"
+                    >
+                        3
+                    </span>
+                </button>
+
+
+                <button
+                    class="nav-item"
+                    type="button"
+                    data-page="my-jobs"
+                >
+                    <span class="nav-icon">
+                        <i class="fa-solid fa-list-check"></i>
+                    </span>
+
+                    <span class="nav-text">
+                        My Jobs
+                    </span>
+                </button>
+
+
+                <button
+                    class="nav-item"
+                    type="button"
+                    data-page="site-tracking"
+                >
+                    <span class="nav-icon">
+                        <i class="fa-solid fa-location-crosshairs"></i>
+                    </span>
+
+                    <span class="nav-text">
+                        Site Tracking
+                    </span>
+
+                    <span
+                        class="nav-live-dot"
+                        id="trackingNavDot"
+                    ></span>
+                </button>
+
+
+                <button
+                    class="nav-item"
+                    type="button"
+                    data-page="commissioning"
+                >
+                    <span class="nav-icon">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                    </span>
+
+                    <span class="nav-text">
+                        Commissioning
+                    </span>
+                </button>
+
+            </div>
+
+
+            <div class="nav-section">
+
+                <span class="nav-label">
+                    FINANCE
+                </span>
+
+                <button
+                    class="nav-item"
+                    type="button"
+                    data-page="payouts"
+                >
+                    <span class="nav-icon">
+                        <i class="fa-solid fa-wallet"></i>
+                    </span>
+
+                    <span class="nav-text">
+                        Payouts
+                    </span>
+                </button>
+
+            </div>
+
+
+            <div class="nav-section">
+
+                <span class="nav-label">
+                    DOCUMENTS
+                </span>
+
+                <button
+                    class="nav-item"
+                    type="button"
+                    data-page="documents"
+                >
+                    <span class="nav-icon">
+                        <i class="fa-regular fa-folder-open"></i>
+                    </span>
+
+                    <span class="nav-text">
+                        Documents
+                    </span>
+                </button>
+
+            </div>
+
+
+            <div class="nav-section">
+
+                <span class="nav-label">
+                    SYSTEM
+                </span>
+
+                <button
+                    class="nav-item"
+                    type="button"
+                    data-page="notifications"
+                >
+                    <span class="nav-icon">
+                        <i class="fa-regular fa-bell"></i>
+                    </span>
+
+                    <span class="nav-text">
+                        Notifications
+                    </span>
+
+                    <span
+                        class="nav-count nav-count-gold"
+                        id="notificationNavCount"
+                    >
+                        2
+                    </span>
+                </button>
+
+
+                <button
+                    class="nav-item"
+                    type="button"
+                    data-page="support"
+                >
+                    <span class="nav-icon">
+                        <i class="fa-regular fa-circle-question"></i>
+                    </span>
+
+                    <span class="nav-text">
+                        Support
+                    </span>
+                </button>
+
+            </div>
+
+        </nav>
+
+
+        <!-- =================================================
+             SIDEBAR FOOTER
+             ================================================= -->
+
+        <div class="sidebar-footer">
+
+            <button
+                class="profile-nav"
+                type="button"
+                data-page="profile"
+            >
+
+                <div class="profile-avatar">
+                    <span id="footerAvatarInitials">
+                        EA
+                    </span>
+                </div>
+
+                <div class="profile-nav-copy">
+
+                    <strong id="footerInstallerName">
+                        Installer
+                    </strong>
+
+                    <span>
+                        My Profile
+                    </span>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right"></i>
+
+            </button>
+
+
+            <button
+                class="logout-button"
+                type="button"
+                id="logoutButton"
+            >
+
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                <span>
+                    Sign Out
+                </span>
+
+            </button>
+
+
+            <div class="portal-version">
+                VERSION 5.0 PREMIUM
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main class="main-content">
+
+        <!-- =================================================
+             TOPBAR
+             ================================================= -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    class="icon-button mobile-menu-button"
+                    id="sidebarToggle"
+                    type="button"
+                    aria-label="Open menu"
+                >
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+
+                <div class="topbar-heading">
+
+                    <span class="topbar-eyebrow">
+                        AE NETWORK
+                    </span>
+
+                    <h1 id="pageTitle">
+                        Installer Dashboard
+                    </h1>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <button
+                    class="icon-button notification-button"
+                    id="notificationButton"
+                    type="button"
+                    aria-label="Notifications"
+                >
+
+                    <i class="fa-regular fa-bell"></i>
+
+                    <span
+                        class="notification-dot"
+                        id="topNotificationDot"
+                    ></span>
+
+                </button>
+
+
+                <button
+                    class="top-profile-button"
+                    id="topbarProfileButton"
+                    type="button"
+                    data-page="profile"
+                >
+
+                    <div class="top-avatar">
+                        <span id="topAvatarInitials">
+                            EA
+                        </span>
+                    </div>
+
+                    <div class="top-profile-copy">
+
+                        <strong id="topInstallerName">
+                            Installer
+                        </strong>
+
+                        <span>
+                            Field Installer
+                        </span>
+
+                    </div>
+
+                    <i class="fa-solid fa-chevron-down"></i>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             PAGE CONTAINER
+             ================================================= -->
+
+        <div class="page-container">
+
+
+            <!-- =================================================
+                 DASHBOARD
+                 ================================================= -->
+
+            <section
+                class="portal-page active"
+                id="page-dashboard"
+            >
+
+                <div class="page-head">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            FIELD OPERATIONS
+                        </span>
+
+                        <h2>
+                            Installer Dashboard
+                        </h2>
+
+                        <p>
+                            Manage your assignments, installation evidence,
+                            commissioning and payment requests.
+                        </p>
+
+                    </div>
+
+                    <div class="page-head-actions">
+
+                        <button
+                            class="secondary-btn"
+                            type="button"
+                            data-page="available-jobs"
+                        >
+                            <i class="fa-solid fa-briefcase"></i>
+                            Browse Jobs
+                        </button>
+
+                        <button
+                            class="primary-btn"
+                            type="button"
+                            data-page="site-tracking"
+                        >
+                            <i class="fa-solid fa-location-crosshairs"></i>
+                            Site Tracking
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- METRICS -->
+
+                <div class="metric-grid">
+
+                    <article class="metric-card">
+
+                        <div class="metric-icon blue">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </div>
+
+                        <div class="metric-copy">
+
+                            <span>
+                                Available Jobs
+                            </span>
+
+                            <strong id="availableJobsMetric">
+                                3
+                            </strong>
+
+                            <small>
+                                Ready for assignment
+                            </small>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="metric-card">
+
+                        <div class="metric-icon navy">
+                            <i class="fa-solid fa-person-digging"></i>
+                        </div>
+
+                        <div class="metric-copy">
+
+                            <span>
+                                Active Jobs
+                            </span>
+
+                            <strong id="activeJobsMetric">
+                                1
+                            </strong>
+
+                            <small>
+                                Currently assigned
+                            </small>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="metric-card">
+
+                        <div class="metric-icon gold">
+                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                        </div>
+
+                        <div class="metric-copy">
+
+                            <span>
+                                Commissioning
+                            </span>
+
+                            <strong id="commissioningMetric">
+                                1
+                            </strong>
+
+                            <small>
+                                Awaiting completion
+                            </small>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="metric-card">
+
+                        <div class="metric-icon green">
+                            <i class="fa-solid fa-naira-sign"></i>
+                        </div>
+
+                        <div class="metric-copy">
+
+                            <span>
+                                Pending Payouts
+                            </span>
+
+                            <strong id="pendingPayoutsMetric">
+                                ₦180K
+                            </strong>
+
+                            <small>
+                                In review
+                            </small>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- SITE TRACKING FEATURE CARD -->
+
+                <div class="site-tracking-feature panel">
+
+                    <div class="tracking-feature-main">
+
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-camera"></i>
+                        </div>
+
+                        <div>
+
+                            <span class="eyebrow">
+                                INSTALLATION EVIDENCE
+                            </span>
+
+                            <h3>
+                                Site Project Tracking
+                            </h3>
+
+                            <p>
+                                Capture installation images from the starting
+                                site through final completion. Every required
+                                stage must be documented before payment can
+                                be requested.
+                            </p>
+
+                            <div class="feature-tags">
+
+                                <span>
+                                    <i class="fa-solid fa-camera"></i>
+                                    Photo Evidence
+                                </span>
+
+                                <span>
+                                    <i class="fa-solid fa-list-check"></i>
+                                    6 Required Stages
+                                </span>
+
+                                <span>
+                                    <i class="fa-solid fa-money-bill-transfer"></i>
+                                    Payment Request
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="tracking-feature-action">
+
+                        <div class="feature-progress">
+
+                            <span>
+                                Current Progress
+                            </span>
+
+                            <strong id="dashboardTrackingPercent">
+                                0%
+                            </strong>
+
+                        </div>
+
+                        <div class="progress">
+                            <span
+                                id="dashboardTrackingBar"
+                                style="width:0%"
+                            ></span>
+                        </div>
+
+                        <button
+                            class="primary-btn wide-btn"
+                            type="button"
+                            data-page="site-tracking"
+                        >
+                            Open Site Tracking
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-grid">
+
+                    <!-- CURRENT ASSIGNMENT -->
+
+                    <article class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <span class="eyebrow">
+                                    CURRENT ASSIGNMENT
+                                </span>
+
+                                <h3>
+                                    Active Installation
+                                </h3>
+
+                            </div>
+
+                            <span class="status-pill status-progress">
+                                In Progress
+                            </span>
+
+                        </div>
+
+
+                        <div class="assignment-card">
+
+                            <div class="assignment-code">
+                                AE-PRJ-2026-018
+                            </div>
+
+                            <h4>
+                                Residential Hybrid Solar System
+                            </h4>
+
+                            <p class="assignment-location">
+                                <i class="fa-solid fa-location-dot"></i>
+                                Abuja, FCT
+                            </p>
+
+
+                            <div class="assignment-specs">
+
+                                <div>
+                                    <span>
+                                        Inverter
+                                    </span>
+
+                                    <strong>
+                                        16kVA DEYE
+                                    </strong>
+                                </div>
+
+                                <div>
+                                    <span>
+                                        Battery
+                                    </span>
+
+                                    <strong>
+                                        32kWh Lithium
+                                    </strong>
+                                </div>
+
+                                <div>
+                                    <span>
+                                        PV Array
+                                    </span>
+
+                                    <strong>
+                                        12kWp
+                                    </strong>
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                class="secondary-btn full-width"
+                                type="button"
+                                data-page="site-tracking"
+                            >
+                                Continue Installation
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- RECENT ACTIVITY -->
+
+                    <article class="panel">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <span class="eyebrow">
+                                    ACTIVITY
+                                </span>
+
+                                <h3>
+                                    Recent Activity
+                                </h3>
+
+                            </div>
+
+                            <button
+                                class="text-button"
+                                type="button"
+                                data-page="notifications"
+                            >
+                                View All
+                            </button>
+
+                        </div>
+
+
+                        <div class="activity-list">
+
+                            <div class="activity-item">
+
+                                <div class="activity-dot green">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Job accepted
+                                    </strong>
+
+                                    <p>
+                                        AE-PRJ-2026-018 was accepted.
+                                    </p>
+
+                                    <time>
+                                        Today · 09:42
+                                    </time>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="activity-item">
+
+                                <div class="activity-dot blue">
+                                    <i class="fa-solid fa-camera"></i>
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Site tracking started
+                                    </strong>
+
+                                    <p>
+                                        Installation evidence is ready.
+                                    </p>
+
+                                    <time>
+                                        Today · 10:15
+                                    </time>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="activity-item">
+
+                                <div class="activity-dot gold">
+                                    <i class="fa-solid fa-wallet"></i>
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Payout under review
+                                    </strong>
+
+                                    <p>
+                                        Previous job payout is being processed.
+                                    </p>
+
+                                    <time>
+                                        Yesterday · 16:20
+                                    </time>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 AVAILABLE JOBS
+                 ================================================= -->
+
+            <section
+                class="portal-page"
+                id="page-available-jobs"
+            >
+
+                <div class="page-head">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            JOB BOARD
+                        </span>
+
+                        <h2>
+                            Available Jobs
+                        </h2>
+
+                        <p>
+                            Review installation opportunities available
+                            for your field team.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="job-grid"
+                    id="availableJobsList"
+                >
+
+                    <article class="job-card">
+
+                        <div class="job-card-top">
+
+                            <span class="job-code">
+                                AE-PRJ-2026-021
+                            </span>
+
+                            <span class="status-pill status-available">
+                                Available
+                            </span>
+
+                        </div>
+
+                        <h3>
+                            Residential Hybrid Installation
+                        </h3>
+
+                        <p class="job-location">
+                            <i class="fa-solid fa-location-dot"></i>
+                            Gwarinpa, Abuja
+                        </p>
+
+                        <div class="job-specs">
+
+                            <span>
+                                <i class="fa-solid fa-bolt"></i>
+                                10kVA
+                            </span>
+
+                            <span>
+                                <i class="fa-solid fa-battery-full"></i>
+                                20kWh
+                            </span>
+
+                            <span>
+                                <i class="fa-solid fa-solar-panel"></i>
+                                8kWp
+                            </span>
+
+                        </div>
+
+                        <div class="job-card-footer">
+
+                            <strong>
+                                ₦150,000
+                            </strong>
+
+                            <button
+                                class="primary-btn small-btn"
+                                type="button"
+                                data-action="accept-job"
+                            >
+                                Accept Job
+                            </button>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="job-card">
+
+                        <div class="job-card-top">
+
+                            <span class="job-code">
+                                AE-PRJ-2026-022
+                            </span>
+
+                            <span class="status-pill status-available">
+                                Available
+                            </span>
+
+                        </div>
+
+                        <h3>
+                            Commercial Solar Installation
+                        </h3>
+
+                        <p class="job-location">
+                            <i class="fa-solid fa-location-dot"></i>
+                            Wuse 2, Abuja
+                        </p>
+
+                        <div class="job-specs">
+
+                            <span>
+                                <i class="fa-solid fa-bolt"></i>
+                                20kVA
+                            </span>
+
+                            <span>
+                                <i class="fa-solid fa-battery-full"></i>
+                                40kWh
+                            </span>
+
+                            <span>
+                                <i class="fa-solid fa-solar-panel"></i>
+                                18kWp
+                            </span>
+
+                        </div>
+
+                        <div class="job-card-footer">
+
+                            <strong>
+                                ₦220,000
+                            </strong>
+
+                            <button
+                                class="primary-btn small-btn"
+                                type="button"
+                                data-action="accept-job"
+                            >
+                                Accept Job
+                            </button>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="job-card">
+
+                        <div class="job-card-top">
+
+                            <span class="job-code">
+                                AE-PRJ-2026-023
+                            </span>
+
+                            <span class="status-pill status-available">
+                                Available
+                            </span>
+
+                        </div>
+
+                        <h3>
+                            Backup Power Upgrade
+                        </h3>
+
+                        <p class="job-location">
+                            <i class="fa-solid fa-location-dot"></i>
+                            Maitama, Abuja
+                        </p>
+
+                        <div class="job-specs">
+
+                            <span>
+                                <i class="fa-solid fa-bolt"></i>
+                                8kVA
+                            </span>
+
+                            <span>
+                                <i class="fa-solid fa-battery-full"></i>
+                                15kWh
+                            </span>
+
+                            <span>
+                                <i class="fa-solid fa-solar-panel"></i>
+                                6kWp
+                            </span>
+
+                        </div>
+
+                        <div class="job-card-footer">
+
+                            <strong>
+                                ₦120,000
+                            </strong>
+
+                            <button
+                                class="primary-btn small-btn"
+                                type="button"
+                                data-action="accept-job"
+                            >
+                                Accept Job
+                            </button>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 MY JOBS
+                 ================================================= -->
+
+            <section
+                class="portal-page"
+                id="page-my-jobs"
+            >
+
+                <div class="page-head">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            ASSIGNMENTS
+                        </span>
+
+                        <h2>
+                            My Jobs
+                        </h2>
+
+                        <p>
+                            Track your assigned installation projects.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-panel panel">
+
+                    <div class="table-responsive">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Project</th>
+                                    <th>Site</th>
+                                    <th>System</th>
+                                    <th>Status</th>
+                                    <th>Progress</th>
+                                    <th></th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+
+                                    <td>
+                                        <strong>
+                                            AE-PRJ-2026-018
+                                        </strong>
+
+                                        <span class="table-subtext">
+                                            Residential Hybrid
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        Abuja, FCT
+                                    </td>
+
+                                    <td>
+                                        16kVA / 32kWh
+                                    </td>
+
+                                    <td>
+                                        <span class="status-pill status-progress">
+                                            In Progress
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <div class="table-progress">
+                                            <div class="progress">
+                                                <span
+                                                    id="myJobProgressBar"
+                                                    style="width:0%"
+                                                ></span>
+                                            </div>
+
+                                            <small id="myJobProgressText">
+                                                0%
+                                            </small>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <button
+                                            class="table-btn"
+                                            type="button"
+                                            data-page="site-tracking"
+                                        >
+                                            Track
+                                        </button>
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td>
+                                        <strong>
+                                            AE-PRJ-2026-011
+                                        </strong>
+
+                                        <span class="table-subtext">
+                                            Residential Installation
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        Garki, Abuja
+                                    </td>
+
+                                    <td>
+                                        8kVA / 15kWh
+                                    </td>
+
+                                    <td>
+                                        <span class="status-pill status-complete">
+                                            Completed
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <div class="table-progress">
+                                            <div class="progress">
+                                                <span style="width:100%"></span>
+                                            </div>
+
+                                            <small>
+                                                100%
+                                            </small>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <button
+                                            class="table-btn"
+                                            type="button"
+                                            data-action="view-job"
+                                        >
+                                            View
+                                        </button>
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 SITE PROJECT TRACKING
+                 ================================================= -->
+
+            <section
+                class="portal-page"
+                id="page-site-tracking"
+            >
+
+                <div class="page-head tracking-page-head">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            INSTALLATION CONTROL
+                        </span>
+
+                        <h2>
+                            Site Project Tracking
+                        </h2>
+
+                        <p>
+                            Document the installation from the starting
+                            site through final completion.
+                        </p>
+
+                    </div>
+
+                    <div class="page-head-actions">
+
+                        <button
+                            class="secondary-btn"
+                            type="button"
+                            data-page="my-jobs"
+                        >
+                            <i class="fa-solid fa-arrow-left"></i>
+                            My Jobs
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PROJECT HEADER -->
+
+                <div class="tracking-project panel">
+
+                    <div class="tracking-project-identity">
+
+                        <div class="project-code-badge">
+                            AE-PRJ-2026-018
+                        </div>
+
+                        <h3>
+                            Residential Hybrid Solar System
+                        </h3>
+
+                        <div class="project-meta-list">
+
+                            <span>
+                                <i class="fa-solid fa-location-dot"></i>
+                                Abuja, FCT
+                            </span>
+
+                            <span>
+                                <i class="fa-solid fa-bolt"></i>
+                                16kVA DEYE
+                            </span>
+
+                            <span>
+                                <i class="fa-solid fa-battery-full"></i>
+                                32kWh Lithium
+                            </span>
+
+                            <span>
+                                <i class="fa-solid fa-solar-panel"></i>
+                                12kWp PV
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="tracking-project-progress">
+
+                        <div class="tracking-progress-top">
+
+                            <span>
+                                Installation Progress
+                            </span>
+
+                            <strong id="siteTrackingPercent">
+                                0%
+                            </strong>
+
+                        </div>
+
+                        <div class="large-progress">
+                            <span
+                                id="siteTrackingProgressBar"
+                                style="width:0%"
+                            ></span>
+                        </div>
+
+                        <small id="siteTrackingProgressText">
+                            0 of 6 evidence stages completed
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TRACKING LAYOUT -->
+
+                <div class="tracking-layout">
+
+                    <div class="tracking-main">
+
+                        <div class="section-heading">
+
+                            <div>
+
+                                <span class="eyebrow">
+                                    REQUIRED EVIDENCE
+                                </span>
+
+                                <h3>
+                                    Installation Stages
+                                </h3>
+
+                            </div>
+
+                            <span class="evidence-rule">
+                                <i class="fa-solid fa-circle-info"></i>
+                                Photo evidence required
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="tracking-stages"
+                            id="trackingStages"
+                        ></div>
+
+                    </div>
+
+
+                    <!-- SUMMARY -->
+
+                    <aside
+                        class="tracking-sidebar"
+                    >
+
+                        <div
+                            class="tracking-summary panel"
+                            id="trackingSummary"
+                        ></div>
+
+
+                        <div class="tracking-help panel">
+
+                            <div class="help-icon">
+                                <i class="fa-solid fa-camera"></i>
+                            </div>
+
+                            <h4>
+                                Evidence Guidelines
+                            </h4>
+
+                            <p>
+                                Take clear images that show the actual
+                                installation work. Avoid blurry or
+                                obstructed photos.
+                            </p>
+
+                            <ul>
+
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    Capture the complete work area.
+                                </li>
+
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    Show equipment labels where applicable.
+                                </li>
+
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    Photograph cable termination clearly.
+                                </li>
+
+                                <li>
+                                    <i class="fa-solid fa-check"></i>
+                                    Use the rear camera on mobile.
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    </aside>
+
+                </div>
+
+
+                <!-- FINAL PAYMENT PANEL -->
+
+                <div
+                    class="payment-request-panel panel"
+                    id="paymentRequestPanel"
+                >
+
+                    <div class="payment-request-icon">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                    </div>
+
+                    <div class="payment-request-content">
+
+                        <span class="eyebrow">
+                            FINAL STEP
+                        </span>
+
+                        <h3>
+                            Request Installation Payment
+                        </h3>
+
+                        <p id="paymentRequestDescription">
+                            Complete all six installation evidence stages
+                            before requesting your installation payment.
+                        </p>
+
+                        <div
+                            class="payment-checklist"
+                            id="paymentChecklist"
+                        ></div>
+
+                    </div>
+
+
+                    <div class="payment-request-action">
+
+                        <strong id="paymentRequestStatus">
+                            Evidence Incomplete
+                        </strong>
+
+                        <button
+                            class="primary-btn payment-btn"
+                            id="requestPaymentButton"
+                            type="button"
+                            disabled
+                        >
+                            <i class="fa-solid fa-lock"></i>
+                            Request Payment
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 COMMISSIONING
+                 ================================================= -->
+
+            <section
+                class="portal-page"
+                id="page-commissioning"
+            >
+
+                <div class="page-head">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            SYSTEM HANDOVER
+                        </span>
+
+                        <h2>
+                            Commissioning
+                        </h2>
+
+                        <p>
+                            Complete final technical checks before project
+                            handover.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="commissioning-grid">
+
+                    <article class="panel commissioning-card">
+
+                        <div class="commissioning-card-icon">
+                            <i class="fa-solid fa-list-check"></i>
+                        </div>
+
+                        <h3>
+                            Commissioning Checklist
+                        </h3>
+
+                        <p>
+                            Complete the required checks for the current
+                            installation.
+                        </p>
+
+                        <div class="check-list">
+
+                            <label>
+                                <input type="checkbox">
+                                <span>
+                                    Inverter configuration verified
+                                </span>
+                            </label>
+
+                            <label>
+                                <input type="checkbox">
+                                <span>
+                                    Battery communication verified
+                                </span>
+                            </label>
+
+                            <label>
+                                <input type="checkbox">
+                                <span>
+                                    PV input verified
+                                </span>
+                            </label>
+
+                            <label>
+                                <input type="checkbox">
+                                <span>
+                                    Protection devices checked
+                                </span>
+                            </label>
+
+                            <label>
+                                <input type="checkbox">
+                                <span>
+                                    Client handover completed
+                                </span>
+                            </label>
+
+                        </div>
+
+                        <button
+                            class="primary-btn full-width"
+                            type="button"
+                            data-action="save-commissioning"
+                        >
+                            Save Commissioning
+                        </button>
+
+                    </article>
+
+
+                    <article class="panel commissioning-status">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <span class="eyebrow">
+                                    CURRENT PROJECT
+                                </span>
+
+                                <h3>
+                                    AE-PRJ-2026-018
+                                </h3>
+
+                            </div>
+
+                            <span class="status-pill status-progress">
+                                In Progress
+                            </span>
+
+                        </div>
+
+                        <div class="commissioning-stat">
+
+                            <span>
+                                Commissioning Completion
+                            </span>
+
+                            <strong>
+                                60%
+                            </strong>
+
+                        </div>
+
+                        <div class="large-progress">
+                            <span style="width:60%"></span>
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PAYOUTS
+                 ================================================= -->
+
+            <section
+                class="portal-page"
+                id="page-payouts"
+            >
+
+                <div class="page-head">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            INSTALLER FINANCE
+                        </span>
+
+                        <h2>
+                            Payouts
+                        </h2>
+
+                        <p>
+                            Review completed installation payments and
+                            payment requests.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="finance-grid">
+
+                    <article class="finance-card">
+
+                        <span>
+                            Pending
+                        </span>
+
+                        <strong>
+                            ₦180,000
+                        </strong>
+
+                        <small>
+                            Under operations review
+                        </small>
+
+                    </article>
+
+
+                    <article class="finance-card">
+
+                        <span>
+                            This Month
+                        </span>
+
+                        <strong>
+                            ₦420,000
+                        </strong>
+
+                        <small>
+                            Completed jobs
+                        </small>
+
+                    </article>
+
+
+                    <article class="finance-card">
+
+                        <span>
+                            Total Paid
+                        </span>
+
+                        <strong>
+                            ₦1.84M
+                        </strong>
+
+                        <small>
+                            Installer earnings
+                        </small>
+
+                    </article>
+
+                </div>
+
+
+                <div class="table-panel panel">
+
+                    <div class="table-responsive">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Project</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+
+                                    <td>
+                                        AE-PRJ-2026-011
+                                    </td>
+
+                                    <td>
+                                        18 Sep 2026
+                                    </td>
+
+                                    <td>
+                                        ₦120,000
+                                    </td>
+
+                                    <td>
+                                        <span class="status-pill status-complete">
+                                            Paid
+                                        </span>
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td>
+                                        AE-PRJ-2026-015
+                                    </td>
+
+                                    <td>
+                                        22 Sep 2026
+                                    </td>
+
+                                    <td>
+                                        ₦180,000
+                                    </td>
+
+                                    <td>
+                                        <span class="status-pill status-progress">
+                                            Processing
+                                        </span>
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 DOCUMENTS
+                 ================================================= -->
+
+            <section
+                class="portal-page"
+                id="page-documents"
+            >
+
+                <div class="page-head">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            INSTALLER RECORDS
+                        </span>
+
+                        <h2>
+                            Documents
+                        </h2>
+
+                        <p>
+                            Manage your installer documents and certificates.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="document-grid">
+
+                    <article class="document-card panel">
+
+                        <div class="document-icon">
+                            <i class="fa-regular fa-id-card"></i>
+                        </div>
+
+                        <div>
+                            <h3>
+                                Identification
+                            </h3>
+
+                            <p>
+                                Government identification document.
+                            </p>
+                        </div>
+
+                        <span class="status-pill status-complete">
+                            Verified
+                        </span>
+
+                    </article>
+
+
+                    <article class="document-card panel">
+
+                        <div class="document-icon">
+                            <i class="fa-solid fa-certificate"></i>
+                        </div>
+
+                        <div>
+                            <h3>
+                                Technical Certificate
+                            </h3>
+
+                            <p>
+                                Renewable energy / electrical qualification.
+                            </p>
+                        </div>
+
+                        <span class="status-pill status-complete">
+                            Verified
+                        </span>
+
+                    </article>
+
+
+                    <article class="document-card panel">
+
+                        <div class="document-icon">
+                            <i class="fa-solid fa-file-contract"></i>
+                        </div>
+
+                        <div>
+                            <h3>
+                                Installer Agreement
+                            </h3>
+
+                            <p>
+                                AE Network installer agreement.
+                            </p>
+                        </div>
+
+                        <span class="status-pill status-progress">
+                            Review
+                        </span>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 NOTIFICATIONS
+                 ================================================= -->
+
+            <section
+                class="portal-page"
+                id="page-notifications"
+            >
+
+                <div class="page-head">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            SYSTEM ALERTS
+                        </span>
+
+                        <h2>
+                            Notifications
+                        </h2>
+
+                        <p>
+                            Stay updated on assignments, jobs and payments.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="notification-list panel">
+
+                    <div class="notification-item unread">
+
+                        <div class="notification-icon blue">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                New installation available
+                            </strong>
+
+                            <p>
+                                A new Abuja residential installation
+                                is available for your review.
+                            </p>
+
+                            <time>
+                                25 Sep 2026 · 10:20
+                            </time>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="notification-item unread">
+
+                        <div class="notification-icon gold">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Payment update
+                            </strong>
+
+                            <p>
+                                Your previous installation payment is
+                                under review.
+                            </p>
+
+                            <time>
+                                24 Sep 2026 · 16:40
+                            </time>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="notification-item">
+
+                        <div class="notification-icon green">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Installer profile verified
+                            </strong>
+
+                            <p>
+                                Your technical profile information has
+                                been reviewed.
+                            </p>
+
+                            <time>
+                                22 Sep 2026 · 12:10
+                            </time>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 SUPPORT
+                 ================================================= -->
+
+            <section
+                class="portal-page"
+                id="page-support"
+            >
+
+                <div class="page-head">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            FIELD SUPPORT
+                        </span>
+
+                        <h2>
+                            Support
+                        </h2>
+
+                        <p>
+                            Contact AE Network operations for project support.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="support-grid">
+
+                    <article class="support-card panel">
+
+                        <div class="support-icon">
+                            <i class="fa-solid fa-headset"></i>
+                        </div>
+
+                        <h3>
+                            Operations Support
+                        </h3>
+
+                        <p>
+                            Get assistance with active installation assignments.
+                        </p>
+
+                        <button
+                            class="secondary-btn"
+                            type="button"
+                            data-action="support"
+                        >
+                            Contact Operations
+                        </button>
+
+                    </article>
+
+
+                    <article class="support-card panel">
+
+                        <div class="support-icon">
+                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                        </div>
+
+                        <h3>
+                            Technical Support
+                        </h3>
+
+                        <p>
+                            Get technical assistance with system installation.
+                        </p>
+
+                        <button
+                            class="secondary-btn"
+                            type="button"
+                            data-action="support"
+                        >
+                            Request Technical Help
+                        </button>
+
+                    </article>
+
+
+                    <article class="support-card panel">
+
+                        <div class="support-icon">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                        </div>
+
+                        <h3>
+                            Payment Support
+                        </h3>
+
+                        <p>
+                            Questions about installation payment processing.
+                        </p>
+
+                        <button
+                            class="secondary-btn"
+                            type="button"
+                            data-action="support"
+                        >
+                            Contact Finance
+                        </button>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PROFILE
+                 ================================================= -->
+
+            <section
+                class="portal-page"
+                id="page-profile"
+            >
+
+                <div class="page-head">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            INSTALLER ACCOUNT
+                        </span>
+
+                        <h2>
+                            My Profile
+                        </h2>
+
+                        <p>
+                            Review your professional installer information.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="profile-layout">
+
+                    <article class="profile-card-large panel">
+
+                        <div class="large-profile-avatar">
+                            <span id="profileAvatarInitials">
+                                EA
+                            </span>
+                        </div>
+
+                        <h3 id="profileInstallerName">
+                            Eniola Abdulrasaq
+                        </h3>
+
+                        <p>
+                            Field Installer
+                        </p>
+
+                        <span class="status-pill status-complete">
+                            Active Installer
+                        </span>
+
+                    </article>
+
+
+                    <article class="panel profile-information">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <span class="eyebrow">
+                                    PROFESSIONAL INFORMATION
+                                </span>
+
+                                <h3>
+                                    Installer Details
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-grid">
+
+                            <div class="form-field">
+
+                                <label>
+                                    Full Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    value="Eniola Abdulrasaq"
+                                >
+
+                            </div>
+
+
+                            <div class="form-field">
+
+                                <label>
+                                    Installer ID
+                                </label>
+
+                                <input
+                                    type="text"
+                                    value="AEI-0001"
+                                    readonly
+                                >
+
+                            </div>
+
+
+                            <div class="form-field">
+
+                                <label>
+                                    Phone
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    value="0813 361 5132"
+                                >
+
+                            </div>
+
+
+                            <div class="form-field">
+
+                                <label>
+                                    Email
+                                </label>
+
+                                <input
+                                    type="email"
+                                    value="AERenewablesolution@gmail.com"
+                                >
+
+                            </div>
+
+
+                            <div class="form-field">
+
+                                <label>
+                                    State
+                                </label>
+
+                                <input
+                                    type="text"
+                                    value="FCT Abuja"
+                                >
+
+                            </div>
+
+
+                            <div class="form-field">
+
+                                <label>
+                                    Primary Specialization
+                                </label>
+
+                                <input
+                                    type="text"
+                                    value="Solar Installation"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            class="primary-btn"
+                            type="button"
+                            data-action="save-profile"
+                        >
+                            Save Changes
+                        </button>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     TOAST
+     ========================================================= -->
+
+<div
+    class="toast-container"
+    id="toastContainer"
+></div>
+
+
+<!-- =========================================================
+     MODAL
+     ========================================================= -->
+
+<div
+    class="modal-backdrop"
+    id="modalBackdrop"
+    aria-hidden="true"
+>
+
+    <div
+        class="modal"
+        id="modal"
+        role="dialog"
+        aria-modal="true"
+    >
+
+        <button
+            class="modal-close"
+            id="modalClose"
+            type="button"
+            aria-label="Close"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div id="modalContent"></div>
+
+    </div>
+
+</div>
+
+
+<script
+    src="installerPortal.js"
+></script>
+
+</body>
+</html>
