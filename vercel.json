@@ -1,14 +1,44 @@
 {
-  "version": 2,
-  "functions": {
-    "api/index.js": {
-      "includeFiles": "CLI_Folder/**"
-    }
-  },
+  "cleanUrls": true,
   "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/api/index.js"
-    }
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/client", "destination": "/index.html" },
+    { "source": "/client/landing", "destination": "/index.html" },
+    { "source": "/client/landing.html", "destination": "/index.html" },
+    { "source": "/client/login", "destination": "/CLI_Folder/client/login.html" },
+    { "source": "/client/login.html", "destination": "/CLI_Folder/client/login.html" },
+    { "source": "/client/portal", "destination": "/CLI_Folder/client/client.html" },
+    { "source": "/client/portal.html", "destination": "/CLI_Folder/client/client.html" },
+    { "source": "/client/dashboard", "destination": "/CLI_Folder/client/client.html" },
+    { "source": "/client/client.html", "destination": "/CLI_Folder/client/client.html" },
+    { "source": "/client/:match*", "destination": "/CLI_Folder/client/:match*" },
+    { "source": "/admin", "destination": "/CLI_Folder/admin/admin.html" },
+    { "source": "/admin/", "destination": "/CLI_Folder/admin/admin.html" },
+    { "source": "/admin/admin.html", "destination": "/CLI_Folder/admin/admin.html" },
+    { "source": "/admin/login", "destination": "/CLI_Folder/admin/login.html" },
+    { "source": "/admin/login.html", "destination": "/CLI_Folder/admin/login.html" },
+    { "source": "/admin/dashboard", "destination": "/CLI_Folder/admin/admin.html" },
+    { "source": "/admin/portal", "destination": "/CLI_Folder/admin/admin.html" },
+    { "source": "/admin/:match*", "destination": "/CLI_Folder/admin/:match*" },
+    { "source": "/arde", "destination": "/CLI_Folder/arde/arde.html" },
+    { "source": "/arde/", "destination": "/CLI_Folder/arde/arde.html" },
+    { "source": "/arde/arde.html", "destination": "/CLI_Folder/arde/arde.html" },
+    { "source": "/arde/landing", "destination": "/CLI_Folder/arde/landing.html" },
+    { "source": "/arde/landing.html", "destination": "/CLI_Folder/arde/landing.html" },
+    { "source": "/arde/studio", "destination": "/CLI_Folder/arde/index.html" },
+    { "source": "/arde/index.html", "destination": "/CLI_Folder/arde/index.html" },
+    { "source": "/arde/:match*", "destination": "/CLI_Folder/arde/:match*" },
+    { "source": "/installer", "destination": "/CLI_Folder/installer/installer.html" },
+    { "source": "/installer/", "destination": "/CLI_Folder/installer/installer.html" },
+    { "source": "/installer/installer.html", "destination": "/CLI_Folder/installer/installer.html" },
+    { "source": "/installer/login", "destination": "/CLI_Folder/installer/login.html" },
+    { "source": "/installer/login.html", "destination": "/CLI_Folder/installer/login.html" },
+    { "source": "/installer/portal", "destination": "/CLI_Folder/installer/portal.html" },
+    { "source": "/installer/portal.html", "destination": "/CLI_Folder/installer/portal.html" },
+    { "source": "/installer/dashboard", "destination": "/CLI_Folder/installer/portal.html" },
+    { "source": "/installer/:match*", "destination": "/CLI_Folder/installer/:match*" },
+    { "source": "/uploads/:match*", "destination": "/CLI_Folder/uploads/:match*" },
+    { "source": "/images/:match*", "destination": "/CLI_Folder/client/images/:match*" },
+    { "source": "/site-images/:match*", "destination": "/LETS_GO/images/:match*" }
   ]
 }

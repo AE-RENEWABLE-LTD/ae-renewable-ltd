@@ -3,44 +3,1804 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0; url=/client">
-    <title>AE Renewable Ltd | Clean Energy Engineering</title>
-    <link rel="icon" type="image/png" href="/CLI_Folder/client/logo.png">
-    <script>
-        if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
-            window.location.replace("/client");
-        }
-    </script>
+    <meta name="description" content="AE Renewable — Powering Your Future with Sun. Verified live engineering updates across 6 installation stages, certified installer photo logs, and real-time client feedback.">
+    <meta name="theme-color" content="#030b18">
+
+    <title>AE Renewable — Powering Your Future with Sun | Live Field Feed</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-base: #030b18;
+            --bg-card: rgba(13, 23, 42, 0.88);
+            --bg-card-hover: rgba(18, 33, 62, 0.98);
+            --border-card: rgba(255, 255, 255, 0.09);
+            --border-highlight: rgba(0, 177, 64, 0.4);
+            --ae-blue: #004AAD;
+            --ae-light-blue: #38bdf8;
+            --ae-green: #00B140;
+            --ae-emerald: #10b981;
+            --ae-gold: #f59e0b;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --text-sub: #64748B;
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --radius-sm: 6px;
+            --glass-blur: blur(16px);
+            --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            background: #010a1d;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(0, 74, 173, 0.16) 0%, transparent 40%),
+                radial-gradient(circle at 90% 60%, rgba(0, 177, 64, 0.12) 0%, transparent 45%),
+                linear-gradient(to bottom, rgba(3, 11, 24, 0.98), #030b18);
+            background-attachment: fixed;
+        }
+
+        /* Ambient Glow Background */
+        .ambient-glow {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 1440px;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                radial-gradient(circle at 50% 12%, rgba(56, 189, 248, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.06) 0%, transparent 40%);
+        }
+
+        /* SITE HEADER */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: var(--glass-blur);
+            background: rgba(3, 11, 24, 0.88);
+            border-bottom: 1px solid var(--border-card);
+            padding: 10px 20px;
+            transition: var(--transition);
+        }
+
+        .header-container {
+            max-width: 860px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .brand-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .brand-logo-img {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
+            border-radius: 10px;
+            filter: drop-shadow(0 2px 8px rgba(0, 177, 64, 0.35));
+            background: rgba(255, 255, 255, 0.04);
+            padding: 2px;
+        }
+
+        .brand-titles {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-titles h1 {
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .brand-titles h1 span {
+            color: var(--ae-green);
+        }
+
+        .brand-tagline {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: #fbbf24;
+            background: linear-gradient(90deg, #f59e0b, #38bdf8, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 1px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-arde {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 16px;
+            border-radius: 99px;
+            background: rgba(245, 158, 11, 0.12);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            font-weight: 700;
+            font-size: 12.5px;
+            text-decoration: none;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .btn-arde:hover {
+            background: rgba(245, 158, 11, 0.25);
+            border-color: #f59e0b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-client-login {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 18px;
+            border-radius: 99px;
+            background: linear-gradient(135deg, #004AAD, #0284c7);
             color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            border: none;
+            font-weight: 700;
+            font-size: 13px;
+            text-decoration: none;
+            box-shadow: 0 4px 16px rgba(0, 74, 173, 0.4);
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .btn-client-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 22px rgba(0, 74, 173, 0.6);
+            background: linear-gradient(135deg, #0056cc, #0396e6);
+        }
+
+        /* CENTERED SINGLE-COLUMN FEED LAYOUT */
+        .main-layout {
+            position: relative;
+            z-index: 1;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 24px 16px 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* CONTROLS: SEARCH & CITY FILTER */
+        .feed-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-lg);
+            padding: 12px 18px;
+            backdrop-filter: var(--glass-blur);
+            box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.4);
+        }
+
+        .search-input-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .search-input-wrap i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-sub);
+            font-size: 13px;
+        }
+
+        .search-input-wrap input {
+            width: 100%;
+            padding: 9px 14px 9px 38px;
+            border-radius: 99px;
+            background: rgba(3, 11, 24, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 12.5px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-input-wrap input:focus {
+            border-color: var(--ae-light-blue);
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+        }
+
+        /* POST CARD (FACEBOOK STYLE) */
+        .post-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            backdrop-filter: var(--glass-blur);
+            box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.5);
+            transition: var(--transition);
+        }
+
+        .post-card:hover {
+            border-color: rgba(56, 189, 248, 0.25);
+            box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.65);
+        }
+
+        /* POST HEADER */
+        .post-header {
+            padding: 16px 18px 12px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .post-author-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .author-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid #00B140;
+            object-fit: cover;
+            background: #0f172a;
+            flex-shrink: 0;
+        }
+
+        .author-info h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .verified-badge {
+            color: #38bdf8;
+            font-size: 13px;
+        }
+
+        .post-meta {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 2px;
+        }
+
+        .post-meta i {
+            color: #f59e0b;
+        }
+
+        .stage-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            background: rgba(0, 177, 64, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(0, 177, 64, 0.35);
+            white-space: nowrap;
+        }
+
+        /* POST BODY */
+        .post-body {
+            padding: 0 18px 14px;
+        }
+
+        .post-text {
+            font-size: 13.5px;
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .post-tags-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .spec-tag {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #94a3b8;
+        }
+
+        /* MEDIA CONTAINER */
+        .post-media-wrap {
+            position: relative;
+            width: 100%;
+            max-height: 440px;
+            overflow: hidden;
+            background: #020617;
+            cursor: pointer;
+        }
+
+        .post-media-img {
+            width: 100%;
+            height: 100%;
+            max-height: 440px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .post-media-wrap:hover .post-media-img {
+            transform: scale(1.02);
+        }
+
+        .media-watermark {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(3, 11, 24, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* CLIENT FEEDBACK / COMPLAINANT RESOLUTION CARD */
+        .client-feedback-box {
+            margin: 14px 18px;
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-left: 4px solid #f59e0b;
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+        }
+
+        .feedback-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .feedback-head-title {
+            font-size: 11.5px;
+            font-weight: 800;
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-transform: uppercase;
+        }
+
+        .stars-row {
+            color: #f59e0b;
+            font-size: 11px;
+            letter-spacing: 2px;
+        }
+
+        .feedback-quote {
+            font-size: 12px;
+            color: #e2e8f0;
+            font-style: italic;
+            line-height: 1.55;
+            margin-bottom: 5px;
+        }
+
+        .resolution-note {
+            font-size: 11px;
+            color: #10b981;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* SOCIAL STATS COUNTERS */
+        .social-stats-bar {
+            padding: 9px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11.5px;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stats-icons-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .reaction-bubble {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9.5px;
+        }
+
+        .bubble-like { background: #004AAD; color: #fff; }
+        .bubble-love { background: #ef4444; color: #fff; }
+
+        /* INTERACTIVE ACTION BUTTONS (FACEBOOK STYLE) */
+        .post-actions-bar {
+            padding: 5px 10px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 6px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            flex-direction: column;
-            gap: 16px;
+            gap: 6px;
+            transition: var(--transition);
         }
-        .spinner {
-            width: 48px;
-            height: 48px;
-            border: 4px solid rgba(244, 166, 0, 0.2);
-            border-top-color: #f4a600;
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-main);
+        }
+
+        .action-btn.liked {
+            color: #38bdf8;
+            font-weight: 700;
+        }
+
+        .action-btn.loved {
+            color: #f43f5e;
+            font-weight: 700;
+        }
+
+        .action-btn.loved i {
+            animation: heart-burst 0.4s ease;
+        }
+
+        @keyframes heart-burst {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
+        }
+
+        /* COMMENTS SECTION */
+        .comments-section {
+            padding: 12px 18px 16px;
+            background: rgba(3, 11, 24, 0.45);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .comment-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .comment-avatar {
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            background: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #94a3b8;
+            flex-shrink: 0;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        h1 { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
-        p { color: #94a3b8; font-size: 0.9rem; }
-        a { color: #f4a600; text-decoration: none; font-weight: 500; }
+
+        .comment-bubble {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 7px 11px;
+            flex: 1;
+        }
+
+        .comment-author {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 2px;
+        }
+
+        .comment-text {
+            font-size: 11.5px;
+            color: #cbd5e1;
+        }
+
+        .comment-input-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .comment-input-box input {
+            flex: 1;
+            padding: 8px 14px;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-family: inherit;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .comment-input-box input:focus {
+            border-color: #38bdf8;
+        }
+
+        .comment-send-btn {
+            background: #004AAD;
+            border: none;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .comment-send-btn:hover {
+            background: #0284c7;
+        }
+
+        /* TOAST NOTIFICATION */
+        .toast-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #0f172a;
+            color: #ffffff;
+            border: 1px solid #10b981;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 12.5px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast-popup.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* SHARE MODAL */
+        .share-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+
+        .share-modal-overlay.active {
+            display: flex;
+        }
+
+        .share-modal-card {
+            background: #0b1329;
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 420px;
+            padding: 22px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+        }
+
+        .share-modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .share-modal-head h3 {
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .modal-close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .share-options-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .share-target-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .share-target-btn:hover {
+            background: rgba(0, 177, 64, 0.15);
+            border-color: #10b981;
+            transform: translateY(-2px);
+        }
+
+        .share-target-btn i {
+            font-size: 20px;
+        }
+
+        .share-target-btn.whatsapp i { color: #25D366; }
+        .share-target-btn.twitter i { color: #1DA1F2; }
+        .share-target-btn.facebook i { color: #1877F2; }
+
+        .copy-link-wrap {
+            display: flex;
+            gap: 8px;
+        }
+
+        .copy-link-wrap input {
+            flex: 1;
+            background: #030b18;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 9px 12px;
+            color: #cbd5e1;
+            font-size: 11.5px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .copy-btn {
+            background: var(--ae-blue);
+            color: #fff;
+            border: none;
+            padding: 9px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 11.5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .copy-btn:hover {
+            background: #0284c7;
+        }
+
+        @media (max-width: 600px) {
+            .site-header {
+                padding: 8px 12px;
+            }
+            .brand-logo-img {
+                width: 36px;
+                height: 36px;
+            }
+            .brand-titles h1 {
+                font-size: 14px;
+            }
+            .btn-arde span, .btn-client-login span {
+                font-size: 11.5px;
+            }
+            .btn-arde, .btn-client-login {
+                padding: 6px 12px;
+            }
+            .post-actions-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .brand-tagline {
+                font-size: 8px;
+                letter-spacing: 0.6px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="spinner"></div>
-    <h1>AE Renewable Ltd</h1>
-    <p>Redirecting to client portal... <a href="/client">Click here if not redirected</a></p>
+
+    <div class="ambient-glow" aria-hidden="true"></div>
+
+    <!-- 01. HEADER: OFFICIAL LOGO, POWERING YOUR FUTURE WITH SUN, ARDE STUDIO & CLIENT LOGIN -->
+    <header class="site-header">
+        <div class="header-container">
+            <a href="/client" class="brand-link">
+                <img src="/arde/assets/images/logo3D.png" alt="AE Renewable Logo" class="brand-logo-img" onerror="this.src='/client/logo.png'">
+                <div class="brand-titles">
+                    <h1>AE <span>RENEWABLE</span></h1>
+                    <span class="brand-tagline">POWERING YOUR FUTURE WITH SUN</span>
+                </div>
+            </a>
+
+            <div class="header-actions">
+                <a href="/arde" class="btn-arde" title="Start System Design & Client Intake in ARDE">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>ARDE Studio</span>
+                </a>
+                <a href="/client/login" class="btn-client-login" title="Sign In to Client Account">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>Client Login</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 02. MAIN CONTENT LAYOUT (CENTERED FEED STREAM) -->
+    <main class="main-layout">
+
+        <!-- CONTROLS: SEARCH & CITY FILTER -->
+        <div class="feed-controls">
+            <div class="search-input-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="feedSearchInput" placeholder="Search by location, component, or engineer..." oninput="filterFeedPosts()">
+            </div>
+            <div style="font-size:12px; color:var(--text-muted); font-weight:700;" id="feedCountTag">
+                Showing 6 Verified Stage Reports
+            </div>
+        </div>
+
+        <div id="postsContainer" style="display:flex; flex-direction:column; gap:20px;">
+
+            <!-- POST 1: STAGE 3 (PV & INVERTER MOUNTING) -->
+            <article class="post-card" data-stage="stage3" data-location="Maitama Abuja FCT" data-post-id="post-101">
+                <div class="post-header">
+                    <div class="post-author-row">
+                        <img src="/site-images/instalerface.jpeg" alt="Lead Engineer" class="author-avatar" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';">
+                        <div class="author-info">
+                            <h3>Engr. Eniola Abdulrasaq <i class="fa-solid fa-circle-check verified-badge" title="Certified Lead Installer"></i></h3>
+                            <div class="post-meta">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>Maitama District, Abuja FCT</span>
+                                <span>• 2h ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="stage-pill">⚡ Stage 3: PV & Inverter Mount</span>
+                </div>
+
+                <div class="post-body">
+                    <p class="post-text">
+                        Successfully deployed and mounted 24x 585W Tier-1 High-Efficiency Mono PERC Solar Panels on reinforced anodized aluminium railed roofing. Coupled with dual 12kW Deye Hybrid Inverters with smart MPPT multi-string tracking. Cable routing is securely insulated against harmonic loss.
+                    </p>
+                    <div class="post-tags-row">
+                        <span class="spec-tag">14.04 kWp Solar Array</span>
+                        <span class="spec-tag">Dual 12kW Deye Hybrid</span>
+                        <span class="spec-tag">6mm² Solar DC Cables</span>
+                    </div>
+                </div>
+
+                <div class="post-media-wrap" onclick="openMediaPreview('/site-images/panelUtako1.jpeg')">
+                    <img src="/site-images/panelUtako1.jpeg" alt="Solar Panel Array Installation" class="post-media-img" onerror="this.src='/site-images/Gemini_Generated_Image_vv7ds3vv7ds3vv7d.png'">
+                    <div class="media-watermark">
+                        <i class="fa-solid fa-camera"></i>
+                        <span>AE RENEWABLE • SITE EVIDENCE VERIFIED</span>
+                    </div>
+                </div>
+
+                <!-- CLIENT FEEDBACK & RESOLUTION NOTE -->
+                <div class="client-feedback-box">
+                    <div class="feedback-head">
+                        <span class="feedback-head-title"><i class="fa-solid fa-quote-left"></i> Verified Client Experience</span>
+                        <span class="stars-row">★★★★★</span>
+                    </div>
+                    <p class="feedback-quote">
+                        "The team arrived punctually at 8:00 AM. Roof structural integrity check was done thoroughly before mounting. Our daytime air-conditioners are now running 100% directly off the sun."
+                    </p>
+                    <div class="resolution-note">
+                        <i class="fa-solid fa-check-double"></i>
+                        <span>Audit Status: Passed Structural & Electrical Wind-Load Inspection</span>
+                    </div>
+                </div>
+
+                <!-- SOCIAL COUNTERS -->
+                <div class="social-stats-bar">
+                    <div class="stats-icons-group">
+                        <span class="reaction-bubble bubble-like"><i class="fa-solid fa-thumbs-up"></i></span>
+                        <span class="reaction-bubble bubble-love"><i class="fa-solid fa-heart"></i></span>
+                        <span id="likes-count-101" style="font-weight:700; color:#cbd5e1; margin-left:4px;">148</span>
+                    </div>
+                    <div>
+                        <span id="shares-count-101">32 Shares</span> • <span>18 Comments</span>
+                    </div>
+                </div>
+
+                <!-- INTERACTIVE SOCIAL TOOLBAR -->
+                <div class="post-actions-bar">
+                    <button class="action-btn" id="like-btn-101" onclick="toggleReaction('101', 'like')">
+                        <i class="fa-regular fa-thumbs-up"></i>
+                        <span>Like</span>
+                    </button>
+                    <button class="action-btn" id="love-btn-101" onclick="toggleReaction('101', 'love')">
+                        <i class="fa-regular fa-heart"></i>
+                        <span>Love</span>
+                    </button>
+                    <button class="action-btn" onclick="openShareModal('post-101', '14.04kWp Solar Array in Maitama Abuja')">
+                        <i class="fa-solid fa-share"></i>
+                        <span>Reshare</span>
+                    </button>
+                    <button class="action-btn" onclick="toggleComments('101')">
+                        <i class="fa-regular fa-comment"></i>
+                        <span>Comment</span>
+                    </button>
+                </div>
+
+                <!-- COMMENTS ACCORDION -->
+                <div class="comments-section" id="comments-101" style="display:none;">
+                    <div class="comment-item">
+                        <div class="comment-avatar">AO</div>
+                        <div class="comment-bubble">
+                            <div class="comment-author">Architect Oladipo</div>
+                            <div class="comment-text">Super neat DC trunking along the parapet wall. Great engineering standard!</div>
+                        </div>
+                    </div>
+                    <div class="comment-item">
+                        <div class="comment-avatar">MK</div>
+                        <div class="comment-bubble">
+                            <div class="comment-author">Dr. Mohammed Kano</div>
+                            <div class="comment-text">Is this system compatible with 3-phase grid power synchronization?</div>
+                        </div>
+                    </div>
+                    <div class="comment-input-box">
+                        <input type="text" placeholder="Write a community comment..." id="comment-input-101" onkeydown="handleCommentSubmit(event, '101')">
+                        <button class="comment-send-btn" onclick="submitComment('101')"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- POST 2: STAGE 4 (BATTERY STORAGE & BMS) -->
+            <article class="post-card" data-stage="stage4" data-location="Victoria Island Lagos" data-post-id="post-102">
+                <div class="post-header">
+                    <div class="post-author-row">
+                        <img src="/site-images/installerface1.jpeg" alt="Lead Engineer" class="author-avatar" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';">
+                        <div class="author-info">
+                            <h3>Engr. Solomon Abdulrasaq <i class="fa-solid fa-circle-check verified-badge" title="Certified Storage Specialist"></i></h3>
+                            <div class="post-meta">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>Victoria Island, Lagos State</span>
+                                <span>• 5h ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="stage-pill" style="background:rgba(56,189,248,0.15); color:#38bdf8; border-color:rgba(56,189,248,0.35);">
+                        🔋 Stage 4: Battery & BMS Wiring
+                    </span>
+                </div>
+
+                <div class="post-body">
+                    <p class="post-text">
+                        Completed multi-module rack installation of 30kWh Felicity LiFePO4 Ultra-High Capacity Battery Bank with CAN-bus communication linked directly to the primary power management system. 0ms uninterrupted switchover tested during sudden grid blackouts.
+                    </p>
+                    <div class="post-tags-row">
+                        <span class="spec-tag">30kWh LiFePO4 Storage</span>
+                        <span class="spec-tag">6000+ Cycles (90% DoD)</span>
+                        <span class="spec-tag">CAN / RS485 Dual Bus</span>
+                    </div>
+                </div>
+
+                <div class="post-media-wrap" onclick="openMediaPreview('/site-images/utakoinverterdone.jpeg')">
+                    <img src="/site-images/utakoinverterdone.jpeg" alt="LiFePO4 Battery & Inverter Wall" class="post-media-img" onerror="this.src='/site-images/inverterUtako2.jpeg'">
+                    <div class="media-watermark">
+                        <i class="fa-solid fa-camera"></i>
+                        <span>AE RENEWABLE • SITE EVIDENCE VERIFIED</span>
+                    </div>
+                </div>
+
+                <!-- CLIENT FEEDBACK / COMPLAINANT NOTE -->
+                <div class="client-feedback-box">
+                    <div class="feedback-head">
+                        <span class="feedback-head-title"><i class="fa-solid fa-quote-left"></i> Client Resolution & Review</span>
+                        <span class="stars-row">★★★★★</span>
+                    </div>
+                    <p class="feedback-quote">
+                        "Our main concern was our server room rebooting whenever NEPA took light. With this AE installation, the changeover is literally invisible. Our servers stayed online without dropping a single packet."
+                    </p>
+                    <div class="resolution-note">
+                        <i class="fa-solid fa-check-double"></i>
+                        <span>Resolution: 0-Millisecond UPS Switching Verified by Telemetry</span>
+                    </div>
+                </div>
+
+                <!-- SOCIAL COUNTERS -->
+                <div class="social-stats-bar">
+                    <div class="stats-icons-group">
+                        <span class="reaction-bubble bubble-like"><i class="fa-solid fa-thumbs-up"></i></span>
+                        <span class="reaction-bubble bubble-love"><i class="fa-solid fa-heart"></i></span>
+                        <span id="likes-count-102" style="font-weight:700; color:#cbd5e1; margin-left:4px;">215</span>
+                    </div>
+                    <div>
+                        <span id="shares-count-102">54 Shares</span> • <span>29 Comments</span>
+                    </div>
+                </div>
+
+                <!-- INTERACTIVE SOCIAL TOOLBAR -->
+                <div class="post-actions-bar">
+                    <button class="action-btn" id="like-btn-102" onclick="toggleReaction('102', 'like')">
+                        <i class="fa-regular fa-thumbs-up"></i>
+                        <span>Like</span>
+                    </button>
+                    <button class="action-btn" id="love-btn-102" onclick="toggleReaction('102', 'love')">
+                        <i class="fa-regular fa-heart"></i>
+                        <span>Love</span>
+                    </button>
+                    <button class="action-btn" onclick="openShareModal('post-102', '30kWh LiFePO4 Storage in Victoria Island Lagos')">
+                        <i class="fa-solid fa-share"></i>
+                        <span>Reshare</span>
+                    </button>
+                    <button class="action-btn" onclick="toggleComments('102')">
+                        <i class="fa-regular fa-comment"></i>
+                        <span>Comment</span>
+                    </button>
+                </div>
+
+                <!-- COMMENTS ACCORDION -->
+                <div class="comments-section" id="comments-102" style="display:none;">
+                    <div class="comment-item">
+                        <div class="comment-avatar">CA</div>
+                        <div class="comment-bubble">
+                            <div class="comment-author">Chief Adeleke</div>
+                            <div class="comment-text">Incredible setup. How long does it take to charge from solar on a normal sunny day?</div>
+                        </div>
+                    </div>
+                    <div class="comment-input-box">
+                        <input type="text" placeholder="Write a community comment..." id="comment-input-102" onkeydown="handleCommentSubmit(event, '102')">
+                        <button class="comment-send-btn" onclick="submitComment('102')"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- POST 3: STAGE 5 (EARTHING & SURGE PROTECTION) -->
+            <article class="post-card" data-stage="stage5" data-location="Port Harcourt Rivers" data-post-id="post-103">
+                <div class="post-header">
+                    <div class="post-author-row">
+                        <img src="/site-images/instaler2.jpeg" alt="Lead Engineer" class="author-avatar" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';">
+                        <div class="author-info">
+                            <h3>Engr. Fabiyi Oluwasegun <i class="fa-solid fa-circle-check verified-badge" title="Certified Protection Tech"></i></h3>
+                            <div class="post-meta">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>GRA Phase 2, Port Harcourt, Rivers State</span>
+                                <span>• 1d ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="stage-pill" style="background:rgba(245,158,11,0.15); color:#fbbf24; border-color:rgba(245,158,11,0.35);">
+                        ⚡ Stage 5: Earthing (<2Ω) & SPDs
+                    </span>
+                </div>
+
+                <div class="post-body">
+                    <p class="post-text">
+                        Deep copper rod earthing system driven into site substrate treated with Marconite compound, achieving an audited earth resistance of <strong>1.48 Ohms</strong> (well below IEEE 2.0Ω safety ceiling). Installed heavy-duty DC and AC Class I+II surge arrestors for comprehensive lightning suppression.
+                    </p>
+                    <div class="post-tags-row">
+                        <span class="spec-tag">1.48Ω Earth Resistance</span>
+                        <span class="spec-tag">Type 1+2 DC SPDs (1000V)</span>
+                        <span class="spec-tag">Copper Earth Chamber</span>
+                    </div>
+                </div>
+
+                <div class="post-media-wrap" onclick="openMediaPreview('/site-images/electrical.jpg')">
+                    <img src="/site-images/electrical.jpg" alt="Surge Protection and Earthing Enclosure" class="post-media-img" onerror="this.src='/site-images/Gemini_Generated_Image_ckbs95ckbs95ckbs.png'">
+                    <div class="media-watermark">
+                        <i class="fa-solid fa-camera"></i>
+                        <span>AE RENEWABLE • SITE EVIDENCE VERIFIED</span>
+                    </div>
+                </div>
+
+                <!-- CLIENT FEEDBACK / COMPLAINANT NOTE -->
+                <div class="client-feedback-box">
+                    <div class="feedback-head">
+                        <span class="feedback-head-title"><i class="fa-solid fa-quote-left"></i> Client Quality Assurance</span>
+                        <span class="stars-row">★★★★★</span>
+                    </div>
+                    <p class="feedback-quote">
+                        "Last year lightning struck our transformer and blew our borehole pump and TV. AE Renewable made earthing and lightning protection their top priority. Very impressed with the digital tester verification."
+                    </p>
+                    <div class="resolution-note">
+                        <i class="fa-solid fa-check-double"></i>
+                        <span>NEMSA Electrical Safety Code Compliant</span>
+                    </div>
+                </div>
+
+                <!-- SOCIAL COUNTERS -->
+                <div class="social-stats-bar">
+                    <div class="stats-icons-group">
+                        <span class="reaction-bubble bubble-like"><i class="fa-solid fa-thumbs-up"></i></span>
+                        <span class="reaction-bubble bubble-love"><i class="fa-solid fa-heart"></i></span>
+                        <span id="likes-count-103" style="font-weight:700; color:#cbd5e1; margin-left:4px;">189</span>
+                    </div>
+                    <div>
+                        <span id="shares-count-103">41 Shares</span> • <span>23 Comments</span>
+                    </div>
+                </div>
+
+                <!-- INTERACTIVE SOCIAL TOOLBAR -->
+                <div class="post-actions-bar">
+                    <button class="action-btn" id="like-btn-103" onclick="toggleReaction('103', 'like')">
+                        <i class="fa-regular fa-thumbs-up"></i>
+                        <span>Like</span>
+                    </button>
+                    <button class="action-btn" id="love-btn-103" onclick="toggleReaction('103', 'love')">
+                        <i class="fa-regular fa-heart"></i>
+                        <span>Love</span>
+                    </button>
+                    <button class="action-btn" onclick="openShareModal('post-103', 'Sub-2 Ohm Earthing Pit in Port Harcourt')">
+                        <i class="fa-solid fa-share"></i>
+                        <span>Reshare</span>
+                    </button>
+                    <button class="action-btn" onclick="toggleComments('103')">
+                        <i class="fa-regular fa-comment"></i>
+                        <span>Comment</span>
+                    </button>
+                </div>
+
+                <!-- COMMENTS ACCORDION -->
+                <div class="comments-section" id="comments-103" style="display:none;">
+                    <div class="comment-input-box">
+                        <input type="text" placeholder="Write a community comment..." id="comment-input-103" onkeydown="handleCommentSubmit(event, '103')">
+                        <button class="comment-send-btn" onclick="submitComment('103')"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- POST 4: STAGE 6 (TESTING & COMMISSIONING) -->
+            <article class="post-card" data-stage="stage6" data-location="Bodija Ibadan Oyo" data-post-id="post-104">
+                <div class="post-header">
+                    <div class="post-author-row">
+                        <img src="/site-images/instaler3.jpeg" alt="Lead Engineer" class="author-avatar" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';">
+                        <div class="author-info">
+                            <h3>Engr. Stephen Akolade <i class="fa-solid fa-circle-check verified-badge" title="Certified Commissioning Officer"></i></h3>
+                            <div class="post-meta">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>Bodija Estate, Ibadan, Oyo State</span>
+                                <span>• 2d ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="stage-pill" style="background:rgba(16,185,129,0.2); color:#6ee7b7; border-color:rgba(16,185,129,0.4);">
+                        🏆 Stage 6: Testing & Handover
+                    </span>
+                </div>
+
+                <div class="post-body">
+                    <p class="post-text">
+                        Final commissioning and client live orientation completed for 10kVA Turnkey Solar Facility. Full load test carried out at 8.2kW continuous draw with thermal imaging of all busbar connections showing optimal temperature margins (31°C). Wi-Fi telemetry activated for real-time mobile app monitoring.
+                    </p>
+                    <div class="post-tags-row">
+                        <span class="spec-tag">Thermal Imaging Verified</span>
+                        <span class="spec-tag">8.2kW Live Stress Test</span>
+                        <span class="spec-tag">Cloud Telemetry Enabled</span>
+                    </div>
+                </div>
+
+                <div class="post-media-wrap" onclick="openMediaPreview('/site-images/smartInverter.jpeg')">
+                    <img src="/site-images/smartInverter.jpeg" alt="Commissioned Smart Inverter System" class="post-media-img" onerror="this.src='/site-images/Gemini_Generated_Image_kaiccpkaiccpkaic.png'">
+                    <div class="media-watermark">
+                        <i class="fa-solid fa-camera"></i>
+                        <span>AE RENEWABLE • SITE EVIDENCE VERIFIED</span>
+                    </div>
+                </div>
+
+                <!-- CLIENT FEEDBACK / COMPLAINANT NOTE -->
+                <div class="client-feedback-box">
+                    <div class="feedback-head">
+                        <span class="feedback-head-title"><i class="fa-solid fa-quote-left"></i> Client Handover Testimonial</span>
+                        <span class="stars-row">★★★★★</span>
+                    </div>
+                    <p class="feedback-quote">
+                        "The handover was smooth and informative. Engr. Stephen walked me through the telemetry app so I can see exactly how many units our solar panels are generating every hour. Top class professional delivery!"
+                    </p>
+                    <div class="resolution-note">
+                        <i class="fa-solid fa-check-double"></i>
+                        <span>Official Certificate of Electrical Safety & Warranty Issued</span>
+                    </div>
+                </div>
+
+                <!-- SOCIAL COUNTERS -->
+                <div class="social-stats-bar">
+                    <div class="stats-icons-group">
+                        <span class="reaction-bubble bubble-like"><i class="fa-solid fa-thumbs-up"></i></span>
+                        <span class="reaction-bubble bubble-love"><i class="fa-solid fa-heart"></i></span>
+                        <span id="likes-count-104" style="font-weight:700; color:#cbd5e1; margin-left:4px;">342</span>
+                    </div>
+                    <div>
+                        <span id="shares-count-104">88 Shares</span> • <span>47 Comments</span>
+                    </div>
+                </div>
+
+                <!-- INTERACTIVE SOCIAL TOOLBAR -->
+                <div class="post-actions-bar">
+                    <button class="action-btn" id="like-btn-104" onclick="toggleReaction('104', 'like')">
+                        <i class="fa-regular fa-thumbs-up"></i>
+                        <span>Like</span>
+                    </button>
+                    <button class="action-btn" id="love-btn-104" onclick="toggleReaction('104', 'love')">
+                        <i class="fa-regular fa-heart"></i>
+                        <span>Love</span>
+                    </button>
+                    <button class="action-btn" onclick="openShareModal('post-104', '10kVA Solar Handover in Bodija Ibadan')">
+                        <i class="fa-solid fa-share"></i>
+                        <span>Reshare</span>
+                    </button>
+                    <button class="action-btn" onclick="toggleComments('104')">
+                        <i class="fa-regular fa-comment"></i>
+                        <span>Comment</span>
+                    </button>
+                </div>
+
+                <!-- COMMENTS ACCORDION -->
+                <div class="comments-section" id="comments-104" style="display:none;">
+                    <div class="comment-input-box">
+                        <input type="text" placeholder="Write a community comment..." id="comment-input-104" onkeydown="handleCommentSubmit(event, '104')">
+                        <button class="comment-send-btn" onclick="submitComment('104')"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- POST 5: STAGE 1 (PRE-INSTALLATION SITE AUDIT) -->
+            <article class="post-card" data-stage="stage1" data-location="Gombe Central" data-post-id="post-105">
+                <div class="post-header">
+                    <div class="post-author-row">
+                        <img src="/site-images/instaler5.jpeg" alt="Lead Engineer" class="author-avatar" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';">
+                        <div class="author-info">
+                            <h3>Engr. Eniola Abdulrasaq <i class="fa-solid fa-circle-check verified-badge" title="Certified Site Auditor"></i></h3>
+                            <div class="post-meta">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>Gombe Central Commercial Hub, Gombe</span>
+                                <span>• 3d ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="stage-pill" style="background:rgba(239,68,68,0.15); color:#f87171; border-color:rgba(239,68,68,0.35);">
+                        🔍 Stage 1: Site Audit & Structural
+                    </span>
+                </div>
+
+                <div class="post-body">
+                    <p class="post-text">
+                        Comprehensive geotechnical and roof structural load assessment performed for a 45kW commercial mini-grid facility. Solar irradiance measured at 5.8 kWh/m²/day. Rafter stress distribution calculations mapped in ARDE Studio before finalizing mounting anchors.
+                    </p>
+                    <div class="post-tags-row">
+                        <span class="spec-tag">5.8 kWh/m²/day Peak Sun</span>
+                        <span class="spec-tag">ARDE Structural Simulation</span>
+                        <span class="spec-tag">Zero Roof Puncture Framing</span>
+                    </div>
+                </div>
+
+                <div class="post-media-wrap" onclick="openMediaPreview('/site-images/gombe1.png')">
+                    <img src="/site-images/gombe1.png" alt="Commercial Site Audit Layout" class="post-media-img" onerror="this.src='/site-images/Gemini_Generated_Image_rrxhudrrxhudrrxh.png'">
+                    <div class="media-watermark">
+                        <i class="fa-solid fa-camera"></i>
+                        <span>AE RENEWABLE • SITE EVIDENCE VERIFIED</span>
+                    </div>
+                </div>
+
+                <!-- CLIENT FEEDBACK / COMPLAINANT NOTE -->
+                <div class="client-feedback-box">
+                    <div class="feedback-head">
+                        <span class="feedback-head-title"><i class="fa-solid fa-quote-left"></i> Client Requirement Alignment</span>
+                        <span class="stars-row">★★★★★</span>
+                    </div>
+                    <p class="feedback-quote">
+                        "We originally worried whether our factory roof could hold 80+ panels safely during stormy seasons. The engineering report and wind simulation put our board at complete ease."
+                    </p>
+                    <div class="resolution-note">
+                        <i class="fa-solid fa-check-double"></i>
+                        <span>Structural Load Safety Factor: 2.5x High-Wind Rating</span>
+                    </div>
+                </div>
+
+                <!-- SOCIAL COUNTERS -->
+                <div class="social-stats-bar">
+                    <div class="stats-icons-group">
+                        <span class="reaction-bubble bubble-like"><i class="fa-solid fa-thumbs-up"></i></span>
+                        <span class="reaction-bubble bubble-love"><i class="fa-solid fa-heart"></i></span>
+                        <span id="likes-count-105" style="font-weight:700; color:#cbd5e1; margin-left:4px;">176</span>
+                    </div>
+                    <div>
+                        <span id="shares-count-105">39 Shares</span> • <span>15 Comments</span>
+                    </div>
+                </div>
+
+                <!-- INTERACTIVE SOCIAL TOOLBAR -->
+                <div class="post-actions-bar">
+                    <button class="action-btn" id="like-btn-105" onclick="toggleReaction('105', 'like')">
+                        <i class="fa-regular fa-thumbs-up"></i>
+                        <span>Like</span>
+                    </button>
+                    <button class="action-btn" id="love-btn-105" onclick="toggleReaction('105', 'love')">
+                        <i class="fa-regular fa-heart"></i>
+                        <span>Love</span>
+                    </button>
+                    <button class="action-btn" onclick="openShareModal('post-105', '45kW Commercial Site Audit in Gombe')">
+                        <i class="fa-solid fa-share"></i>
+                        <span>Reshare</span>
+                    </button>
+                    <button class="action-btn" onclick="toggleComments('105')">
+                        <i class="fa-regular fa-comment"></i>
+                        <span>Comment</span>
+                    </button>
+                </div>
+
+                <!-- COMMENTS ACCORDION -->
+                <div class="comments-section" id="comments-105" style="display:none;">
+                    <div class="comment-input-box">
+                        <input type="text" placeholder="Write a community comment..." id="comment-input-105" onkeydown="handleCommentSubmit(event, '105')">
+                        <button class="comment-send-btn" onclick="submitComment('105')"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- POST 6: STAGE 2 (CABLE TRENCHING & CONDUIT ROUTING) -->
+            <article class="post-card" data-stage="stage2" data-location="Kano Industrial Zone" data-post-id="post-106">
+                <div class="post-header">
+                    <div class="post-author-row">
+                        <img src="/site-images/instalerface.jpeg" alt="Lead Engineer" class="author-avatar" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';">
+                        <div class="author-info">
+                            <h3>Engr. Solomon Abdulrasaq <i class="fa-solid fa-circle-check verified-badge" title="Certified Infrastructure Lead"></i></h3>
+                            <div class="post-meta">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>Challawa Industrial Layout, Kano State</span>
+                                <span>• 4d ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="stage-pill" style="background:rgba(168,85,247,0.15); color:#c084fc; border-color:rgba(168,85,247,0.35);">
+                        🛠️ Stage 2: Trenching & Conduit
+                    </span>
+                </div>
+
+                <div class="post-body">
+                    <p class="post-text">
+                        Underground armoured DC and AC cable pathways laid in heavy-duty PVC electrical conduits with warning tape embedded 400mm above trench beds. Terminated neatly into IP66 weatherproof distribution junction boxes with moisture desiccant seals.
+                    </p>
+                    <div class="post-tags-row">
+                        <span class="spec-tag">IP66 Waterproof Ingress</span>
+                        <span class="spec-tag">Subterranean Conduit Line</span>
+                        <span class="spec-tag">Armoured 4-Core XLPE</span>
+                    </div>
+                </div>
+
+                <div class="post-media-wrap" onclick="openMediaPreview('/site-images/installer1.jpeg')">
+                    <img src="/site-images/installer1.jpeg" alt="Industrial Trenching and Conduit Inspection" class="post-media-img" onerror="this.src='/site-images/Gemini_Generated_Image_fnbv0nfnbv0nfnbv.png'">
+                    <div class="media-watermark">
+                        <i class="fa-solid fa-camera"></i>
+                        <span>AE RENEWABLE • SITE EVIDENCE VERIFIED</span>
+                    </div>
+                </div>
+
+                <!-- CLIENT FEEDBACK / COMPLAINANT NOTE -->
+                <div class="client-feedback-box">
+                    <div class="feedback-head">
+                        <span class="feedback-head-title"><i class="fa-solid fa-quote-left"></i> Client Quality Assurance</span>
+                        <span class="stars-row">★★★★★</span>
+                    </div>
+                    <p class="feedback-quote">
+                        "We had complaints in the past with previous contractors leaving exposed wires across our factory walkways. AE Renewable did proper underground trenching and restored the interlocks completely. Excellent work."
+                    </p>
+                    <div class="resolution-note">
+                        <i class="fa-solid fa-check-double"></i>
+                        <span>Compliant Industrial Workplace Safety Sign-off</span>
+                    </div>
+                </div>
+
+                <!-- SOCIAL COUNTERS -->
+                <div class="social-stats-bar">
+                    <div class="stats-icons-group">
+                        <span class="reaction-bubble bubble-like"><i class="fa-solid fa-thumbs-up"></i></span>
+                        <span class="reaction-bubble bubble-love"><i class="fa-solid fa-heart"></i></span>
+                        <span id="likes-count-106" style="font-weight:700; color:#cbd5e1; margin-left:4px;">194</span>
+                    </div>
+                    <div>
+                        <span id="shares-count-106">43 Shares</span> • <span>19 Comments</span>
+                    </div>
+                </div>
+
+                <!-- INTERACTIVE SOCIAL TOOLBAR -->
+                <div class="post-actions-bar">
+                    <button class="action-btn" id="like-btn-106" onclick="toggleReaction('106', 'like')">
+                        <i class="fa-regular fa-thumbs-up"></i>
+                        <span>Like</span>
+                    </button>
+                    <button class="action-btn" id="love-btn-106" onclick="toggleReaction('106', 'love')">
+                        <i class="fa-regular fa-heart"></i>
+                        <span>Love</span>
+                    </button>
+                    <button class="action-btn" onclick="openShareModal('post-106', 'Industrial Cable Trenching in Kano')">
+                        <i class="fa-solid fa-share"></i>
+                        <span>Reshare</span>
+                    </button>
+                    <button class="action-btn" onclick="toggleComments('106')">
+                        <i class="fa-regular fa-comment"></i>
+                        <span>Comment</span>
+                    </button>
+                </div>
+
+                <!-- COMMENTS ACCORDION -->
+                <div class="comments-section" id="comments-106" style="display:none;">
+                    <div class="comment-input-box">
+                        <input type="text" placeholder="Write a community comment..." id="comment-input-106" onkeydown="handleCommentSubmit(event, '106')">
+                        <button class="comment-send-btn" onclick="submitComment('106')"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+
+    </main>
+
+    <!-- 03. RESHARE MODAL (FACEBOOK STYLE) -->
+    <div class="share-modal-overlay" id="shareModal" onclick="closeShareModal(event)">
+        <div class="share-modal-card" onclick="event.stopPropagation()">
+            <div class="share-modal-head">
+                <h3><i class="fa-solid fa-share-nodes" style="color:#38bdf8;"></i> Reshare Field Post</h3>
+                <button class="modal-close-btn" onclick="closeShareModal()">&times;</button>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px;" id="shareModalPostTitle">
+                Share this verified solar engineering milestone to social networks:
+            </p>
+            <div class="share-options-grid">
+                <a href="#" id="shareWhatsAppBtn" target="_blank" class="share-target-btn whatsapp" onclick="recordShare()">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="#" id="shareTwitterBtn" target="_blank" class="share-target-btn twitter" onclick="recordShare()">
+                    <i class="fa-brands fa-x-twitter"></i>
+                    <span>Twitter / X</span>
+                </a>
+                <a href="#" id="shareFacebookBtn" target="_blank" class="share-target-btn facebook" onclick="recordShare()">
+                    <i class="fa-brands fa-facebook"></i>
+                    <span>Facebook</span>
+                </a>
+            </div>
+            <div class="copy-link-wrap">
+                <input type="text" id="shareDirectLink" readonly value="http://localhost:5000/client">
+                <button class="copy-btn" onclick="copyShareLink()"><i class="fa-regular fa-copy"></i> Copy Link</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST POPUP -->
+    <div class="toast-popup" id="liveToast">
+        <i class="fa-solid fa-circle-check" style="color:#10b981; font-size:16px;"></i>
+        <span id="toastMessage">Action completed successfully!</span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        let currentPostId = null;
+
+        function showToast(msg) {
+            const toast = document.getElementById("liveToast");
+            const text = document.getElementById("toastMessage");
+            if (!toast || !text) return;
+            text.textContent = msg;
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 3000);
+        }
+
+        /* REACTION TOGGLE (LIKE / LOVE) */
+        function toggleReaction(id, type) {
+            const likeBtn = document.getElementById(`like-btn-${id}`);
+            const loveBtn = document.getElementById(`love-btn-${id}`);
+            const countEl = document.getElementById(`likes-count-${id}`);
+            let count = parseInt(countEl.textContent, 10) || 100;
+
+            const storageKey = `reaction_post_${id}`;
+            const currentReaction = localStorage.getItem(storageKey);
+
+            if (type === 'like') {
+                if (currentReaction === 'like') {
+                    likeBtn.classList.remove('liked');
+                    likeBtn.innerHTML = `<i class="fa-regular fa-thumbs-up"></i><span>Like</span>`;
+                    count = Math.max(0, count - 1);
+                    localStorage.removeItem(storageKey);
+                } else {
+                    if (currentReaction === 'love') {
+                        loveBtn.classList.remove('loved');
+                        loveBtn.innerHTML = `<i class="fa-regular fa-heart"></i><span>Love</span>`;
+                    } else {
+                        count += 1;
+                    }
+                    likeBtn.classList.add('liked');
+                    likeBtn.innerHTML = `<i class="fa-solid fa-thumbs-up"></i><span>Liked</span>`;
+                    localStorage.setItem(storageKey, 'like');
+                    showToast("👍 You liked this installation report!");
+                }
+            } else if (type === 'love') {
+                if (currentReaction === 'love') {
+                    loveBtn.classList.remove('loved');
+                    loveBtn.innerHTML = `<i class="fa-regular fa-heart"></i><span>Love</span>`;
+                    count = Math.max(0, count - 1);
+                    localStorage.removeItem(storageKey);
+                } else {
+                    if (currentReaction === 'like') {
+                        likeBtn.classList.remove('liked');
+                        likeBtn.innerHTML = `<i class="fa-regular fa-thumbs-up"></i><span>Like</span>`;
+                    } else {
+                        count += 1;
+                    }
+                    loveBtn.classList.add('loved');
+                    loveBtn.innerHTML = `<i class="fa-solid fa-heart"></i><span>Loved</span>`;
+                    localStorage.setItem(storageKey, 'love');
+                    showToast("❤️ You loved this installation report!");
+                }
+            }
+
+            countEl.textContent = count;
+        }
+
+        /* COMMENTS TOGGLE & SUBMIT */
+        function toggleComments(id) {
+            const box = document.getElementById(`comments-${id}`);
+            if (!box) return;
+            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function handleCommentSubmit(e, id) {
+            if (e.key === 'Enter') {
+                submitComment(id);
+            }
+        }
+
+        function submitComment(id) {
+            const input = document.getElementById(`comment-input-${id}`);
+            if (!input || !input.value.trim()) return;
+
+            const text = input.value.trim();
+            const commentsBox = document.getElementById(`comments-${id}`);
+            
+            const newComment = document.createElement('div');
+            newComment.className = 'comment-item';
+            newComment.innerHTML = `
+                <div class="comment-avatar" style="background:#004AAD; color:#fff;">YOU</div>
+                <div class="comment-bubble">
+                    <div class="comment-author">Community Visitor</div>
+                    <div class="comment-text">${escapeHtml(text)}</div>
+                </div>
+            `;
+
+            commentsBox.insertBefore(newComment, commentsBox.lastElementChild);
+            input.value = '';
+            showToast("💬 Comment posted to live community feed!");
+        }
+
+        /* SEARCH FILTER */
+        function filterFeedPosts() {
+            const query = document.getElementById('feedSearchInput').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.post-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                const loc = (card.dataset.location || '').toLowerCase();
+                const stage = (card.dataset.stage || '').toLowerCase();
+                if (!query || text.includes(query) || loc.includes(query) || stage.includes(query)) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            const countTag = document.getElementById('feedCountTag');
+            if (countTag) {
+                countTag.textContent = `Showing ${visibleCount} Verified Reports`;
+            }
+        }
+
+        /* SHARE MODAL */
+        function openShareModal(postId, title) {
+            currentPostId = postId;
+            const modal = document.getElementById('shareModal');
+            const titleEl = document.getElementById('shareModalPostTitle');
+            const linkInput = document.getElementById('shareDirectLink');
+
+            const postUrl = `${window.location.origin}/client#${postId}`;
+            if (titleEl) titleEl.textContent = `Share "${title}" with your network:`;
+            if (linkInput) linkInput.value = postUrl;
+
+            // Setup social links
+            const encodedUrl = encodeURIComponent(postUrl);
+            const encodedTitle = encodeURIComponent(`Check out this certified solar installation by AE Renewable Ltd: ${title}`);
+
+            const waBtn = document.getElementById('shareWhatsAppBtn');
+            const twBtn = document.getElementById('shareTwitterBtn');
+            const fbBtn = document.getElementById('shareFacebookBtn');
+
+            if (waBtn) waBtn.href = `https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`;
+            if (twBtn) twBtn.href = `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`;
+            if (fbBtn) fbBtn.href = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+
+            modal.classList.add('active');
+        }
+
+        function closeShareModal() {
+            const modal = document.getElementById('shareModal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function copyShareLink() {
+            const linkInput = document.getElementById('shareDirectLink');
+            if (!linkInput) return;
+            linkInput.select();
+            linkInput.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(linkInput.value);
+            showToast("📋 Post link copied to clipboard!");
+            recordShare();
+            setTimeout(closeShareModal, 800);
+        }
+
+        function recordShare() {
+            if (!currentPostId) return;
+            const num = currentPostId.replace('post-', '');
+            const shareSpan = document.getElementById(`shares-count-${num}`);
+            if (shareSpan) {
+                const cur = parseInt(shareSpan.textContent, 10) || 30;
+                shareSpan.textContent = `${cur + 1} Shares`;
+            }
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+            });
+        }
+
+        function openMediaPreview(src) {
+            window.open(src, '_blank');
+        }
+
+        /* DYNAMIC LIVE FIELD POST SYNC */
+        async function fetchLiveFieldPosts() {
+            try {
+                const res = await fetch("/api/field-posts");
+                const json = await res.json();
+                if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+                    renderDynamicFeedPosts(json.data);
+                }
+            } catch (e) {
+                console.warn("[Live Feed] Static fallback retained:", e);
+            }
+        }
+
+        function renderDynamicFeedPosts(posts) {
+            const container = document.getElementById("postsContainer");
+            if (!container) return;
+
+            container.innerHTML = posts.map(p => {
+                const idNum = p.id ? p.id.replace('post-', '') : String(Math.floor(Math.random()*1000));
+                const tags = Array.isArray(p.tags) ? p.tags : [];
+                const timeStr = p.created_at ? getTimeAgo(p.created_at) : '2h ago';
+                const likes = p.likes_count || 120;
+                const loves = p.loves_count || 45;
+                const shares = p.shares_count || 25;
+                const comments = Array.isArray(p.comments) ? p.comments : [];
+                const safeAvatar = p.engineer_avatar || '/uploads/installer-default.jpg';
+                const safeImg = p.image_url || '/site-images/panelUtako1.jpeg';
+
+                return `
+                    <article class="post-card" data-stage="${escapeHtml(p.stage)}" data-location="${escapeHtml(p.location)}" data-post-id="${escapeHtml(p.id)}">
+                        <div class="post-header">
+                            <div class="post-author-row">
+                                <img src="${safeAvatar}" alt="Lead Engineer" class="author-avatar" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';">
+                                <div class="author-info">
+                                    <h3>${escapeHtml(p.engineer_name)} <i class="fa-solid fa-circle-check verified-badge" title="Certified Lead Installer"></i></h3>
+                                    <div class="post-meta">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        <span>${escapeHtml(p.location)}</span>
+                                        <span>• ${timeStr}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="stage-pill">${escapeHtml(p.stage_title || p.stage)}</span>
+                        </div>
+
+                        <div class="post-body">
+                            <p class="post-text">
+                                ${escapeHtml(p.description)}
+                            </p>
+                            <div class="post-tags-row">
+                                ${tags.map(t => `<span class="spec-tag">${escapeHtml(t)}</span>`).join('')}
+                            </div>
+                        </div>
+
+                        <div class="post-media-wrap" onclick="openMediaPreview('${safeImg}')">
+                            <img src="${safeImg}" alt="Solar Installation Evidence" class="post-media-img" onerror="this.onerror=null; this.src='/site-images/panelUtako1.jpeg';">
+                            <div class="media-watermark">
+                                <i class="fa-solid fa-camera"></i>
+                                <span>AE RENEWABLE • SITE EVIDENCE VERIFIED</span>
+                            </div>
+                        </div>
+
+                        ${p.client_feedback ? `
+                        <div class="client-feedback-box">
+                            <div class="feedback-head">
+                                <span class="feedback-head-title"><i class="fa-solid fa-quote-left"></i> Verified Client Experience</span>
+                                <span class="stars-row">★★★★★</span>
+                            </div>
+                            <p class="feedback-quote">
+                                "${escapeHtml(p.client_feedback)}"
+                            </p>
+                            ${p.resolution_note ? `
+                            <div class="resolution-note">
+                                <i class="fa-solid fa-check-double"></i>
+                                <span>${escapeHtml(p.resolution_note)}</span>
+                            </div>
+                            ` : ''}
+                        </div>
+                        ` : ''}
+
+                        <div class="social-stats-bar">
+                            <div class="stats-icons-group">
+                                <span class="reaction-bubble bubble-like"><i class="fa-solid fa-thumbs-up"></i></span>
+                                <span class="reaction-bubble bubble-love"><i class="fa-solid fa-heart"></i></span>
+                                <span id="likes-count-${idNum}" style="font-weight:700; color:#cbd5e1; margin-left:4px;">${likes}</span>
+                            </div>
+                            <div>
+                                <span id="shares-count-${idNum}">${shares} Shares</span> • <span>${comments.length} Comments</span>
+                            </div>
+                        </div>
+
+                        <div class="post-actions-bar">
+                            <button class="action-btn" id="like-btn-${idNum}" onclick="toggleReaction('${idNum}', 'like')">
+                                <i class="fa-regular fa-thumbs-up"></i>
+                                <span>Like</span>
+                            </button>
+                            <button class="action-btn" id="love-btn-${idNum}" onclick="toggleReaction('${idNum}', 'love')">
+                                <i class="fa-regular fa-heart"></i>
+                                <span>Love</span>
+                            </button>
+                            <button class="action-btn" onclick="toggleComments('${idNum}')">
+                                <i class="fa-regular fa-comment"></i>
+                                <span>Comment</span>
+                            </button>
+                            <button class="action-btn" onclick="openShareModal('${escapeHtml(p.id)}', '${escapeHtml(p.stage_title || p.stage)}')">
+                                <i class="fa-solid fa-share-nodes"></i>
+                                <span>Share</span>
+                            </button>
+                        </div>
+
+                        <div class="comments-section" id="comments-${idNum}" style="display:none;">
+                            ${comments.map(c => `
+                                <div class="comment-item">
+                                    <div class="comment-avatar">${escapeHtml(c.avatar || 'AE')}</div>
+                                    <div class="comment-bubble">
+                                        <div class="comment-author">${escapeHtml(c.author || 'Visitor')}</div>
+                                        <div class="comment-text">${escapeHtml(c.text)}</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                            <div class="comment-input-wrap">
+                                <input type="text" class="comment-input" id="comment-input-${idNum}" placeholder="Write a comment or technical inquiry..." onkeypress="handleCommentSubmit(event, '${idNum}')">
+                                <button class="comment-submit-btn" onclick="submitComment('${idNum}')"><i class="fa-solid fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+
+            const countTag = document.getElementById('feedCountTag');
+            if (countTag) {
+                countTag.textContent = `Showing ${posts.length} Verified Stage Reports`;
+            }
+        }
+
+        function getTimeAgo(dateStr) {
+            const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
+            if (diff < 60) return "Just now";
+            if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+            return `${Math.floor(diff / 86400)}d ago`;
+        }
+
+        // Initialize dynamic fetch on page load
+        document.addEventListener('DOMContentLoaded', fetchLiveFieldPosts);
+    </script>
 </body>
 </html>

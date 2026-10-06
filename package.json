@@ -1,22 +1,6 @@
 {
   "name": "ae-renewable-ltd",
   "version": "1.0.0",
-  "description": "AE Renewable Ltd client, installer, admin and engineering network platform",
-  "main": "api/index.js",
-  "scripts": {
-    "start": "node CLI_Folder/backend/server.js",
-    "build": "echo \"Build complete\""
-  },
-  "dependencies": {
-    "bcryptjs": "^3.0.2",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.1",
-    "express": "^5.1.0",
-    "express-rate-limit": "^8.0.1",
-    "helmet": "^8.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "multer": "^2.0.2",
-    "nodemailer": "^9.1.0",
-    "pg": "^8.16.3"
-  }
+  "description": "AE Renewable Ltd Platform",
+  "private": true
 }
