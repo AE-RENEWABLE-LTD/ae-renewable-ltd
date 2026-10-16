@@ -176,14 +176,26 @@ document.addEventListener("DOMContentLoaded", () => {
         const hasAppliances = Object.keys(state.appliances).length > 0;
         const isEnergyTouched = Boolean(hasAppliances || engNotes || totalWatts > 0);
 
-        // SCENARIO 1: Empty or User clicked proceed without doing anything on Card 3 and didn't touch Card 1 or 2
-        if (!isClientFilled && !isSiteTouched && !isEnergyTouched) {
-            flagCard3Red();
+        // If client is not providing number or any means of contact for the consultation, take client to fill it in Section 3
+        if (!phone) {
+            flagCard3Red("Please provide your phone number in Section 3 so our engineering team can contact you.", "custPhone");
+            return;
+        }
+        if (!email) {
+            flagCard3Red("Please enter your official email in Section 3 to receive project updates & credentials.", "custEmail");
+            return;
+        }
+        if (!fullName) {
+            flagCard3Red("Please enter your full name in Section 3.", "custFullName");
+            return;
+        }
+        if (!address) {
+            flagCard3Red("Please enter your site installation address in Section 3.", "custAddress");
             return;
         }
 
         // SCENARIO 2: Client chose ONLY 2. Site Survey & Infrastructure Assessment
-        if (isSiteTouched && !isClientFilled && !isEnergyTouched) {
+        if (isSiteTouched && !isEnergyTouched) {
             await submitSiteSurveyOnly({
                 gridReliability: state.gridReliability,
                 generatorKva: genKva,
@@ -194,19 +206,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // SCENARIO 3: Client chose ONLY 1. Energy Profiling & Sizing Targets
-        if (isEnergyTouched && !isClientFilled && !isSiteTouched) {
+        if (isEnergyTouched && !isSiteTouched) {
             await submitEnergyProfileOnly({
                 loadWatts: totalWatts > 0 ? totalWatts : 5000,
                 appliances: Object.keys(state.appliances).map(k => `${k} x ${state.appliances[k]}`),
                 batteryType: state.batteryType,
                 generalNotes: engNotes
             });
-            return;
-        }
-
-        // If client attempted partial client info but missed required fields (*), flag Card 3
-        if (!isClientFilled) {
-            flagCard3Red();
             return;
         }
 
@@ -234,31 +240,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Flag Section 3 Red helper
-    function flagCard3Red() {
+    function flagCard3Red(msg, focusId = "custFullName") {
         if (sectionCard3) {
             sectionCard3.classList.add("card-flag-red");
+            sectionCard3.classList.add("card-highlight-active");
             sectionCard3.scrollIntoView({ behavior: "smooth", block: "center" });
         }
-        if (custFullName) {
-            setTimeout(() => custFullName.focus(), 400);
+        const target = (focusId && document.getElementById(focusId)) || custFullName;
+        if (target) {
+            setTimeout(() => target.focus(), 400);
         }
-        showToast("Please complete Section 3 (Client & Contact Profiling) to proceed", "error");
+        showToast(msg || "Please complete Section 3 (Client & Contact Profiling) to proceed", "error");
     }
 
     // SUBMIT: Site Survey Only
     async function submitSiteSurveyOnly(siteData) {
+        const browserEmail = custEmail?.value.trim() || localStorage.getItem("ae_client_email") || (() => {
+            try { return JSON.parse(localStorage.getItem("user") || "{}").email || ""; } catch(e) { return ""; }
+        })();
+        const browserName = custFullName?.value.trim() || "";
+        const browserPhone = custPhone?.value.trim() || "";
+
+        if (!browserPhone || !browserEmail || !browserName) {
+            openSection3Profiling();
+            showToast("Please provide your phone number and contact details in Section 3 so our engineering team can contact you.", "warning");
+            return;
+        }
+
         setBtnLoading(true);
         try {
             const payload = {
                 intakeScenario: "site_only",
                 client: {
-                    fullName: "Site Survey Visitor Lead",
-                    email: `site-lead-${Date.now()}@aerenewable.com`,
-                    phone: "+234 813 361 5132",
-                    address: "Physical Site Assessment",
-                    city: "Abuja",
-                    state: "FCT",
-                    propertyType: "Residential"
+                    fullName: browserName,
+                    email: browserEmail,
+                    phone: browserPhone,
+                    address: custAddress?.value.trim() || "Physical Site Assessment",
+                    city: custCity?.value.trim() || "Abuja",
+                    state: custState?.value || "FCT",
+                    propertyType: custPropertyType?.value || "Residential"
                 },
                 site: siteData,
                 loadProfile: {
@@ -277,6 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (siteSurveyModal) {
                 siteSurveyModal.classList.add("active");
             }
+            showToast("✓ Site consultation logged! Credentials sent to your email.", "success");
         } catch (err) {
             showToast("Error: " + err.message, "error");
         } finally {
@@ -286,18 +307,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // SUBMIT: Energy Profile Only
     async function submitEnergyProfileOnly(energyData) {
+        const browserEmail = custEmail?.value.trim() || localStorage.getItem("ae_client_email") || (() => {
+            try { return JSON.parse(localStorage.getItem("user") || "{}").email || ""; } catch(e) { return ""; }
+        })();
+        const browserName = custFullName?.value.trim() || "";
+        const browserPhone = custPhone?.value.trim() || "";
+
+        if (!browserPhone || !browserEmail || !browserName) {
+            openSection3Profiling();
+            showToast("Please provide your phone number and contact details in Section 3 so our engineering team can contact you.", "warning");
+            return;
+        }
+
         setBtnLoading(true);
         try {
             const payload = {
                 intakeScenario: "energy_only",
                 client: {
-                    fullName: "Energy Profiling Visitor Lead",
-                    email: `energy-lead-${Date.now()}@aerenewable.com`,
-                    phone: "+234 813 361 5132",
-                    address: "Energy Profiling Inquiry",
-                    city: "Abuja",
-                    state: "FCT",
-                    propertyType: "Residential"
+                    fullName: browserName,
+                    email: browserEmail,
+                    phone: browserPhone,
+                    address: custAddress?.value.trim() || "Energy Profiling Inquiry",
+                    city: custCity?.value.trim() || "Abuja",
+                    state: custState?.value || "FCT",
+                    propertyType: custPropertyType?.value || "Residential"
                 },
                 site: {
                     gridReliability: state.gridReliability,
@@ -316,6 +349,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (energyInquiryModal) {
                 energyInquiryModal.classList.add("active");
             }
+            showToast("✓ Energy consultation logged! Credentials sent to your email.", "success");
         } catch (err) {
             showToast("Error: " + err.message, "error");
         } finally {
@@ -413,12 +447,23 @@ document.addEventListener("DOMContentLoaded", () => {
             sectionCard3.classList.add("card-highlight-active");
             sectionCard3.scrollIntoView({ behavior: "smooth", block: "start" });
         }
-        if (custFullName) {
-            setTimeout(() => {
+        setTimeout(() => {
+            if (custPhone && !custPhone.value.trim()) {
+                custPhone.focus();
+                showToast("Please provide your Phone / WhatsApp number so our engineering team can call you.", "info");
+            } else if (custFullName && !custFullName.value.trim()) {
                 custFullName.focus();
-                showToast("Please enter your contact details to complete profiling.", "info");
-            }, 350);
-        }
+                showToast("Please enter your contact person name.", "info");
+            } else if (custEmail && !custEmail.value.trim()) {
+                custEmail.focus();
+                showToast("Please enter your official email address.", "info");
+            } else if (custAddress && !custAddress.value.trim()) {
+                custAddress.focus();
+                showToast("Please enter your installation address.", "info");
+            } else if (custPhone) {
+                custPhone.focus();
+            }
+        }, 350);
     }
     window.openSection3Profiling = openSection3Profiling;
 
@@ -452,4 +497,20 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
     });
+
+    // Auto-focus Section 3 if requested via URL params or hash
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("focus") === "sectionCard3" || urlParams.get("section") === "3" || window.location.hash === "#sectionCard3" || window.location.hash === "#section-client") {
+            setTimeout(() => {
+                openSection3Profiling();
+            }, 300);
+        }
+        if (urlParams.get("email") && custEmail) {
+            custEmail.value = urlParams.get("email");
+        }
+        if (urlParams.get("name") && custFullName) {
+            custFullName.value = urlParams.get("name");
+        }
+    } catch (e) {}
 });

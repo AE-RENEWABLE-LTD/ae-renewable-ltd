@@ -293,7 +293,8 @@ function isVerificationMode() {
         );
 
     return (
-        params.get("verify") === "1"
+        params.get("verify") === "1" ||
+        params.get("step") === "otp"
     );
 }
 
@@ -523,6 +524,70 @@ function clearMessage() {
 
     messageContainer.hidden =
         true;
+}
+
+
+function showDuplicateAccountNotice(
+    message,
+    email
+) {
+
+    if (!messageContainer) {
+        return;
+    }
+
+    const safeEmail = escapeHtml(email || "");
+    const safeMsg = escapeHtml(
+        message ||
+        "An account with this email address already exists and is already verified."
+    );
+
+    const loginUrl = `/installer/login?email=${encodeURIComponent(email || "")}`;
+    const forgotUrl = `/installer/login?email=${encodeURIComponent(email || "")}#forgot`;
+
+    messageContainer.className =
+        "message-container error duplicate-notice";
+
+    messageContainer.innerHTML = `
+        <div class="message-content" style="align-items: flex-start; gap: 14px;">
+            <span class="message-icon" aria-hidden="true" style="margin-top: 2px;">!</span>
+
+            <div class="message-text" style="flex: 1;">
+                <strong style="display: block; font-size: 15px; margin-bottom: 4px; color: #fff;">
+                    Account Already Registered & Verified
+                </strong>
+
+                <p style="margin: 0 0 12px 0; font-size: 13.5px; opacity: 0.95; line-height: 1.5;">
+                    ${safeMsg} Since your account is already active, OTP verification is not required. You can sign in directly to access the Installer Portal.
+                </p>
+
+                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                    <a
+                        href="${loginUrl}"
+                        class="primary-button"
+                        style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; font-size: 13.5px; text-decoration: none; border-radius: 8px; font-weight: 700; background: #00B140; color: #fff; box-shadow: 0 4px 12px rgba(0, 177, 64, 0.35);"
+                    >
+                        Sign in to Portal →
+                    </a>
+
+                    <a
+                        href="${forgotUrl}"
+                        style="color: #F4A600; font-size: 13px; font-weight: 600; text-decoration: underline;"
+                    >
+                        Forgot password?
+                    </a>
+                </div>
+            </div>
+        </div>
+    `;
+
+    messageContainer.hidden =
+        false;
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
 
@@ -1755,13 +1820,12 @@ async function submitRegistration() {
             const message =
                 getApiMessage(
                     result,
-                    "An account with these details already exists."
+                    "An account with this email address already exists and is already verified."
                 );
 
-            showMessage(
-                message +
-                    " If you already registered, please sign in instead.",
-                "error"
+            showDuplicateAccountNotice(
+                message,
+                data.email
             );
 
             return;
@@ -1804,6 +1868,11 @@ async function submitRegistration() {
             verificationEmail
         );
 
+        const isReactivated =
+            apiData.isPendingVerification === true ||
+            result.isPendingVerification === true ||
+            apiData.user?.isPendingVerification === true;
+
         const verificationSent =
             apiData.verificationSent !== false &&
             result.verificationSent !== false;
@@ -1819,9 +1888,11 @@ async function submitRegistration() {
         }
 
         showOtpStep(
-            verificationSent
-                ? "Your installer account has been created. Check your email for the verification code."
-                : ""
+            isReactivated
+                ? "Your registration was pending verification. A new 6-digit verification code has been dispatched to your email."
+                : (verificationSent
+                    ? "Your installer account has been created. Check your email for the verification code."
+                    : "")
         );
 
     } catch (error) {
@@ -2278,15 +2349,30 @@ function initializeVerificationOnlyMode() {
     verificationOnlyMode =
         isVerificationMode();
 
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const queryEmail =
+        normalizeEmail(
+            params.get("email")
+        );
+
+    if (queryEmail) {
+        savePendingVerificationEmail(queryEmail);
+        verificationEmail = queryEmail;
+    } else {
+        verificationEmail =
+            getPendingVerificationEmail();
+    }
+
     if (
         !verificationOnlyMode
     ) {
 
         return;
     }
-
-    verificationEmail =
-        getPendingVerificationEmail();
 
     /*
      * The OTP itself is deliberately NOT stored.

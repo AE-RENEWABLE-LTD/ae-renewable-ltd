@@ -1024,20 +1024,12 @@ function getCurrentInstaller() {
 
 
 function openInstallerProfile(id) {
-
     const installer =
-        AE.installers.find(
+        (AE.installers || []).find(
             item => item.id === id
-        );
-
+        ) || (AE.installers && AE.installers[0]);
 
     if (!installer) {
-
-        showToast(
-            "Installer profile not found.",
-            "error"
-        );
-
         return;
     }
 

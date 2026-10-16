@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>TamTam Energy Resources Limited - Quotation</title>
-
+    <title>CV - Abioye Abidemi Olawumi</title>
     <style>
-        @page {
-            size: A4;
-            margin: 12mm;
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+
+        :root {
+            --primary-color: #0b4f6c;
+            --heading-color: #1a202c;
+            --text-color: #2d3748;
+            --subtext-color: #4a5568;
+            --border-color: #cbd5e0;
+            --bg-pill: #edf2f7;
         }
 
         * {
@@ -19,312 +24,340 @@
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #ffffff;
-            color: #111111;
-        }
-
-        .quotation {
-            width: 100%;
-            max-width: 794px;
-            margin: 0 auto;
-            background: #ffffff;
-        }
-
-        /* =========================
-           COMPANY HEADER
-        ========================== */
-
-        .header {
-            width: 100%;
-            text-align: center;
-            margin-bottom: 18px;
-        }
-
-        .logo {
-            width: 100%;
-            max-width: 720px;
-            height: auto;
-            display: block;
-            margin: 0 auto 12px auto;
-        }
-
-        .company-details {
-            font-size: 12px;
-            line-height: 1.65;
-            color: #222222;
-        }
-
-        .company-details strong {
-            font-weight: 700;
-        }
-
-        /* =========================
-           QUOTATION TITLE
-        ========================== */
-
-        .quotation-title {
-            text-align: center;
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: 1.5px;
-            margin: 20px 0 18px;
-            color: #0b1f3a;
-        }
-
-        /* =========================
-           QUOTATION TABLE
-        ========================== */
-
-        .quotation-table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #e2e8f0;
+            color: var(--text-color);
+            line-height: 1.45;
             font-size: 13px;
+            padding: 30px 15px;
         }
 
-        .quotation-table th {
-            background: #0b1f3a;
-            color: #ffffff;
-            padding: 12px 8px;
-            border: 1px solid #0b1f3a;
+        .cv-page {
+            background: #ffffff;
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            padding: 36px 42px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* Header styling matching the sample PDF */
+        header {
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            color: var(--heading-color);
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .target-role {
+            font-size: 13px;
             font-weight: 700;
-            text-align: center;
+            color: var(--primary-color);
+            letter-spacing: 0.8px;
+            margin-top: 3px;
+            text-transform: uppercase;
         }
 
-        .quotation-table td {
-            padding: 14px 10px;
-            border: 1px solid #777777;
-            vertical-align: middle;
+        .contact-info {
+            font-size: 12px;
+            color: var(--subtext-color);
+            margin-top: 5px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
-        .quotation-table th:nth-child(1),
-        .quotation-table td:nth-child(1) {
-            width: 8%;
-            text-align: center;
+        .contact-info span {
+            display: inline-block;
         }
 
-        .quotation-table th:nth-child(2),
-        .quotation-table td:nth-child(2) {
-            width: 42%;
-            text-align: left;
+        /* Section Headings */
+        .section-title {
+            font-size: 13px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: var(--heading-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 4px;
+            margin-top: 18px;
+            margin-bottom: 10px;
         }
 
-        .quotation-table th:nth-child(3),
-        .quotation-table td:nth-child(3) {
-            width: 12%;
-            text-align: center;
+        p {
+            color: var(--text-color);
+            margin-bottom: 8px;
+            text-align: justify;
         }
 
-        .quotation-table th:nth-child(4),
-        .quotation-table td:nth-child(4) {
-            width: 19%;
-            text-align: right;
+        /* 4-Column Grid for Technical / Core Skills */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 6px;
         }
 
-        .quotation-table th:nth-child(5),
-        .quotation-table td:nth-child(5) {
-            width: 19%;
-            text-align: right;
+        .skill-category h4 {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 6px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 2px;
         }
 
-        .total-row td {
-            background: #f3f5f7;
-            font-weight: 800;
-            font-size: 14px;
+        .skill-category ul {
+            list-style-type: none;
         }
 
-        .total-label {
-            text-align: right !important;
+        .skill-category ul li {
+            font-size: 11.5px;
+            color: var(--subtext-color);
+            margin-bottom: 4px;
+            line-height: 1.35;
         }
 
-        /* =========================
-           PRINT
-        ========================== */
+        /* Experience List */
+        .experience-list {
+            list-style-type: none;
+            margin-top: 6px;
+        }
 
+        .experience-list li {
+            font-size: 12px;
+            color: var(--text-color);
+            margin-bottom: 4px;
+            position: relative;
+            padding-left: 14px;
+            line-height: 1.4;
+        }
+
+        .experience-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* Education Block */
+        .edu-block {
+            margin-bottom: 8px;
+        }
+
+        .edu-school {
+            font-weight: 700;
+            font-size: 12.5px;
+            text-transform: uppercase;
+            color: var(--heading-color);
+        }
+
+        .edu-degree {
+            font-size: 12px;
+            color: var(--subtext-color);
+        }
+
+        /* Personal Strengths Pills / Tags */
+        .strengths-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 6px;
+            margin-bottom: 8px;
+        }
+
+        .strength-pill {
+            background: var(--bg-pill);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11.5px;
+            font-weight: 500;
+            color: var(--heading-color);
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Print settings for PDF export */
         @media print {
-
             body {
-                background: #ffffff;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
+                background: transparent;
+                padding: 0;
             }
 
-            .quotation {
-                max-width: none;
+            .cv-page {
+                width: 100%;
+                min-height: auto;
+                box-shadow: none;
+                padding: 24px 30px;
+                margin: 0;
             }
 
-            .quotation-table th {
-                background: #0b1f3a !important;
-                color: #ffffff !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-
-            .total-row td {
-                background: #f3f5f7 !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
+            .no-print {
+                display: none !important;
             }
         }
 
-        /* =========================
-           MOBILE
-        ========================== */
+        /* Top Floating Print Button */
+        .print-btn-bar {
+            max-width: 210mm;
+            margin: 0 auto 15px auto;
+            text-align: right;
+        }
 
-        @media screen and (max-width: 600px) {
+        .print-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
 
-            .quotation {
-                padding: 10px;
-            }
-
-            .company-details {
-                font-size: 10px;
-            }
-
-            .quotation-title {
-                font-size: 18px;
-            }
-
-            .quotation-table {
-                font-size: 10px;
-            }
-
-            .quotation-table th,
-            .quotation-table td {
-                padding: 8px 5px;
-            }
+        .print-btn:hover {
+            background-color: #083b52;
         }
     </style>
 </head>
 
 <body>
 
-<div class="quotation">
+    <!-- Floating Print Trigger Button -->
+    <div class="print-btn-bar no-print">
+        <button class="print-btn" onclick="window.print()">🖨️ Print / Save to PDF</button>
+    </div>
 
-    <!-- COMPANY LOGO -->
-    <div class="header">
+    <div class="cv-page">
+        <!-- Header -->
+        <header>
+            <h1>ABIOYE ABIDEMI OLAWUMI</h1>
+            <div class="target-role">ADMINISTRATIVE &amp; CUSTOMER SUPPORT ASSISTANT</div>
+            <div class="contact-info">
+                <span>📍No 9 Kamina close, wuse zone 4</span>
+                <span>📞 08135833870</span>
+                <span>✉️ estherabioye73@gmail.com</span>
+            </div>
+        </header>
 
-        <!-- Put tamtam_logo.png in the same folder as this HTML file -->
-        <img
-            src="tamtam_logo.png"
-            alt="TamTam Energy Resources Limited"
-            class="logo"
-        >
+        <!-- Profile Section -->
+        <div class="section-title">PROFILE</div>
+        <p>
+            Adaptable, coachable, and hard-working HND graduate with a strong willingness to learn and work
+            cooperatively with others. Punctual, detail-oriented, and ready to put in the effort to support team goals
+            and deliver reliable results across administrative, customer service, or operational roles.
+        </p>
+        <!-- <p>
+            I combine a disciplined academic foundation with hands-on experience gained from classroom coordination and
+            instructional support. I am recognized for tactful and diplomatic communication with people at all levels, a
+            dependable work ethic, and the ability to maintain composure in fast-paced environments.
+        </p> -->
 
-        <div class="company-details">
-
-            <div>
-                <strong>Headquarters:</strong>
-                Suite 115, Jinifa Plaza, Central Business District, FCT-Abuja
+        <!-- Technical / Core Skills (4 Column Layout matching the PDF) -->
+        <div class="section-title">TECHNICAL &amp; CORE SKILLS</div>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h4>Administration</h4>
+                <ul>
+                    <li>Office organization</li>
+                    <li>Data entry &amp; typing</li>
+                    <li>Document filing</li>
+                    <li>Scheduling &amp; records</li>
+                    <li>Basic paperwork</li>
+                </ul>
             </div>
 
-            <div>
-                <strong>Maiduguri Office:</strong>
-                137, Behind GGC, Maiduguri, Borno State
+            <div class="skill-category">
+                <h4>Customer Support</h4>
+                <ul>
+                    <li>Client reception</li>
+                    <li>Active listening</li>
+                    <li>Diplomatic communication</li>
+                    <li>Phone assistance</li>
+                    <li>Conflict resolution</li>
+                </ul>
             </div>
 
-            <div>
-                +2348035222926 &nbsp; | &nbsp; +2348028036057
+            <div class="skill-category">
+                <h4>Workplace Skills</h4>
+                <ul>
+                    <li>Fast learner</li>
+                    <li>Time management</li>
+                    <li>High punctuality</li>
+                    <li>Attention to detail</li>
+                    <li>Calm under pressure</li>
+                </ul>
             </div>
 
-            <div>
-                info@tamtamenergies.com
-                &nbsp; | &nbsp;
-                tamtamenergyresources@gmail.com
+            <div class="skill-category">
+                <h4>Developing Skills</h4>
+                <ul>
+                    <li>Excel spreadsheets</li>
+                    <li>Digital support tools</li>
+                    <li>Executive reporting</li>
+                    <li>Stock coordination</li>
+                    <li>File archiving</li>
+                </ul>
             </div>
-
-            <div>
-                www.tamtamenergies.com
-            </div>
-
         </div>
 
+        <!-- Field & Work Experience -->
+        <div class="section-title">FIELD &amp; PRACTICAL EXPERIENCE</div>
+        <ul class="experience-list">
+            <li>Completed practical instructional and administrative work during teaching practice.</li>
+            <li>Assisted lead coordinators in planning, organizing, and executing daily schedules and operational tasks.
+            </li>
+            <li>Maintained accurate routine records including attendance, supplies tracking, and progress reporting.
+            </li>
+            <li>Communicated professionally and tactfully with team members, supervisors, and visitors.</li>
+            <li>Managed high-energy, busy environments while staying composed and adaptable under pressure.</li>
+            <li>Gained hands-on experience in taking supervisory instructions and working collaboratively within a team.
+            </li>
+        </ul>
+
+        <!-- Education -->
+        <div class="section-title">EDUCATION</div>
+        <div class="edu-block">
+            <div class="edu-school">KWARA STATE POLYTECHNIC</div>
+            <div class="edu-degree">HND, Biochemistry (2022)</div>
+        </div>
+
+
+        <!-- Personal Strengths (Pill tags like the PDF) -->
+        <div class="section-title">PERSONAL STRENGTHS</div>
+        <div class="strengths-container">
+            <div class="strength-pill">Willing to learn</div>
+            <div class="strength-pill">Team-oriented</div>
+            <div class="strength-pill">Able to take instructions</div>
+            <div class="strength-pill">Reliable</div>
+            <div class="strength-pill">Committed</div>
+            <div class="strength-pill">Attention to detail</div>
+            <div class="strength-pill">Practical approach</div>
+            <div class="strength-pill">Punctual</div>
+        </div>
+
+        <!-- Career Objective -->
+        <div class="section-title">CAREER OBJECTIVE</div>
+        <!-- <p>
+            To secure an entry-level position within a forward-thinking organization where I can apply my organizational
+            and communication skills, learn from experienced team members, and continue developing my professional
+            capabilities. I am open to collaborative teamwork, adapting to new tasks, and taking on greater
+            responsibilities as I gain experience.
+        </p> -->
+
+        <!-- References -->
+        <div class="section-title">REFERENCES</div>
+        <p>Available upon request.</p>
     </div>
-
-
-    <!-- QUOTATION -->
-    <div class="quotation-title">
-        QUOTATION
-    </div>
-
-
-    <!-- QUOTATION TABLE -->
-    <table class="quotation-table">
-
-        <thead>
-            <tr>
-                <th>S/N</th>
-                <th>DESCRIPTION</th>
-                <th>QTY</th>
-                <th>UNIT PRICE (₦)</th>
-                <th>AMOUNT (₦)</th>
-            </tr>
-        </thead>
-
-        <tbody>
-
-            <tr>
-                <td>1</td>
-
-                <td>
-                    Wireless Camera
-                </td>
-
-                <td>
-                    5
-                </td>
-
-                <td>
-                    60,000.00
-                </td>
-
-                <td>
-                    300,000.00
-                </td>
-            </tr>
-
-
-            <tr>
-                <td>2</td>
-
-                <td>
-                    Installation
-                </td>
-
-                <td>
-                    1
-                </td>
-
-                <td>
-                    80,000.00
-                </td>
-
-                <td>
-                    80,000.00
-                </td>
-            </tr>
-
-
-            <tr class="total-row">
-
-                <td colspan="3"></td>
-
-                <td class="total-label">
-                    TOTAL
-                </td>
-
-                <td>
-                    ₦380,000.00
-                </td>
-
-            </tr>
-
-        </tbody>
-
-    </table>
-
-</div>
 
 </body>
+
 </html>

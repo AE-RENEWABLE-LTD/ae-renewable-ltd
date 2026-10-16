@@ -20,26 +20,31 @@
     <script>
         (function() {
             try {
-                if (sessionStorage.getItem("ae_installer_logged_in") !== "true") {
-                    document.documentElement.style.display = "none";
-                    window.location.replace("/installer/login");
-                    throw new Error("Access Denied: Installer authentication required");
-                }
-                var token = localStorage.getItem("aeInstallerToken") || localStorage.getItem("token") || localStorage.getItem("accessToken") || localStorage.getItem("aeRenewableToken") || localStorage.getItem("aeAdminToken") || "";
+                var token = localStorage.getItem("aeInstallerToken") || localStorage.getItem("token") || localStorage.getItem("accessToken") || localStorage.getItem("aeRenewableToken") || "";
                 var rawUser = localStorage.getItem("aeInstallerUser") || localStorage.getItem("user") || localStorage.getItem("aeRenewableUser") || localStorage.getItem("aeAdminUser") || "{}";
                 var user = {};
                 try { user = JSON.parse(rawUser) || {}; } catch(e) {}
-                var role = user && user.role ? String(user.role).toLowerCase() : "";
-                var allowed = ["installer", "admin", "staff"];
-                if (!token || !role || !allowed.includes(role)) {
+                var role = user && (user.role || (user.user && user.user.role)) ? String(user.role || user.user.role).toLowerCase() : "";
+
+                if (role === "admin" || role === "staff") {
+                    document.documentElement.style.display = "none";
+                    window.location.replace("/admin");
+                    return;
+                }
+                if (role === "client") {
+                    document.documentElement.style.display = "none";
+                    window.location.replace("/client/dashboard");
+                    return;
+                }
+                if (!token || role !== "installer") {
                     document.documentElement.style.display = "none";
                     window.location.replace("/installer/login");
-                    throw new Error("Access Denied: Installer authentication required");
+                    return;
                 }
+                try { sessionStorage.setItem("ae_installer_logged_in", "true"); } catch(e) {}
             } catch(err) {
                 document.documentElement.style.display = "none";
                 window.location.replace("/installer/login");
-                throw err;
             }
         })();
     </script>
@@ -102,16 +107,12 @@
                 aria-label="AE Network Installer Portal"
             >
 
-                <div class="brand-logo" id="brandLogoContainer">
-                    <img
-                        id="brandLogoImg"
-                        src="/installer/assets/logo.png"
-                        alt="AE Network"
-                    >
+                <div class="brand-logo" id="brandLogoContainer" style="display:flex; align-items:center; justify-content:center; background:radial-gradient(circle, rgba(244,166,0,0.2) 0%, rgba(2,12,26,0.95) 70%); border:1px solid #f4a600; border-radius:8px; box-shadow:0 0 10px rgba(244,166,0,0.3); overflow:hidden; padding:3px;">
+                    <img id="brandLogoImg" src="/installer/assets/logodark.png" alt="AE Renewable Logo" style="width:100%; height:100%; object-fit:contain;" onerror="this.src='assets/logodark.png'">
                 </div>
 
                 <div class="brand-copy">
-                    <strong>AE NETWORK</strong>
+                    <strong>AE RENEWABLE LTD</strong>
                     <span>INSTALLER PORTAL</span>
                 </div>
 
@@ -184,8 +185,9 @@
                     <span
                         class="nav-count"
                         id="availableJobsNavCount"
+                        style="display: none;"
                     >
-                        3
+                        0
                     </span>
                 </button>
 
@@ -352,8 +354,9 @@
                     <span
                         class="nav-count nav-count-gold"
                         id="notificationNavCount"
+                        style="display: none;"
                     >
-                        2
+                        0
                     </span>
                 </button>
 
@@ -489,6 +492,7 @@
                     <span
                         class="notification-dot"
                         id="topNotificationDot"
+                        style="display: none;"
                     ></span>
 
                 </button>
@@ -535,6 +539,19 @@
 
         <div class="page-container">
 
+            <!-- GLOBAL NOTIFICATION & VERIFICATION ALERT BANNER -->
+            <div id="installerGlobalAlertBanner" class="global-portal-banner banner-warning" style="display:none;">
+                <div class="banner-content">
+                    <i class="fa-solid fa-triangle-exclamation banner-icon" id="globalAlertIcon"></i>
+                    <div class="banner-text">
+                        <strong id="globalAlertTitle">Action Required: Complete Registration in Profile</strong>
+                        <p id="globalAlertMessage">Please complete your financial settlement banking details, CAC upload and primary specialization in your profile to request Admin verification and unlock field jobs.</p>
+                    </div>
+                    <button type="button" class="banner-action-btn" id="btnBannerGoProfile">
+                        Complete Profile Now →
+                    </button>
+                </div>
+            </div>
 
             <!-- =================================================
                  DASHBOARD
@@ -606,7 +623,7 @@
                             </span>
 
                             <strong id="availableJobsMetric">
-                                3
+                                0
                             </strong>
 
                             <small>
@@ -631,7 +648,7 @@
                             </span>
 
                             <strong id="activeJobsMetric">
-                                1
+                                0
                             </strong>
 
                             <small>
@@ -656,7 +673,7 @@
                             </span>
 
                             <strong id="commissioningMetric">
-                                1
+                                0
                             </strong>
 
                             <small>
@@ -681,11 +698,11 @@
                             </span>
 
                             <strong id="pendingPayoutsMetric">
-                                ₦180K
+                                ₦0
                             </strong>
 
-                            <small>
-                                In review
+                            <small id="pendingPayoutsSub">
+                                No pending payouts
                             </small>
 
                         </div>
@@ -785,7 +802,7 @@
 
                     <!-- CURRENT ASSIGNMENT -->
 
-                    <article class="panel">
+                    <article class="panel" id="currentAssignmentPanel">
 
                         <div class="panel-header">
 
@@ -801,38 +818,38 @@
 
                             </div>
 
-                            <span class="status-pill status-progress">
-                                In Progress
+                            <span class="status-pill status-pending" id="currentAssignmentStatus">
+                                None Active
                             </span>
 
                         </div>
 
 
-                        <div class="assignment-card">
+                        <div class="assignment-card" id="currentAssignmentCard">
 
-                            <div class="assignment-code">
-                                AE-PRJ-2026-018
+                            <div class="assignment-code" id="currentAssignmentCode">
+                                No Active Project
                             </div>
 
-                            <h4>
-                                Residential Hybrid Solar System
+                            <h4 id="currentAssignmentName">
+                                Awaiting Project Assignment
                             </h4>
 
-                            <p class="assignment-location">
+                            <p class="assignment-location" id="currentAssignmentLocation">
                                 <i class="fa-solid fa-location-dot"></i>
-                                Abuja, FCT
+                                —
                             </p>
 
 
-                            <div class="assignment-specs">
+                            <div class="assignment-specs" id="currentAssignmentSpecs">
 
                                 <div>
                                     <span>
                                         Inverter
                                     </span>
 
-                                    <strong>
-                                        16kVA DEYE
+                                    <strong id="currentAssignmentInverter">
+                                        —
                                     </strong>
                                 </div>
 
@@ -841,8 +858,8 @@
                                         Battery
                                     </span>
 
-                                    <strong>
-                                        32kWh Lithium
+                                    <strong id="currentAssignmentBattery">
+                                        —
                                     </strong>
                                 </div>
 
@@ -851,8 +868,8 @@
                                         PV Array
                                     </span>
 
-                                    <strong>
-                                        12kWp
+                                    <strong id="currentAssignmentSolar">
+                                        —
                                     </strong>
                                 </div>
 
@@ -862,9 +879,10 @@
                             <button
                                 class="secondary-btn full-width"
                                 type="button"
-                                data-page="site-tracking"
+                                data-page="available-jobs"
+                                id="currentAssignmentActionBtn"
                             >
-                                Continue Installation
+                                Browse Available Jobs
                                 <i class="fa-solid fa-arrow-right"></i>
                             </button>
 
@@ -902,82 +920,11 @@
                         </div>
 
 
-                        <div class="activity-list">
-
-                            <div class="activity-item">
-
-                                <div class="activity-dot green">
-                                    <i class="fa-solid fa-check"></i>
-                                </div>
-
-                                <div>
-
-                                    <strong>
-                                        Job accepted
-                                    </strong>
-
-                                    <p>
-                                        AE-PRJ-2026-018 was accepted.
-                                    </p>
-
-                                    <time>
-                                        Today · 09:42
-                                    </time>
-
-                                </div>
-
+                        <div class="activity-list" id="installerActivityList">
+                            <div style="text-align: center; padding: 32px 10px; color: #64748b; font-size: 13px;">
+                                <i class="fa-solid fa-clock-rotate-left" style="font-size: 24px; color: #94a3b8; margin-bottom: 8px; display: block;"></i>
+                                No recent activity logged yet.
                             </div>
-
-
-                            <div class="activity-item">
-
-                                <div class="activity-dot blue">
-                                    <i class="fa-solid fa-camera"></i>
-                                </div>
-
-                                <div>
-
-                                    <strong>
-                                        Site tracking started
-                                    </strong>
-
-                                    <p>
-                                        Installation evidence is ready.
-                                    </p>
-
-                                    <time>
-                                        Today · 10:15
-                                    </time>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="activity-item">
-
-                                <div class="activity-dot gold">
-                                    <i class="fa-solid fa-wallet"></i>
-                                </div>
-
-                                <div>
-
-                                    <strong>
-                                        Payout under review
-                                    </strong>
-
-                                    <p>
-                                        Previous job payout is being processed.
-                                    </p>
-
-                                    <time>
-                                        Yesterday · 16:20
-                                    </time>
-
-                                </div>
-
-                            </div>
-
                         </div>
 
                     </article>
@@ -1022,120 +969,11 @@
                     class="job-grid"
                     id="availableJobsList"
                 >
-
-                    <!-- REAL LIFE JOB 1 -->
-                    <article class="job-card" data-job-id="4">
-                        <div class="job-card-top">
-                            <span class="job-code">
-                                <i class="fa-solid fa-hashtag"></i> PRJ-202610-3328
-                            </span>
-                            <span class="status-pill status-available">
-                                <i class="fa-solid fa-circle-check"></i> Available
-                            </span>
-                        </div>
-
-                        <h3>Residential Turnkey Solar Installation</h3>
-
-                        <div class="job-info-table">
-                            <div class="job-info-row">
-                                <span class="info-label"><i class="fa-solid fa-user-tie"></i> Client Name</span>
-                                <strong class="info-value client-name-val">Chief Emeka Nnamdi</strong>
-                            </div>
-                            <div class="job-info-row">
-                                <span class="info-label"><i class="fa-solid fa-location-dot"></i> Site Address</span>
-                                <strong class="info-value address-val">Plot 402, Diplomatic Zone, Maitama, Abuja</strong>
-                            </div>
-                        </div>
-
-                        <div class="job-specs-table">
-                            <div class="spec-cell spec-solar" title="Solar Array Capacity">
-                                <div class="spec-icon"><i class="fa-solid fa-solar-panel"></i></div>
-                                <span class="spec-title">SOLAR</span>
-                                <strong class="spec-num">9.9 kWp</strong>
-                            </div>
-                            <div class="spec-cell spec-inverter" title="Inverter Power Rating">
-                                <div class="spec-icon"><i class="fa-solid fa-bolt"></i></div>
-                                <span class="spec-title">INVERTER</span>
-                                <strong class="spec-num">5.4 kVA</strong>
-                            </div>
-                            <div class="spec-cell spec-battery" title="Battery Storage Capacity">
-                                <div class="spec-icon"><i class="fa-solid fa-battery-full"></i></div>
-                                <span class="spec-title">BATTERY</span>
-                                <strong class="spec-num">41.0 kWh</strong>
-                            </div>
-                        </div>
-
-                        <div class="job-card-footer">
-                            <div class="job-price-group">
-                                <span class="price-caption">INSTALLATION PRICE (LABOUR)</span>
-                                <strong class="price-amount">₦250,000</strong>
-                            </div>
-                            <button
-                                class="accept-job-btn"
-                                type="button"
-                                onclick="acceptJob('4', this)"
-                            >
-                                <i class="fa-solid fa-check"></i> Accept Job
-                            </button>
-                        </div>
-                    </article>
-
-                    <!-- REAL LIFE JOB 2 -->
-                    <article class="job-card" data-job-id="15">
-                        <div class="job-card-top">
-                            <span class="job-code">
-                                <i class="fa-solid fa-hashtag"></i> PRJ-202610-5512
-                            </span>
-                            <span class="status-pill status-available">
-                                <i class="fa-solid fa-circle-check"></i> Available
-                            </span>
-                        </div>
-
-                        <h3>Commercial Hybrid Solar Power Installation</h3>
-
-                        <div class="job-info-table">
-                            <div class="job-info-row">
-                                <span class="info-label"><i class="fa-solid fa-user-tie"></i> Client Name</span>
-                                <strong class="info-value client-name-val">Alhaji Kashim Ibrahim</strong>
-                            </div>
-                            <div class="job-info-row">
-                                <span class="info-label"><i class="fa-solid fa-location-dot"></i> Site Address</span>
-                                <strong class="info-value address-val">Plot 14, 4th Avenue, Gwarinpa Estate, Abuja</strong>
-                            </div>
-                        </div>
-
-                        <div class="job-specs-table">
-                            <div class="spec-cell spec-solar" title="Solar Array Capacity">
-                                <div class="spec-icon"><i class="fa-solid fa-solar-panel"></i></div>
-                                <span class="spec-title">SOLAR</span>
-                                <strong class="spec-num">8.8 kWp</strong>
-                            </div>
-                            <div class="spec-cell spec-inverter" title="Inverter Power Rating">
-                                <div class="spec-icon"><i class="fa-solid fa-bolt"></i></div>
-                                <span class="spec-title">INVERTER</span>
-                                <strong class="spec-num">10.0 kVA</strong>
-                            </div>
-                            <div class="spec-cell spec-battery" title="Battery Storage Capacity">
-                                <div class="spec-icon"><i class="fa-solid fa-battery-full"></i></div>
-                                <span class="spec-title">BATTERY</span>
-                                <strong class="spec-num">20.5 kWh</strong>
-                            </div>
-                        </div>
-
-                        <div class="job-card-footer">
-                            <div class="job-price-group">
-                                <span class="price-caption">INSTALLATION PRICE (LABOUR)</span>
-                                <strong class="price-amount">₦220,000</strong>
-                            </div>
-                            <button
-                                class="accept-job-btn"
-                                type="button"
-                                onclick="acceptJob('15', this)"
-                            >
-                                <i class="fa-solid fa-check"></i> Accept Job
-                            </button>
-                        </div>
-                    </article>
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 16px;">
+                        <i class="fa-solid fa-briefcase" style="font-size: 32px; color: #94a3b8; margin-bottom: 12px; display: block;"></i>
+                        <h3 style="color: #1e293b; font-size: 18px; margin-bottom: 6px;">No Available Jobs Right Now</h3>
+                        <p style="color: #64748b; font-size: 13px;">New installations ready for field deployment will appear here in real time as clients book consultations and projects.</p>
+                    </div>
                 </div>
 
             </section>
@@ -1208,6 +1046,192 @@
 
 
             <!-- =================================================
+                 CONSULTATION DETAIL & FULL QUOTATION DOSSIER
+                 ================================================= -->
+
+            <section
+                class="portal-page"
+                id="page-consultation-detail"
+            >
+
+                <div class="page-head">
+                    <div>
+                        <button class="table-btn" type="button" onclick="showPage('my-jobs')" style="margin-bottom: 12px; background: #e2e8f0; color: #0f172a; border: none; padding: 7px 16px; font-weight: 700; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-arrow-left"></i> Back to Consultations
+                        </button>
+                        <span class="eyebrow">CONSULTATION DETAIL</span>
+                        <h2 id="insDetailProjectCode">PRJ-202610-7641</h2>
+                        <p>Client requirement and engineering intake record.</p>
+                    </div>
+
+                    <div class="action-buttons" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                        <button class="secondary-btn" id="insBtnTrackSite" type="button" style="font-weight: 700;">
+                            <i class="fa-solid fa-location-crosshairs"></i> Site Tracking
+                        </button>
+                        <a id="insBtnArdeStudio" href="/arde/studio" target="_blank" class="primary" style="background: linear-gradient(135deg, #f4a600, #fbbf24); color: #010a1d; font-weight: 800; border: none; padding: 10px 18px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                            ⚡ Open ARDE Studio
+                        </a>
+                        <button class="secondary-btn" id="insBtnPrintQuotation" type="button" style="font-weight: 700;">
+                            <i class="fa-solid fa-file-invoice-dollar"></i> View Quotation
+                        </button>
+                    </div>
+                </div>
+
+                <div class="detail-grid">
+                    <div class="panel detail-main">
+                        <div class="detail-head">
+                            <div class="avatar large" id="insDetailAvatar">EA</div>
+                            <div style="flex: 1;">
+                                <h3 id="insDetailClientName" style="margin: 0; font-size: 20px; color: #0f172a;">Eniola Abdulrasaq</h3>
+                                <p id="insDetailSubtitle" style="margin: 4px 0 0; color: #64748b; font-size: 13.5px;">individual Client • Abuja, FCT</p>
+                            </div>
+                            <span class="status-pill status-progress" id="insDetailStatusBadge">installer_assigned</span>
+                        </div>
+
+                        <!-- CONTACT INFORMATION -->
+                        <div class="section-title">CONTACT INFORMATION</div>
+                        <div class="info-grid">
+                            <div>
+                                <small>Phone</small>
+                                <strong id="insDetailPhone"><a href="tel:08133615132" style="color: #004aad; text-decoration: none;">08133615132</a></strong>
+                            </div>
+                            <div>
+                                <small>Email</small>
+                                <strong id="insDetailEmail"><a href="mailto:e7546113@gmail.com" style="color: #004aad; text-decoration: none;">e7546113@gmail.com</a></strong>
+                            </div>
+                            <div>
+                                <small>Project Location</small>
+                                <strong id="insDetailLocation">Abuja, FCT</strong>
+                            </div>
+                            <div>
+                                <small>Property Type</small>
+                                <strong id="insDetailProperty">individual</strong>
+                            </div>
+                        </div>
+
+                        <!-- PROJECT REQUIREMENT -->
+                        <div class="section-title">PROJECT REQUIREMENT</div>
+                        <div class="requirement" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+                            <span style="font-size: 11.5px; color: #64748b; font-weight: 600; display: block; margin-bottom: 2px;">Primary Service</span>
+                            <strong id="insDetailService" style="font-size: 15px; color: #0f172a; display: block; margin: 4px 0 6px;">Solar &amp; Hybrid Power</strong>
+                            <p id="insDetailRequirement" style="color: #475569; font-size: 13.5px; margin: 0; line-height: 1.5;">Client requires reliable backup power with solar generation, lithium storage and intelligent inverter control for a residential property.</p>
+                        </div>
+
+                        <!-- 1. ENERGY PROFILING & SIZING TARGETS -->
+                        <div class="section-title">1. ENERGY PROFILING &amp; SIZING TARGETS</div>
+                        <div class="note-box" id="insDetailEnergyProfiling" style="background: #eff6ff; border-left: 4px solid #004aad; color: #1e3a8a;">
+                            1. Energy Profiling &amp; Sizing Targets: Connected load 6 kW, battery preference: lithium. Backup duration: 8 hours.
+                        </div>
+
+                        <!-- HARDWARE SPECIFICATIONS SUMMARY TILES -->
+                        <div class="job-specs-table" style="margin-bottom: 24px;">
+                            <div class="spec-cell spec-solar">
+                                <div class="spec-icon"><i class="fa-solid fa-solar-panel"></i></div>
+                                <span class="spec-title">SOLAR ARRAY</span>
+                                <strong class="spec-num" id="insDetailSolar">6.0 kWp PV</strong>
+                            </div>
+                            <div class="spec-cell spec-inverter">
+                                <div class="spec-icon"><i class="fa-solid fa-bolt"></i></div>
+                                <span class="spec-title">INVERTER</span>
+                                <strong class="spec-num" id="insDetailInverter">8.0 kVA Hybrid</strong>
+                            </div>
+                            <div class="spec-cell spec-battery">
+                                <div class="spec-icon"><i class="fa-solid fa-battery-full"></i></div>
+                                <span class="spec-title">BATTERY STORAGE</span>
+                                <strong class="spec-num" id="insDetailBattery">15.0 kWh Lithium</strong>
+                            </div>
+                        </div>
+
+                        <!-- CONNECTED LOAD & ENERGY REQUIREMENTS -->
+                        <div class="section-title">
+                            <span>CONNECTED LOAD &amp; ENERGY REQUIREMENTS</span>
+                            <span id="insDetailLoadTotalBadge" style="font-size: 12px; font-weight: 700; background: #dbeafe; color: #004aad; padding: 3px 10px; border-radius: 6px;">6,000 W (6 kW)</span>
+                        </div>
+                        <div id="insDetailLoadScheduleSection" style="margin-bottom: 24px;">
+                            <div id="insDetailLoadScheduleContainer" style="overflow-x: auto; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; font-size: 13px; color: #475569;">
+                                No itemized appliance load schedule submitted for this consultation. Base connected load: 6 kW (6,000 W).
+                            </div>
+                        </div>
+
+                        <!-- 2. SITE SURVEY & INFRASTRUCTURE ASSESSMENT -->
+                        <div class="section-title">2. SITE SURVEY &amp; INFRASTRUCTURE ASSESSMENT</div>
+                        <div class="note-box" id="insDetailSiteSurvey" style="background: #f0fdf4; border-left: 4px solid #059669; color: #065f46;">
+                            Public Grid Reliability (DISCO / NEPA Tier) &amp; DB Distribution Assessment.
+                        </div>
+
+                        <!-- 3. COMMERCIAL & FULL QUOTATION DETAILS -->
+                        <div class="section-title">3. COMMERCIAL QUOTATION &amp; LABOUR DISBURSEMENT</div>
+                        <div class="commercial-quotation-box" style="background: #f8fafc; border: 1.5px solid #004aad; border-radius: 10px; padding: 20px; margin-bottom: 24px;">
+                            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                                <div>
+                                    <span style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase;">Quotation Reference</span>
+                                    <div id="insDetailQuotationRef" style="font-weight: 800; font-family: monospace; font-size: 16px; color: #0f172a;">QUO-202610-7641</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <span style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase;">Quotation Status</span>
+                                    <div id="insDetailQuotationStatus"><span class="status-pill status-complete">Official Sent</span></div>
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 16px;">
+                                <div style="background: #ffffff; padding: 12px 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                                    <small style="color: #64748b; font-size: 11px; display: block;">Total Turnkey Quotation</small>
+                                    <strong id="insDetailContractValue" style="font-size: 16px; color: #0f172a; font-family: monospace;">₦25,035,000.00</strong>
+                                </div>
+                                <div style="background: #ffffff; padding: 12px 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                                    <small style="color: #64748b; font-size: 11px; display: block;">Client Amount Paid</small>
+                                    <strong id="insDetailAmountPaid" style="font-size: 16px; color: #16a34a; font-family: monospace;">₦25,035,000.00</strong>
+                                </div>
+                                <div style="background: #ffffff; padding: 12px 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                                    <small style="color: #64748b; font-size: 11px; display: block;">Balance Due</small>
+                                    <strong id="insDetailBalanceDue" style="font-size: 16px; color: #64748b; font-family: monospace;">₦0.00</strong>
+                                </div>
+                            </div>
+
+                            <!-- INSTALLER LABOUR PAYOUT CARD -->
+                            <div style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 2px solid #10b981; border-radius: 8px; padding: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                                <div>
+                                    <span style="font-size: 11.5px; font-weight: 800; color: #065f46; text-transform: uppercase; letter-spacing: 0.05em;"><i class="fa-solid fa-coins"></i> Your Certified Installation Labour Payout</span>
+                                    <div id="insDetailLabourPayout" style="font-size: 22px; font-weight: 900; color: #047857; font-family: monospace;">₦180,000.00</div>
+                                    <small style="color: #065f46; font-size: 12px;">Disbursed directly to your verified settlement bank account upon milestone validation</small>
+                                </div>
+                                <span class="status-pill status-complete" style="background: #10b981; color: #ffffff; font-weight: 700; padding: 6px 14px;">
+                                    <i class="fa-solid fa-shield-check"></i> Escrow Secured
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- ADDITIONAL AUDIT & ENGINEERING NOTES -->
+                        <div class="section-title">ADDITIONAL AUDIT &amp; ENGINEERING NOTES</div>
+                        <div class="note-box" id="insDetailNotes" style="background: #f8fafc; border: 1px solid #e2e8f0; color: #475569;">
+                            Assessment intake record.
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN: WORKFLOW PROGRESSION TIMELINE -->
+                    <aside class="panel timeline-panel">
+                        <div class="panel-head" style="margin-bottom: 20px;">
+                            <div>
+                                <span class="eyebrow" style="font-size: 11px; font-weight: 800; color: #004aad; text-transform: uppercase;">PROJECT PROGRESSION</span>
+                                <h3 style="margin: 4px 0 0; font-size: 18px; color: #0f172a;">Workflow</h3>
+                                <p style="margin: 4px 0 0; color: #64748b; font-size: 12.5px;">Milestone tracking</p>
+                            </div>
+                        </div>
+                        <div class="timeline" id="insDetailTimeline">
+                            <div class="step completed"><i>✓</i><div><strong>Consultation Received</strong><small>Logged in database</small></div></div>
+                            <div class="step completed"><i>✓</i><div><strong>Technical Review &amp; Sizing</strong><small>Engineering assessment ready</small></div></div>
+                            <div class="step completed"><i>✓</i><div><strong>Quotation Approved</strong><small>Commercial BOQ generated</small></div></div>
+                            <div class="step current"><i>⚡</i><div><strong>Installer Assigned</strong><small>Assigned to your field profile</small></div></div>
+                            <div class="step"><i></i><div><strong>Site Installation</strong><small>Stage photos &amp; cable tracking</small></div></div>
+                            <div class="step"><i></i><div><strong>Testing &amp; Commissioning</strong><small>Admin signoff &amp; payout</small></div></div>
+                        </div>
+                    </aside>
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
                  SITE PROJECT TRACKING
                  ================================================= -->
 
@@ -1257,34 +1281,34 @@
 
                     <div class="tracking-project-identity">
 
-                        <div class="project-code-badge">
-                            AE-PRJ-2026-018
+                        <div class="project-code-badge" id="trackingProjectCode">
+                            No Active Project
                         </div>
 
-                        <h3>
-                            Residential Hybrid Solar System
+                        <h3 id="trackingProjectName">
+                            No Active Project Assigned
                         </h3>
 
                         <div class="project-meta-list">
 
                             <span>
                                 <i class="fa-solid fa-location-dot"></i>
-                                Abuja, FCT
+                                <span id="trackingProjectLocation">—</span>
                             </span>
 
                             <span>
                                 <i class="fa-solid fa-bolt"></i>
-                                16kVA DEYE
+                                <span id="trackingProjectInverter">—</span>
                             </span>
 
                             <span>
                                 <i class="fa-solid fa-battery-full"></i>
-                                32kWh Lithium
+                                <span id="trackingProjectBattery">—</span>
                             </span>
 
                             <span>
                                 <i class="fa-solid fa-solar-panel"></i>
-                                12kWp PV
+                                <span id="trackingProjectSolar">—</span>
                             </span>
 
                         </div>
@@ -1571,16 +1595,16 @@
                                 </span>
 
                                 <h3 id="commProjectCode">
-                                    AE-PRJ-2026-018
+                                    No Active Project
                                 </h3>
 
                                 <p class="comm-project-subtitle" id="commProjectName">
-                                    Residential Hybrid Solar System
+                                    Awaiting Project Commissioning
                                 </p>
 
                             </div>
 
-                            <span class="status-pill status-progress" id="commStatusPill">
+                            <span class="status-pill status-pending" id="commStatusPill">
                                 0 / 6 Stages
                             </span>
 
@@ -1588,10 +1612,10 @@
 
                         <!-- Technical Specification Chips -->
                         <div class="comm-spec-chips" id="commSpecChips">
-                            <span><i class="fa-solid fa-bolt"></i> <b id="commInverterSpec">16kVA Inverter</b></span>
-                            <span><i class="fa-solid fa-battery-full"></i> <b id="commBatterySpec">32kWh Battery</b></span>
-                            <span><i class="fa-solid fa-solar-panel"></i> <b id="commPvSpec">12kWp Solar PV</b></span>
-                            <span><i class="fa-solid fa-location-dot"></i> <b id="commLocationSpec">Abuja, FCT</b></span>
+                            <span><i class="fa-solid fa-bolt"></i> <b id="commInverterSpec">—</b></span>
+                            <span><i class="fa-solid fa-battery-full"></i> <b id="commBatterySpec">—</b></span>
+                            <span><i class="fa-solid fa-solar-panel"></i> <b id="commPvSpec">—</b></span>
+                            <span><i class="fa-solid fa-location-dot"></i> <b id="commLocationSpec">—</b></span>
                         </div>
 
                         <div class="commissioning-stat">
@@ -1665,19 +1689,19 @@
 
                     <article class="finance-card">
                         <span>Pending</span>
-                        <strong id="payoutPendingMetric">₦250,000</strong>
+                        <strong id="payoutPendingMetric">₦0</strong>
                         <small>Under operations review</small>
                     </article>
 
                     <article class="finance-card">
                         <span>This Month</span>
-                        <strong id="payoutThisMonthMetric">₦180,000</strong>
+                        <strong id="payoutThisMonthMetric">₦0</strong>
                         <small>Completed jobs</small>
                     </article>
 
                     <article class="finance-card">
                         <span>Total Paid</span>
-                        <strong id="payoutTotalPaidMetric">₦180,000</strong>
+                        <strong id="payoutTotalPaidMetric">₦0</strong>
                         <small>Installer earnings</small>
                     </article>
 
@@ -2082,7 +2106,7 @@
                             <span class="photo-sync-hint" id="photoStatusHint">Links to your verified account</span>
                         </div>
 
-                        <h3 id="profileInstallerName">Eniola Abdulrasaq</h3>
+                        <h3 id="profileInstallerName">Lead Installer</h3>
                         <p id="profileInstallerRole">Field Operations Specialist</p>
 
                         <div class="profile-badges-row">
@@ -2178,7 +2202,7 @@
                                             type="text"
                                             id="profileAccountName"
                                             name="account_name"
-                                            placeholder="Account Name (e.g. Eniola Abdulrasaq)"
+                                            placeholder="Account Name (e.g. Alimi Babatunde)"
                                             required
                                         >
                                     </div>
@@ -2298,7 +2322,8 @@
                                             type="email"
                                             id="profileEmail"
                                             name="email"
-                                            value="AERenewablesolution@gmail.com"
+                                            value=""
+                                            placeholder="installer@domain.com"
                                             readonly
                                             class="locked-input"
                                         >
@@ -2320,14 +2345,64 @@
 
                                     <div class="form-field">
                                         <label for="profileFullName">
-                                            Full Name
+                                            Full Name <span class="required-star">*</span>
                                         </label>
                                         <input
                                             type="text"
                                             id="profileFullName"
                                             name="contact_name"
-                                            value="Eniola Abdulrasaq"
+                                            value=""
+                                            placeholder="Enter Full Name"
                                         >
+                                    </div>
+
+                                    <div class="form-field">
+                                        <label for="profileCompanyName">
+                                            Registered Business / Company Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="profileCompanyName"
+                                            name="company_name"
+                                            value=""
+                                            placeholder="e.g. Alimi Solar Solutions Ltd"
+                                        >
+                                    </div>
+
+                                    <div class="form-field">
+                                        <label for="profileRcNumber">
+                                            CAC Registration (RC / BN Number)
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="profileRcNumber"
+                                            name="rc_number"
+                                            value=""
+                                            placeholder="e.g. RC-123456 or BN-789012"
+                                        >
+                                    </div>
+
+                                    <div class="form-field">
+                                        <label for="profileSpecialization">
+                                            Primary Specialization <span class="required-star">*</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="profileSpecialization"
+                                            name="specialization"
+                                            list="profileSpecializationList"
+                                            value="Solar Installation"
+                                            placeholder="Select or enter specialization..."
+                                        >
+                                        <datalist id="profileSpecializationList">
+                                            <option value="Solar Installation">
+                                            <option value="Electrical Engineering">
+                                            <option value="Inverter Systems & Lithium Storage">
+                                            <option value="Commercial Mini-Grids">
+                                            <option value="CCTV & Security Systems">
+                                            <option value="Smart Home Automation">
+                                            <option value="Energy Audit & Maintenance">
+                                        </datalist>
                                     </div>
 
                                     <div class="form-field">
@@ -2339,19 +2414,69 @@
                                             id="profileState"
                                             name="state"
                                             value="FCT Abuja"
+                                            placeholder="e.g. Abuja, Lagos, Kano"
                                         >
                                     </div>
 
                                     <div class="form-field">
-                                        <label for="profileSpecialization">
-                                            Primary Specialization
+                                        <label for="profileLga">
+                                            Local Government Area (LGA)
                                         </label>
                                         <input
                                             type="text"
-                                            id="profileSpecialization"
-                                            name="specialization"
-                                            value="Solar Installation & Inverter Systems"
+                                            id="profileLga"
+                                            name="local_government"
+                                            value=""
+                                            placeholder="e.g. AMAC, Ikeja, Gwale"
                                         >
+                                    </div>
+
+                                    <div class="form-field full-width" style="grid-column: 1 / -1;">
+                                        <label for="profileAddress">
+                                            Operating Address / Office Location
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="profileAddress"
+                                            name="address"
+                                            value=""
+                                            placeholder="Enter your operational or business address"
+                                        >
+                                    </div>
+
+                                    <!-- CAC DOCUMENT UPLOAD -->
+                                    <div class="form-field full-width" style="grid-column: 1 / -1; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:10px; padding:16px;">
+                                        <label for="profileCacFileInput" style="font-weight:700; display:flex; justify-content:space-between; align-items:center;">
+                                            <span><i class="fa-solid fa-file-shield" style="color:#044381;"></i> CAC Certificate / Incorporation Document</span>
+                                            <span id="cacDocStatusBadge" class="status-pill status-warning" style="font-size:11px;">Not Uploaded</span>
+                                        </label>
+                                        <p style="font-size:12px; color:#64748b; margin:4px 0 10px;">Upload your official Corporate Affairs Commission (CAC) certificate (PDF, JPG, or PNG, max 15MB).</p>
+                                        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                                            <input
+                                                type="file"
+                                                id="profileCacFileInput"
+                                                accept="image/*,application/pdf"
+                                                style="display:none;"
+                                            >
+                                            <button
+                                                type="button"
+                                                class="secondary-btn btn-sm"
+                                                id="btnTriggerCacUpload"
+                                                onclick="document.getElementById('profileCacFileInput').click();"
+                                            >
+                                                <i class="fa-solid fa-upload"></i> Choose CAC Document
+                                            </button>
+                                            <span id="cacFileNameDisplay" style="font-size:12px; font-weight:600; color:#334155;">No file chosen</span>
+                                            <a
+                                                id="btnViewCurrentCac"
+                                                href="#"
+                                                target="_blank"
+                                                class="text-btn"
+                                                style="display:none; font-size:12px; font-weight:700; color:#044381;"
+                                            >
+                                                <i class="fa-solid fa-eye"></i> View Current Document
+                                            </a>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -2610,9 +2735,6 @@
                     <div class="camera-error-actions">
                         <button type="button" class="primary-btn btn-sm" id="btnRetrySiteCamera">
                             <i class="fa-solid fa-rotate-right"></i> Try Again
-                        </button>
-                        <button type="button" class="secondary-btn btn-sm" id="btnFallbackSiteFile">
-                            <i class="fa-solid fa-folder-open"></i> Choose Image File
                         </button>
                     </div>
                 </div>

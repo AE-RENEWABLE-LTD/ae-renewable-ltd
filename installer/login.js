@@ -416,6 +416,33 @@ function getApiData(data) {
 }
 
 
+function formatErrorMessage(
+    error,
+    fallback = "Unable to complete request. Please try again."
+) {
+
+    if (!error) {
+        return fallback;
+    }
+
+    const msg = typeof error === "string" ? error : (error.message || "");
+    const lower = msg.toLowerCase();
+
+    if (
+        lower.includes("failed to fetch") ||
+        lower.includes("networkerror") ||
+        lower.includes("err_connection_refused") ||
+        lower.includes("load failed") ||
+        lower.includes("network request failed") ||
+        (error?.name === "TypeError" && lower.includes("fetch"))
+    ) {
+        return "Unable to connect to the AE Renewable server. Please ensure the backend server is running and check your network connection.";
+    }
+
+    return msg || fallback;
+}
+
+
 /* =========================================================
    MESSAGE SYSTEM
 ========================================================= */
@@ -435,11 +462,22 @@ function showMessage(
 
     if (textElement) {
 
-        textElement.textContent =
-            String(
-                text ||
-                "Something went wrong."
-            );
+        let cleanText = String(
+            text ||
+            "Something went wrong."
+        );
+
+        const lower = cleanText.toLowerCase();
+        if (
+            lower.includes("failed to fetch") ||
+            lower.includes("networkerror") ||
+            lower.includes("err_connection_refused") ||
+            lower.includes("load failed")
+        ) {
+            cleanText = "Unable to connect to the AE Renewable server. Please ensure the backend server is running and check your network connection.";
+        }
+
+        textElement.textContent = cleanText;
 
     }
 
@@ -1144,8 +1182,10 @@ async function resendVerificationCode(
 
 
         showLoginMessage(
-            error?.message ||
-            "Unable to resend verification code."
+            formatErrorMessage(
+                error,
+                "Unable to resend verification code."
+            )
         );
 
 
@@ -1206,7 +1246,7 @@ function openVerificationInterface() {
 
 
     window.location.assign(
-        VERIFICATION_URL
+        `${VERIFICATION_URL}&email=${encodeURIComponent(email)}`
     );
 
 }
@@ -1376,7 +1416,8 @@ loginForm?.addEventListener(
                         body:
                             JSON.stringify({
                                 email,
-                                password
+                                password,
+                                portal: "installer"
                             })
 
                     }
@@ -1457,14 +1498,30 @@ loginForm?.addEventListener(
             }
 
 
+            const user =
+                data?.data?.user ||
+                data?.user;
+            const role = user?.role ? String(user.role).toLowerCase() : "";
+
+            if (role !== "installer") {
+                try {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("accessToken");
+                    localStorage.removeItem("aeInstallerToken");
+                    localStorage.removeItem("aeRenewableToken");
+                    localStorage.removeItem("aeAdminToken");
+                    localStorage.removeItem("aeClientToken");
+                    sessionStorage.removeItem("ae_installer_logged_in");
+                    sessionStorage.removeItem("ae_admin_logged_in");
+                    sessionStorage.removeItem("ae_client_logged_in");
+                } catch {}
+                throw new Error("These credentials are not authorized for this portal. Please use the correct sign-in page.");
+            }
+
             localStorage.setItem("token", token);
             localStorage.setItem("accessToken", token);
             localStorage.setItem("aeInstallerToken", token);
             localStorage.setItem("aeRenewableToken", token);
-
-            const user =
-                data?.data?.user ||
-                data?.user;
 
             if (user) {
                 localStorage.setItem("user", JSON.stringify(user));
@@ -1526,8 +1583,10 @@ loginForm?.addEventListener(
 
 
             showLoginMessage(
-                error?.message ||
-                "Unable to connect to the server. Please try again."
+                formatErrorMessage(
+                    error,
+                    "Unable to connect to the server. Please try again."
+                )
             );
 
 
@@ -1774,7 +1833,8 @@ async function requestPasswordReset() {
 
                     body:
                         JSON.stringify({
-                            email
+                            email,
+                            role: "installer"
                         })
 
                 }
@@ -1845,8 +1905,10 @@ async function requestPasswordReset() {
 
 
         showResetMessage(
-            error?.message ||
-            "Unable to process your password reset request."
+            formatErrorMessage(
+                error,
+                "Unable to process your password reset request."
+            )
         );
 
     } finally {
@@ -1965,7 +2027,8 @@ async function verifyPasswordResetCode() {
                     body:
                         JSON.stringify({
                             email,
-                            code
+                            code,
+                            role: "installer"
                         })
 
                 }
@@ -2056,8 +2119,10 @@ async function verifyPasswordResetCode() {
 
 
         showResetMessage(
-            error?.message ||
-            "Invalid or expired verification code."
+            formatErrorMessage(
+                error,
+                "Invalid or expired verification code."
+            )
         );
 
 
@@ -2204,14 +2269,10 @@ async function resetPassword() {
 
                     body:
                         JSON.stringify({
-
                             email,
-
                             resetToken,
-
-                            newPassword:
-                                password
-
+                            newPassword: password,
+                            role: "installer"
                         })
 
                 }
@@ -2283,8 +2344,10 @@ async function resetPassword() {
 
 
         showResetMessage(
-            error?.message ||
-            "Unable to reset your password."
+            formatErrorMessage(
+                error,
+                "Unable to reset your password."
+            )
         );
 
     } finally {

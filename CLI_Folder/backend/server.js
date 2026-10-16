@@ -518,6 +518,30 @@ app.use("/api/activity", activityRoutes);
 app.use("/api/field-posts", fieldPostRoutes);
 app.use("/api/field", fieldPostRoutes);
 
+/* ---------------- VERCEL CRON / SERVERLESS AUTOMATION ---------------- */
+app.get("/api/cron/automation", async (req, res) => {
+    try {
+        const authHeader = req.headers.authorization;
+        const cronSecret = process.env.CRON_SECRET;
+        if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+            return res.status(401).json({ success: false, message: "Unauthorized cron execution." });
+        }
+
+        const { checkQuotationExpiries, checkOverdueProjects } = require("./services/automation.service");
+        await checkQuotationExpiries();
+        await checkOverdueProjects();
+
+        return res.status(200).json({
+            success: true,
+            timestamp: new Date().toISOString(),
+            message: "Automation cron cycle completed successfully."
+        });
+    } catch (err) {
+        console.error("[Vercel Cron] Execution error:", err);
+        return res.status(500).json({ success: false, error: err.message });
+    }
+});
+
 // Comprehensive Static Directories & Image Fallbacks
 app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

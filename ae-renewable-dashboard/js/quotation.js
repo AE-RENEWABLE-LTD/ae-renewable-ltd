@@ -272,7 +272,7 @@ function createQuotationHTML(
         <div class="quote-company">
 
             <img
-                src="assets/logo.png"
+                src="assets/logodark.png"
                 alt="AE Renewable"
             >
 

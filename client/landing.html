@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AE Renewable — Powering Your Future with Sun. Verified live engineering updates across 6 installation stages, certified installer photo logs, and real-time client feedback.">
+    <meta name="description" content="AE Renewable Ltd — Powering Your Future with Sun. Verified live engineering updates across 6 installation stages, certified installer photo logs, and real-time client feedback.">
     <meta name="theme-color" content="#030b18">
 
-    <title>AE Renewable — Powering Your Future with Sun | Live Field Feed</title>
+    <title>AE Renewable Ltd — Powering Your Future with Sun | Live Field Feed & Stories</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +17,7 @@
     <style>
         :root {
             --bg-base: #030b18;
-            --bg-card: rgba(13, 23, 42, 0.88);
+            --bg-card: rgba(13, 23, 42, 0.92);
             --bg-card-hover: rgba(18, 33, 62, 0.98);
             --border-card: rgba(255, 255, 255, 0.09);
             --border-highlight: rgba(0, 177, 64, 0.4);
@@ -73,25 +73,25 @@
                 radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.06) 0%, transparent 40%);
         }
 
-        /* SITE HEADER */
+        /* MATURE EXECUTIVE TOPBAR */
         .site-header {
             position: sticky;
             top: 0;
             z-index: 100;
             backdrop-filter: var(--glass-blur);
-            background: rgba(3, 11, 24, 0.88);
+            background: rgba(3, 11, 24, 0.92);
             border-bottom: 1px solid var(--border-card);
-            padding: 10px 20px;
+            padding: 10px 24px;
             transition: var(--transition);
         }
 
         .header-container {
-            max-width: 860px;
+            max-width: 1400px;
             margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
+            gap: 16px;
         }
 
         .brand-link {
@@ -100,6 +100,7 @@
             gap: 12px;
             text-decoration: none;
             color: var(--text-main);
+            flex-shrink: 0;
         }
 
         .brand-logo-img {
@@ -132,9 +133,9 @@
         }
 
         .brand-tagline {
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: 800;
-            letter-spacing: 1.2px;
+            letter-spacing: 1.1px;
             text-transform: uppercase;
             color: #fbbf24;
             background: linear-gradient(90deg, #f59e0b, #38bdf8, #10b981);
@@ -143,68 +144,336 @@
             margin-top: 1px;
         }
 
+        /* Topbar Center Nav */
+        .topbar-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .topbar-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 12.5px;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
+        .topbar-nav-link:hover, .topbar-nav-link.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .topbar-nav-link.active {
+            color: #38bdf8;
+            border-bottom: 2px solid #38bdf8;
+            border-radius: 8px 8px 0 0;
+        }
+
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            flex-shrink: 0;
         }
 
-        .btn-arde {
+        .brand-hotline-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #38bdf8;
+            text-decoration: none;
+        }
+
+        .brand-hotline-badge:hover {
+            background: rgba(56, 189, 248, 0.15);
+        }
+
+        .btn-arde, .btn-client-login {
             display: inline-flex;
             align-items: center;
             gap: 7px;
             padding: 8px 16px;
-            border-radius: 99px;
-            background: rgba(245, 158, 11, 0.12);
-            color: #fbbf24;
-            border: 1px solid rgba(245, 158, 11, 0.35);
+            border-radius: 8px;
+            font-size: 12px;
             font-weight: 700;
-            font-size: 12.5px;
             text-decoration: none;
             transition: var(--transition);
-            white-space: nowrap;
+        }
+
+        .btn-arde {
+            background: #004AAD;
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(0, 74, 173, 0.4);
         }
 
         .btn-arde:hover {
-            background: rgba(245, 158, 11, 0.25);
-            border-color: #f59e0b;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+            background: #0284c7;
+            transform: translateY(-1px);
         }
 
         .btn-client-login {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            padding: 8px 18px;
-            border-radius: 99px;
-            background: linear-gradient(135deg, #004AAD, #0284c7);
-            color: #ffffff;
-            border: none;
-            font-weight: 700;
-            font-size: 13px;
-            text-decoration: none;
-            box-shadow: 0 4px 16px rgba(0, 74, 173, 0.4);
-            transition: var(--transition);
-            white-space: nowrap;
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
 
         .btn-client-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 22px rgba(0, 74, 173, 0.6);
-            background: linear-gradient(135deg, #0056cc, #0396e6);
+            background: rgba(255, 255, 255, 0.12);
         }
 
-        /* CENTERED SINGLE-COLUMN FEED LAYOUT */
-        .main-layout {
+        /* 3-COLUMN FACEBOOK-STYLE MAIN LAYOUT */
+        .fb-layout-container {
             position: relative;
             z-index: 1;
-            max-width: 720px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 24px 16px 80px;
+            padding: 22px 16px 80px;
+            display: grid;
+            grid-template-columns: 290px 1fr 310px;
+            gap: 22px;
+            align-items: flex-start;
+        }
+
+        /* SIDEBARS */
+        .fb-sidebar {
+            position: sticky;
+            top: 75px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
+        }
+
+        .sidebar-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-lg);
+            padding: 18px;
+            backdrop-filter: var(--glass-blur);
+            box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.4);
+        }
+
+        .sidebar-card-title {
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #38bdf8;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .corp-meta-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 12.5px;
+        }
+
+        .corp-meta-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            color: var(--text-muted);
+        }
+
+        .corp-meta-item i {
+            color: #f59e0b;
+            margin-top: 3px;
+            font-size: 13px;
+        }
+
+        .corp-meta-item strong {
+            color: #fff;
+            display: block;
+        }
+
+        .nav-shortcuts {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .nav-shortcut-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 12.5px;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
+        .nav-shortcut-btn:hover {
+            background: rgba(56, 189, 248, 0.12);
+            color: #fff;
+            border-color: rgba(56, 189, 248, 0.3);
+            transform: translateX(3px);
+        }
+
+        .stage-filter-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .stage-filter-chip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: #94a3b8;
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .stage-filter-chip:hover, .stage-filter-chip.active {
+            background: rgba(0, 177, 64, 0.15);
+            border-color: #10b981;
+            color: #34d399;
+        }
+
+        /* STORIES BAR (FACEBOOK STYLE) */
+        .stories-bar {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            margin-bottom: 20px;
+            backdrop-filter: var(--glass-blur);
+        }
+
+        .stories-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .stories-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .stories-scroll-row {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: thin;
+        }
+
+        .stories-scroll-row::-webkit-scrollbar {
+            height: 4px;
+        }
+        .stories-scroll-row::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        .story-card {
+            position: relative;
+            flex: 0 0 115px;
+            height: 165px;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: var(--transition);
+            background: #0b1329;
+        }
+
+        .story-card:hover {
+            transform: translateY(-3px) scale(1.02);
+            border-color: #38bdf8;
+            box-shadow: 0 8px 20px rgba(0, 74, 173, 0.35);
+        }
+
+        .story-bg-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7);
+            transition: var(--transition);
+        }
+
+        .story-card:hover .story-bg-img {
+            filter: brightness(0.85);
+            transform: scale(1.05);
+        }
+
+        .story-avatar-wrap {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2.5px solid #00B140;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .story-avatar-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .story-bottom-info {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            right: 8px;
+            color: #fff;
+        }
+
+        .story-author-name {
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1.2;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+            display: block;
+        }
+
+        .story-sub {
+            font-size: 9.5px;
+            color: #38bdf8;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+        }
+
+        /* CENTER FEED STREAM */
+        .feed-stream {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
         }
 
         /* CONTROLS: SEARCH & CITY FILTER */
@@ -317,6 +586,7 @@
             align-items: center;
             gap: 6px;
             margin-top: 2px;
+            flex-wrap: wrap;
         }
 
         .post-meta i {
@@ -353,66 +623,111 @@
 
         .post-tags-row {
             display: flex;
-            gap: 6px;
             flex-wrap: wrap;
-            margin-bottom: 12px;
+            gap: 6px;
+            margin-bottom: 8px;
         }
 
         .spec-tag {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            color: #7dd3fc;
+            padding: 3px 9px;
+            border-radius: 6px;
             font-size: 11px;
-            padding: 3px 8px;
-            border-radius: 4px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #94a3b8;
+            font-weight: 600;
         }
 
-        /* MEDIA CONTAINER */
+        /* POST MEDIA */
         .post-media-wrap {
             position: relative;
             width: 100%;
-            max-height: 440px;
+            background: #020713;
+            max-height: 480px;
             overflow: hidden;
-            background: #020617;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
         }
 
         .post-media-img {
             width: 100%;
-            height: 100%;
-            max-height: 440px;
+            height: auto;
+            max-height: 480px;
             object-fit: cover;
             display: block;
-            transition: transform 0.4s ease;
+            transition: var(--transition);
         }
 
         .post-media-wrap:hover .post-media-img {
-            transform: scale(1.02);
+            transform: scale(1.015);
         }
 
         .media-watermark {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
+            bottom: 12px;
+            right: 12px;
             background: rgba(3, 11, 24, 0.85);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 3px 8px;
-            border-radius: 5px;
+            border-radius: 6px;
+            padding: 4px 10px;
             font-size: 10.5px;
             font-weight: 700;
-            color: #ffffff;
+            color: #fff;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+            letter-spacing: 0.5px;
         }
 
-        /* CLIENT FEEDBACK / COMPLAINANT RESOLUTION CARD */
+        .media-watermark i {
+            color: var(--ae-green);
+        }
+
+        /* CORPORATE BRAND VERIFICATION FOOTER */
+        .post-corp-verification {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 74, 173, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 8px 18px;
+            font-size: 11.5px;
+            color: #94a3b8;
+        }
+
+        .post-corp-verification strong {
+            color: #38bdf8;
+        }
+
+        .btn-chat-installer {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #25D366;
+            color: #032b13;
+            font-size: 11.5px;
+            font-weight: 800;
+            padding: 5px 12px;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn-chat-installer:hover {
+            background: #20bd5a;
+            transform: scale(1.03);
+            color: #021a0a;
+        }
+
+        /* CLIENT FEEDBACK BOX */
         .client-feedback-box {
-            margin: 14px 18px;
-            background: rgba(15, 23, 42, 0.65);
-            border: 1px solid rgba(245, 158, 11, 0.25);
-            border-left: 4px solid #f59e0b;
+            margin: 12px 18px 0;
+            background: rgba(2, 6, 23, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.07);
             border-radius: var(--radius-md);
             padding: 12px 14px;
         }
@@ -421,76 +736,77 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
 
         .feedback-head-title {
-            font-size: 11.5px;
-            font-weight: 800;
-            color: #fbbf24;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--ae-light-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
             display: flex;
             align-items: center;
             gap: 6px;
-            text-transform: uppercase;
         }
 
         .stars-row {
-            color: #f59e0b;
-            font-size: 11px;
+            color: #fbbf24;
+            font-size: 12px;
             letter-spacing: 2px;
         }
 
         .feedback-quote {
             font-size: 12px;
-            color: #e2e8f0;
+            color: #cbd5e1;
             font-style: italic;
-            line-height: 1.55;
-            margin-bottom: 5px;
+            line-height: 1.5;
+            margin-bottom: 6px;
         }
 
         .resolution-note {
-            font-size: 11px;
-            color: #10b981;
+            font-size: 10.5px;
+            color: #34d399;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 5px;
         }
 
-        /* SOCIAL STATS COUNTERS */
+        /* SOCIAL METRICS BAR */
         .social-stats-bar {
-            padding: 9px 18px;
+            padding: 10px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             font-size: 11.5px;
             color: var(--text-muted);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .stats-icons-group {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
 
         .reaction-bubble {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 9.5px;
+            font-size: 10px;
+            color: #fff;
         }
 
-        .bubble-like { background: #004AAD; color: #fff; }
-        .bubble-love { background: #ef4444; color: #fff; }
+        .bubble-like { background: #004AAD; }
+        .bubble-love { background: #e11d48; }
 
-        /* INTERACTIVE ACTION BUTTONS (FACEBOOK STYLE) */
+        /* POST ACTIONS BAR */
         .post-actions-bar {
-            padding: 5px 10px;
+            padding: 4px 12px;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 4px;
@@ -502,98 +818,88 @@
             color: var(--text-muted);
             font-family: inherit;
             font-size: 12px;
-            font-weight: 600;
-            padding: 8px 6px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
+            font-weight: 700;
+            padding: 9px 8px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 7px;
+            cursor: pointer;
             transition: var(--transition);
         }
 
         .action-btn:hover {
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.05);
             color: var(--text-main);
         }
 
-        .action-btn.liked {
+        .action-btn.active-like {
             color: #38bdf8;
-            font-weight: 700;
         }
 
-        .action-btn.loved {
+        .action-btn.active-love {
             color: #f43f5e;
-            font-weight: 700;
-        }
-
-        .action-btn.loved i {
-            animation: heart-burst 0.4s ease;
-        }
-
-        @keyframes heart-burst {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.4); }
-            100% { transform: scale(1); }
         }
 
         /* COMMENTS SECTION */
         .comments-section {
-            padding: 12px 18px 16px;
-            background: rgba(3, 11, 24, 0.45);
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 12px 18px;
+            background: rgba(2, 6, 23, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .comment-item {
             display: flex;
             align-items: flex-start;
             gap: 10px;
-            margin-bottom: 10px;
         }
 
         .comment-avatar {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            background: #1e293b;
+            background: #004AAD;
+            color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 11px;
-            font-weight: 700;
-            color: #94a3b8;
+            font-weight: 800;
             flex-shrink: 0;
         }
 
         .comment-bubble {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 10px;
-            padding: 7px 11px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 8px 12px;
             flex: 1;
         }
 
         .comment-author {
-            font-size: 11.5px;
+            font-size: 12px;
             font-weight: 700;
-            color: #f1f5f9;
+            color: #fff;
             margin-bottom: 2px;
         }
 
         .comment-text {
-            font-size: 11.5px;
+            font-size: 12px;
             color: #cbd5e1;
+            line-height: 1.4;
         }
 
-        .comment-input-box {
+        .comment-input-wrap {
             display: flex;
-            align-items: center;
             gap: 8px;
-            margin-top: 10px;
+            margin-top: 6px;
         }
 
-        .comment-input-box input {
+        .comment-input {
             flex: 1;
             padding: 8px 14px;
             border-radius: 99px;
@@ -605,16 +911,16 @@
             outline: none;
         }
 
-        .comment-input-box input:focus {
+        .comment-input:focus {
             border-color: #38bdf8;
         }
 
-        .comment-send-btn {
+        .comment-submit-btn {
             background: #004AAD;
             border: none;
             color: #fff;
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -623,11 +929,66 @@
             transition: var(--transition);
         }
 
-        .comment-send-btn:hover {
+        .comment-submit-btn:hover {
             background: #0284c7;
         }
 
-        /* TOAST NOTIFICATION */
+        /* INSTALLER DIRECTORY CARD (RIGHT SIDEBAR) */
+        .installer-contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .installer-contact-left {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .installer-contact-left img {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid #00B140;
+        }
+
+        .inst-contact-text strong {
+            font-size: 12px;
+            color: #fff;
+            display: block;
+        }
+
+        .inst-contact-text span {
+            font-size: 10.5px;
+            color: #94a3b8;
+            display: block;
+        }
+
+        .btn-mini-chat {
+            background: rgba(37, 211, 102, 0.15);
+            color: #25D366;
+            border: 1px solid rgba(37, 211, 102, 0.3);
+            border-radius: 12px;
+            padding: 4px 8px;
+            font-size: 10.5px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: var(--transition);
+        }
+
+        .btn-mini-chat:hover {
+            background: #25D366;
+            color: #032b13;
+        }
+
+        /* TOAST POPUP */
         .toast-popup {
             position: fixed;
             bottom: 20px;
@@ -735,10 +1096,7 @@
             transform: translateY(-2px);
         }
 
-        .share-target-btn i {
-            font-size: 20px;
-        }
-
+        .share-target-btn i { font-size: 20px; }
         .share-target-btn.whatsapp i { color: #25D366; }
         .share-target-btn.twitter i { color: #1DA1F2; }
         .share-target-btn.facebook i { color: #1877F2; }
@@ -772,33 +1130,31 @@
             transition: var(--transition);
         }
 
-        .copy-btn:hover {
-            background: #0284c7;
+        .copy-btn:hover { background: #0284c7; }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1100px) {
+            .fb-layout-container {
+                grid-template-columns: 260px 1fr;
+            }
+            .fb-sidebar-right {
+                display: none;
+            }
         }
 
-        @media (max-width: 600px) {
-            .site-header {
-                padding: 8px 12px;
+        @media (max-width: 800px) {
+            .site-header { padding: 8px 14px; }
+            .topbar-nav { display: none; }
+            .brand-hotline-badge { display: none; }
+            .fb-layout-container {
+                grid-template-columns: 1fr;
+                padding-top: 14px;
             }
-            .brand-logo-img {
-                width: 36px;
-                height: 36px;
-            }
-            .brand-titles h1 {
-                font-size: 14px;
-            }
-            .btn-arde span, .btn-client-login span {
-                font-size: 11.5px;
-            }
-            .btn-arde, .btn-client-login {
-                padding: 6px 12px;
+            .fb-sidebar-left {
+                display: none;
             }
             .post-actions-bar {
                 grid-template-columns: repeat(2, 1fr);
-            }
-            .brand-tagline {
-                font-size: 8px;
-                letter-spacing: 0.6px;
             }
         }
     </style>
@@ -807,846 +1163,403 @@
 
     <div class="ambient-glow" aria-hidden="true"></div>
 
-    <!-- 01. HEADER: OFFICIAL LOGO, POWERING YOUR FUTURE WITH SUN, ARDE STUDIO & CLIENT LOGIN -->
+    <!-- 01. EXECUTIVE TOPBAR: LOGO, NAV TABS, HOTLINE, ARDE & LOGIN -->
     <header class="site-header">
         <div class="header-container">
             <a href="/client" class="brand-link">
-                <img src="/arde/assets/images/logo3D.png" alt="AE Renewable Logo" class="brand-logo-img" onerror="this.src='/client/logo.png'">
+                <img src="/arde/assets/images/logodark.png" alt="AE Renewable Logo" class="brand-logo-img" onerror="this.src='/client/logodark.png'">
                 <div class="brand-titles">
-                    <h1>AE <span>RENEWABLE</span></h1>
-                    <span class="brand-tagline">POWERING YOUR FUTURE WITH SUN</span>
+                    <h1>AE <span>RENEWABLE</span> LTD</h1>
+                    <span class="brand-tagline">POWERING YOUR FUTURE WITH SUN • RC: 9010643</span>
                 </div>
             </a>
 
-            <div class="header-actions">
-                <a href="/arde" class="btn-arde" title="Start System Design & Client Intake in ARDE">
+            <!-- Central Navigation Tabs (Facebook Style) -->
+            <nav class="topbar-nav">
+                <a href="/explore" class="topbar-nav-link active">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Feed & Stories</span>
+                </a>
+                <a href="/arde" class="topbar-nav-link">
                     <i class="fa-solid fa-bolt"></i>
                     <span>ARDE Studio</span>
                 </a>
-                <a href="/client/login" class="btn-client-login" title="Sign In to Client Account">
+                <a href="/client/dashboard" class="topbar-nav-link">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Client Portal</span>
+                </a>
+                <a href="/installer/portal.html" class="topbar-nav-link">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <span>Installer Portal</span>
+                </a>
+            </nav>
+
+            <div class="header-actions">
+                <a href="tel:08133615131" class="brand-hotline-badge" title="Direct Engineering Hotline">
+                    <i class="fa-solid fa-phone"></i>
+                    <span>0813 361 5131</span>
+                </a>
+                <a href="/arde?focus=sectionCard3" class="btn-arde" title="Create Engineering Project & Intake">
+                    <i class="fa-solid fa-plus-circle"></i>
+                    <span>Create Project</span>
+                </a>
+                <a href="/client/login" class="btn-client-login" title="Client Portal Sign In">
                     <i class="fa-solid fa-right-to-bracket"></i>
-                    <span>Client Login</span>
+                    <span>Login</span>
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- 02. MAIN CONTENT LAYOUT (CENTERED FEED STREAM) -->
-    <main class="main-layout">
+    <!-- 02. 3-COLUMN FACEBOOK-STYLE MAIN LAYOUT -->
+    <div class="fb-layout-container">
 
-        <!-- CONTROLS: SEARCH & CITY FILTER -->
-        <div class="feed-controls">
-            <div class="search-input-wrap">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="feedSearchInput" placeholder="Search by location, component, or engineer..." oninput="filterFeedPosts()">
+        <!-- LEFT SIDEBAR -->
+        <aside class="fb-sidebar fb-sidebar-left">
+            <!-- Corporate Brand Card -->
+            <div class="sidebar-card">
+                <div class="sidebar-card-title">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>AE RENEWABLE LTD</span>
+                </div>
+                <div class="corp-meta-list">
+                    <div class="corp-meta-item">
+                        <i class="fa-solid fa-id-card"></i>
+                        <div>
+                            <span>CAC RC Number</span>
+                            <strong>RC: 9010643</strong>
+                        </div>
+                    </div>
+                    <div class="corp-meta-item">
+                        <i class="fa-solid fa-phone-volume"></i>
+                        <div>
+                            <span>Executive Hotline</span>
+                            <strong>0813 361 5131</strong>
+                        </div>
+                    </div>
+                    <div class="corp-meta-item">
+                        <i class="fa-solid fa-envelope"></i>
+                        <div>
+                            <span>Official Email</span>
+                            <strong>aerenewablesolution@gmail.com</strong>
+                        </div>
+                    </div>
+                    <div class="corp-meta-item">
+                        <i class="fa-solid fa-building-columns"></i>
+                        <div>
+                            <span>Corporate Account</span>
+                            <strong>UBA: 1029827207</strong>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div style="font-size:12px; color:var(--text-muted); font-weight:700;" id="feedCountTag">
-                Showing 6 Verified Stage Reports
+
+            <!-- Ecosystem Quick Links -->
+            <div class="sidebar-card">
+                <div class="sidebar-card-title">
+                    <i class="fa-solid fa-compass"></i>
+                    <span>Ecosystem Portals</span>
+                </div>
+                <div class="nav-shortcuts">
+                    <a href="/arde" class="nav-shortcut-btn">
+                        <i class="fa-solid fa-bolt" style="color:#f59e0b;"></i>
+                        <span>ARDE Engineering Studio</span>
+                    </a>
+                    <a href="/arde?focus=sectionCard3" class="nav-shortcut-btn">
+                        <i class="fa-solid fa-file-pen" style="color:#38bdf8;"></i>
+                        <span>Create Project & Profile</span>
+                    </a>
+                    <a href="/client/dashboard" class="nav-shortcut-btn">
+                        <i class="fa-solid fa-user-tie" style="color:#10b981;"></i>
+                        <span>Client Dashboard</span>
+                    </a>
+                    <a href="/installer/portal.html" class="nav-shortcut-btn">
+                        <i class="fa-solid fa-helmet-safety" style="color:#fbbf24;"></i>
+                        <span>Certified Installer Hub</span>
+                    </a>
+                    <a href="/admin/dashboard" class="nav-shortcut-btn">
+                        <i class="fa-solid fa-user-shield" style="color:#f43f5e;"></i>
+                        <span>Admin Control Centre</span>
+                    </a>
+                </div>
             </div>
-        </div>
 
-        <div id="postsContainer" style="display:flex; flex-direction:column; gap:20px;">
-
-            <!-- POST 1: STAGE 3 (PV & INVERTER MOUNTING) -->
-            <article class="post-card" data-stage="stage3" data-location="Maitama Abuja FCT" data-post-id="post-101">
-                <div class="post-header">
-                    <div class="post-author-row">
-                        <img src="/site-images/instalerface.jpeg" alt="Lead Engineer" class="author-avatar" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';">
-                        <div class="author-info">
-                            <h3>Engr. Eniola Abdulrasaq <i class="fa-solid fa-circle-check verified-badge" title="Certified Lead Installer"></i></h3>
-                            <div class="post-meta">
-                                <i class="fa-solid fa-location-dot"></i>
-                                <span>Maitama District, Abuja FCT</span>
-                                <span>• 2h ago</span>
-                            </div>
-                        </div>
-                    </div>
-                    <span class="stage-pill">⚡ Stage 3: PV & Inverter Mount</span>
+            <!-- 6 Stages Filter -->
+            <div class="sidebar-card">
+                <div class="sidebar-card-title">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>Installation Milestones</span>
                 </div>
-
-                <div class="post-body">
-                    <p class="post-text">
-                        Successfully deployed and mounted 24x 585W Tier-1 High-Efficiency Mono PERC Solar Panels on reinforced anodized aluminium railed roofing. Coupled with dual 12kW Deye Hybrid Inverters with smart MPPT multi-string tracking. Cable routing is securely insulated against harmonic loss.
-                    </p>
-                    <div class="post-tags-row">
-                        <span class="spec-tag">14.04 kWp Solar Array</span>
-                        <span class="spec-tag">Dual 12kW Deye Hybrid</span>
-                        <span class="spec-tag">6mm² Solar DC Cables</span>
+                <div class="stage-filter-list" id="stageFilterList">
+                    <div class="stage-filter-chip active" data-filter="all" onclick="filterByStage('all')">
+                        <span>All Verified Proofs</span>
+                        <i class="fa-solid fa-check"></i>
                     </div>
-                </div>
-
-                <div class="post-media-wrap" onclick="openMediaPreview('/site-images/panelUtako1.jpeg')">
-                    <img src="/site-images/panelUtako1.jpeg" alt="Solar Panel Array Installation" class="post-media-img" onerror="this.src='/site-images/Gemini_Generated_Image_vv7ds3vv7ds3vv7d.png'">
-                    <div class="media-watermark">
-                        <i class="fa-solid fa-camera"></i>
-                        <span>AE RENEWABLE • SITE EVIDENCE VERIFIED</span>
+                    <div class="stage-filter-chip" data-filter="stage1" onclick="filterByStage('stage1')">
+                        <span>1. Site Audit & Sizing</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                    <div class="stage-filter-chip" data-filter="stage2" onclick="filterByStage('stage2')">
+                        <span>2. Mounting & Structure</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                    <div class="stage-filter-chip" data-filter="stage3" onclick="filterByStage('stage3')">
+                        <span>3. PV Panels & Inverter</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                    <div class="stage-filter-chip" data-filter="stage4" onclick="filterByStage('stage4')">
+                        <span>4. Battery Bank & BMS</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                    <div class="stage-filter-chip" data-filter="stage5" onclick="filterByStage('stage5')">
+                        <span>5. Earthing & Surge SPDs</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                    <div class="stage-filter-chip" data-filter="stage6" onclick="filterByStage('stage6')">
+                        <span>6. Testing & Handover</span>
+                        <i class="fa-solid fa-chevron-right"></i>
                     </div>
                 </div>
+            </div>
+        </aside>
 
-                <!-- CLIENT FEEDBACK & RESOLUTION NOTE -->
-                <div class="client-feedback-box">
-                    <div class="feedback-head">
-                        <span class="feedback-head-title"><i class="fa-solid fa-quote-left"></i> Verified Client Experience</span>
-                        <span class="stars-row">★★★★★</span>
-                    </div>
-                    <p class="feedback-quote">
-                        "The team arrived punctually at 8:00 AM. Roof structural integrity check was done thoroughly before mounting. Our daytime air-conditioners are now running 100% directly off the sun."
-                    </p>
-                    <div class="resolution-note">
-                        <i class="fa-solid fa-check-double"></i>
-                        <span>Audit Status: Passed Structural & Electrical Wind-Load Inspection</span>
-                    </div>
-                </div>
+        <!-- CENTER MAIN STREAM -->
+        <main class="feed-stream">
 
-                <!-- SOCIAL COUNTERS -->
-                <div class="social-stats-bar">
-                    <div class="stats-icons-group">
-                        <span class="reaction-bubble bubble-like"><i class="fa-solid fa-thumbs-up"></i></span>
-                        <span class="reaction-bubble bubble-love"><i class="fa-solid fa-heart"></i></span>
-                        <span id="likes-count-101" style="font-weight:700; color:#cbd5e1; margin-left:4px;">148</span>
-                    </div>
-                    <div>
-                        <span id="shares-count-101">32 Shares</span> • <span>18 Comments</span>
-                    </div>
-                </div>
-
-                <!-- INTERACTIVE SOCIAL TOOLBAR -->
-                <div class="post-actions-bar">
-                    <button class="action-btn" id="like-btn-101" onclick="toggleReaction('101', 'like')">
-                        <i class="fa-regular fa-thumbs-up"></i>
-                        <span>Like</span>
-                    </button>
-                    <button class="action-btn" id="love-btn-101" onclick="toggleReaction('101', 'love')">
-                        <i class="fa-regular fa-heart"></i>
-                        <span>Love</span>
-                    </button>
-                    <button class="action-btn" onclick="openShareModal('post-101', '14.04kWp Solar Array in Maitama Abuja')">
-                        <i class="fa-solid fa-share"></i>
-                        <span>Reshare</span>
-                    </button>
-                    <button class="action-btn" onclick="toggleComments('101')">
-                        <i class="fa-regular fa-comment"></i>
-                        <span>Comment</span>
-                    </button>
-                </div>
-
-                <!-- COMMENTS ACCORDION -->
-                <div class="comments-section" id="comments-101" style="display:none;">
-                    <div class="comment-item">
-                        <div class="comment-avatar">AO</div>
-                        <div class="comment-bubble">
-                            <div class="comment-author">Architect Oladipo</div>
-                            <div class="comment-text">Super neat DC trunking along the parapet wall. Great engineering standard!</div>
-                        </div>
-                    </div>
-                    <div class="comment-item">
-                        <div class="comment-avatar">MK</div>
-                        <div class="comment-bubble">
-                            <div class="comment-author">Dr. Mohammed Kano</div>
-                            <div class="comment-text">Is this system compatible with 3-phase grid power synchronization?</div>
-                        </div>
-                    </div>
-                    <div class="comment-input-box">
-                        <input type="text" placeholder="Write a community comment..." id="comment-input-101" onkeydown="handleCommentSubmit(event, '101')">
-                        <button class="comment-send-btn" onclick="submitComment('101')"><i class="fa-solid fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </article>
-
-            <!-- POST 2: STAGE 4 (BATTERY STORAGE & BMS) -->
-            <article class="post-card" data-stage="stage4" data-location="Victoria Island Lagos" data-post-id="post-102">
-                <div class="post-header">
-                    <div class="post-author-row">
-                        <img src="/site-images/installerface1.jpeg" alt="Lead Engineer" class="author-avatar" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';">
-                        <div class="author-info">
-                            <h3>Engr. Solomon Abdulrasaq <i class="fa-solid fa-circle-check verified-badge" title="Certified Storage Specialist"></i></h3>
-                            <div class="post-meta">
-                                <i class="fa-solid fa-location-dot"></i>
-                                <span>Victoria Island, Lagos State</span>
-                                <span>• 5h ago</span>
-                            </div>
-                        </div>
-                    </div>
-                    <span class="stage-pill" style="background:rgba(56,189,248,0.15); color:#38bdf8; border-color:rgba(56,189,248,0.35);">
-                        🔋 Stage 4: Battery & BMS Wiring
+            <!-- FACEBOOK-STYLE STORIES CAROUSEL -->
+            <div class="stories-bar">
+                <div class="stories-header">
+                    <span class="stories-title">
+                        <i class="fa-solid fa-circle-play" style="color:#00B140;"></i>
+                        <span>Installer Live Site Stories</span>
                     </span>
+                    <small style="color:#94a3b8; font-size:11px;">Updated 24/7 round-the-clock</small>
                 </div>
-
-                <div class="post-body">
-                    <p class="post-text">
-                        Completed multi-module rack installation of 30kWh Felicity LiFePO4 Ultra-High Capacity Battery Bank with CAN-bus communication linked directly to the primary power management system. 0ms uninterrupted switchover tested during sudden grid blackouts.
-                    </p>
-                    <div class="post-tags-row">
-                        <span class="spec-tag">30kWh LiFePO4 Storage</span>
-                        <span class="spec-tag">6000+ Cycles (90% DoD)</span>
-                        <span class="spec-tag">CAN / RS485 Dual Bus</span>
-                    </div>
-                </div>
-
-                <div class="post-media-wrap" onclick="openMediaPreview('/site-images/utakoinverterdone.jpeg')">
-                    <img src="/site-images/utakoinverterdone.jpeg" alt="LiFePO4 Battery & Inverter Wall" class="post-media-img" onerror="this.src='/site-images/inverterUtako2.jpeg'">
-                    <div class="media-watermark">
-                        <i class="fa-solid fa-camera"></i>
-                        <span>AE RENEWABLE • SITE EVIDENCE VERIFIED</span>
-                    </div>
-                </div>
-
-                <!-- CLIENT FEEDBACK / COMPLAINANT NOTE -->
-                <div class="client-feedback-box">
-                    <div class="feedback-head">
-                        <span class="feedback-head-title"><i class="fa-solid fa-quote-left"></i> Client Resolution & Review</span>
-                        <span class="stars-row">★★★★★</span>
-                    </div>
-                    <p class="feedback-quote">
-                        "Our main concern was our server room rebooting whenever NEPA took light. With this AE installation, the changeover is literally invisible. Our servers stayed online without dropping a single packet."
-                    </p>
-                    <div class="resolution-note">
-                        <i class="fa-solid fa-check-double"></i>
-                        <span>Resolution: 0-Millisecond UPS Switching Verified by Telemetry</span>
-                    </div>
-                </div>
-
-                <!-- SOCIAL COUNTERS -->
-                <div class="social-stats-bar">
-                    <div class="stats-icons-group">
-                        <span class="reaction-bubble bubble-like"><i class="fa-solid fa-thumbs-up"></i></span>
-                        <span class="reaction-bubble bubble-love"><i class="fa-solid fa-heart"></i></span>
-                        <span id="likes-count-102" style="font-weight:700; color:#cbd5e1; margin-left:4px;">215</span>
-                    </div>
-                    <div>
-                        <span id="shares-count-102">54 Shares</span> • <span>29 Comments</span>
-                    </div>
-                </div>
-
-                <!-- INTERACTIVE SOCIAL TOOLBAR -->
-                <div class="post-actions-bar">
-                    <button class="action-btn" id="like-btn-102" onclick="toggleReaction('102', 'like')">
-                        <i class="fa-regular fa-thumbs-up"></i>
-                        <span>Like</span>
-                    </button>
-                    <button class="action-btn" id="love-btn-102" onclick="toggleReaction('102', 'love')">
-                        <i class="fa-regular fa-heart"></i>
-                        <span>Love</span>
-                    </button>
-                    <button class="action-btn" onclick="openShareModal('post-102', '30kWh LiFePO4 Storage in Victoria Island Lagos')">
-                        <i class="fa-solid fa-share"></i>
-                        <span>Reshare</span>
-                    </button>
-                    <button class="action-btn" onclick="toggleComments('102')">
-                        <i class="fa-regular fa-comment"></i>
-                        <span>Comment</span>
-                    </button>
-                </div>
-
-                <!-- COMMENTS ACCORDION -->
-                <div class="comments-section" id="comments-102" style="display:none;">
-                    <div class="comment-item">
-                        <div class="comment-avatar">CA</div>
-                        <div class="comment-bubble">
-                            <div class="comment-author">Chief Adeleke</div>
-                            <div class="comment-text">Incredible setup. How long does it take to charge from solar on a normal sunny day?</div>
+                <div class="stories-scroll-row">
+                    <!-- Story 1 -->
+                    <div class="story-card" onclick="openMediaPreview('/site-images/panelUtako1.jpeg')">
+                        <img src="/site-images/panelUtako1.jpeg" alt="Solar Story" class="story-bg-img">
+                        <div class="story-avatar-wrap">
+                            <img src="/site-images/instalerface.jpeg" alt="Engr. Eniola">
+                        </div>
+                        <div class="story-bottom-info">
+                            <span class="story-author-name">Engr. Eniola</span>
+                            <span class="story-sub">Maitama • 2h</span>
                         </div>
                     </div>
-                    <div class="comment-input-box">
-                        <input type="text" placeholder="Write a community comment..." id="comment-input-102" onkeydown="handleCommentSubmit(event, '102')">
-                        <button class="comment-send-btn" onclick="submitComment('102')"><i class="fa-solid fa-paper-plane"></i></button>
+                    <!-- Story 2 -->
+                    <div class="story-card" onclick="openMediaPreview('/site-images/utakoinverterdone.jpeg')">
+                        <img src="/site-images/utakoinverterdone.jpeg" alt="Storage Story" class="story-bg-img">
+                        <div class="story-avatar-wrap">
+                            <img src="/site-images/installerface1.jpeg" alt="Engr. Solomon">
+                        </div>
+                        <div class="story-bottom-info">
+                            <span class="story-author-name">Engr. Solomon</span>
+                            <span class="story-sub">VI Lagos • 5h</span>
+                        </div>
+                    </div>
+                    <!-- Story 3 -->
+                    <div class="story-card" onclick="openMediaPreview('/site-images/electrical.jpg')">
+                        <img src="/site-images/electrical.jpg" alt="Earthing Story" class="story-bg-img">
+                        <div class="story-avatar-wrap">
+                            <img src="/site-images/instaler2.jpeg" alt="Engr. Oluwasegun">
+                        </div>
+                        <div class="story-bottom-info">
+                            <span class="story-author-name">Engr. Segun</span>
+                            <span class="story-sub">PH Rivers • 1d</span>
+                        </div>
+                    </div>
+                    <!-- Story 4 -->
+                    <div class="story-card" onclick="openMediaPreview('/site-images/smartInverter.jpeg')">
+                        <img src="/site-images/smartInverter.jpeg" alt="Handover Story" class="story-bg-img">
+                        <div class="story-avatar-wrap">
+                            <img src="/site-images/instaler3.jpeg" alt="Engr. Stephen">
+                        </div>
+                        <div class="story-bottom-info">
+                            <span class="story-author-name">Engr. Stephen</span>
+                            <span class="story-sub">Ibadan • 2d</span>
+                        </div>
+                    </div>
+                    <!-- Story 5 -->
+                    <div class="story-card" onclick="openMediaPreview('/site-images/Gemini_Generated_Image_vv7ds3vv7ds3vv7d.png')">
+                        <img src="/site-images/Gemini_Generated_Image_vv7ds3vv7ds3vv7d.png" alt="Audit Story" class="story-bg-img">
+                        <div class="story-avatar-wrap">
+                            <img src="/site-images/instaler5.jpeg" alt="Engr. Kabir">
+                        </div>
+                        <div class="story-bottom-info">
+                            <span class="story-author-name">Engr. Kabir</span>
+                            <span class="story-sub">AMAC • 3d</span>
+                        </div>
                     </div>
                 </div>
-            </article>
+            </div>
 
-            <!-- POST 3: STAGE 5 (EARTHING & SURGE PROTECTION) -->
-            <article class="post-card" data-stage="stage5" data-location="Port Harcourt Rivers" data-post-id="post-103">
-                <div class="post-header">
-                    <div class="post-author-row">
-                        <img src="/site-images/instaler2.jpeg" alt="Lead Engineer" class="author-avatar" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';">
-                        <div class="author-info">
-                            <h3>Engr. Fabiyi Oluwasegun <i class="fa-solid fa-circle-check verified-badge" title="Certified Protection Tech"></i></h3>
-                            <div class="post-meta">
-                                <i class="fa-solid fa-location-dot"></i>
-                                <span>GRA Phase 2, Port Harcourt, Rivers State</span>
-                                <span>• 1d ago</span>
+            <!-- SEARCH CONTROLS -->
+            <div class="feed-controls">
+                <div class="search-input-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="feedSearchInput" placeholder="Search by site address, installer name, or project ID..." oninput="filterFeedPosts()">
+                </div>
+                <div style="font-size:12px; color:var(--text-muted); font-weight:700;" id="feedCountTag">
+                    Loading verified field logs...
+                </div>
+            </div>
+
+            <!-- POSTS STREAM CONTAINER -->
+            <div id="postsContainer" style="display:flex; flex-direction:column; gap:20px;">
+                <!-- Dynamically loaded from /api/field-posts -->
+            </div>
+
+        </main>
+
+        <!-- RIGHT SIDEBAR -->
+        <aside class="fb-sidebar fb-sidebar-right">
+            <!-- Active Certified Installers Directory -->
+            <div class="sidebar-card">
+                <div class="sidebar-card-title">
+                    <i class="fa-solid fa-user-check"></i>
+                    <span>Certified Lead Installers</span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <!-- Installer 1 -->
+                    <div class="installer-contact-item">
+                        <div class="installer-contact-left">
+                            <img src="/site-images/instalerface.jpeg" alt="Engr. Eniola">
+                            <div class="inst-contact-text">
+                                <strong>Engr. Alimi Babatunde</strong>
+                                <span>Lead Solar Engr • Abuja</span>
                             </div>
                         </div>
+                        <a href="https://wa.me/2348133615131?text=Hello%20Engr%20Eniola%20I%20am%20inquiring%20about%20AE%20Renewable%20Solar%20Project" target="_blank" class="btn-mini-chat" title="Chat with Installer">
+                            <i class="fa-brands fa-whatsapp"></i> Chat
+                        </a>
                     </div>
-                    <span class="stage-pill" style="background:rgba(245,158,11,0.15); color:#fbbf24; border-color:rgba(245,158,11,0.35);">
-                        ⚡ Stage 5: Earthing (<2Ω) & SPDs
-                    </span>
-                </div>
-
-                <div class="post-body">
-                    <p class="post-text">
-                        Deep copper rod earthing system driven into site substrate treated with Marconite compound, achieving an audited earth resistance of <strong>1.48 Ohms</strong> (well below IEEE 2.0Ω safety ceiling). Installed heavy-duty DC and AC Class I+II surge arrestors for comprehensive lightning suppression.
-                    </p>
-                    <div class="post-tags-row">
-                        <span class="spec-tag">1.48Ω Earth Resistance</span>
-                        <span class="spec-tag">Type 1+2 DC SPDs (1000V)</span>
-                        <span class="spec-tag">Copper Earth Chamber</span>
-                    </div>
-                </div>
-
-                <div class="post-media-wrap" onclick="openMediaPreview('/site-images/electrical.jpg')">
-                    <img src="/site-images/electrical.jpg" alt="Surge Protection and Earthing Enclosure" class="post-media-img" onerror="this.src='/site-images/Gemini_Generated_Image_ckbs95ckbs95ckbs.png'">
-                    <div class="media-watermark">
-                        <i class="fa-solid fa-camera"></i>
-                        <span>AE RENEWABLE • SITE EVIDENCE VERIFIED</span>
-                    </div>
-                </div>
-
-                <!-- CLIENT FEEDBACK / COMPLAINANT NOTE -->
-                <div class="client-feedback-box">
-                    <div class="feedback-head">
-                        <span class="feedback-head-title"><i class="fa-solid fa-quote-left"></i> Client Quality Assurance</span>
-                        <span class="stars-row">★★★★★</span>
-                    </div>
-                    <p class="feedback-quote">
-                        "Last year lightning struck our transformer and blew our borehole pump and TV. AE Renewable made earthing and lightning protection their top priority. Very impressed with the digital tester verification."
-                    </p>
-                    <div class="resolution-note">
-                        <i class="fa-solid fa-check-double"></i>
-                        <span>NEMSA Electrical Safety Code Compliant</span>
-                    </div>
-                </div>
-
-                <!-- SOCIAL COUNTERS -->
-                <div class="social-stats-bar">
-                    <div class="stats-icons-group">
-                        <span class="reaction-bubble bubble-like"><i class="fa-solid fa-thumbs-up"></i></span>
-                        <span class="reaction-bubble bubble-love"><i class="fa-solid fa-heart"></i></span>
-                        <span id="likes-count-103" style="font-weight:700; color:#cbd5e1; margin-left:4px;">189</span>
-                    </div>
-                    <div>
-                        <span id="shares-count-103">41 Shares</span> • <span>23 Comments</span>
-                    </div>
-                </div>
-
-                <!-- INTERACTIVE SOCIAL TOOLBAR -->
-                <div class="post-actions-bar">
-                    <button class="action-btn" id="like-btn-103" onclick="toggleReaction('103', 'like')">
-                        <i class="fa-regular fa-thumbs-up"></i>
-                        <span>Like</span>
-                    </button>
-                    <button class="action-btn" id="love-btn-103" onclick="toggleReaction('103', 'love')">
-                        <i class="fa-regular fa-heart"></i>
-                        <span>Love</span>
-                    </button>
-                    <button class="action-btn" onclick="openShareModal('post-103', 'Sub-2 Ohm Earthing Pit in Port Harcourt')">
-                        <i class="fa-solid fa-share"></i>
-                        <span>Reshare</span>
-                    </button>
-                    <button class="action-btn" onclick="toggleComments('103')">
-                        <i class="fa-regular fa-comment"></i>
-                        <span>Comment</span>
-                    </button>
-                </div>
-
-                <!-- COMMENTS ACCORDION -->
-                <div class="comments-section" id="comments-103" style="display:none;">
-                    <div class="comment-input-box">
-                        <input type="text" placeholder="Write a community comment..." id="comment-input-103" onkeydown="handleCommentSubmit(event, '103')">
-                        <button class="comment-send-btn" onclick="submitComment('103')"><i class="fa-solid fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </article>
-
-            <!-- POST 4: STAGE 6 (TESTING & COMMISSIONING) -->
-            <article class="post-card" data-stage="stage6" data-location="Bodija Ibadan Oyo" data-post-id="post-104">
-                <div class="post-header">
-                    <div class="post-author-row">
-                        <img src="/site-images/instaler3.jpeg" alt="Lead Engineer" class="author-avatar" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';">
-                        <div class="author-info">
-                            <h3>Engr. Stephen Akolade <i class="fa-solid fa-circle-check verified-badge" title="Certified Commissioning Officer"></i></h3>
-                            <div class="post-meta">
-                                <i class="fa-solid fa-location-dot"></i>
-                                <span>Bodija Estate, Ibadan, Oyo State</span>
-                                <span>• 2d ago</span>
+                    <!-- Installer 2 -->
+                    <div class="installer-contact-item">
+                        <div class="installer-contact-left">
+                            <img src="/site-images/instaler5.jpeg" alt="Engr. Kabir">
+                            <div class="inst-contact-text">
+                                <strong>Engr. Kabir Adesina</strong>
+                                <span>Master Field Tech • AMAC</span>
                             </div>
                         </div>
+                        <a href="https://wa.me/2348133615131?text=Hello%20Engr%20Kabir%20I%20am%20inquiring%20about%20AE%20Renewable%20Solar%20Project" target="_blank" class="btn-mini-chat" title="Chat with Installer">
+                            <i class="fa-brands fa-whatsapp"></i> Chat
+                        </a>
                     </div>
-                    <span class="stage-pill" style="background:rgba(16,185,129,0.2); color:#6ee7b7; border-color:rgba(16,185,129,0.4);">
-                        🏆 Stage 6: Testing & Handover
-                    </span>
-                </div>
-
-                <div class="post-body">
-                    <p class="post-text">
-                        Final commissioning and client live orientation completed for 10kVA Turnkey Solar Facility. Full load test carried out at 8.2kW continuous draw with thermal imaging of all busbar connections showing optimal temperature margins (31°C). Wi-Fi telemetry activated for real-time mobile app monitoring.
-                    </p>
-                    <div class="post-tags-row">
-                        <span class="spec-tag">Thermal Imaging Verified</span>
-                        <span class="spec-tag">8.2kW Live Stress Test</span>
-                        <span class="spec-tag">Cloud Telemetry Enabled</span>
-                    </div>
-                </div>
-
-                <div class="post-media-wrap" onclick="openMediaPreview('/site-images/smartInverter.jpeg')">
-                    <img src="/site-images/smartInverter.jpeg" alt="Commissioned Smart Inverter System" class="post-media-img" onerror="this.src='/site-images/Gemini_Generated_Image_kaiccpkaiccpkaic.png'">
-                    <div class="media-watermark">
-                        <i class="fa-solid fa-camera"></i>
-                        <span>AE RENEWABLE • SITE EVIDENCE VERIFIED</span>
-                    </div>
-                </div>
-
-                <!-- CLIENT FEEDBACK / COMPLAINANT NOTE -->
-                <div class="client-feedback-box">
-                    <div class="feedback-head">
-                        <span class="feedback-head-title"><i class="fa-solid fa-quote-left"></i> Client Handover Testimonial</span>
-                        <span class="stars-row">★★★★★</span>
-                    </div>
-                    <p class="feedback-quote">
-                        "The handover was smooth and informative. Engr. Stephen walked me through the telemetry app so I can see exactly how many units our solar panels are generating every hour. Top class professional delivery!"
-                    </p>
-                    <div class="resolution-note">
-                        <i class="fa-solid fa-check-double"></i>
-                        <span>Official Certificate of Electrical Safety & Warranty Issued</span>
-                    </div>
-                </div>
-
-                <!-- SOCIAL COUNTERS -->
-                <div class="social-stats-bar">
-                    <div class="stats-icons-group">
-                        <span class="reaction-bubble bubble-like"><i class="fa-solid fa-thumbs-up"></i></span>
-                        <span class="reaction-bubble bubble-love"><i class="fa-solid fa-heart"></i></span>
-                        <span id="likes-count-104" style="font-weight:700; color:#cbd5e1; margin-left:4px;">342</span>
-                    </div>
-                    <div>
-                        <span id="shares-count-104">88 Shares</span> • <span>47 Comments</span>
-                    </div>
-                </div>
-
-                <!-- INTERACTIVE SOCIAL TOOLBAR -->
-                <div class="post-actions-bar">
-                    <button class="action-btn" id="like-btn-104" onclick="toggleReaction('104', 'like')">
-                        <i class="fa-regular fa-thumbs-up"></i>
-                        <span>Like</span>
-                    </button>
-                    <button class="action-btn" id="love-btn-104" onclick="toggleReaction('104', 'love')">
-                        <i class="fa-regular fa-heart"></i>
-                        <span>Love</span>
-                    </button>
-                    <button class="action-btn" onclick="openShareModal('post-104', '10kVA Solar Handover in Bodija Ibadan')">
-                        <i class="fa-solid fa-share"></i>
-                        <span>Reshare</span>
-                    </button>
-                    <button class="action-btn" onclick="toggleComments('104')">
-                        <i class="fa-regular fa-comment"></i>
-                        <span>Comment</span>
-                    </button>
-                </div>
-
-                <!-- COMMENTS ACCORDION -->
-                <div class="comments-section" id="comments-104" style="display:none;">
-                    <div class="comment-input-box">
-                        <input type="text" placeholder="Write a community comment..." id="comment-input-104" onkeydown="handleCommentSubmit(event, '104')">
-                        <button class="comment-send-btn" onclick="submitComment('104')"><i class="fa-solid fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </article>
-
-            <!-- POST 5: STAGE 1 (PRE-INSTALLATION SITE AUDIT) -->
-            <article class="post-card" data-stage="stage1" data-location="Gombe Central" data-post-id="post-105">
-                <div class="post-header">
-                    <div class="post-author-row">
-                        <img src="/site-images/instaler5.jpeg" alt="Lead Engineer" class="author-avatar" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';">
-                        <div class="author-info">
-                            <h3>Engr. Eniola Abdulrasaq <i class="fa-solid fa-circle-check verified-badge" title="Certified Site Auditor"></i></h3>
-                            <div class="post-meta">
-                                <i class="fa-solid fa-location-dot"></i>
-                                <span>Gombe Central Commercial Hub, Gombe</span>
-                                <span>• 3d ago</span>
+                    <!-- Installer 3 -->
+                    <div class="installer-contact-item">
+                        <div class="installer-contact-left">
+                            <img src="/site-images/installerface1.jpeg" alt="Engr. Solomon">
+                            <div class="inst-contact-text">
+                                <strong>Engr. Solomon Abdulrasaq</strong>
+                                <span>Storage Specialist • Lagos</span>
                             </div>
                         </div>
-                    </div>
-                    <span class="stage-pill" style="background:rgba(239,68,68,0.15); color:#f87171; border-color:rgba(239,68,68,0.35);">
-                        🔍 Stage 1: Site Audit & Structural
-                    </span>
-                </div>
-
-                <div class="post-body">
-                    <p class="post-text">
-                        Comprehensive geotechnical and roof structural load assessment performed for a 45kW commercial mini-grid facility. Solar irradiance measured at 5.8 kWh/m²/day. Rafter stress distribution calculations mapped in ARDE Studio before finalizing mounting anchors.
-                    </p>
-                    <div class="post-tags-row">
-                        <span class="spec-tag">5.8 kWh/m²/day Peak Sun</span>
-                        <span class="spec-tag">ARDE Structural Simulation</span>
-                        <span class="spec-tag">Zero Roof Puncture Framing</span>
+                        <a href="https://wa.me/2348133615131?text=Hello%20Engr%20Solomon%20I%20am%20inquiring%20about%20AE%20Renewable%20Solar%20Project" target="_blank" class="btn-mini-chat" title="Chat with Installer">
+                            <i class="fa-brands fa-whatsapp"></i> Chat
+                        </a>
                     </div>
                 </div>
+            </div>
 
-                <div class="post-media-wrap" onclick="openMediaPreview('/site-images/gombe1.png')">
-                    <img src="/site-images/gombe1.png" alt="Commercial Site Audit Layout" class="post-media-img" onerror="this.src='/site-images/Gemini_Generated_Image_rrxhudrrxhudrrxh.png'">
-                    <div class="media-watermark">
-                        <i class="fa-solid fa-camera"></i>
-                        <span>AE RENEWABLE • SITE EVIDENCE VERIFIED</span>
+            <!-- Instant Consultation CTA -->
+            <div class="sidebar-card" style="background: linear-gradient(135deg, rgba(0, 74, 173, 0.25), rgba(0, 177, 64, 0.2)); border-color: rgba(56, 189, 248, 0.3);">
+                <div style="font-size:11px; font-weight:800; color:#38bdf8; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">
+                    ⚡ ARDE ENGINEERING
+                </div>
+                <h4 style="font-size:14px; color:#fff; margin-bottom:6px;">Need Solar For Your Facility?</h4>
+                <p style="font-size:12px; color:#cbd5e1; margin-bottom:12px; line-height:1.45;">
+                    Generate exact technical load sizing, BOQ schedules, and assigned nearest installer in under 2 minutes.
+                </p>
+                <a href="/arde?focus=sectionCard3" class="btn-arde" style="width:100%; justify-content:center; padding:10px;">
+                    <i class="fa-solid fa-bolt"></i> Start Free Consultation
+                </a>
+            </div>
+
+            <!-- Company Trust & Guarantees -->
+            <div class="sidebar-card">
+                <div class="sidebar-card-title">
+                    <i class="fa-solid fa-award"></i>
+                    <span>Quality Standard</span>
+                </div>
+                <div style="font-size:12px; color:#cbd5e1; display:flex; flex-direction:column; gap:8px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-circle-check" style="color:#10b981;"></i>
+                        <span>NEMSA Certified Standards</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-circle-check" style="color:#10b981;"></i>
+                        <span>25-Year PV Performance Guarantee</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-circle-check" style="color:#10b981;"></i>
+                        <span>10-Year Inverter System Warranty</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-circle-check" style="color:#10b981;"></i>
+                        <span>24/7 Round-the-Clock Telemetry</span>
                     </div>
                 </div>
+            </div>
+        </aside>
 
-                <!-- CLIENT FEEDBACK / COMPLAINANT NOTE -->
-                <div class="client-feedback-box">
-                    <div class="feedback-head">
-                        <span class="feedback-head-title"><i class="fa-solid fa-quote-left"></i> Client Requirement Alignment</span>
-                        <span class="stars-row">★★★★★</span>
-                    </div>
-                    <p class="feedback-quote">
-                        "We originally worried whether our factory roof could hold 80+ panels safely during stormy seasons. The engineering report and wind simulation put our board at complete ease."
-                    </p>
-                    <div class="resolution-note">
-                        <i class="fa-solid fa-check-double"></i>
-                        <span>Structural Load Safety Factor: 2.5x High-Wind Rating</span>
-                    </div>
-                </div>
+    </div>
 
-                <!-- SOCIAL COUNTERS -->
-                <div class="social-stats-bar">
-                    <div class="stats-icons-group">
-                        <span class="reaction-bubble bubble-like"><i class="fa-solid fa-thumbs-up"></i></span>
-                        <span class="reaction-bubble bubble-love"><i class="fa-solid fa-heart"></i></span>
-                        <span id="likes-count-105" style="font-weight:700; color:#cbd5e1; margin-left:4px;">176</span>
-                    </div>
-                    <div>
-                        <span id="shares-count-105">39 Shares</span> • <span>15 Comments</span>
-                    </div>
-                </div>
-
-                <!-- INTERACTIVE SOCIAL TOOLBAR -->
-                <div class="post-actions-bar">
-                    <button class="action-btn" id="like-btn-105" onclick="toggleReaction('105', 'like')">
-                        <i class="fa-regular fa-thumbs-up"></i>
-                        <span>Like</span>
-                    </button>
-                    <button class="action-btn" id="love-btn-105" onclick="toggleReaction('105', 'love')">
-                        <i class="fa-regular fa-heart"></i>
-                        <span>Love</span>
-                    </button>
-                    <button class="action-btn" onclick="openShareModal('post-105', '45kW Commercial Site Audit in Gombe')">
-                        <i class="fa-solid fa-share"></i>
-                        <span>Reshare</span>
-                    </button>
-                    <button class="action-btn" onclick="toggleComments('105')">
-                        <i class="fa-regular fa-comment"></i>
-                        <span>Comment</span>
-                    </button>
-                </div>
-
-                <!-- COMMENTS ACCORDION -->
-                <div class="comments-section" id="comments-105" style="display:none;">
-                    <div class="comment-input-box">
-                        <input type="text" placeholder="Write a community comment..." id="comment-input-105" onkeydown="handleCommentSubmit(event, '105')">
-                        <button class="comment-send-btn" onclick="submitComment('105')"><i class="fa-solid fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </article>
-
-            <!-- POST 6: STAGE 2 (CABLE TRENCHING & CONDUIT ROUTING) -->
-            <article class="post-card" data-stage="stage2" data-location="Kano Industrial Zone" data-post-id="post-106">
-                <div class="post-header">
-                    <div class="post-author-row">
-                        <img src="/site-images/instalerface.jpeg" alt="Lead Engineer" class="author-avatar" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';">
-                        <div class="author-info">
-                            <h3>Engr. Solomon Abdulrasaq <i class="fa-solid fa-circle-check verified-badge" title="Certified Infrastructure Lead"></i></h3>
-                            <div class="post-meta">
-                                <i class="fa-solid fa-location-dot"></i>
-                                <span>Challawa Industrial Layout, Kano State</span>
-                                <span>• 4d ago</span>
-                            </div>
-                        </div>
-                    </div>
-                    <span class="stage-pill" style="background:rgba(168,85,247,0.15); color:#c084fc; border-color:rgba(168,85,247,0.35);">
-                        🛠️ Stage 2: Trenching & Conduit
-                    </span>
-                </div>
-
-                <div class="post-body">
-                    <p class="post-text">
-                        Underground armoured DC and AC cable pathways laid in heavy-duty PVC electrical conduits with warning tape embedded 400mm above trench beds. Terminated neatly into IP66 weatherproof distribution junction boxes with moisture desiccant seals.
-                    </p>
-                    <div class="post-tags-row">
-                        <span class="spec-tag">IP66 Waterproof Ingress</span>
-                        <span class="spec-tag">Subterranean Conduit Line</span>
-                        <span class="spec-tag">Armoured 4-Core XLPE</span>
-                    </div>
-                </div>
-
-                <div class="post-media-wrap" onclick="openMediaPreview('/site-images/installer1.jpeg')">
-                    <img src="/site-images/installer1.jpeg" alt="Industrial Trenching and Conduit Inspection" class="post-media-img" onerror="this.src='/site-images/Gemini_Generated_Image_fnbv0nfnbv0nfnbv.png'">
-                    <div class="media-watermark">
-                        <i class="fa-solid fa-camera"></i>
-                        <span>AE RENEWABLE • SITE EVIDENCE VERIFIED</span>
-                    </div>
-                </div>
-
-                <!-- CLIENT FEEDBACK / COMPLAINANT NOTE -->
-                <div class="client-feedback-box">
-                    <div class="feedback-head">
-                        <span class="feedback-head-title"><i class="fa-solid fa-quote-left"></i> Client Quality Assurance</span>
-                        <span class="stars-row">★★★★★</span>
-                    </div>
-                    <p class="feedback-quote">
-                        "We had complaints in the past with previous contractors leaving exposed wires across our factory walkways. AE Renewable did proper underground trenching and restored the interlocks completely. Excellent work."
-                    </p>
-                    <div class="resolution-note">
-                        <i class="fa-solid fa-check-double"></i>
-                        <span>Compliant Industrial Workplace Safety Sign-off</span>
-                    </div>
-                </div>
-
-                <!-- SOCIAL COUNTERS -->
-                <div class="social-stats-bar">
-                    <div class="stats-icons-group">
-                        <span class="reaction-bubble bubble-like"><i class="fa-solid fa-thumbs-up"></i></span>
-                        <span class="reaction-bubble bubble-love"><i class="fa-solid fa-heart"></i></span>
-                        <span id="likes-count-106" style="font-weight:700; color:#cbd5e1; margin-left:4px;">194</span>
-                    </div>
-                    <div>
-                        <span id="shares-count-106">43 Shares</span> • <span>19 Comments</span>
-                    </div>
-                </div>
-
-                <!-- INTERACTIVE SOCIAL TOOLBAR -->
-                <div class="post-actions-bar">
-                    <button class="action-btn" id="like-btn-106" onclick="toggleReaction('106', 'like')">
-                        <i class="fa-regular fa-thumbs-up"></i>
-                        <span>Like</span>
-                    </button>
-                    <button class="action-btn" id="love-btn-106" onclick="toggleReaction('106', 'love')">
-                        <i class="fa-regular fa-heart"></i>
-                        <span>Love</span>
-                    </button>
-                    <button class="action-btn" onclick="openShareModal('post-106', 'Industrial Cable Trenching in Kano')">
-                        <i class="fa-solid fa-share"></i>
-                        <span>Reshare</span>
-                    </button>
-                    <button class="action-btn" onclick="toggleComments('106')">
-                        <i class="fa-regular fa-comment"></i>
-                        <span>Comment</span>
-                    </button>
-                </div>
-
-                <!-- COMMENTS ACCORDION -->
-                <div class="comments-section" id="comments-106" style="display:none;">
-                    <div class="comment-input-box">
-                        <input type="text" placeholder="Write a community comment..." id="comment-input-106" onkeydown="handleCommentSubmit(event, '106')">
-                        <button class="comment-send-btn" onclick="submitComment('106')"><i class="fa-solid fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </article>
-
-        </div>
-
-    </main>
-
-    <!-- 03. RESHARE MODAL (FACEBOOK STYLE) -->
-    <div class="share-modal-overlay" id="shareModal" onclick="closeShareModal(event)">
-        <div class="share-modal-card" onclick="event.stopPropagation()">
+    <!-- SHARE MODAL -->
+    <div class="share-modal-overlay" id="shareModalOverlay">
+        <div class="share-modal-card">
             <div class="share-modal-head">
-                <h3><i class="fa-solid fa-share-nodes" style="color:#38bdf8;"></i> Reshare Field Post</h3>
+                <h3>Reshare Installation Milestone</h3>
                 <button class="modal-close-btn" onclick="closeShareModal()">&times;</button>
             </div>
-            <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px;" id="shareModalPostTitle">
-                Share this verified solar engineering milestone to social networks:
+            <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 14px;" id="shareModalPrompt">
+                Share this verified AE Renewable engineering report with your network.
             </p>
             <div class="share-options-grid">
-                <a href="#" id="shareWhatsAppBtn" target="_blank" class="share-target-btn whatsapp" onclick="recordShare()">
+                <a href="#" target="_blank" class="share-target-btn whatsapp" id="shareBtnWhatsapp">
                     <i class="fa-brands fa-whatsapp"></i>
                     <span>WhatsApp</span>
                 </a>
-                <a href="#" id="shareTwitterBtn" target="_blank" class="share-target-btn twitter" onclick="recordShare()">
+                <a href="#" target="_blank" class="share-target-btn twitter" id="shareBtnTwitter">
                     <i class="fa-brands fa-x-twitter"></i>
-                    <span>Twitter / X</span>
+                    <span>X / Twitter</span>
                 </a>
-                <a href="#" id="shareFacebookBtn" target="_blank" class="share-target-btn facebook" onclick="recordShare()">
-                    <i class="fa-brands fa-facebook"></i>
+                <a href="#" target="_blank" class="share-target-btn facebook" id="shareBtnFacebook">
+                    <i class="fa-brands fa-facebook-f"></i>
                     <span>Facebook</span>
                 </a>
             </div>
             <div class="copy-link-wrap">
-                <input type="text" id="shareDirectLink" readonly value="http://localhost:5000/client">
-                <button class="copy-btn" onclick="copyShareLink()"><i class="fa-regular fa-copy"></i> Copy Link</button>
+                <input type="text" id="shareLinkInput" readonly value="https://aerenewablesolution.com/explore">
+                <button class="copy-btn" onclick="copyShareLink()">Copy Link</button>
             </div>
         </div>
     </div>
 
     <!-- TOAST POPUP -->
-    <div class="toast-popup" id="liveToast">
-        <i class="fa-solid fa-circle-check" style="color:#10b981; font-size:16px;"></i>
-        <span id="toastMessage">Action completed successfully!</span>
+    <div class="toast-popup" id="toastPopup">
+        <i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 16px;"></i>
+        <span id="toastMessage">Success!</span>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
     <script>
-        let currentPostId = null;
+        let allFieldPosts = [];
+        let currentStageFilter = "all";
 
         function showToast(msg) {
-            const toast = document.getElementById("liveToast");
+            const toast = document.getElementById("toastPopup");
             const text = document.getElementById("toastMessage");
             if (!toast || !text) return;
             text.textContent = msg;
             toast.classList.add("show");
-            setTimeout(() => toast.classList.remove("show"), 3000);
-        }
-
-        /* REACTION TOGGLE (LIKE / LOVE) */
-        function toggleReaction(id, type) {
-            const likeBtn = document.getElementById(`like-btn-${id}`);
-            const loveBtn = document.getElementById(`love-btn-${id}`);
-            const countEl = document.getElementById(`likes-count-${id}`);
-            let count = parseInt(countEl.textContent, 10) || 100;
-
-            const storageKey = `reaction_post_${id}`;
-            const currentReaction = localStorage.getItem(storageKey);
-
-            if (type === 'like') {
-                if (currentReaction === 'like') {
-                    likeBtn.classList.remove('liked');
-                    likeBtn.innerHTML = `<i class="fa-regular fa-thumbs-up"></i><span>Like</span>`;
-                    count = Math.max(0, count - 1);
-                    localStorage.removeItem(storageKey);
-                } else {
-                    if (currentReaction === 'love') {
-                        loveBtn.classList.remove('loved');
-                        loveBtn.innerHTML = `<i class="fa-regular fa-heart"></i><span>Love</span>`;
-                    } else {
-                        count += 1;
-                    }
-                    likeBtn.classList.add('liked');
-                    likeBtn.innerHTML = `<i class="fa-solid fa-thumbs-up"></i><span>Liked</span>`;
-                    localStorage.setItem(storageKey, 'like');
-                    showToast("👍 You liked this installation report!");
-                }
-            } else if (type === 'love') {
-                if (currentReaction === 'love') {
-                    loveBtn.classList.remove('loved');
-                    loveBtn.innerHTML = `<i class="fa-regular fa-heart"></i><span>Love</span>`;
-                    count = Math.max(0, count - 1);
-                    localStorage.removeItem(storageKey);
-                } else {
-                    if (currentReaction === 'like') {
-                        likeBtn.classList.remove('liked');
-                        likeBtn.innerHTML = `<i class="fa-regular fa-thumbs-up"></i><span>Like</span>`;
-                    } else {
-                        count += 1;
-                    }
-                    loveBtn.classList.add('loved');
-                    loveBtn.innerHTML = `<i class="fa-solid fa-heart"></i><span>Loved</span>`;
-                    localStorage.setItem(storageKey, 'love');
-                    showToast("❤️ You loved this installation report!");
-                }
-            }
-
-            countEl.textContent = count;
-        }
-
-        /* COMMENTS TOGGLE & SUBMIT */
-        function toggleComments(id) {
-            const box = document.getElementById(`comments-${id}`);
-            if (!box) return;
-            box.style.display = box.style.display === 'none' ? 'block' : 'none';
-        }
-
-        function handleCommentSubmit(e, id) {
-            if (e.key === 'Enter') {
-                submitComment(id);
-            }
-        }
-
-        function submitComment(id) {
-            const input = document.getElementById(`comment-input-${id}`);
-            if (!input || !input.value.trim()) return;
-
-            const text = input.value.trim();
-            const commentsBox = document.getElementById(`comments-${id}`);
-            
-            const newComment = document.createElement('div');
-            newComment.className = 'comment-item';
-            newComment.innerHTML = `
-                <div class="comment-avatar" style="background:#004AAD; color:#fff;">YOU</div>
-                <div class="comment-bubble">
-                    <div class="comment-author">Community Visitor</div>
-                    <div class="comment-text">${escapeHtml(text)}</div>
-                </div>
-            `;
-
-            commentsBox.insertBefore(newComment, commentsBox.lastElementChild);
-            input.value = '';
-            showToast("💬 Comment posted to live community feed!");
-        }
-
-        /* SEARCH FILTER */
-        function filterFeedPosts() {
-            const query = document.getElementById('feedSearchInput').value.toLowerCase().trim();
-            const cards = document.querySelectorAll('.post-card');
-            let visibleCount = 0;
-
-            cards.forEach(card => {
-                const text = card.textContent.toLowerCase();
-                const loc = (card.dataset.location || '').toLowerCase();
-                const stage = (card.dataset.stage || '').toLowerCase();
-                if (!query || text.includes(query) || loc.includes(query) || stage.includes(query)) {
-                    card.style.display = 'block';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-
-            const countTag = document.getElementById('feedCountTag');
-            if (countTag) {
-                countTag.textContent = `Showing ${visibleCount} Verified Reports`;
-            }
-        }
-
-        /* SHARE MODAL */
-        function openShareModal(postId, title) {
-            currentPostId = postId;
-            const modal = document.getElementById('shareModal');
-            const titleEl = document.getElementById('shareModalPostTitle');
-            const linkInput = document.getElementById('shareDirectLink');
-
-            const postUrl = `${window.location.origin}/client#${postId}`;
-            if (titleEl) titleEl.textContent = `Share "${title}" with your network:`;
-            if (linkInput) linkInput.value = postUrl;
-
-            // Setup social links
-            const encodedUrl = encodeURIComponent(postUrl);
-            const encodedTitle = encodeURIComponent(`Check out this certified solar installation by AE Renewable Ltd: ${title}`);
-
-            const waBtn = document.getElementById('shareWhatsAppBtn');
-            const twBtn = document.getElementById('shareTwitterBtn');
-            const fbBtn = document.getElementById('shareFacebookBtn');
-
-            if (waBtn) waBtn.href = `https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`;
-            if (twBtn) twBtn.href = `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`;
-            if (fbBtn) fbBtn.href = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
-
-            modal.classList.add('active');
-        }
-
-        function closeShareModal() {
-            const modal = document.getElementById('shareModal');
-            if (modal) modal.classList.remove('active');
-        }
-
-        function copyShareLink() {
-            const linkInput = document.getElementById('shareDirectLink');
-            if (!linkInput) return;
-            linkInput.select();
-            linkInput.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(linkInput.value);
-            showToast("📋 Post link copied to clipboard!");
-            recordShare();
-            setTimeout(closeShareModal, 800);
-        }
-
-        function recordShare() {
-            if (!currentPostId) return;
-            const num = currentPostId.replace('post-', '');
-            const shareSpan = document.getElementById(`shares-count-${num}`);
-            if (shareSpan) {
-                const cur = parseInt(shareSpan.textContent, 10) || 30;
-                shareSpan.textContent = `${cur + 1} Shares`;
-            }
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
         }
 
         function escapeHtml(str) {
+            if (str === null || str === undefined) return "";
             return String(str).replace(/[&<>"']/g, function(m) {
                 return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
             });
@@ -1656,16 +1569,138 @@
             window.open(src, '_blank');
         }
 
-        /* DYNAMIC LIVE FIELD POST SYNC */
+        function openShareModal(postId, stageTitle) {
+            const overlay = document.getElementById("shareModalOverlay");
+            const input = document.getElementById("shareLinkInput");
+            const prompt = document.getElementById("shareModalPrompt");
+            if (!overlay) return;
+
+            const url = window.location.origin + "/explore?post=" + encodeURIComponent(postId);
+            if (input) input.value = url;
+            if (prompt) prompt.textContent = `Share verified milestone: ${stageTitle || 'Solar Installation'}`;
+
+            const encodedUrl = encodeURIComponent(url);
+            const encodedText = encodeURIComponent(`Check out this solar installation milestone by AE Renewable Ltd (RC: 9010643): `);
+
+            const wa = document.getElementById("shareBtnWhatsapp");
+            if (wa) wa.href = `https://api.whatsapp.com/send?text=${encodedText}${encodedUrl}`;
+
+            const tw = document.getElementById("shareBtnTwitter");
+            if (tw) tw.href = `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`;
+
+            const fb = document.getElementById("shareBtnFacebook");
+            if (fb) fb.href = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+
+            overlay.classList.add("active");
+
+            // Record reshare in backend
+            toggleReaction(postId, 'share');
+        }
+
+        function closeShareModal() {
+            const overlay = document.getElementById("shareModalOverlay");
+            if (overlay) overlay.classList.remove("active");
+        }
+
+        function copyShareLink() {
+            const input = document.getElementById("shareLinkInput");
+            if (!input) return;
+            input.select();
+            navigator.clipboard.writeText(input.value).then(() => {
+                showToast("Link copied to clipboard!");
+            });
+        }
+
+        async function toggleReaction(postId, type) {
+            const idNum = String(postId).replace('post-', '');
+            const countEl = document.getElementById(`likes-count-${idNum}`);
+            const btnLike = document.getElementById(`like-btn-${idNum}`);
+            const btnLove = document.getElementById(`love-btn-${idNum}`);
+
+            try {
+                const res = await fetch(`/api/field-posts/${postId}/react`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ type })
+                });
+                const json = await res.json();
+                if (json.success && json.data) {
+                    if (countEl) {
+                        const total = Number(json.data.likes_count || 0) + Number(json.data.loves_count || 0);
+                        countEl.textContent = total;
+                    }
+                    if (type === 'like' && btnLike) {
+                        btnLike.classList.toggle("active-like");
+                    } else if (type === 'love' && btnLove) {
+                        btnLove.classList.toggle("active-love");
+                    }
+                    showToast(type === 'love' ? "❤️ Reaction recorded!" : (type === 'share' ? "🔗 Reshare logged!" : "👍 Liked!"));
+                }
+            } catch(e) {
+                console.warn("[Reaction Error]", e);
+            }
+        }
+
+        function toggleComments(postId) {
+            const idNum = String(postId).replace('post-', '');
+            const box = document.getElementById(`comments-${idNum}`);
+            if (box) {
+                box.style.display = box.style.display === "none" ? "flex" : "none";
+            }
+        }
+
+        async function submitComment(postId) {
+            const idNum = String(postId).replace('post-', '');
+            const input = document.getElementById(`comment-input-${idNum}`);
+            if (!input || !input.value.trim()) return;
+
+            const text = input.value.trim();
+            input.value = "";
+
+            try {
+                const res = await fetch(`/api/field-posts/${postId}/comments`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ author: "Community Member", text })
+                });
+                const json = await res.json();
+                if (json.success) {
+                    showToast("Comment submitted!");
+                    fetchLiveFieldPosts();
+                }
+            } catch(e) {
+                console.warn("[Comment Error]", e);
+            }
+        }
+
+        function handleCommentSubmit(event, postId) {
+            if (event.key === "Enter") {
+                submitComment(postId);
+            }
+        }
+
+        function filterByStage(stage) {
+            currentStageFilter = stage;
+            document.querySelectorAll("#stageFilterList .stage-filter-chip").forEach(c => {
+                c.classList.toggle("active", c.dataset.filter === stage);
+            });
+            renderDynamicFeedPosts(allFieldPosts);
+        }
+
+        function filterFeedPosts() {
+            renderDynamicFeedPosts(allFieldPosts);
+        }
+
         async function fetchLiveFieldPosts() {
             try {
                 const res = await fetch("/api/field-posts");
                 const json = await res.json();
                 if (json.success && Array.isArray(json.data) && json.data.length > 0) {
-                    renderDynamicFeedPosts(json.data);
+                    allFieldPosts = json.data;
+                    renderDynamicFeedPosts(allFieldPosts);
                 }
             } catch (e) {
-                console.warn("[Live Feed] Static fallback retained:", e);
+                console.warn("[Live Feed] Fetch error:", e);
             }
         }
 
@@ -1673,27 +1708,59 @@
             const container = document.getElementById("postsContainer");
             if (!container) return;
 
-            container.innerHTML = posts.map(p => {
-                const idNum = p.id ? p.id.replace('post-', '') : String(Math.floor(Math.random()*1000));
+            const searchVal = document.getElementById("feedSearchInput")?.value?.toLowerCase().trim() || "";
+
+            let filtered = posts.filter(p => {
+                const matchStage = currentStageFilter === "all" || p.stage === currentStageFilter;
+                const matchSearch = !searchVal || 
+                    (p.engineer_name && p.engineer_name.toLowerCase().includes(searchVal)) ||
+                    (p.location && p.location.toLowerCase().includes(searchVal)) ||
+                    (p.description && p.description.toLowerCase().includes(searchVal)) ||
+                    (p.project_code && p.project_code.toLowerCase().includes(searchVal));
+                return matchStage && matchSearch;
+            });
+
+            const countTag = document.getElementById('feedCountTag');
+            if (countTag) {
+                countTag.textContent = `Showing ${filtered.length} Verified Field Reports`;
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div style="background:var(--bg-card); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:40px; text-align:center;">
+                        <i class="fa-solid fa-solar-panel" style="font-size:36px; color:#64748B; margin-bottom:12px; display:block;"></i>
+                        <h4 style="color:#fff; margin-bottom:6px;">No Matching Field Reports</h4>
+                        <p style="font-size:13px; color:#94a3b8;">Try adjusting your filter or search keywords.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map(p => {
+                const idNum = p.id ? String(p.id).replace('post-', '') : String(Math.floor(Math.random()*1000));
                 const tags = Array.isArray(p.tags) ? p.tags : [];
                 const timeStr = p.created_at ? getTimeAgo(p.created_at) : '2h ago';
                 const likes = p.likes_count || 120;
                 const loves = p.loves_count || 45;
                 const shares = p.shares_count || 25;
                 const comments = Array.isArray(p.comments) ? p.comments : [];
-                const safeAvatar = p.engineer_avatar || '/uploads/installer-default.jpg';
+                const safeAvatar = p.engineer_avatar || '/site-images/instalerface.jpeg';
                 const safeImg = p.image_url || '/site-images/panelUtako1.jpeg';
+                const projectCode = p.project_code || 'PRJ-2026';
+                const engineerName = p.engineer_name || 'Certified Lead Installer';
+                const chatLink = p.chat_url || `https://wa.me/2348133615131?text=Hello%20AE%20Renewable%20I%20am%20chatting%20regarding%20installer%20${encodeURIComponent(engineerName)}%20and%20project%20${encodeURIComponent(projectCode)}`;
 
                 return `
                     <article class="post-card" data-stage="${escapeHtml(p.stage)}" data-location="${escapeHtml(p.location)}" data-post-id="${escapeHtml(p.id)}">
                         <div class="post-header">
                             <div class="post-author-row">
-                                <img src="${safeAvatar}" alt="Lead Engineer" class="author-avatar" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';">
+                                <img src="${safeAvatar}" alt="Lead Engineer" class="author-avatar" onerror="this.onerror=null; this.src='/site-images/instalerface.jpeg';">
                                 <div class="author-info">
-                                    <h3>${escapeHtml(p.engineer_name)} <i class="fa-solid fa-circle-check verified-badge" title="Certified Lead Installer"></i></h3>
+                                    <h3>${escapeHtml(engineerName)} <i class="fa-solid fa-circle-check verified-badge" title="NEMSA Certified Lead Installer"></i></h3>
                                     <div class="post-meta">
                                         <i class="fa-solid fa-location-dot"></i>
                                         <span>${escapeHtml(p.location)}</span>
+                                        <span>• Project: <strong style="color:#38bdf8;">${escapeHtml(projectCode)}</strong></span>
                                         <span>• ${timeStr}</span>
                                     </div>
                                 </div>
@@ -1714,8 +1781,19 @@
                             <img src="${safeImg}" alt="Solar Installation Evidence" class="post-media-img" onerror="this.onerror=null; this.src='/site-images/panelUtako1.jpeg';">
                             <div class="media-watermark">
                                 <i class="fa-solid fa-camera"></i>
-                                <span>AE RENEWABLE • SITE EVIDENCE VERIFIED</span>
+                                <span>AE RENEWABLE • RC 9010643 • VERIFIED EVIDENCE</span>
                             </div>
+                        </div>
+
+                        <!-- CORPORATE BRAND & DIRECT INSTALLER CHAT -->
+                        <div class="post-corp-verification">
+                            <div>
+                                <i class="fa-solid fa-building-shield" style="color:#10b981;"></i>
+                                <span>AE RENEWABLE LTD • <strong>RC: 9010643</strong> • 08133615131</span>
+                            </div>
+                            <a href="${chatLink}" target="_blank" class="btn-chat-installer" title="Direct WhatsApp Chat with Installer">
+                                <i class="fa-brands fa-whatsapp"></i> Chat with Installer
+                            </a>
                         </div>
 
                         ${p.client_feedback ? `
@@ -1740,7 +1818,7 @@
                             <div class="stats-icons-group">
                                 <span class="reaction-bubble bubble-like"><i class="fa-solid fa-thumbs-up"></i></span>
                                 <span class="reaction-bubble bubble-love"><i class="fa-solid fa-heart"></i></span>
-                                <span id="likes-count-${idNum}" style="font-weight:700; color:#cbd5e1; margin-left:4px;">${likes}</span>
+                                <span id="likes-count-${idNum}" style="font-weight:700; color:#cbd5e1; margin-left:4px;">${likes + loves}</span>
                             </div>
                             <div>
                                 <span id="shares-count-${idNum}">${shares} Shares</span> • <span>${comments.length} Comments</span>
@@ -1748,11 +1826,11 @@
                         </div>
 
                         <div class="post-actions-bar">
-                            <button class="action-btn" id="like-btn-${idNum}" onclick="toggleReaction('${idNum}', 'like')">
+                            <button class="action-btn" id="like-btn-${idNum}" onclick="toggleReaction('${escapeHtml(p.id)}', 'like')">
                                 <i class="fa-regular fa-thumbs-up"></i>
                                 <span>Like</span>
                             </button>
-                            <button class="action-btn" id="love-btn-${idNum}" onclick="toggleReaction('${idNum}', 'love')">
+                            <button class="action-btn" id="love-btn-${idNum}" onclick="toggleReaction('${escapeHtml(p.id)}', 'love')">
                                 <i class="fa-regular fa-heart"></i>
                                 <span>Love</span>
                             </button>
@@ -1762,7 +1840,7 @@
                             </button>
                             <button class="action-btn" onclick="openShareModal('${escapeHtml(p.id)}', '${escapeHtml(p.stage_title || p.stage)}')">
                                 <i class="fa-solid fa-share-nodes"></i>
-                                <span>Share</span>
+                                <span>Reshare</span>
                             </button>
                         </div>
 
@@ -1777,18 +1855,13 @@
                                 </div>
                             `).join('')}
                             <div class="comment-input-wrap">
-                                <input type="text" class="comment-input" id="comment-input-${idNum}" placeholder="Write a comment or technical inquiry..." onkeypress="handleCommentSubmit(event, '${idNum}')">
-                                <button class="comment-submit-btn" onclick="submitComment('${idNum}')"><i class="fa-solid fa-paper-plane"></i></button>
+                                <input type="text" class="comment-input" id="comment-input-${idNum}" placeholder="Write a comment or technical inquiry..." onkeypress="handleCommentSubmit(event, '${escapeHtml(p.id)}')">
+                                <button class="comment-submit-btn" onclick="submitComment('${escapeHtml(p.id)}')"><i class="fa-solid fa-paper-plane"></i></button>
                             </div>
                         </div>
                     </article>
                 `;
             }).join('');
-
-            const countTag = document.getElementById('feedCountTag');
-            if (countTag) {
-                countTag.textContent = `Showing ${posts.length} Verified Stage Reports`;
-            }
         }
 
         function getTimeAgo(dateStr) {

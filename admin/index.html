@@ -7,25 +7,23 @@
   <script>
     (function() {
       try {
-        if (sessionStorage.getItem("ae_admin_logged_in") !== "true") {
-          document.documentElement.style.display = "none";
-          window.location.replace("/admin/login");
-          throw new Error("Access Denied: Admin authentication required");
-        }
-        var token = localStorage.getItem("token") || localStorage.getItem("accessToken") || localStorage.getItem("aeAdminToken") || "";
-        var rawUser = localStorage.getItem("user") || localStorage.getItem("aeAdminUser") || "{}";
+        var isLoggedIn = sessionStorage.getItem("ae_admin_logged_in") === "true";
+        var token = localStorage.getItem("aeAdminToken") || "";
+        var rawUser = localStorage.getItem("aeAdminUser") || "{}";
         var user = {};
         try { user = JSON.parse(rawUser) || {}; } catch(e) { user = {}; }
-        var role = user && user.role ? String(user.role).toLowerCase() : "";
-        if (!token || (role !== "admin" && role !== "staff")) {
-          document.documentElement.style.display = "none";
-          window.location.replace("/admin/login");
-          throw new Error("Access Denied: Admin authentication required");
+        var role = (user && (user.role || (user.user && user.user.role))) ? String(user.role || user.user.role).toLowerCase() : "";
+
+        if (isLoggedIn && token && (role === "admin" || role === "staff")) {
+          return;
         }
+
+        document.documentElement.style.display = "none";
+        window.location.replace("/admin/login");
+        throw new Error("Access Denied: Admin authentication required");
       } catch(err) {
         document.documentElement.style.display = "none";
         window.location.replace("/admin/login");
-        throw err;
       }
     })();
   </script>
@@ -42,9 +40,11 @@
   ========================================================== -->
   <aside class="sidebar" id="sidebar">
     <div class="brand">
-      <div class="brand-logo">AE</div>
+      <div class="brand-logo" style="display:flex; align-items:center; justify-content:center; background:radial-gradient(circle, rgba(244,166,0,0.2) 0%, rgba(2,12,26,0.95) 70%); border:1px solid #f4a600; border-radius:8px; box-shadow:0 0 10px rgba(244,166,0,0.3); overflow:hidden; padding:3px;">
+        <img src="/arde/assets/images/logodark.png" alt="AE Renewable Logo" style="width:100%; height:100%; object-fit:contain;" onerror="this.src='logodark.png'">
+      </div>
       <div>
-        <strong>AE RENEWABLE</strong>
+        <strong>AE RENEWABLE LTD</strong>
         <span>POWERING YOUR FUTURE WITH SUN</span>
       </div>
       <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close Navigation">×</button>
@@ -1078,19 +1078,19 @@
       <div class="stats installer-stats">
         <div class="stat-card">
           <div class="stat-icon blue">♙</div>
-          <div><span>Total Installers</span><strong id="totalInstallers">18</strong><small>Registered personnel</small></div>
+          <div><span>Total Installers</span><strong id="totalInstallers">0</strong><small>Registered personnel</small></div>
         </div>
         <div class="stat-card">
           <div class="stat-icon green">✓</div>
-          <div><span>Active</span><strong id="activeInstallers">12</strong><small class="online-text">● Available / active</small></div>
+          <div><span>Active</span><strong id="activeInstallers">0</strong><small class="online-text">● Available / active</small></div>
         </div>
         <div class="stat-card">
           <div class="stat-icon gold">▣</div>
-          <div><span>On Project</span><strong id="projectInstallers">06</strong><small>Currently assigned</small></div>
+          <div><span>On Project</span><strong id="projectInstallers">0</strong><small>Currently assigned</small></div>
         </div>
         <div class="stat-card">
           <div class="stat-icon navy">◫</div>
-          <div><span>Projects Handled</span><strong id="installerProjects">47</strong><small>Completed assignments</small></div>
+          <div><span>Projects Handled</span><strong id="installerProjects">0</strong><small>Completed assignments</small></div>
         </div>
       </div>
 
@@ -2128,7 +2128,7 @@
       <div class="form-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
         <div class="form-field" style="display:flex; flex-direction:column; gap:6px;">
           <label style="font-size:12px; font-weight:700; color:#334155;">Lead Field Engineer *</label>
-          <input type="text" id="fieldEngineerName" required placeholder="e.g. Engr. Eniola Abdulrasaq" style="padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit;">
+          <input type="text" id="fieldEngineerName" required placeholder="e.g. Lead Installer Name" style="padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:13px; font-family:inherit;">
         </div>
         <div class="form-field" style="display:flex; flex-direction:column; gap:6px;">
           <label style="font-size:12px; font-weight:700; color:#334155;">Engineer Accreditation / Title *</label>

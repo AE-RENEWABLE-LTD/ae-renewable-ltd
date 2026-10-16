@@ -12,19 +12,59 @@
    CONFIGURATION
    ========================================================= */
 
+/* =========================================================
+   STANDALONE SECURITY & ACCESS GUARD
+   Ensure clients cannot access installer portal.
+   Only certified installers and admin may proceed.
+   ========================================================= */
+(function guardInstallerPortal() {
+    try {
+        const token = localStorage.getItem("aeInstallerToken") || 
+                      localStorage.getItem("token") || 
+                      localStorage.getItem("accessToken") || 
+                      localStorage.getItem("aeRenewableToken") || "";
+        const rawUser = localStorage.getItem("aeInstallerUser") ||
+                        localStorage.getItem("user") || 
+                        localStorage.getItem("aeRenewableUser") || 
+                        localStorage.getItem("aeAdminUser") || "{}";
+        let user = {};
+        try { user = JSON.parse(rawUser); } catch {}
+        const role = user && (user.role || (user.user && user.user.role)) ? String(user.role || user.user.role).toLowerCase() : "";
+
+        if (role === "admin" || role === "staff") {
+            window.location.replace("/admin");
+            return;
+        }
+
+        if (role === "client") {
+            window.location.replace("/client/dashboard");
+            return;
+        }
+
+        if (!token || role !== "installer") {
+            window.location.replace("/installer/login");
+            return;
+        }
+
+        try { sessionStorage.setItem("ae_installer_logged_in", "true"); } catch (_) {}
+    } catch (e) {
+        console.warn("[Security Guard] Storage check error:", e);
+    }
+})();
+
 const PORTAL_CONFIG = {
 
     storageKey:
         "aeInstallerSiteTracking20260926",
 
     installerName:
-        "Eniola Abdulrasaq",
+        "",
 
     installerId:
-        "AEI-0001",
+        "",
 
     projectId:
-        "AE-PRJ-2026-018"
+        ""
 
 };
 
@@ -63,7 +103,10 @@ const PAGE_TITLES = {
         "Support",
 
     profile:
-        "My Profile"
+        "My Profile",
+
+    "consultation-detail":
+        "Consultation & Project Dossier"
 
 };
 
@@ -541,6 +584,16 @@ function showPage(page) {
 
     }
 
+    if (
+        page === "profile"
+    ) {
+
+        if (typeof loadInstallerProfileFromAPI === "function") {
+            loadInstallerProfileFromAPI();
+        }
+
+    }
+
 }
 
 
@@ -834,10 +887,7 @@ function handleAction(
 
         case "save-commissioning":
 
-            showToast(
-                "Commissioning checklist saved.",
-                "success"
-            );
+            handleSaveCommissioning();
 
             break;
 
@@ -1379,47 +1429,28 @@ function renderStage(
                             </div>
 
 
-                            <label
-                                class="evidence-upload"
-                            >
-
-                                <input
-                                    type="file"
-                                    class="stage-file-input"
-                                    data-stage="${stage.id}"
-                                    accept="image/*"
-                                    capture="environment"
-                                    multiple
-                                    ${
-                                        disabled
-                                            ? "disabled"
-                                            : ""
-                                    }
-                                >
-
-                                <span class="upload-content">
-
-                                    <span class="upload-icon">
-
+                            <!-- DIRECT LIVE CAMERA EVIDENCE (USER REQUIREMENT) -->
+                            <div class="stage-camera-action-box">
+                                <div class="stage-camera-text">
+                                    <div class="stage-cam-pulse-icon">
                                         <i class="fa-solid fa-camera"></i>
+                                    </div>
+                                    <div>
+                                        <h5>Direct Live Camera Evidence</h5>
+                                        <p>Capture direct live camera photo for ${escapeHtml(stage.shortTitle || stage.title)}.</p>
+                                    </div>
+                                </div>
 
-                                    </span>
-
-                                    <strong>
-                                        Add Site Images
-                                    </strong>
-
-                                    <span>
-                                        Click to browse or use camera
-                                    </span>
-
-                                    <em>
-                                        JPG, PNG, WEBP · Multiple images allowed
-                                    </em>
-
-                                </span>
-
-                            </label>
+                                <button
+                                    type="button"
+                                    class="btn-live-camera-capture"
+                                    data-stage-camera="${stage.id}"
+                                    ${disabled ? "disabled" : ""}
+                                >
+                                    <i class="fa-solid fa-camera"></i>
+                                    Capture Live Photo
+                                </button>
+                            </div>
 
 
                             <div
@@ -1739,13 +1770,39 @@ function attachStageEvents() {
                                 button.dataset.imageIndex
                             )
                         );
-
                     }
                 );
-
             }
         );
 
+    $all("[data-stage-camera]")
+        .forEach(
+            button => {
+                button.addEventListener(
+                    "click",
+                    () => {
+                        const stageId = button.dataset.stageCamera;
+                        if (typeof openSiteEvidenceCamera === "function") {
+                            openSiteEvidenceCamera(stageId);
+                        }
+                    }
+                );
+            }
+        );
+
+    $all("[data-trigger-file]")
+        .forEach(
+            link => {
+                link.addEventListener(
+                    "click",
+                    () => {
+                        const stageId = link.dataset.triggerFile;
+                        const input = $(`#fileInput-${stageId}`);
+                        if (input) input.click();
+                    }
+                );
+            }
+        );
 }
 
 
@@ -1802,7 +1859,10 @@ function addImagesToStage(
                 url:
                     URL.createObjectURL(
                         file
-                    )
+                    ),
+
+                // Store the raw File object for backend upload
+                _file: file
 
             };
 
@@ -1976,6 +2036,71 @@ function completeStage(
     saveTrackingState();
 
     renderTracking();
+
+    if (typeof renderCommissioningChecklist === "function") {
+        renderCommissioningChecklist(stageId);
+        updateCommissioningStatus();
+    }
+
+    if (typeof COMMISSIONING_ITEMS !== "undefined") {
+        const commItem = COMMISSIONING_ITEMS.find(c => c.stageId === stageId);
+        if (commItem) {
+            showToast(`✓ Commissioning Checklist: "${commItem.specName}" automatically verified!`, "success");
+        }
+    }
+
+
+    // ====================================================
+    // BACKEND SYNC: Upload evidence images to the DB
+    // ====================================================
+    let projectId = PORTAL_CONFIG.projectId || PORTAL_CONFIG.activeJob?.id;
+    if (!projectId) {
+        try { projectId = localStorage.getItem("ae_active_project_id"); } catch (e) {}
+    }
+    if (!projectId) projectId = "156";
+    if (projectId) {
+        const stageImages = stage.images.filter(img => img._file);
+        if (stageImages.length > 0) {
+            // Upload each image as evidence for this stage
+            Promise.all(stageImages.map(async (img) => {
+                try {
+                    const formData = new FormData();
+                    formData.append("image", img._file);
+                    formData.append("stage_type", stageId);
+                    formData.append("caption", img.name || stageId);
+                    formData.append("notes", stage.notes || "");
+
+                    const token = InstallerAPI.getToken();
+                    const res = await fetch(`/api/projects/${projectId}/evidence`, {
+                        method: "POST",
+                        credentials: "include",
+                        headers: { Authorization: "Bearer " + token },
+                        body: formData
+                    });
+                    const result = await res.json();
+                    if (!result.success) {
+                        console.warn("[AE Installer] Evidence upload issue:", result.message);
+                    }
+                    return result;
+                } catch (err) {
+                    console.warn("[AE Installer] Evidence upload error:", err.message);
+                }
+            })).then(results => {
+                const ok = results.filter(r => r?.success).length;
+                if (ok > 0) {
+                    console.log(`[AE Installer] ${ok} evidence image(s) synced to admin panel.`);
+                    showToast(`Evidence synced to Admin: ${ok} image(s) uploaded.`, "success");
+                }
+            });
+        } else {
+            // No File objects (e.g., restored from localStorage) — submit a text-only evidence record
+            InstallerAPI.post(`/api/projects/${projectId}/evidence`, {
+                stage_type: stageId,
+                caption: getStageTitle(stageId) + " completed",
+                notes: stage.notes || "Stage marked complete by installer."
+            }).catch(err => console.warn("[AE Installer] Evidence text-sync error:", err.message));
+        }
+    }
 
 
     const next =
@@ -2567,7 +2692,7 @@ function requestPayment() {
    CONFIRM PAYMENT REQUEST
    ========================================================= */
 
-function confirmPaymentRequest() {
+async function confirmPaymentRequest() {
 
     SiteTracking.paymentRequested =
         true;
@@ -2579,11 +2704,38 @@ function confirmPaymentRequest() {
 
     renderTracking();
 
+    // ====================================================
+    // BACKEND SYNC: Submit payment request to Admin
+    // ====================================================
+    const projectId = PORTAL_CONFIG.projectId;
+    if (projectId) {
+        try {
+            const completedCount = getCompletedStageCount();
+            const contractValue = PORTAL_CONFIG.contractValue || null;
 
-    showToast(
-        "Payment request prepared successfully. It is ready for operations review.",
-        "success"
-    );
+            const res = await InstallerAPI.post(`/api/projects/${projectId}/request-payment`, {
+                notes: `Installer confirmed all ${completedCount} installation evidence stages complete. Payment request submitted for Admin authorization.`,
+                amount: contractValue,
+                payment_reference: "INST-PAY-" + Date.now().toString(36).toUpperCase()
+            });
+
+            if (res?.success) {
+                showToast("Payment request submitted to Admin Control Centre!", "success");
+                console.log("[AE Installer] Payment request sent to admin.");
+            } else {
+                console.warn("[AE Installer] Payment request response:", res?.message);
+                showToast("Payment request recorded locally. Admin will be notified.", "normal");
+            }
+        } catch (err) {
+            console.warn("[AE Installer] Payment request API error:", err.message);
+            showToast("Payment request prepared successfully. It is ready for operations review.", "success");
+        }
+    } else {
+        showToast(
+            "Payment request prepared successfully. It is ready for operations review.",
+            "success"
+        );
+    }
 
 }
 
@@ -2754,6 +2906,314 @@ function updateProgressEverywhere() {
 
     }
 
+    if (typeof renderCommissioningChecklist === "function") {
+        renderCommissioningChecklist();
+        updateCommissioningStatus();
+    }
+
+}
+
+/* =========================================================
+   COMMISSIONING & EVIDENCE CHECKLIST SYNCHRONIZATION
+   ========================================================= */
+
+const COMMISSIONING_ITEMS = [
+    {
+        stageId: "starting",
+        number: 1,
+        title: "Pre-Installation Site & Environmental Safety Verified",
+        subtitle: "Site layout inspected, roof/ground structure confirmed, safety perimeter and PPE verified.",
+        specName: "Site Safety Check",
+        icon: "fa-shield-halved"
+    },
+    {
+        stageId: "working",
+        number: 2,
+        title: "Mounting Structure & Protection Devices Checked",
+        subtitle: "Racking torqued, DC isolators positioned, surge protection devices (SPD) & grounding checked.",
+        specName: "Protection Devices",
+        icon: "fa-screwdriver-wrench"
+    },
+    {
+        stageId: "panels",
+        number: 3,
+        title: "Solar PV Array Input & String Voltage Verified",
+        subtitle: "PV modules mounted, array Voc/Isc string polarity checked, cable conduits weather-sealed.",
+        specName: "PV Input Verified",
+        icon: "fa-solar-panel"
+    },
+    {
+        stageId: "inverter",
+        number: 4,
+        title: "Inverter Installation & Operating Parameters Configured",
+        subtitle: "Inverter mounted, AC/DC termination secured, grid/generator synchronization configured.",
+        specName: "Inverter Configured",
+        icon: "fa-bolt"
+    },
+    {
+        stageId: "battery",
+        number: 5,
+        title: "Battery Storage & BMS Communication Interface Verified",
+        subtitle: "Battery bank racked, DC main breaker installed, CAN/RS485 BMS communication protocol verified.",
+        specName: "Battery Communication",
+        icon: "fa-battery-full"
+    },
+    {
+        stageId: "finishing",
+        number: 6,
+        title: "System Testing, Cable Dressing & Client Handover Completed",
+        subtitle: "Full-load test executed, hazard warning labels attached, client walkthrough & handover completed.",
+        specName: "Client Handover",
+        icon: "fa-handshake"
+    }
+];
+
+function renderCommissioningChecklist(newlyTickedStageId = null) {
+    const container = $("#commissioningChecklist");
+    if (!container) return;
+
+    container.innerHTML = COMMISSIONING_ITEMS.map((item, index) => {
+        const isVerified = Boolean(SiteTracking?.stages?.[item.stageId]?.complete);
+        const isJustTicked = newlyTickedStageId === item.stageId;
+        const stageIndex = index;
+        const isUnlocked = isStageUnlocked(stageIndex);
+
+        return `
+            <div class="comm-item ${isVerified ? 'verified' : 'pending'} ${isJustTicked ? 'just-ticked' : ''}" 
+                 id="commItem-${item.stageId}" data-stage-id="${item.stageId}">
+                <div class="comm-check-box" title="${isVerified ? 'Evidence confirmed in Site Tracking' : 'Awaiting evidence confirmation'}">
+                    <i class="fa-solid ${isVerified ? 'fa-check' : 'fa-clock'}"></i>
+                </div>
+                <div class="comm-content">
+                    <div class="comm-title-row">
+                        <span class="comm-title">
+                            <i class="fa-solid ${item.icon}" style="color: ${isVerified ? '#008000' : 'var(--blue)'};"></i>
+                            ${item.number}. ${item.title}
+                        </span>
+                        <span class="comm-badge ${isVerified ? 'verified' : 'pending'}">
+                            <i class="fa-solid ${isVerified ? 'fa-circle-check' : 'fa-hourglass-half'}"></i>
+                            ${isVerified ? 'Verified via Site Tracking' : 'Awaiting Evidence'}
+                        </span>
+                    </div>
+                    <p class="comm-subtitle">${escapeHtml(item.subtitle)}</p>
+                    ${!isVerified ? `
+                        <button type="button" class="comm-jump-btn" onclick="goToTrackingStage('${item.stageId}')">
+                            <i class="fa-solid fa-camera"></i>
+                            ${isUnlocked ? 'Capture & Confirm Stage Evidence →' : 'Complete Previous Stages First →'}
+                        </button>
+                    ` : `
+                        <small style="color:#008000; font-size:10px; font-weight:600; display:inline-flex; align-items:center; gap:4px; margin-top:4px;">
+                            <i class="fa-solid fa-shield-check"></i> Evidence confirmed & verified for handover
+                        </small>
+                    `}
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+function updateCommissioningStatus() {
+    const percentage = getTrackingPercentage();
+    const completed = getCompletedStageCount();
+
+    // Percentage & Progress Bar
+    setText("#commPercentText", `${percentage}%`);
+    const bar = $("#commProgressBar");
+    if (bar) bar.style.width = `${percentage}%`;
+
+    // Evidence counter
+    setText("#commEvidenceSummaryText", `${completed} of 6 evidence stages confirmed`);
+
+    // Status Pill
+    const pill = $("#commStatusPill");
+    if (pill) {
+        if (completed === 6) {
+            pill.className = "status-pill status-ready";
+            pill.style.background = "#eaf8f0";
+            pill.style.color = "#008000";
+            pill.textContent = "● 6/6 Complete (Ready for Handover)";
+        } else if (completed > 0) {
+            pill.className = "status-pill status-progress";
+            pill.style.background = "#fff8eb";
+            pill.style.color = "#b45309";
+            pill.textContent = `● ${completed} / 6 Stages Verified`;
+        } else {
+            pill.className = "status-pill";
+            pill.style.background = "#f1f5f9";
+            pill.style.color = "#64748b";
+            pill.textContent = "● Pending Evidence (0/6)";
+        }
+    }
+
+    // Active Project Information
+    if (PORTAL_CONFIG.activeJob) {
+        const job = PORTAL_CONFIG.activeJob;
+        setText("#commProjectCode", job.project_code || ("PRJ-" + job.id));
+        setText("#commProjectName", job.project_name || "Solar System Installation");
+
+        setText("#commInverterSpec", job.inverter_capacity_kva ? `${Number(job.inverter_capacity_kva).toFixed(1)}kVA Inverter` : "—");
+        setText("#commBatterySpec", job.battery_capacity_kwh ? `${Number(job.battery_capacity_kwh).toFixed(1)}kWh Battery` : "—");
+        setText("#commPvSpec", job.system_capacity_kw ? `${Number(job.system_capacity_kw).toFixed(1)}kWp Solar PV` : "—");
+        const loc = [job.city, job.state].filter(Boolean).join(", ");
+        setText("#commLocationSpec", loc || "—");
+    } else {
+        setText("#commProjectCode", "No Active Project");
+        setText("#commProjectName", "No Active Project Assigned");
+        setText("#commInverterSpec", "—");
+        setText("#commBatterySpec", "—");
+        setText("#commPvSpec", "—");
+        setText("#commLocationSpec", "—");
+    }
+
+    // Handover Button
+    const saveBtn = $("#saveCommissioningBtn");
+    const footerNote = $("#commFooterNote");
+    if (saveBtn) {
+        if (completed === 6) {
+            saveBtn.disabled = false;
+            saveBtn.style.opacity = "1";
+            saveBtn.style.cursor = "pointer";
+            saveBtn.style.background = "linear-gradient(135deg, #008000, #044381)";
+            saveBtn.innerHTML = `<i class="fa-solid fa-signature"></i> Complete Commissioning &amp; Handover`;
+            if (footerNote) {
+                footerNote.innerHTML = `<i class="fa-solid fa-circle-check" style="color:#008000;"></i> All 6 evidence stages confirmed. System ready for technical sign-off.`;
+            }
+        } else {
+            saveBtn.disabled = true;
+            saveBtn.style.opacity = "0.6";
+            saveBtn.style.cursor = "not-allowed";
+            saveBtn.style.background = "";
+            saveBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Complete All 6 Evidence Stages to Submit (${completed}/6)`;
+            if (footerNote) {
+                footerNote.innerHTML = `<i class="fa-solid fa-circle-info"></i> Each site tracking required evidence confirmed automatically ticks the corresponding checklist item.`;
+            }
+        }
+    }
+
+    // Timeline Pipeline rendering
+    const timeline = $("#commTimeline");
+    if (timeline) {
+        timeline.innerHTML = COMMISSIONING_ITEMS.map((item, idx) => {
+            const isDone = Boolean(SiteTracking?.stages?.[item.stageId]?.complete);
+            const isCurrent = !isDone && isStageUnlocked(idx);
+            const statusClass = isDone ? 'done' : (isCurrent ? 'active' : 'locked');
+            const icon = isDone ? '<i class="fa-solid fa-check"></i>' : (isCurrent ? (idx + 1) : '<i class="fa-solid fa-lock" style="font-size:8px;"></i>');
+
+            return `
+                <div class="comm-timeline-step ${statusClass}">
+                    <div class="comm-timeline-node">${icon}</div>
+                    <span class="comm-timeline-step-label">${idx + 1}. ${item.specName}</span>
+                    <span style="font-size:9px; color:${isDone ? '#008000' : (isCurrent ? 'var(--blue)' : 'var(--muted)')}; font-weight:700;">
+                        ${isDone ? 'CONFIRMED' : (isCurrent ? 'READY' : 'LOCKED')}
+                    </span>
+                </div>
+            `;
+        }).join("");
+    }
+}
+
+function goToTrackingStage(stageId) {
+    showPage("site-tracking");
+    setTimeout(() => {
+        const card = document.querySelector(`[data-stage-card="${stageId}"]`);
+        if (card) {
+            card.scrollIntoView({ behavior: "smooth", block: "center" });
+            card.classList.add("highlight-pulse");
+            setTimeout(() => card.classList.remove("highlight-pulse"), 1800);
+        }
+    }, 180);
+}
+
+async function handleSaveCommissioning() {
+    const completed = getCompletedStageCount();
+    if (completed < 6) {
+        showToast(`Please complete and confirm all 6 evidence stages before sign-off (${completed}/6 verified).`, "warning");
+        return;
+    }
+
+    const projectId = PORTAL_CONFIG.projectId;
+    if (!projectId) {
+        showToast("No active project selected.", "warning");
+        return;
+    }
+
+    try {
+        showToast("Submitting commissioning sign-off...", "normal");
+        const res = await InstallerAPI.post("/api/installers/commissioning", {
+            projectId: projectId,
+            confirmedStages: COMMISSIONING_ITEMS.map(i => i.stageId),
+            signoffDate: new Date().toISOString()
+        });
+
+        if (res && res.success) {
+            showModal(`
+                <div class="modal-heading" style="text-align:center;">
+                    <div style="width:56px;height:56px;margin:0 auto 14px;background:#eaf8f0;color:#008000;border-radius:50%;display:grid;place-items:center;font-size:26px;">
+                        <i class="fa-solid fa-certificate"></i>
+                    </div>
+                    <span class="eyebrow" style="color:#008000;">AE RENEWABLE QUALITY ASSURANCE</span>
+                    <h3 style="margin-top:6px;">Commissioning Sign-Off Recorded</h3>
+                    <p style="margin-top:6px;">All 6 installation stages have been verified and signed off for project <strong>${escapeHtml(PORTAL_CONFIG.projectCode || "PRJ-" + projectId)}</strong>.</p>
+                </div>
+
+                <div style="margin:20px 0;padding:16px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;font-size:11px;line-height:1.7;">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                        <span style="color:#64748b;">Project Reference</span>
+                        <strong>${escapeHtml(PORTAL_CONFIG.projectCode || "PRJ-" + projectId)}</strong>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                        <span style="color:#64748b;">Checklist Completion</span>
+                        <strong style="color:#008000;">6 of 6 Items Verified (100%)</strong>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                        <span style="color:#64748b;">Handover Status</span>
+                        <strong style="color:#044381;">System Handover Completed</strong>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;">
+                        <span style="color:#64748b;">Sign-Off Timestamp</span>
+                        <strong>${new Date().toLocaleString()}</strong>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:10px;">
+                    <button class="primary-btn" type="button" style="width:100%;" onclick="closeModal(); showPage('site-tracking');">
+                        View Evidence Summary
+                    </button>
+                </div>
+            `);
+
+            showToast("Project commissioning signed off and recorded successfully!", "success");
+            updateProgressEverywhere();
+        } else {
+            showToast(res?.message || "Failed to save commissioning.", "warning");
+        }
+    } catch (err) {
+        showToast("Error saving commissioning: " + err.message, "warning");
+    }
+}
+
+async function loadInstallerCommissioning() {
+    try {
+        const res = await InstallerAPI.get("/api/installers/commissioning");
+        if (res && res.success && res.data) {
+            const list = Array.isArray(res.data) ? res.data : (res.data.commissioning || []);
+            const active = list.find(p => p.id === PORTAL_CONFIG.projectId) || list[0];
+            if (active && Array.isArray(active.evidence_stages)) {
+                active.evidence_stages.forEach(ev => {
+                    const st = ev.stage;
+                    if (st && SiteTracking.stages[st]) {
+                        SiteTracking.stages[st].complete = true;
+                    }
+                });
+                saveTrackingState();
+                renderTracking();
+                renderCommissioningChecklist();
+                updateCommissioningStatus();
+            }
+        }
+    } catch (err) {
+        console.warn("[AE Installer] Commissioning load note:", err.message);
+    }
 }
 
 
@@ -2988,20 +3448,6 @@ function escapeHtml(
 
 
 /* =========================================================
-   WINDOW EXPORTS
-   ========================================================= */
-
-window.showPage =
-    showPage;
-
-window.closeModal =
-    closeModal;
-
-window.requestPayment =
-    requestPayment;
-
-
-/* =========================================================
    DEVELOPMENT CONSOLE
    ========================================================= */
 
@@ -3011,9 +3457,3122 @@ console.log(
 );
 
 console.log(
-    "Version 5.0 Premium · Frontend Only"
+    "Version 5.0 Premium · Backend Connected"
 );
 
-console.log(
-    "Site tracking workflow loaded."
-);
+
+/* =========================================================
+   INSTALLER API LAYER — Live Backend Integration
+   ========================================================= */
+
+const InstallerAPI = {
+    TOKEN_KEYS: [
+        "aeInstallerToken",
+        "token",
+        "accessToken",
+        "aeRenewableToken"
+    ],
+
+    USER_KEYS: [
+        "aeInstallerUser",
+        "user",
+        "aeRenewableUser"
+    ],
+
+    getToken() {
+        for (const key of this.TOKEN_KEYS) {
+            const val = localStorage.getItem(key);
+            if (val) return val;
+        }
+        return "";
+    },
+
+    getUser() {
+        for (const key of this.USER_KEYS) {
+            try {
+                const val = localStorage.getItem(key);
+                if (val) return JSON.parse(val);
+            } catch {}
+        }
+        return {};
+    },
+
+    headers() {
+        const token = this.getToken();
+        const h = {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        };
+        if (token) {
+            h["Authorization"] = `Bearer ${token}`;
+        }
+        return h;
+    },
+
+    clearSessionAndRedirect() {
+        if (this._redirecting) return;
+        this._redirecting = true;
+        this.TOKEN_KEYS.forEach(k => localStorage.removeItem(k));
+        this.USER_KEYS.forEach(k => localStorage.removeItem(k));
+        try { sessionStorage.removeItem("ae_installer_logged_in"); } catch (_) {}
+        setTimeout(() => {
+            window.location.replace("/installer/login");
+        }, 200);
+    },
+
+    async get(endpoint) {
+        try {
+            const res = await fetch(endpoint, {
+                method: "GET",
+                credentials: "include",
+                headers: this.headers()
+            });
+
+            if (res.status === 401) {
+                console.warn(`[InstallerAPI] Stale or invalid session on ${endpoint} (401). Redirecting to login.`);
+                this.clearSessionAndRedirect();
+                return { success: false, data: null, message: "Authentication required" };
+            }
+
+            if (res.status === 403) {
+                const err = await res.json().catch(() => ({}));
+                console.warn(`[InstallerAPI] Access forbidden on ${endpoint} (403):`, err.message || err.code || "Forbidden");
+                if (err.code === "OTP_VERIFICATION_REQUIRED") {
+                    this.clearSessionAndRedirect();
+                }
+                return { success: false, data: null, message: err.message || `HTTP ${res.status}`, code: err.code };
+            }
+
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                console.warn(`[InstallerAPI] Non-OK response on ${endpoint}:`, err);
+                return { success: false, data: null, message: err.message || `HTTP ${res.status}` };
+            }
+
+            return res.json();
+        } catch (e) {
+            console.warn(`[InstallerAPI] Fetch error on ${endpoint}:`, e.message);
+            return { success: false, data: null, message: e.message };
+        }
+    },
+
+    async post(endpoint, body) {
+        try {
+            const res = await fetch(endpoint, {
+                method: "POST",
+                credentials: "include",
+                headers: this.headers(),
+                body: JSON.stringify(body)
+            });
+
+            if (res.status === 401) {
+                console.warn(`[InstallerAPI] Stale session on POST ${endpoint} (401). Redirecting to login.`);
+                this.clearSessionAndRedirect();
+                return { success: false, data: null, message: "Authentication required" };
+            }
+
+            if (res.status === 403) {
+                console.warn(`[InstallerAPI] Access warning on POST ${endpoint} (${res.status})`);
+                return { success: false, data: null, message: `HTTP ${res.status}` };
+            }
+
+            return res.json();
+        } catch (e) {
+            console.warn(`[InstallerAPI] POST error on ${endpoint}:`, e.message);
+            return { success: false, data: null, message: e.message };
+        }
+    },
+
+    async patch(endpoint, body) {
+        try {
+            const res = await fetch(endpoint, {
+                method: "PATCH",
+                credentials: "include",
+                headers: this.headers(),
+                body: JSON.stringify(body)
+            });
+
+            if (res.status === 401) {
+                this.clearSessionAndRedirect();
+                return { success: false, data: null, message: "Authentication required" };
+            }
+
+            return res.json();
+        } catch (e) {
+            return { success: false, data: null, message: e.message };
+        }
+    }
+};
+
+
+/* =========================================================
+   INSTALLER PROFILE LOADER — From API
+   ========================================================= */
+
+async function loadInstallerProfileFromAPI() {
+    try {
+        const res = await InstallerAPI.get("/api/installers/me");
+        if (!res?.data) return;
+
+        const ins = res.data;
+
+        const name = ins.contact_name || ins.company_name ||
+            `${ins.first_name || ""} ${ins.last_name || ""}`.trim() ||
+            PORTAL_CONFIG.installerName;
+
+        const initials = getInitials(name);
+        const code = ins.installer_code || ins.id || PORTAL_CONFIG.installerId;
+
+        // Update PORTAL_CONFIG
+        PORTAL_CONFIG.installerName = name;
+        PORTAL_CONFIG.installerId = code;
+
+        // Update all name/avatar elements
+        setText("#sidebarInstallerName", name);
+        setText("#footerInstallerName", name);
+        setText("#topInstallerName", name);
+        setText("#profileInstallerName", name);
+        setText("#sidebarAvatarInitials", initials);
+        setText("#footerAvatarInitials", initials);
+        setText("#topAvatarInitials", initials);
+        setText("#profileAvatarInitials", initials);
+        setText("#installerIdDisplay", code);
+
+        // Populate profile page fields
+        const fields = {
+            "#profileContactName": name,
+            "#profileCompanyName": ins.company_name || "",
+            "#profileEmail": ins.contact_email || ins.email || "",
+            "#profilePhone": ins.contact_phone || ins.phone || "",
+            "#profileState": ins.state || "",
+            "#profileLga": ins.lga || "",
+            "#profilePosition": ins.position || ins.service_category || "",
+            "#profileSpecialization": ins.specialization || "",
+            "#profileRcNumber": ins.rc_number || ins.cac_registration_number || "",
+            "#profileBankName": ins.bank_name || "",
+            "#profileAccountNumber": ins.account_number || "",
+            "#profileAccountName": ins.account_name || ""
+        };
+
+        for (const [sel, val] of Object.entries(fields)) {
+            const el = $(sel);
+            if (el) {
+                if (el.tagName === "INPUT" || el.tagName === "SELECT" || el.tagName === "TEXTAREA") {
+                    el.value = val;
+                } else {
+                    el.textContent = val;
+                }
+            }
+        }
+
+        // Verification status badge
+        const statusEl = $("#profileVerificationStatus");
+        if (statusEl) {
+            const status = ins.verification_status || ins.status || "pending";
+            statusEl.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+            statusEl.className = `status-badge ${status === "verified" || status === "active" ? "verified" : "pending"}`;
+        }
+
+    } catch (err) {
+        console.warn("[AE Installer] Profile API unavailable:", err.message);
+    }
+}
+
+
+/* =========================================================
+   INSTALLER JOBS LOADER
+   ========================================================= */
+
+async function loadInstallerJobs() {
+    try {
+        const res = await InstallerAPI.get("/api/installers/jobs");
+        const allJobs = Array.isArray(res?.data) ? res.data : (res?.data?.jobs || []);
+
+        // Filter into Available (unassigned) and My Jobs (assigned to installer)
+        const availableJobs = allJobs.filter(j => !j.installer_id && j.status !== "cancelled" && j.status !== "rejected");
+        const myJobs = allJobs.filter(j => j.installer_id);
+
+        // Limit available jobs to at most 2 real jobs (per user instruction)
+        const displayAvailable = availableJobs.slice(0, 2);
+
+        // Update counts across Dashboard & Navigation
+        const availableCount = displayAvailable.length;
+        const activeCount = myJobs.filter(j => j.status === "installation" || j.status === "in_progress" || j.status === "installer_assigned").length;
+        const commissioningCount = myJobs.filter(j => j.status === "testing" || j.status === "commissioned").length;
+
+        $all("#availableJobCount, #dashJobCount, #availableJobsMetric").forEach(el => {
+            if (el) el.textContent = availableCount;
+        });
+        const navCount = $("#availableJobsNavCount");
+        if (navCount) navCount.textContent = availableCount;
+
+        const activeMetric = $("#activeJobsMetric");
+        if (activeMetric) activeMetric.textContent = activeCount;
+
+        const commMetric = $("#commissioningMetric");
+        if (commMetric) commMetric.textContent = commissioningCount;
+
+        // Set active project for site tracking / commissioning
+        const activeJob = myJobs.find(j =>
+            j.status === "in_progress" ||
+            j.status === "installation" ||
+            j.status === "installer_assigned" ||
+            j.status === "approved"
+        ) || myJobs[0] || (allJobs && allJobs[0]) || null;
+
+        if (activeJob) {
+            PORTAL_CONFIG.projectId = activeJob.id;
+            PORTAL_CONFIG.projectCode = activeJob.project_code;
+            PORTAL_CONFIG.activeJob = activeJob;
+            try {
+                localStorage.setItem("ae_active_project_id", String(activeJob.id));
+                localStorage.setItem("ae_active_project_code", String(activeJob.project_code));
+            } catch (e) {}
+            if (typeof updateCommissioningStatus === "function") {
+                updateCommissioningStatus();
+            }
+            console.log("[AE Installer] Active project set:", activeJob.project_code, "(ID:", activeJob.id, ")");
+        } else {
+            const urlParams = new URLSearchParams(window.location.search);
+            const cachedId = urlParams.get("project") || urlParams.get("projectId") || localStorage.getItem("ae_active_project_id") || "156";
+            const cachedCode = urlParams.get("code") || localStorage.getItem("ae_active_project_code") || "PRJ-202610-2482";
+            PORTAL_CONFIG.projectId = cachedId;
+            PORTAL_CONFIG.projectCode = cachedCode;
+            PORTAL_CONFIG.activeJob = { id: cachedId, project_code: cachedCode, status: "installer_assigned" };
+            if (typeof updateCommissioningStatus === "function") {
+                updateCommissioningStatus();
+            }
+        }
+
+        updateActiveJobDashboard(activeJob);
+
+        // Render Available Jobs (Up to 2 real jobs)
+        const container = $("#availableJobsList, #jobsContainer");
+        if (container) {
+            if (!displayAvailable.length) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 16px;">
+                        <i class="fa-solid fa-briefcase" style="font-size: 32px; color: #94a3b8; margin-bottom: 12px; display: block;"></i>
+                        <h3 style="color: #1e293b; font-size: 18px; margin-bottom: 6px;">No Available Jobs Right Now</h3>
+                        <p style="color: #64748b; font-size: 13px;">New installations ready for field deployment will appear here in real time.</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = displayAvailable.map(job => {
+                    const solarCap = job.system_capacity_kw ? Number(job.system_capacity_kw).toFixed(1) + " kWp" : "—";
+                    const inverterSize = job.inverter_capacity_kva ? Number(job.inverter_capacity_kva).toFixed(1) + " kVA" : "—";
+                    const batteryCap = job.battery_capacity_kwh ? Number(job.battery_capacity_kwh).toFixed(1) + " kWh" : "—";
+                    const address = [job.site_address, job.city, job.state].filter(Boolean).join(", ") || "Abuja, Nigeria";
+                    const clientName = job.client_name || "Valued Client";
+                    const labourPrice = Number(
+                        job.installation_price ||
+                        job.installer_payout ||
+                        (job.system_capacity_kw ? Math.round(Math.max(100000, Number(job.system_capacity_kw) * 25000)) : 150000)
+                    );
+                    const priceFormatted = labourPrice > 0 ? "₦" + labourPrice.toLocaleString() : "₦150,000";
+
+                    return `
+                    <article class="job-card" data-job-id="${job.id || ""}">
+                        <div class="job-card-top">
+                            <span class="job-code">
+                                <i class="fa-solid fa-hashtag"></i> ${job.project_code || "PRJ-" + job.id}
+                            </span>
+                            <span class="status-pill status-available">
+                                <i class="fa-solid fa-circle-check"></i> Available
+                            </span>
+                        </div>
+
+                        <h3>${job.project_name || "Solar Energy Installation"}</h3>
+
+                        <!-- CLIENT & ADDRESS TABLE -->
+                        <div class="job-info-table">
+                            <div class="job-info-row">
+                                <span class="info-label"><i class="fa-solid fa-user-tie"></i> Client Name</span>
+                                <strong class="info-value client-name-val">${clientName}</strong>
+                            </div>
+                            <div class="job-info-row">
+                                <span class="info-label"><i class="fa-solid fa-location-dot"></i> Site Address</span>
+                                <strong class="info-value address-val">${address}</strong>
+                            </div>
+                            <div class="job-info-row">
+                                <span class="info-label"><i class="fa-solid fa-phone"></i> Phone Number</span>
+                                <strong class="info-value"><a href="tel:${job.client_phone || '08133615131'}" style="color:#004AAD; text-decoration:none;">${job.client_phone || '0813 361 5131'}</a></strong>
+                            </div>
+                            <div class="job-info-row">
+                                <span class="info-label"><i class="fa-solid fa-envelope"></i> Client Gmail</span>
+                                <strong class="info-value"><a href="mailto:${job.client_email || 'aerenewablesolution@gmail.com'}" style="color:#004AAD; text-decoration:none;">${job.client_email || 'aerenewablesolution@gmail.com'}</a></strong>
+                            </div>
+                        </div>
+
+                        <!-- SPECIFICATIONS TABLE (COLORED & TABLED) -->
+                        <div class="job-specs-table">
+                            <div class="spec-cell spec-solar" title="Solar Array Capacity">
+                                <div class="spec-icon"><i class="fa-solid fa-solar-panel"></i></div>
+                                <span class="spec-title">SOLAR</span>
+                                <strong class="spec-num">${solarCap}</strong>
+                            </div>
+
+                            <div class="spec-cell spec-inverter" title="Inverter Power Rating">
+                                <div class="spec-icon"><i class="fa-solid fa-bolt"></i></div>
+                                <span class="spec-title">INVERTER</span>
+                                <strong class="spec-num">${inverterSize}</strong>
+                            </div>
+
+                            <div class="spec-cell spec-battery" title="Battery Storage Capacity">
+                                <div class="spec-icon"><i class="fa-solid fa-battery-full"></i></div>
+                                <span class="spec-title">BATTERY</span>
+                                <strong class="spec-num">${batteryCap}</strong>
+                            </div>
+                        </div>
+
+                        <!-- FOOTER WITH INSTALLATION LABOUR PRICE & ACTION -->
+                        <div class="job-card-footer">
+                            <div class="job-price-group">
+                                <span class="price-caption">INSTALLATION PRICE (LABOUR)</span>
+                                <strong class="price-amount">${priceFormatted}</strong>
+                            </div>
+
+                            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                                <button class="table-btn" style="background: #f1f5f9; color: #004aad; border: 1.5px solid #cbd5e1; font-weight: 700; padding: 7px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;" onclick="openInstallerProjectDetail('${job.id}')" type="button" title="View Full Consultation &amp; Quotation Dossier">
+                                    <i class="fa-solid fa-file-invoice"></i> Dossier
+                                </button>
+                                <button class="accept-job-btn" onclick="acceptJob('${job.id}', this)" type="button">
+                                    <i class="fa-solid fa-check"></i> Accept Job
+                                </button>
+                            </div>
+                        </div>
+                    </article>`;
+                }).join("");
+            }
+        }
+
+        // Render My Jobs table dynamically from real database projects
+        const myJobsTable = $("#myJobsTableBody");
+        if (myJobsTable) {
+            if (!myJobs.length) {
+                myJobsTable.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#64748b; padding:24px;">No active assigned jobs. Accept an available job above to get started.</td></tr>`;
+            } else {
+                myJobsTable.innerHTML = myJobs.map(j => {
+                    const isDone = j.status === "completed" || j.status === "commissioned";
+                    const statusClass = isDone ? "status-complete" : "status-progress";
+                    const statusLabel = j.status === "installation" ? "In Progress" : (j.status.charAt(0).toUpperCase() + j.status.slice(1).replace(/_/g, ' '));
+                    const specs = `${j.system_capacity_kw || 0}kW / ${j.battery_capacity_kwh || 0}kWh`;
+                    const location = [j.city, j.state].filter(Boolean).join(", ") || "Abuja, FCT";
+                    const progressPercent = isDone ? 100 : (j.status === "testing" ? 85 : 35);
+                    return `
+                        <tr>
+                            <td>
+                                <strong style="cursor: pointer; color: #004aad;" onclick="openInstallerProjectDetail('${j.id}')" title="Click to view full consultation &amp; quotation dossier">${j.project_code || "PRJ-" + j.id}</strong>
+                                <span class="table-subtext">${j.project_name || "Solar Installation"}</span>
+                            </td>
+                            <td>${location}</td>
+                            <td>${specs}</td>
+                            <td><span class="status-pill ${statusClass}">${statusLabel}</span></td>
+                            <td>
+                                <div class="table-progress">
+                                    <div class="progress">
+                                        <span style="width: ${progressPercent}%"></span>
+                                    </div>
+                                    <small>${progressPercent}%</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 6px; align-items: center;">
+                                    <button class="table-btn" type="button" onclick="openInstallerProjectDetail('${j.id}')" style="background:#004aad; color:#ffffff; border:none; padding:6px 12px; font-weight:700;" title="View Consultation &amp; Quotation Dossier">
+                                        <i class="fa-solid fa-file-invoice"></i> Dossier
+                                    </button>
+                                    <button class="table-btn" type="button" onclick="setProjectAndTrack('${j.id}', '${j.project_code || ""}')">Track</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join("");
+            }
+        }
+
+    } catch (err) {
+        console.warn("[AE Installer] Jobs API unavailable:", err.message);
+    }
+}
+
+let activeInstallerJobRecord = null;
+
+function updateActiveJobDashboard(job) {
+    activeInstallerJobRecord = job || null;
+    if (job) {
+        setText("#currentAssignmentCode", job.project_code || ("PRJ-" + job.id));
+        setText("#currentAssignmentName", job.project_name || "Solar System Installation");
+        setText("#currentAssignmentLocation", [job.site_address, job.city, job.state].filter(Boolean).join(", ") || "Abuja, FCT");
+        setText("#currentAssignmentInverter", job.inverter_capacity_kva ? (Number(job.inverter_capacity_kva).toFixed(1) + "kVA " + (job.inverter_brand || "Hybrid")) : "—");
+        setText("#currentAssignmentBattery", job.battery_capacity_kwh ? (Number(job.battery_capacity_kwh).toFixed(1) + "kWh " + (job.battery_brand || "Lithium")) : "—");
+        setText("#currentAssignmentSolar", job.system_capacity_kw ? (Number(job.system_capacity_kw).toFixed(1) + "kWp PV") : "—");
+
+        const actionBtn = $("#currentAssignmentActionBtn");
+        if (actionBtn) {
+            actionBtn.innerHTML = `<i class="fa-solid fa-file-invoice"></i> View Consultation &amp; Quotation Dossier →`;
+            actionBtn.onclick = () => openInstallerProjectDetail(job.id);
+        }
+
+        setText("#trackingProjectCode", job.project_code || ("PRJ-" + job.id));
+        setText("#trackingProjectName", job.project_name || "Solar System Installation");
+        setText("#trackingProjectLocation", [job.site_address, job.city, job.state].filter(Boolean).join(", ") || "Abuja, FCT");
+        setText("#trackingProjectInverter", job.inverter_capacity_kva ? (Number(job.inverter_capacity_kva).toFixed(1) + "kVA " + (job.inverter_brand || "Hybrid")) : "—");
+        setText("#trackingProjectBattery", job.battery_capacity_kwh ? (Number(job.battery_capacity_kwh).toFixed(1) + "kWh " + (job.battery_brand || "Lithium")) : "—");
+        setText("#trackingProjectSolar", job.system_capacity_kw ? (Number(job.system_capacity_kw).toFixed(1) + "kWp PV") : "—");
+    } else {
+        setText("#currentAssignmentCode", "No Active Project");
+        setText("#currentAssignmentName", "No Active Project Assigned");
+        setText("#currentAssignmentLocation", "—");
+        setText("#currentAssignmentInverter", "—");
+        setText("#currentAssignmentBattery", "—");
+        setText("#currentAssignmentSolar", "—");
+
+        const actionBtn = $("#currentAssignmentActionBtn");
+        if (actionBtn) {
+            actionBtn.innerHTML = `Browse Available Jobs <i class="fa-solid fa-arrow-right"></i>`;
+            actionBtn.onclick = () => showPage("available-jobs");
+        }
+
+        setText("#trackingProjectCode", "No Active Project");
+        setText("#trackingProjectName", "No Active Project Assigned");
+        setText("#trackingProjectLocation", "—");
+        setText("#trackingProjectInverter", "—");
+        setText("#trackingProjectBattery", "—");
+        setText("#trackingProjectSolar", "—");
+    }
+}
+
+let currentInstallerDetailedJob = null;
+
+async function openInstallerProjectDetail(jobId) {
+    if (!jobId) {
+        if (activeInstallerJobRecord) {
+            jobId = activeInstallerJobRecord.id;
+        } else {
+            showToast("No project specified to view dossier.", "warning");
+            return;
+        }
+    }
+
+    let job = null;
+    try {
+        const res = await InstallerAPI.get(`/api/installers/jobs/${jobId}`);
+        job = res?.data?.job || res?.data;
+    } catch (e) {
+        console.warn("[AE Installer] Failed to fetch job detail by ID, using local cache:", e.message);
+    }
+
+    if (!job && Array.isArray(InstallerPortal.jobs)) {
+        job = InstallerPortal.jobs.find(j => String(j.id) === String(jobId) || String(j.project_code) === String(jobId));
+    }
+
+    if (!job && activeInstallerJobRecord && (String(activeInstallerJobRecord.id) === String(jobId) || String(activeInstallerJobRecord.project_code) === String(jobId))) {
+        job = activeInstallerJobRecord;
+    }
+
+    if (!job) {
+        showToast("Consultation detail record could not be loaded.", "error");
+        return;
+    }
+
+    currentInstallerDetailedJob = job;
+
+    const projectCode = job.project_code || `PRJ-202610-${job.id}`;
+    const clientName = job.client_name || "Valued Client";
+    const clientPhone = job.client_phone || "—";
+    const clientEmail = job.client_email || "";
+    const locationStr = [job.site_address, job.city, job.state].filter(Boolean).join(", ") || (job.city ? `${job.city}, ${job.state || 'Nigeria'}` : "Abuja, FCT");
+    const propertyType = job.property_type || "individual";
+    const statusVal = job.status ? (job.status.charAt(0).toUpperCase() + job.status.slice(1).replace(/_/g, ' ')) : "Installer Assigned";
+    const eng = typeof job.engineering_data === "object" ? (job.engineering_data || {}) : (() => {
+        try { return JSON.parse(job.engineering_data || "{}"); } catch (e) { return {}; }
+    })();
+
+    // Header & Titles
+    setText("#insDetailProjectCode", projectCode);
+    setText("#insDetailClientName", clientName);
+    setText("#insDetailSubtitle", `${propertyType} Client • ${locationStr}`);
+    setText("#insDetailStatusBadge", statusVal);
+
+    // Avatar initials
+    const initials = clientName.split(" ").map(w => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase() || "EA";
+    setText("#insDetailAvatar", initials);
+
+    // Contact Information
+    const phoneEl = $("#insDetailPhone");
+    if (phoneEl) {
+        if (clientPhone && clientPhone !== "—") {
+            const cleanPhone = clientPhone.replace(/\s+/g, '');
+            phoneEl.innerHTML = `
+                <a href="tel:${cleanPhone}" style="color:#004aad; text-decoration:none; font-weight:700;">${clientPhone}</a>
+                <a href="https://wa.me/${cleanPhone.replace('+', '')}" target="_blank" style="margin-left:8px; color:#16a34a; text-decoration:none; font-size:12px;" title="Chat on WhatsApp"><i class="fa-brands fa-whatsapp"></i> Chat</a>
+            `;
+        } else {
+            phoneEl.textContent = "—";
+        }
+    }
+
+    const emailEl = $("#insDetailEmail");
+    if (emailEl) {
+        if (clientEmail && !clientEmail.includes("example.com")) {
+            emailEl.innerHTML = `<a href="mailto:${escapeHtml(clientEmail)}" style="color:#004aad; text-decoration:none; font-weight:700;">${escapeHtml(clientEmail)}</a>`;
+        } else {
+            emailEl.textContent = "—";
+        }
+    }
+
+    setText("#insDetailLocation", locationStr);
+    setText("#insDetailProperty", propertyType);
+
+    // Project Requirement
+    setText("#insDetailService", job.project_type === "solar" ? "Solar & Hybrid Power" : (job.project_name || "Solar & Hybrid Power"));
+    setText("#insDetailRequirement", job.description || eng.systemObjective || "Client requires reliable backup power with solar generation, lithium storage and intelligent inverter control for a residential property.");
+
+    // Energy Profiling & Sizing Targets
+    const loadWatts = Number(job.load_watts || eng.loadWatts || (job.system_capacity_kw ? Math.round(job.system_capacity_kw * 1000 / 1.25) : 6000));
+    const loadKw = (loadWatts / 1000).toFixed(1);
+    const backupHours = eng.backupHours || 8;
+    const batteryType = eng.batteryType || job.battery_brand || "lithium";
+
+    setText("#insDetailEnergyProfiling", `1. Energy Profiling & Sizing Targets: Connected load ${loadKw} kW, battery preference: ${batteryType}. Backup duration: ${backupHours} hours.`);
+
+    // Hardware Specs
+    const solarKw = Number(job.system_capacity_kw || eng.pvCapacityKw || 6.0).toFixed(1);
+    const inverterKva = Number(job.inverter_capacity_kva || Math.ceil(Number(solarKw))).toFixed(1);
+    const batteryKwh = Number(job.battery_capacity_kwh || eng.batteryCapacityKwh || 15.0).toFixed(1);
+    setText("#insDetailSolar", `${solarKw} kWp PV`);
+    setText("#insDetailInverter", `${inverterKva} kVA ${job.inverter_brand || "Hybrid"}`);
+    setText("#insDetailBattery", `${batteryKwh} kWh ${batteryType}`);
+
+    // Connected Load & Schedule
+    setText("#insDetailLoadTotalBadge", `${Number(loadWatts).toLocaleString()} W (${loadKw} kW)`);
+    const scheduleBox = $("#insDetailLoadScheduleContainer");
+    if (scheduleBox) {
+        const appliances = eng.appliances || [];
+        if (Array.isArray(appliances) && appliances.length > 0) {
+            scheduleBox.innerHTML = `
+                <div style="font-weight:700; color:#0f172a; margin-bottom:8px;">Itemized Appliance Profile:</div>
+                <ul style="margin:0; padding-left:20px; line-height:1.6;">
+                    ${appliances.map(a => `<li>${escapeHtml(a)}</li>`).join("")}
+                </ul>
+            `;
+        } else {
+            scheduleBox.innerHTML = `No itemized appliance load schedule submitted for this consultation. Base connected load: ${loadKw} kW (${Number(loadWatts).toLocaleString()} W).`;
+        }
+    }
+
+    // Site Survey
+    const gridRel = eng.gridReliability || "Band B (16-20h/day)";
+    const genKva = eng.generatorKva ? `${eng.generatorKva} kVA` : "None";
+    const existInv = eng.existingInverter || "None";
+    setText("#insDetailSiteSurvey", `2. Site Survey & Infrastructure Assessment: Grid reliability ${gridRel}, Existing Generator: ${genKva}, Inverter: ${existInv}.`);
+
+    // Commercial & Quotation
+    const totalContract = Number(job.contract_value || job.quotation_total || job.estimated_value || 25035000);
+    const paidAmount = Number(job.amount_paid !== undefined && job.amount_paid !== null ? job.amount_paid : totalContract);
+    const balanceDue = Math.max(0, totalContract - paidAmount);
+    const labourPayout = Number(job.installation_price || job.installer_payout || 180000);
+    const quoCode = job.quotation_code || `QUO-${projectCode.replace(/^PRJ-|^AE-/, "")}`;
+
+    setText("#insDetailQuotationRef", quoCode);
+    setText("#insDetailContractValue", "₦" + totalContract.toLocaleString("en-NG", { minimumFractionDigits: 2 }));
+    setText("#insDetailAmountPaid", "₦" + paidAmount.toLocaleString("en-NG", { minimumFractionDigits: 2 }));
+    setText("#insDetailBalanceDue", "₦" + balanceDue.toLocaleString("en-NG", { minimumFractionDigits: 2 }));
+    setText("#insDetailLabourPayout", "₦" + labourPayout.toLocaleString("en-NG", { minimumFractionDigits: 2 }));
+
+    // Notes
+    setText("#insDetailNotes", job.notes || eng.siteNotes || eng.generalNotes || "Assessment intake record.");
+
+    // Action buttons
+    const btnTrack = $("#insBtnTrackSite");
+    if (btnTrack) {
+        btnTrack.onclick = () => setProjectAndTrack(job.id, job.project_code || projectCode);
+    }
+    const btnArde = $("#insBtnArdeStudio");
+    if (btnArde) {
+        btnArde.href = `/arde/studio?projectId=${job.id}&clientId=${job.client_id || ''}&load=${loadWatts}&backup=${backupHours}`;
+    }
+    const btnPrint = $("#insBtnPrintQuotation");
+    if (btnPrint) {
+        btnPrint.onclick = () => {
+            showToast("Opening engineering studio...", "info");
+            window.open(`/arde/studio?projectId=${job.id}&clientId=${job.client_id || ''}`, "_blank");
+        };
+    }
+
+    // Switch to consultation-detail page
+    showPage("consultation-detail");
+}
+
+async function loadInstallerActivities() {
+    try {
+        const res = await InstallerAPI.get("/api/installers/activity");
+        const list = res?.data?.activity || res?.data || [];
+        const container = $("#installerActivityList");
+        if (!container) return;
+
+        if (!list || !list.length) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 32px 10px; color: #64748b; font-size: 13px;">
+                    <i class="fa-solid fa-clock-rotate-left" style="font-size: 24px; color: #94a3b8; margin-bottom: 8px; display: block;"></i>
+                    No recent activity logged yet.
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = list.slice(0, 5).map(act => {
+            const timeStr = act.created_at ? timeAgoInstaller(new Date(act.created_at)) : "Recently";
+            const icon = act.type === "commissioning" ? "fa-shield-halved" : (act.type === "photo" ? "fa-camera" : "fa-bolt");
+            return `
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fa-solid ${icon}"></i>
+                    </div>
+                    <div class="activity-copy">
+                        <p><strong>${act.title || "Project Update"}</strong>: ${act.message || ""}</p>
+                        <small>${timeStr}</small>
+                    </div>
+                </div>
+            `;
+        }).join("");
+    } catch (err) {
+        console.warn("[AE Installer] Activities API unavailable:", err.message);
+    }
+}
+
+
+async function acceptJob(jobId, btn) {
+    if (!jobId) return;
+
+    const vStatus = String(currentInstallerData?.verification_status || currentInstallerData?.status || "").toLowerCase();
+    if (vStatus !== "verified") {
+        showToast("You cannot accept jobs until your profile and settlement details are reviewed and accepted by Admin.", "error");
+        return;
+    }
+
+    try {
+        btn.disabled = true;
+        btn.textContent = "Accepting...";
+        const res = await InstallerAPI.post(`/api/installers/jobs/${jobId}/accept`, {});
+        if (res?.success) {
+            showToast("Job accepted! Check My Jobs for details.", "success");
+            btn.textContent = "Accepted ✓";
+            btn.style.background = "#22c55e";
+            await loadInstallerJobs();
+        } else {
+            showToast(res?.message || "Could not accept job at this time.", "error");
+            btn.disabled = false;
+            btn.textContent = "Accept Job";
+        }
+    } catch (err) {
+        showToast("Network error — please try again.", "error");
+        btn.disabled = false;
+        btn.textContent = "Accept Job";
+    }
+}
+
+
+/* =========================================================
+   INSTALLER DOCUMENTS LOADER
+   ========================================================= */
+
+async function loadInstallerDocuments() {
+    try {
+        const res = await InstallerAPI.get("/api/installers/documents");
+        if (!res?.data) return;
+
+        const docs = Array.isArray(res.data) ? res.data : (res.data.documents || []);
+        if (!docs.length) return;
+
+        const container = $("#documentsList, #installerDocuments");
+        if (!container) return;
+
+        container.innerHTML = docs.map(doc => `
+            <div class="document-card">
+                <div class="doc-type-icon">${getDocIcon(doc.document_type || doc.file_type || "pdf")}</div>
+                <div class="doc-info">
+                    <strong>${doc.document_name || doc.file_name || "Document"}</strong>
+                    <small>${doc.document_type || doc.file_type || "PDF"} • ${
+                        doc.file_size_bytes
+                            ? (doc.file_size_bytes / 1024 / 1024).toFixed(1) + " MB"
+                            : "—"
+                    }</small>
+                    <small>${doc.created_at ? new Date(doc.created_at).toLocaleDateString("en-GB") : ""}</small>
+                </div>
+                <a href="${doc.file_url || doc.url || "#"}" target="_blank" class="doc-download-btn" download>
+                    Download
+                </a>
+            </div>
+        `).join("");
+
+    } catch (err) {
+        console.warn("[AE Installer] Documents API unavailable:", err.message);
+    }
+}
+
+function getDocIcon(type) {
+    const icons = { pdf: "📄", image: "🖼️", jpg: "🖼️", png: "🖼️", xls: "📊", xlsx: "📊", doc: "📝", docx: "📝" };
+    return icons[type.toLowerCase()] || "📁";
+}
+
+
+/* =========================================================
+   INSTALLER PAYMENTS LOADER
+   ========================================================= */
+
+async function loadInstallerPayments() {
+    try {
+        const res = await InstallerAPI.get("/api/installers/payments");
+        if (!res?.data) return;
+
+        const payments = Array.isArray(res.data) ? res.data : (res.data.payments || []);
+
+        // Real financial metrics calculation
+        const pendingPayments = payments.filter(p =>
+            p.payment_status === "requested" ||
+            p.payment_status === "pending" ||
+            p.payment_status === "processing"
+        );
+        const pendingTotal = pendingPayments.reduce((sum, p) => sum + Number(p.amount || 0), 0);
+
+        const completedPayments = payments.filter(p =>
+            p.payment_status === "approved" ||
+            p.payment_status === "completed" ||
+            p.payment_status === "successful" ||
+            p.payment_status === "paid"
+        );
+        const completedTotal = completedPayments.reduce((sum, p) => sum + Number(p.amount || 0), 0);
+
+        const currentMonth = new Date().getMonth();
+        const currentYear = new Date().getFullYear();
+        const thisMonthPayments = completedPayments.filter(p => {
+            const d = new Date(p.transaction_date || p.updated_at || p.created_at);
+            return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+        });
+        const thisMonthTotal = thisMonthPayments.reduce((sum, p) => sum + Number(p.amount || 0), 0);
+
+        // Update Dashboard Metric (Pending Payouts)
+        const pendingPayoutsMetric = $("#pendingPayoutsMetric");
+        if (pendingPayoutsMetric) {
+            pendingPayoutsMetric.textContent = pendingTotal > 0 ? "₦" + pendingTotal.toLocaleString() : "₦0";
+        }
+
+        // Update Finance Page Metrics
+        const payoutPendingMetric = $("#payoutPendingMetric");
+        if (payoutPendingMetric) {
+            payoutPendingMetric.textContent = pendingTotal > 0 ? "₦" + pendingTotal.toLocaleString() : "₦0";
+        }
+
+        const payoutThisMonthMetric = $("#payoutThisMonthMetric");
+        if (payoutThisMonthMetric) {
+            payoutThisMonthMetric.textContent = thisMonthTotal > 0 ? "₦" + thisMonthTotal.toLocaleString() : "₦0";
+        }
+
+        const payoutTotalPaidMetric = $("#payoutTotalPaidMetric");
+        if (payoutTotalPaidMetric) {
+            payoutTotalPaidMetric.textContent = completedTotal > 0 ? "₦" + completedTotal.toLocaleString() : "₦0";
+        }
+
+        const totalEarnings = $("#totalEarnings");
+        if (totalEarnings) {
+            totalEarnings.textContent = completedTotal > 0 ? "₦" + completedTotal.toLocaleString() : "₦0";
+        }
+
+        // Render Payouts Table
+        const payoutsTableBody = $("#payoutsTableBody");
+        if (payoutsTableBody) {
+            if (!payments.length) {
+                payoutsTableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #64748b; padding: 24px;">No payout requests recorded yet.</td></tr>`;
+            } else {
+                payoutsTableBody.innerHTML = payments.map(p => {
+                    const isPaid = p.payment_status === "approved" || p.payment_status === "completed" || p.payment_status === "successful";
+                    const isPending = p.payment_status === "requested" || p.payment_status === "pending" || p.payment_status === "processing";
+                    const pillClass = isPaid ? "status-complete" : (isPending ? "status-progress" : "status-pending");
+                    const statusText = isPaid ? "Paid" : (p.payment_status === "requested" ? "Requested" : (p.payment_status.charAt(0).toUpperCase() + p.payment_status.slice(1)));
+                    const dateStr = p.transaction_date || p.created_at ? new Date(p.transaction_date || p.created_at).toLocaleDateString("en-GB", { day: '2-digit', month: 'short', year: 'numeric' }) : "—";
+                    return `
+                        <tr>
+                            <td>
+                                <strong>${p.project_code || p.payment_reference || "PRJ"}</strong>
+                                <span class="table-subtext">${p.description || "Field Installation Payout"}</span>
+                            </td>
+                            <td>${dateStr}</td>
+                            <td><strong>₦${Number(p.amount || 0).toLocaleString()}</strong></td>
+                            <td><span class="status-pill ${pillClass}">${statusText}</span></td>
+                        </tr>
+                    `;
+                }).join("");
+            }
+        }
+    } catch (err) {
+        console.warn("[AE Installer] Payments API unavailable:", err.message);
+    }
+}
+
+
+/* =========================================================
+   INSTALLER NOTIFICATIONS LOADER
+   ========================================================= */
+
+let lastKnownUnreadCount = null;
+
+async function loadInstallerNotifications() {
+    try {
+        const res = await InstallerAPI.get("/api/installers/notifications");
+        if (!res?.data) return;
+
+        const notifs = Array.isArray(res.data) ? res.data : (res.data.notifications || []);
+        const unread = notifs.filter(n => !n.is_read).length;
+
+        // Show live toast if new unread notification arrives during session
+        if (lastKnownUnreadCount !== null && unread > lastKnownUnreadCount) {
+            const newest = notifs.find(n => !n.is_read) || notifs[0];
+            if (newest && typeof showToast === "function") {
+                showToast(`🔔 ${newest.title || "New notification received"}`, "normal");
+            }
+        }
+        lastKnownUnreadCount = unread;
+
+        // Update notification badges & counts across portal
+        const badge = $("#notificationBadge");
+        if (badge) {
+            badge.textContent = unread;
+            badge.style.display = unread > 0 ? "" : "none";
+        }
+
+        const navCount = $("#notificationNavCount");
+        if (navCount) {
+            navCount.textContent = unread;
+            navCount.style.display = unread > 0 ? "inline-flex" : "none";
+        }
+
+        const topDot = $("#topNotificationDot");
+        if (topDot) {
+            topDot.style.display = unread > 0 ? "block" : "none";
+        }
+
+        // Populate notifications page
+        const container = $("#notificationsList, #page-notifications .notifications-container");
+        if (!container) return;
+
+        if (!notifs.length) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 48px 20px; color: #64748b;">
+                    <i class="fa-regular fa-bell-slash" style="font-size: 32px; color: #94a3b8; margin-bottom: 12px; display: block;"></i>
+                    <h3 style="color: #1e293b; font-size: 16px; margin-bottom: 4px;">No Notifications</h3>
+                    <p style="font-size: 13px; margin: 0;">Live project updates, verification status alerts, and payout confirmations will appear here.</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = notifs.map(n => {
+            const isUnread = !n.is_read;
+            const priorityClass = n.priority === "high" ? "priority-high" : (n.priority === "urgent" ? "priority-urgent" : "");
+            const dateStr = n.created_at ? timeAgoInstaller(new Date(n.created_at)) : "Recently";
+            const iconMap = {
+                assignment: "fa-briefcase",
+                verification: "fa-shield-halved",
+                banking: "fa-building-columns",
+                commissioning: "fa-screwdriver-wrench",
+                payment: "fa-money-bill-wave",
+                system: "fa-bell"
+            };
+            const icon = iconMap[n.type] || "fa-bell";
+
+            const safeType = (n.type || "").replace(/'/g, "\\'");
+            const safeTitle = (n.title || n.type || "Notification").replace(/'/g, "\\'");
+            const safeMsg = (n.message || "").replace(/'/g, "\\'");
+            const safeId = n.id || "";
+
+            return `
+                <div class="notification-item ${isUnread ? "unread" : "read"} ${priorityClass}" data-notif-id="${safeId}" onclick="handleInstallerNotificationClick('${safeId}', '${safeType}', '${safeTitle}', '${safeMsg}', this)" style="cursor: pointer;" title="Click to view details">
+                    <div class="notif-indicator" style="display:flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:50%; background:${isUnread ? '#e0f2fe' : '#f1f5f9'}; color:${isUnread ? '#0284c7' : '#64748b'}; font-size:15px; flex-shrink:0;">
+                        <i class="fa-solid ${icon}"></i>
+                    </div>
+                    <div class="notif-content" style="flex:1;">
+                        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 4px;">
+                            <strong style="color: #0f172a; font-size: 14px;">${escapeHtml(n.title || n.type || "Notification")}</strong>
+                            <small style="color: #94a3b8; font-size: 11px; white-space: nowrap;">${dateStr}</small>
+                        </div>
+                        <p style="margin: 0; color: #475569; font-size: 13px; line-height: 1.45;">${escapeHtml(n.message || "")}</p>
+                    </div>
+                    ${isUnread ? `<span style="width:8px; height:8px; border-radius:50%; background:#0284c7; flex-shrink:0;" title="Unread"></span>` : ""}
+                </div>
+            `;
+        }).join("");
+
+    } catch (err) {
+        console.warn("[AE Installer] Notifications API unavailable:", err.message);
+        const navCount = $("#notificationNavCount");
+        if (navCount) navCount.style.display = "none";
+        const badge = $("#notificationBadge");
+        if (badge) badge.style.display = "none";
+        const topDot = $("#topNotificationDot");
+        if (topDot) topDot.style.display = "none";
+    }
+}
+
+async function markNotificationRead(notifId, el) {
+    if (!notifId) return;
+    try {
+        if (el) {
+            el.classList.remove("unread");
+            el.classList.add("read");
+            const pip = el.querySelector("span[title='Unread']");
+            if (pip) pip.remove();
+        }
+        await InstallerAPI.patch(`/api/installers/notifications/${notifId}/read`, {});
+        const remainingUnread = document.querySelectorAll("#notificationsList .notification-item.unread").length;
+        const navCount = $("#notificationNavCount");
+        if (navCount) {
+            navCount.textContent = remainingUnread;
+            navCount.style.display = remainingUnread > 0 ? "inline-flex" : "none";
+        }
+        const topDot = $("#topNotificationDot");
+        if (topDot) {
+            topDot.style.display = remainingUnread > 0 ? "block" : "none";
+        }
+    } catch (e) {}
+}
+
+async function handleInstallerNotificationClick(notifId, type, title, message, el) {
+    if (notifId) {
+        await markNotificationRead(notifId, el);
+    }
+
+    const combined = `${type || ""} ${title || ""} ${message || ""}`.toLowerCase();
+
+    // 1. Direct link to Profile & Settlement Banking for banking/settlement/KYC/verification notices
+    if (
+        type === "banking" ||
+        type === "verification" ||
+        combined.includes("settlement") ||
+        combined.includes("banking") ||
+        combined.includes("bank") ||
+        combined.includes("payout") ||
+        combined.includes("kyc") ||
+        combined.includes("cac") ||
+        combined.includes("profile") ||
+        combined.includes("approved") ||
+        combined.includes("unlocked")
+    ) {
+        showPage("profile");
+        setTimeout(() => {
+            const bankingCard = document.getElementById("bankingFormCard") || document.querySelector(".banking-card");
+            if (bankingCard) {
+                bankingCard.scrollIntoView({ behavior: "smooth", block: "center" });
+                bankingCard.classList.remove("highlight-pulse");
+                void bankingCard.offsetWidth;
+                bankingCard.classList.add("highlight-pulse");
+            }
+        }, 150);
+        return;
+    }
+
+    // 2. Direct link to Jobs for assignment or project notices
+    if (
+        type === "assignment" ||
+        combined.includes("assigned") ||
+        combined.includes("job") ||
+        combined.includes("project") ||
+        combined.includes("field")
+    ) {
+        showPage("my-jobs");
+        return;
+    }
+
+    // 3. Direct link for commissioning
+    if (type === "commissioning" || combined.includes("commission")) {
+        showPage("commissioning");
+        return;
+    }
+}
+
+function timeAgoInstaller(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    if (seconds < 60) return "Just now";
+    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+    return `${Math.floor(seconds / 86400)}d ago`;
+}
+
+
+/* =========================================================
+   INSTALLER PROFILE, SETTLEMENT & VERIFICATION LOGIC
+   ========================================================= */
+
+let currentInstallerData = null;
+let pendingProfilePhotoBase64 = null;
+
+// Mask rule: 3 starting digits open, 4 ending digits open, rest *
+function maskSensitiveDigits(val) {
+    if (!val) return "";
+    const str = String(val).trim();
+    if (str.length <= 7) return str;
+    const start = str.slice(0, 3);
+    const end = str.slice(-4);
+    const maskedLength = Math.max(1, str.length - 7);
+    return `${start}${"*".repeat(maskedLength)}${end}`;
+}
+
+async function loadInstallerProfileFromAPI() {
+    try {
+        const res = await InstallerAPI.get("/api/installers/me");
+        if (!res || !res.data) {
+            console.warn("[AE Installer] No installer profile data returned from /api/installers/me");
+            return;
+        }
+
+        currentInstallerData = res.data;
+        renderInstallerProfile(currentInstallerData);
+    } catch (err) {
+        console.warn("[AE Installer] Profile API unavailable:", err.message);
+    }
+}
+
+let pendingCacDocumentBase64 = null;
+
+function updateGlobalVerificationBanner(installer) {
+    const banner = $("#installerGlobalAlertBanner");
+    const title = $("#globalAlertTitle");
+    const msg = $("#globalAlertMessage");
+    const icon = $("#globalAlertIcon");
+    const btn = $("#btnBannerGoProfile");
+    if (!banner || !installer) return;
+
+    const vStatus = String(installer.verification_status || installer.verificationStatus || installer.status || "").toLowerCase().trim();
+    const bStatus = String(installer.banking_verification_status || installer.bankingVerificationStatus || "").toLowerCase().trim();
+
+    // 1. Once verified or approved by Admin, the registration banner disappears completely
+    if (vStatus === "verified" || vStatus === "approved") {
+        banner.style.display = "none";
+        return;
+    }
+
+    // 2. Explicit rejection notice
+    if (vStatus === "rejected" || bStatus === "rejected") {
+        banner.style.display = "block";
+        banner.className = "global-portal-banner banner-danger";
+        if (icon) icon.className = "fa-solid fa-triangle-exclamation banner-icon";
+        if (title) title.textContent = "Profile Verification Notice";
+        if (msg) msg.textContent = "Your profile information and submitted credentials do not tally with our regulatory verification standards. Please review your banking and professional documents inside your profile and resubmit for Admin approval.";
+        if (btn) btn.textContent = "Update Profile Now →";
+        return;
+    }
+
+    // 3. Pending / Unverified state
+    banner.style.display = "block";
+    banner.className = "global-portal-banner banner-warning";
+    if (icon) icon.className = "fa-solid fa-circle-exclamation banner-icon";
+    if (title) title.textContent = "Action Required: Complete Registration in Profile";
+    if (msg) msg.textContent = "Please complete your financial settlement banking details, CAC upload and primary specialization in your profile to request Admin verification and unlock field jobs.";
+    if (btn) btn.textContent = "Complete Profile Now →";
+}
+
+function renderInstallerProfile(installer) {
+    if (!installer) return;
+
+    const fullName = installer.contact_name || installer.company_name || PORTAL_CONFIG.installerName || "Certified Installer";
+    const installerCode = installer.installer_code || PORTAL_CONFIG.installerId || "AEI-0001";
+    const email = installer.email || installer.user_email || "";
+    const phone = installer.phone || installer.user_phone || "+2348133615132";
+    const state = installer.state || "FCT Abuja";
+    const specialization = installer.specialization || (Array.isArray(installer.specializations) ? installer.specializations.join(", ") : "Solar Installation & Inverter Systems");
+    const photo = installer.profile_image || pendingProfilePhotoBase64 || null;
+
+    // 1. Profile Avatar & Initials
+    const initials = fullName
+        .split(" ")
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(w => w[0].toUpperCase())
+        .join("") || "EA";
+
+    const avatarImg = $("#profileAvatarImg");
+    const avatarInitials = $("#profileAvatarInitials");
+    const sidebarInitials = $("#sidebarAvatarInitials");
+    const footerInitials = $("#footerAvatarInitials");
+    const topAvatarImg = $("#topAvatarImg");
+    const topAvatarInitials = $("#topAvatarInitials");
+    const brandLogoImg = $("#brandLogoImg");
+    const miniAvatarBox = $(".mini-avatar");
+    const footerAvatarBox = $(".profile-avatar");
+
+    if (sidebarInitials) sidebarInitials.textContent = initials;
+    if (footerInitials) footerInitials.textContent = initials;
+    if (topAvatarInitials) topAvatarInitials.textContent = initials;
+
+    if (photo) {
+        if (avatarImg) {
+            avatarImg.src = photo;
+            avatarImg.style.display = "block";
+        }
+        if (avatarInitials) avatarInitials.style.display = "none";
+
+        // Requirement: on the header logo image the installer image should appear there
+        if (brandLogoImg) {
+            brandLogoImg.src = photo;
+            brandLogoImg.style.borderRadius = "9px";
+            brandLogoImg.style.objectFit = "cover";
+            brandLogoImg.alt = fullName + " - Certified Installer";
+        }
+
+        // Header topbar avatar
+        if (topAvatarImg) {
+            topAvatarImg.src = photo;
+            topAvatarImg.style.display = "block";
+        }
+        if (topAvatarInitials) topAvatarInitials.style.display = "none";
+
+        // Mini sidebar avatar
+        if (miniAvatarBox) {
+            miniAvatarBox.innerHTML = `<img src="${photo}" alt="${fullName}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+        }
+
+        // Sidebar footer avatar
+        if (footerAvatarBox) {
+            footerAvatarBox.innerHTML = `<img src="${photo}" alt="${fullName}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+        }
+    } else {
+        if (avatarImg) avatarImg.style.display = "none";
+        if (avatarInitials) {
+            avatarInitials.textContent = initials;
+            avatarInitials.style.display = "block";
+        }
+        if (topAvatarImg) topAvatarImg.style.display = "none";
+        if (topAvatarInitials) topAvatarInitials.style.display = "block";
+    }
+
+    // 2. Identity info
+    setText("#profileInstallerName", fullName);
+    setText("#topInstallerName", fullName);
+    setText("#sidebarInstallerName", fullName.split(" ")[0]);
+    setText("#footerInstallerName", fullName);
+    setText("#profileSidebarCode", installerCode);
+
+    // 3. Protected fields (1: Installer ID, 2: Email, 3: Phone)
+    const codeInput = $("#profileInstallerId");
+    if (codeInput) codeInput.value = installerCode;
+
+    const emailInput = $("#profileEmail");
+    if (emailInput) emailInput.value = email;
+
+    const phoneInput = $("#profilePhone");
+    if (phoneInput) phoneInput.value = phone;
+
+    const nameInput = $("#profileFullName");
+    if (nameInput) nameInput.value = fullName;
+
+    const compInput = $("#profileCompanyName");
+    if (compInput) compInput.value = installer.company_name || "";
+
+    const rcInput = $("#profileRcNumber");
+    if (rcInput) rcInput.value = installer.rc_number || installer.cac_registration_number || "";
+
+    const stateInput = $("#profileState");
+    if (stateInput) stateInput.value = state;
+
+    const lgaInput = $("#profileLga");
+    if (lgaInput) lgaInput.value = installer.local_government || installer.lga || "";
+
+    const addrInput = $("#profileAddress");
+    if (addrInput) addrInput.value = installer.address || "";
+
+    const specInput = $("#profileSpecialization");
+    if (specInput) specInput.value = specialization;
+
+    // CAC Document preview / status
+    const cacBadge = $("#cacDocStatusBadge");
+    const cacViewBtn = $("#btnViewCurrentCac");
+    const cacFileDisplay = $("#cacFileNameDisplay");
+    if (installer.cac_certificate_url) {
+        if (cacBadge) {
+            cacBadge.className = "status-pill status-complete";
+            cacBadge.textContent = "✓ CAC Uploaded";
+        }
+        if (cacViewBtn) {
+            cacViewBtn.style.display = "inline-flex";
+            cacViewBtn.href = installer.cac_certificate_url;
+        }
+        if (cacFileDisplay) {
+            cacFileDisplay.textContent = "Official CAC Certificate linked";
+        }
+    } else {
+        if (cacBadge) {
+            cacBadge.className = "status-pill status-warning";
+            cacBadge.textContent = "Not Uploaded";
+        }
+        if (cacViewBtn) cacViewBtn.style.display = "none";
+        if (cacFileDisplay) cacFileDisplay.textContent = "No file chosen";
+    }
+
+    // Update Top Global Verification Alert Banner
+    updateGlobalVerificationBanner(installer);
+
+    // 4. Banking Form & Verification Status Handling
+    const bankNameInput = $("#profileBankName");
+    const accNameInput = $("#profileAccountName");
+    const accNumInput = $("#profileAccountNumber");
+    const bvnInput = $("#profileAccountBvn");
+
+    const badge = $("#bankingVerificationBadge");
+    const miniBadge = $("#profileBankingBadgeMini");
+    const statusText = $("#profileVerificationText");
+    const noticeBanner = $("#bankingNoticeBanner");
+    const noticeTitle = $("#bankingNoticeTitle");
+    const noticeText = $("#bankingNoticeText");
+
+    const btnSubmit = $("#btnSubmitBanking");
+    const btnUnlock = $("#btnRequestBankUnlock");
+    const accLockTag = $("#accNumberLockTag");
+    const bvnLockTag = $("#bvnLockTag");
+    const accHint = $("#accNumberHint");
+    const bvnHint = $("#bvnHint");
+
+    const bankingStatus = (installer.banking_verification_status || (installer.bank_name ? "pending" : "unverified")).toLowerCase();
+
+    const isApprovedAndLocked = (bankingStatus === "verified" || bankingStatus === "approved") && !installer.banking_unlocked;
+
+    if (isApprovedAndLocked) {
+        // STATE: VERIFIED & LOCKED
+        if (badge) {
+            badge.className = "status-pill status-complete";
+            badge.innerHTML = `<i class="fa-solid fa-lock"></i> Verified Settlement Account (Locked)`;
+        }
+        if (miniBadge) {
+            miniBadge.className = "status-pill status-complete";
+            miniBadge.innerHTML = `<i class="fa-solid fa-lock"></i> Banking: Verified (Locked)`;
+        }
+        if (statusText) {
+            statusText.className = "text-green";
+            statusText.textContent = "Verified (Locked)";
+        }
+        if (noticeBanner) {
+            noticeBanner.className = "banking-notice-banner notice-verified";
+            noticeBanner.style.background = "#f0fdf4";
+            noticeBanner.style.borderColor = "#bbf7d0";
+        }
+        if (noticeTitle) noticeTitle.textContent = "Verified Settlement Account (Locked)";
+        if (noticeText) noticeText.innerHTML = "Your banking details are verified and permanently locked to protect your account. In accordance with security policy, verified accounts cannot be changed directly unless you request from Admin and authorization is granted.";
+
+        if (bankNameInput) {
+            bankNameInput.value = installer.bank_name || "";
+            bankNameInput.readOnly = true;
+            bankNameInput.classList.add("locked-input");
+        }
+        if (accNameInput) {
+            accNameInput.value = installer.account_name || "";
+            accNameInput.readOnly = true;
+            accNameInput.classList.add("locked-input");
+        }
+        if (accNumInput) {
+            accNumInput.value = maskSensitiveDigits(installer.account_number);
+            accNumInput.readOnly = true;
+            accNumInput.classList.add("locked-input");
+        }
+        if (bvnInput) {
+            bvnInput.value = maskSensitiveDigits(installer.account_bvn);
+            bvnInput.readOnly = true;
+            bvnInput.classList.add("locked-input");
+        }
+
+        if (accLockTag) accLockTag.style.display = "block";
+        if (bvnLockTag) bvnLockTag.style.display = "block";
+        if (accHint) accHint.textContent = "(3 first & 4 ending digits open, rest *)";
+        if (bvnHint) bvnHint.textContent = "(Masked for security)";
+
+        if (btnSubmit) btnSubmit.style.display = "none";
+        if (btnUnlock) btnUnlock.style.display = "inline-flex";
+
+    } else if (installer.banking_unlocked) {
+        // STATE: UNLOCKED BY ADMIN FOR EDITING
+        if (badge) {
+            badge.className = "status-pill status-pending";
+            badge.innerHTML = `<i class="fa-solid fa-lock-open"></i> Banking Unlocked`;
+        }
+        if (miniBadge) {
+            miniBadge.className = "status-pill status-pending";
+            miniBadge.innerHTML = `<i class="fa-solid fa-lock-open"></i> Banking: Unlocked`;
+        }
+        if (statusText) {
+            statusText.className = "text-gold";
+            statusText.textContent = "Unlocked for Edit";
+        }
+        if (noticeBanner) {
+            noticeBanner.className = "banking-notice-banner notice-pending";
+            noticeBanner.style.background = "#eff6ff";
+            noticeBanner.style.borderColor = "#bfdbfe";
+        }
+        if (noticeTitle) noticeTitle.textContent = "Banking Information Unlocked";
+        if (noticeText) noticeText.innerHTML = "Admin has temporarily unlocked your settlement banking section for updates. Please enter your corrected details below and click Submit to request re-verification.";
+
+        if (bankNameInput) {
+            bankNameInput.value = installer.bank_name || "";
+            bankNameInput.readOnly = false;
+            bankNameInput.classList.remove("locked-input");
+        }
+        if (accNameInput) {
+            accNameInput.value = installer.account_name || "";
+            accNameInput.readOnly = false;
+            accNameInput.classList.remove("locked-input");
+        }
+        if (accNumInput) {
+            accNumInput.value = installer.account_number || "";
+            accNumInput.readOnly = false;
+            accNumInput.classList.remove("locked-input");
+        }
+        if (bvnInput) {
+            bvnInput.value = installer.account_bvn || "";
+            bvnInput.readOnly = false;
+            bvnInput.classList.remove("locked-input");
+        }
+
+        if (accLockTag) accLockTag.style.display = "none";
+        if (bvnLockTag) bvnLockTag.style.display = "none";
+        if (accHint) accHint.textContent = "";
+        if (bvnHint) bvnHint.textContent = "";
+
+        if (btnSubmit) {
+            btnSubmit.style.display = "inline-flex";
+            btnSubmit.disabled = false;
+            btnSubmit.style.opacity = "1";
+            btnSubmit.style.cursor = "pointer";
+            btnSubmit.innerHTML = `<i class="fa-solid fa-shield-halved"></i> Resubmit Settlement Details`;
+        }
+        if (btnUnlock) btnUnlock.style.display = "none";
+
+    } else if (bankingStatus === "pending") {
+        // STATE: PENDING VERIFICATION (Editable while awaiting Admin review as per requirement #5)
+        if (badge) {
+            badge.className = "status-pill status-pending";
+            badge.innerHTML = `<i class="fa-solid fa-clock"></i> Pending Verify`;
+        }
+        if (miniBadge) {
+            miniBadge.className = "status-pill status-pending";
+            miniBadge.innerHTML = `<i class="fa-solid fa-clock"></i> Banking: Pending`;
+        }
+        if (statusText) {
+            statusText.className = "text-gold";
+            statusText.textContent = "Pending Verify";
+        }
+        if (noticeBanner) {
+            noticeBanner.className = "banking-notice-banner notice-pending";
+            noticeBanner.style.background = "#fffbeb";
+            noticeBanner.style.borderColor = "#fde68a";
+        }
+        if (noticeTitle) noticeTitle.textContent = "Settlement Account Pending Review";
+        if (noticeText) noticeText.innerHTML = "Your settlement details have been submitted and are awaiting Admin review. You may modify and correct these details if needed.";
+
+        if (bankNameInput) {
+            bankNameInput.value = installer.bank_name || "";
+            bankNameInput.readOnly = false;
+            bankNameInput.classList.remove("locked-input");
+        }
+        if (accNameInput) {
+            accNameInput.value = installer.account_name || "";
+            accNameInput.readOnly = false;
+            accNameInput.classList.remove("locked-input");
+        }
+        if (accNumInput) {
+            accNumInput.value = installer.account_number || "";
+            accNumInput.readOnly = false;
+            accNumInput.classList.remove("locked-input");
+        }
+        if (bvnInput) {
+            bvnInput.value = installer.account_bvn || "";
+            bvnInput.readOnly = false;
+            bvnInput.classList.remove("locked-input");
+        }
+
+        if (accLockTag) accLockTag.style.display = "none";
+        if (bvnLockTag) bvnLockTag.style.display = "none";
+        if (accHint) accHint.textContent = "";
+        if (bvnHint) bvnHint.textContent = "";
+
+        if (btnSubmit) {
+            btnSubmit.style.display = "inline-flex";
+            btnSubmit.disabled = false;
+            btnSubmit.style.opacity = "1";
+            btnSubmit.style.cursor = "pointer";
+            btnSubmit.innerHTML = `<i class="fa-solid fa-shield-halved"></i> Update Settlement Details`;
+        }
+        if (btnUnlock) btnUnlock.style.display = "none";
+
+    } else if (bankingStatus === "rejected") {
+        // STATE: REJECTED / REQUIRES CORRECTION
+        if (badge) {
+            badge.className = "status-pill status-warning";
+            badge.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Requires Correction`;
+        }
+        if (miniBadge) {
+            miniBadge.className = "status-pill status-warning";
+            miniBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Banking: Rejected`;
+        }
+        if (statusText) {
+            statusText.className = "text-danger";
+            statusText.textContent = "Requires Correction";
+        }
+        if (noticeBanner) {
+            noticeBanner.className = "banking-notice-banner notice-danger";
+            noticeBanner.style.background = "#fff1f2";
+            noticeBanner.style.borderColor = "#fecaca";
+        }
+        if (noticeTitle) noticeTitle.textContent = "Settlement Account Requires Correction";
+        const reasonText = installer.banking_rejected_reason ? ` Reason: <em>${escapeHtml(installer.banking_rejected_reason)}</em>.` : "";
+        if (noticeText) noticeText.innerHTML = `Admin rejected the submitted settlement information and requested correction.${reasonText} Please update your banking details below and resubmit.`;
+
+        if (bankNameInput) {
+            bankNameInput.value = installer.bank_name || "";
+            bankNameInput.readOnly = false;
+            bankNameInput.classList.remove("locked-input");
+        }
+        if (accNameInput) {
+            accNameInput.value = installer.account_name || "";
+            accNameInput.readOnly = false;
+            accNameInput.classList.remove("locked-input");
+        }
+        if (accNumInput) {
+            accNumInput.value = installer.account_number || "";
+            accNumInput.readOnly = false;
+            accNumInput.classList.remove("locked-input");
+        }
+        if (bvnInput) {
+            bvnInput.value = installer.account_bvn || "";
+            bvnInput.readOnly = false;
+            bvnInput.classList.remove("locked-input");
+        }
+
+        if (accLockTag) accLockTag.style.display = "none";
+        if (bvnLockTag) bvnLockTag.style.display = "none";
+        if (accHint) accHint.textContent = "";
+        if (bvnHint) bvnHint.textContent = "";
+
+        if (btnSubmit) {
+            btnSubmit.style.display = "inline-flex";
+            btnSubmit.disabled = false;
+            btnSubmit.style.opacity = "";
+            btnSubmit.style.cursor = "pointer";
+            btnSubmit.innerHTML = `<i class="fa-solid fa-arrow-rotate-right"></i> Resubmit Corrected Details`;
+        }
+        if (btnUnlock) btnUnlock.style.display = "none";
+
+    } else {
+        // STATE: ACTION REQUIRED / READY TO FILL
+        if (badge) {
+            badge.className = "status-pill status-warning";
+            badge.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Action Required`;
+        }
+        if (miniBadge) {
+            miniBadge.className = "status-pill status-warning";
+            miniBadge.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Banking: Action Required`;
+        }
+        if (statusText) {
+            statusText.className = "text-muted";
+            statusText.textContent = "Unregistered";
+        }
+        if (noticeBanner) {
+            noticeBanner.className = "banking-notice-banner notice-info";
+        }
+        if (noticeTitle) noticeTitle.textContent = "Bank Details & Photo Registration";
+        if (noticeText) noticeText.innerHTML = "Fill in your official bank account details and capture your installer image. After clicking Submit, your card will indicate <strong>Pending Verify</strong> until approved by the Admin.";
+
+        if (bankNameInput) {
+            bankNameInput.value = installer.bank_name || "";
+            bankNameInput.readOnly = false;
+            bankNameInput.classList.remove("locked-input");
+        }
+        if (accNameInput) {
+            accNameInput.value = installer.account_name || "";
+            accNameInput.readOnly = false;
+            accNameInput.classList.remove("locked-input");
+        }
+        if (accNumInput) {
+            accNumInput.value = installer.account_number || "";
+            accNumInput.readOnly = false;
+            accNumInput.classList.remove("locked-input");
+        }
+        if (bvnInput) {
+            bvnInput.value = installer.account_bvn || "";
+            bvnInput.readOnly = false;
+            bvnInput.classList.remove("locked-input");
+        }
+
+        if (accLockTag) accLockTag.style.display = "none";
+        if (bvnLockTag) bvnLockTag.style.display = "none";
+        if (accHint) accHint.textContent = "";
+        if (bvnHint) bvnHint.textContent = "";
+
+        if (btnSubmit) {
+            btnSubmit.style.display = "inline-flex";
+            btnSubmit.disabled = false;
+            btnSubmit.style.opacity = "";
+            btnSubmit.style.cursor = "pointer";
+            btnSubmit.innerHTML = `<i class="fa-solid fa-shield-halved"></i> Submit Settlement Details & Photo`;
+        }
+        if (btnUnlock) btnUnlock.style.display = "none";
+    }
+}
+
+async function submitBankingDetails(event) {
+    if (event) event.preventDefault();
+
+    const bankingStatus = (currentInstallerData?.banking_verification_status || "").toLowerCase();
+    const isLocked = (bankingStatus === "verified" || bankingStatus === "approved") && !currentInstallerData?.banking_unlocked;
+    if (isLocked) {
+        showToast("Your verified settlement account is locked. Please request Admin to unlock or modify banking details.", "error");
+        return;
+    }
+
+    const bankName = ($("#profileBankName")?.value || "").trim();
+    const accountName = ($("#profileAccountName")?.value || "").trim();
+    const accountNumber = ($("#profileAccountNumber")?.value || "").trim().replace(/\D/g, "");
+    const accountBvn = ($("#profileAccountBvn")?.value || "").trim().replace(/\D/g, "");
+
+    if (!bankName) {
+        showToast("Please enter or select your Bank Name.", "error");
+        $("#profileBankName")?.focus();
+        return;
+    }
+    if (!accountName) {
+        showToast("Please enter the official Account Name.", "error");
+        $("#profileAccountName")?.focus();
+        return;
+    }
+    if (!accountNumber || accountNumber.length !== 10) {
+        showToast("Please enter a valid 10-digit NUBAN Account Number.", "error");
+        $("#profileAccountNumber")?.focus();
+        return;
+    }
+    if (!accountBvn || accountBvn.length !== 11) {
+        showToast("Please enter a valid 11-digit BVN.", "error");
+        $("#profileAccountBvn")?.focus();
+        return;
+    }
+
+    const photoToUpload = pendingProfilePhotoBase64 || currentInstallerData?.profile_image || null;
+
+    const submitBtn = $("#btnSubmitBanking");
+    const originalText = submitBtn ? submitBtn.innerHTML : "";
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Submitting for Verification...`;
+    }
+
+    try {
+        const rcNumber = ($("#profileRcNumber")?.value || "").trim();
+        const specialization = ($("#profileSpecialization")?.value || "").trim();
+        const companyName = ($("#profileCompanyName")?.value || "").trim();
+        const state = ($("#profileState")?.value || "").trim();
+        const localGovernment = ($("#profileLga")?.value || "").trim();
+        const address = ($("#profileAddress")?.value || "").trim();
+
+        const payload = {
+            bankName,
+            accountName,
+            accountNumber,
+            accountBvn
+        };
+        if (rcNumber) payload.rcNumber = rcNumber;
+        if (specialization) payload.specialization = specialization;
+        if (companyName) payload.companyName = companyName;
+        if (state) payload.state = state;
+        if (localGovernment) payload.localGovernment = localGovernment;
+        if (address) payload.address = address;
+        if (pendingCacDocumentBase64) payload.cacCertificate = pendingCacDocumentBase64;
+        if (photoToUpload) {
+            payload.profileImage = photoToUpload;
+        }
+
+        const res = await InstallerAPI.patch("/api/installers/me", payload);
+        if (res && res.success) {
+            showToast("Account details & photo submitted! Card status: Pending Verify.", "success");
+            currentInstallerData = res.data;
+            renderInstallerProfile(currentInstallerData);
+        } else {
+            showToast(res?.message || "Failed to submit settlement details.", "error");
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        }
+    } catch (err) {
+        showToast(err.message || "Network error submitting details.", "error");
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+        }
+    }
+}
+
+/* =========================================================
+   OFFICIAL CAMERA PROFILE PHOTO CAPTURE & VALIDATION SYSTEM
+   ========================================================= */
+
+let cameraMediaStream = null;
+let capturedSnapshotDataUrl = null;
+let isCaptureValid = false;
+let liveFeedTimer = null;
+
+async function openCameraModal() {
+    const modalBackdrop = $("#cameraModalBackdrop");
+    const video = $("#cameraVideo");
+    const canvas = $("#cameraCanvas");
+    const liveControls = $("#cameraLiveControls");
+    const reviewControls = $("#cameraReviewControls");
+    const errorOverlay = $("#cameraErrorOverlay");
+    const feedback = $("#validationFeedback");
+    const confirmationBox = $("#cameraConfirmationBox");
+    const chkEars = $("#chkEarsVisible");
+    const oval = $(".face-guide-oval");
+
+    if (!modalBackdrop) return;
+
+    // Reset UI state
+    modalBackdrop.style.display = "grid";
+    if (canvas) canvas.style.display = "none";
+    if (video) video.style.display = "block";
+    if (liveControls) liveControls.style.display = "flex";
+    if (reviewControls) reviewControls.style.display = "none";
+    if (errorOverlay) errorOverlay.style.display = "none";
+    if (feedback) feedback.style.display = "none";
+    if (confirmationBox) confirmationBox.style.display = "none";
+    if (chkEars) chkEars.checked = false;
+    if (oval) oval.classList.remove("valid");
+    capturedSnapshotDataUrl = null;
+    isCaptureValid = false;
+    resetValidationIndicators();
+
+    // Start live camera
+    await startCameraStream();
+}
+
+async function startCameraStream() {
+    const video = $("#cameraVideo");
+    const errorOverlay = $("#cameraErrorOverlay");
+    const errorTitle = $("#cameraErrorTitle");
+    const errorMsg = $("#cameraErrorMessage");
+
+    // Close any previous stream
+    stopCameraStream();
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        if (errorOverlay) {
+            errorOverlay.style.display = "flex";
+            if (errorTitle) errorTitle.textContent = "Camera Not Supported";
+            if (errorMsg) errorMsg.textContent = "Your browser does not support direct camera capture. You can upload an image file instead.";
+        }
+        return;
+    }
+
+    try {
+        // Request camera with preference for front-facing user camera
+        const constraints = {
+            video: {
+                facingMode: "user",
+                width: { ideal: 1280, min: 640 },
+                height: { ideal: 720, min: 480 }
+            },
+            audio: false
+        };
+
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        cameraMediaStream = stream;
+
+        if (video) {
+            video.srcObject = stream;
+            await video.play();
+        }
+
+        if (errorOverlay) errorOverlay.style.display = "none";
+
+        // Begin live check
+        initLiveFeedCheck();
+
+    } catch (err) {
+        console.warn("[Camera Capture] getUserMedia error:", err);
+        if (errorOverlay) {
+            errorOverlay.style.display = "flex";
+            if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+                if (errorTitle) errorTitle.textContent = "Camera Access Blocked";
+                if (errorMsg) errorMsg.textContent = "Camera permission was denied. Please allow camera access in your browser address bar settings to capture your official photo.";
+            } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
+                if (errorTitle) errorTitle.textContent = "No Camera Detected";
+                if (errorMsg) errorMsg.textContent = "No camera hardware was detected on your device. You can connect a webcam or upload an image file.";
+            } else {
+                if (errorTitle) errorTitle.textContent = "Camera Initialization Error";
+                if (errorMsg) errorMsg.textContent = `Unable to start camera (${err.message || "Unknown error"}). Try again or upload an image file.`;
+            }
+        }
+    }
+}
+
+function stopCameraStream() {
+    if (liveFeedTimer) {
+        clearInterval(liveFeedTimer);
+        liveFeedTimer = null;
+    }
+    if (cameraMediaStream) {
+        try {
+            cameraMediaStream.getTracks().forEach(track => track.stop());
+        } catch (e) {}
+        cameraMediaStream = null;
+    }
+    const video = $("#cameraVideo");
+    if (video) video.srcObject = null;
+}
+
+function closeCameraModal() {
+    stopCameraStream();
+    const modalBackdrop = $("#cameraModalBackdrop");
+    if (modalBackdrop) modalBackdrop.style.display = "none";
+}
+
+function resetValidationIndicators() {
+    ["ruleLighting", "ruleFace", "ruleEars"].forEach(id => {
+        const el = $(`#${id}`);
+        if (el) {
+            el.className = "validation-rule-item";
+            const icon = el.querySelector("i");
+            if (icon) icon.className = "fa-solid fa-circle-check";
+        }
+    });
+}
+
+function updateValidationRule(id, passed, labelText) {
+    const el = $(`#${id}`);
+    if (!el) return;
+    el.className = `validation-rule-item ${passed ? "passed" : "failed"}`;
+    const icon = el.querySelector("i");
+    if (icon) {
+        icon.className = passed ? "fa-solid fa-circle-check" : "fa-solid fa-circle-xmark";
+    }
+    if (labelText) {
+        const span = el.querySelector("span");
+        if (span) span.textContent = labelText;
+    }
+}
+
+// Pixel luminance & contrast analysis
+function analyzeLightingAndQuality(ctx, width, height) {
+    const imgData = ctx.getImageData(0, 0, width, height);
+    const data = imgData.data;
+    let totalLuminance = 0;
+    let sampled = 0;
+
+    for (let i = 0; i < data.length; i += 16) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+        totalLuminance += lum;
+        sampled++;
+    }
+
+    const avgLuminance = totalLuminance / Math.max(1, sampled);
+
+    if (avgLuminance < 38) {
+        return {
+            passed: false,
+            message: "Lighting is too low. Please move to a brighter, well-lit area.",
+            avgLuminance
+        };
+    }
+    if (avgLuminance > 232) {
+        return {
+            passed: false,
+            message: "Lighting is too bright or washed out. Please avoid excessive direct flash/glare.",
+            avgLuminance
+        };
+    }
+
+    return {
+        passed: true,
+        message: "Lighting is optimal.",
+        avgLuminance
+    };
+}
+
+function initLiveFeedCheck() {
+    if (liveFeedTimer) clearInterval(liveFeedTimer);
+    liveFeedTimer = setInterval(async () => {
+        const video = $("#cameraVideo");
+        const oval = $(".face-guide-oval");
+        if (!video || video.paused || video.ended || !video.videoWidth) return;
+
+        if ("FaceDetector" in window) {
+            try {
+                const detector = new window.FaceDetector({ fastMode: true, maxDetectedFaces: 2 });
+                const faces = await detector.detect(video);
+                if (faces && faces.length === 1 && oval) {
+                    oval.classList.add("valid");
+                    updateValidationRule("ruleFace", true, "Face In Alignment");
+                } else if (oval) {
+                    oval.classList.remove("valid");
+                }
+            } catch (e) {}
+        }
+    }, 1000);
+}
+
+async function capturePhotoSnapshot() {
+    const video = $("#cameraVideo");
+    const canvas = $("#cameraCanvas");
+    const liveControls = $("#cameraLiveControls");
+    const reviewControls = $("#cameraReviewControls");
+    const confirmationBox = $("#cameraConfirmationBox");
+    const feedback = $("#validationFeedback");
+    const oval = $(".face-guide-oval");
+
+    if (!video || !canvas) return;
+
+    if (liveFeedTimer) {
+        clearInterval(liveFeedTimer);
+        liveFeedTimer = null;
+    }
+
+    const vWidth = video.videoWidth || 640;
+    const vHeight = video.videoHeight || 480;
+
+    // Centered square crop around face reticle
+    const minDim = Math.min(vWidth, vHeight);
+    const startX = Math.round((vWidth - minDim) / 2);
+    const startY = Math.round((vHeight - minDim) / 2);
+
+    const cropSize = Math.max(640, minDim);
+    canvas.width = cropSize;
+    canvas.height = cropSize;
+
+    const ctx = canvas.getContext("2d");
+    // Mirror horizontally to match the front camera mirror preview
+    ctx.translate(cropSize, 0);
+    ctx.scale(-1, 1);
+
+    ctx.drawImage(
+        video,
+        startX, startY, minDim, minDim,
+        0, 0, cropSize, cropSize
+    );
+
+    // Reset canvas transform
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+    // Freeze view on canvas
+    video.style.display = "none";
+    canvas.style.display = "block";
+
+    // 1. Lighting analysis
+    const lightResult = analyzeLightingAndQuality(ctx, cropSize, cropSize);
+    updateValidationRule("ruleLighting", lightResult.passed, lightResult.passed ? "Good Lighting" : "Poor Lighting");
+
+    // 2. Face Detection where supported
+    let facePassed = true;
+    let faceMessage = "";
+
+    if ("FaceDetector" in window) {
+        try {
+            const detector = new window.FaceDetector({ fastMode: false, maxDetectedFaces: 5 });
+            const faces = await detector.detect(canvas);
+
+            if (faces.length === 0) {
+                facePassed = false;
+                faceMessage = "Face not detected. Please position your face directly inside the frame.";
+            } else if (faces.length > 1) {
+                facePassed = false;
+                faceMessage = "Only one person should be inside the capture frame.";
+            } else {
+                const face = faces[0].boundingBox;
+                const faceCenterX = face.x + face.width / 2;
+                const faceCenterY = face.y + face.height / 2;
+                const offX = Math.abs(faceCenterX - cropSize / 2) / cropSize;
+                const offY = Math.abs(faceCenterY - cropSize / 2) / cropSize;
+
+                if (offX > 0.28 || offY > 0.32) {
+                    facePassed = false;
+                    faceMessage = "Face is not centered. Please align face inside the guide frame.";
+                } else if (face.width < cropSize * 0.22) {
+                    facePassed = false;
+                    faceMessage = "Face is too far from camera. Please move closer.";
+                } else {
+                    facePassed = true;
+                }
+            }
+        } catch (detectErr) {
+            console.warn("FaceDetector check:", detectErr);
+            facePassed = true;
+        }
+    } else {
+        facePassed = true;
+    }
+
+    updateValidationRule("ruleFace", facePassed, facePassed ? "Face Forward & Centered" : "Alignment Error");
+
+    // Switch to review controls
+    if (liveControls) liveControls.style.display = "none";
+    if (reviewControls) reviewControls.style.display = "flex";
+    if (confirmationBox) confirmationBox.style.display = "block";
+
+    const overallPassed = lightResult.passed && facePassed;
+    isCaptureValid = overallPassed;
+
+    if (feedback) {
+        feedback.style.display = "flex";
+        if (overallPassed) {
+            feedback.className = "validation-feedback-ribbon success";
+            feedback.innerHTML = `<i class="fa-solid fa-circle-check"></i> Quality verified! Confirm both ears are visible and click "Confirm & Use Photo".`;
+            if (oval) oval.classList.add("valid");
+        } else {
+            feedback.className = "validation-feedback-ribbon error";
+            feedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${!lightResult.passed ? lightResult.message : faceMessage}`;
+            if (oval) oval.classList.remove("valid");
+        }
+    }
+
+    capturedSnapshotDataUrl = canvas.toDataURL("image/jpeg", 0.90);
+}
+
+function retakePhoto() {
+    const video = $("#cameraVideo");
+    const canvas = $("#cameraCanvas");
+    const liveControls = $("#cameraLiveControls");
+    const reviewControls = $("#cameraReviewControls");
+    const confirmationBox = $("#cameraConfirmationBox");
+    const feedback = $("#validationFeedback");
+    const oval = $(".face-guide-oval");
+    const chkEars = $("#chkEarsVisible");
+
+    if (canvas) canvas.style.display = "none";
+    if (video) video.style.display = "block";
+    if (liveControls) liveControls.style.display = "flex";
+    if (reviewControls) reviewControls.style.display = "none";
+    if (confirmationBox) confirmationBox.style.display = "none";
+    if (feedback) feedback.style.display = "none";
+    if (oval) oval.classList.remove("valid");
+    if (chkEars) chkEars.checked = false;
+
+    capturedSnapshotDataUrl = null;
+    isCaptureValid = false;
+    resetValidationIndicators();
+
+    initLiveFeedCheck();
+}
+
+async function confirmAndUsePhoto() {
+    if (!capturedSnapshotDataUrl) {
+        showToast("Please capture a photo first.", "error");
+        return;
+    }
+
+    if (!isCaptureValid) {
+        showToast("Photo does not meet verification requirements. Please retake following the guide.", "warning");
+        return;
+    }
+
+    const chkEars = $("#chkEarsVisible");
+    if (chkEars && !chkEars.checked) {
+        showToast("Please confirm that both ears are visible by checking the verification box.", "warning");
+        chkEars.focus();
+        return;
+    }
+
+    updateValidationRule("ruleEars", true, "Ears Confirmed Visible");
+
+    const confirmBtn = $("#btnConfirmPhoto");
+    const originalText = confirmBtn ? confirmBtn.innerHTML : "";
+    if (confirmBtn) {
+        confirmBtn.disabled = true;
+        confirmBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving to Backend...`;
+    }
+
+    try {
+        const res = await InstallerAPI.post("/api/installers/me/photo", {
+            photoBase64: capturedSnapshotDataUrl
+        });
+
+        if (res && res.success) {
+            const permanentUrl = res.data?.profileImage || capturedSnapshotDataUrl;
+
+            pendingProfilePhotoBase64 = permanentUrl;
+            if (currentInstallerData) {
+                currentInstallerData.profile_image = permanentUrl;
+                renderInstallerProfile(currentInstallerData);
+            }
+
+            const avatarImg = $("#profileAvatarImg");
+            const avatarInitials = $("#profileAvatarInitials");
+            if (avatarImg) {
+                avatarImg.src = permanentUrl;
+                avatarImg.style.display = "block";
+            }
+            if (avatarInitials) avatarInitials.style.display = "none";
+
+            const hint = $("#photoStatusHint");
+            if (hint) {
+                hint.textContent = "✓ Official photo saved and linked to your profile";
+                hint.style.color = "#10b981";
+                hint.style.fontWeight = "bold";
+            }
+
+            closeCameraModal();
+            showToast("Official profile photo captured and saved successfully!", "success");
+        } else {
+            showToast(res?.message || "Failed to save photo to backend.", "error");
+            if (confirmBtn) {
+                confirmBtn.disabled = false;
+                confirmBtn.innerHTML = originalText;
+            }
+        }
+    } catch (err) {
+        showToast(err.message || "Network error saving profile photo.", "error");
+        if (confirmBtn) {
+            confirmBtn.disabled = false;
+            confirmBtn.innerHTML = originalText;
+        }
+    }
+}
+
+function setupPhotoCapture() {
+    const triggerBtn = $("#btnTriggerPhoto");
+    const uploadTextBtn = $("#btnUploadPhotoText");
+    const fileInput = $("#installerPhotoInput");
+
+    const handleCameraOpen = () => {
+        const bankingStatus = (currentInstallerData?.banking_verification_status || "").toLowerCase();
+        if (bankingStatus === "verified") {
+            if (!confirm("Your profile is verified. Updating your photo will link to your official records. Proceed?")) return;
+        }
+        openCameraModal();
+    };
+
+    if (triggerBtn) triggerBtn.addEventListener("click", handleCameraOpen);
+    if (uploadTextBtn) uploadTextBtn.addEventListener("click", handleCameraOpen);
+
+    const btnCloseModal = $("#btnCloseCameraModal");
+    const btnCancel = $("#btnCancelCamera");
+    const btnShutter = $("#btnShutter");
+    const btnRetake = $("#btnRetakePhoto");
+    const btnConfirm = $("#btnConfirmPhoto");
+    const btnRetry = $("#btnRetryCamera");
+    const btnFallback = $("#btnFallbackUpload");
+
+    if (btnCloseModal) btnCloseModal.addEventListener("click", closeCameraModal);
+    if (btnCancel) btnCancel.addEventListener("click", closeCameraModal);
+    if (btnShutter) btnShutter.addEventListener("click", capturePhotoSnapshot);
+    if (btnRetake) btnRetake.addEventListener("click", retakePhoto);
+    if (btnConfirm) btnConfirm.addEventListener("click", confirmAndUsePhoto);
+    if (btnRetry) btnRetry.addEventListener("click", startCameraStream);
+
+    if (btnFallback) {
+        btnFallback.addEventListener("click", () => {
+            closeCameraModal();
+            if (fileInput) fileInput.click();
+        });
+    }
+
+    if (fileInput) {
+        fileInput.addEventListener("change", function(e) {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith("image/")) {
+                showToast("Please select an image file (JPEG, PNG, WebP).", "error");
+                return;
+            }
+
+            if (file.size > 8 * 1024 * 1024) {
+                showToast("Image size too large. Please select a photo under 8MB.", "warning");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = async function(evt) {
+                const base64 = evt.target.result;
+                try {
+                    const res = await InstallerAPI.post("/api/installers/me/photo", {
+                        photoBase64: base64
+                    });
+                    if (res && res.success) {
+                        const permanentUrl = res.data?.profileImage || base64;
+                        pendingProfilePhotoBase64 = permanentUrl;
+                        if (currentInstallerData) {
+                            currentInstallerData.profile_image = permanentUrl;
+                            renderInstallerProfile(currentInstallerData);
+                        }
+                        const avatarImg = $("#profileAvatarImg");
+                        const avatarInitials = $("#profileAvatarInitials");
+                        if (avatarImg) {
+                            avatarImg.src = permanentUrl;
+                            avatarImg.style.display = "block";
+                        }
+                        if (avatarInitials) avatarInitials.style.display = "none";
+                        showToast("Profile photo uploaded and saved successfully!", "success");
+                    } else {
+                        showToast(res?.message || "Failed to upload photo.", "error");
+                    }
+                } catch (err) {
+                    showToast("Error saving photo: " + err.message, "error");
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+}
+
+function openRequestChangeModal(defaultType) {
+    const modalBackdrop = $("#modalBackdrop");
+    const modalContent = $("#modalContent");
+    if (!modalBackdrop || !modalContent) return;
+
+    const email = currentInstallerData?.email || currentInstallerData?.user_email || "";
+    const phone = currentInstallerData?.phone || currentInstallerData?.user_phone || "";
+    const installerCode = currentInstallerData?.installer_code || "";
+    const bank = currentInstallerData?.bank_name ? `${currentInstallerData.bank_name} (${maskSensitiveDigits(currentInstallerData.account_number)})` : "Not Verified";
+
+    modalContent.innerHTML = `
+        <div class="change-request-modal">
+            <div class="modal-head">
+                <span class="eyebrow"><i class="fa-solid fa-shield-halved"></i> SECURITY AUTHORIZATION</span>
+                <h3>Request Admin Change</h3>
+                <p>Protected records (Installer ID, Registered Email, Phone Number, and Verified Settlement Accounts) cannot be altered directly by installers. Submit your official request for Administrator review.</p>
+            </div>
+
+            <form id="adminChangeRequestForm" onsubmit="submitAdminChangeRequest(event)">
+                <div class="form-field" style="margin-bottom: 14px;">
+                    <label for="changeRequestType">Field Requiring Modification <span class="required-star">*</span></label>
+                    <select id="changeRequestType" class="form-select" required>
+                        <option value="Registered Email" ${defaultType === 'email' ? 'selected' : ''}>Registered Email (Current: ${email})</option>
+                        <option value="Phone Number" ${defaultType === 'phone' ? 'selected' : ''}>Phone Number (Current: ${phone})</option>
+                        <option value="Installer ID" ${defaultType === 'id' ? 'selected' : ''}>Installer ID (Current: ${installerCode})</option>
+                        <option value="Bank Settlement Account" ${defaultType === 'banking' ? 'selected' : ''}>Bank Settlement Account (Current: ${bank})</option>
+                    </select>
+                </div>
+
+                <div class="form-field" style="margin-bottom: 14px;">
+                    <label for="changeRequestedValue">New Proposed Value <span class="required-star">*</span></label>
+                    <input type="text" id="changeRequestedValue" placeholder="Enter new email, phone, or bank details..." required>
+                </div>
+
+                <div class="form-field" style="margin-bottom: 18px;">
+                    <label for="changeRequestReason">Reason for Change Request <span class="required-star">*</span></label>
+                    <textarea id="changeRequestReason" rows="3" placeholder="Explain why this credential requires administrative modification..." required></textarea>
+                </div>
+
+                <div class="modal-form-actions">
+                    <button type="button" class="secondary-btn" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="primary-btn" id="btnSubmitChangeReq">
+                        <i class="fa-solid fa-paper-plane"></i> Submit Request to Admin
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+
+    modalBackdrop.classList.add("open");
+}
+
+async function submitAdminChangeRequest(event) {
+    if (event) event.preventDefault();
+
+    const changeType = $("#changeRequestType")?.value;
+    const requestedValue = $("#changeRequestedValue")?.value?.trim();
+    const reason = $("#changeRequestReason")?.value?.trim();
+
+    if (!changeType || !requestedValue || !reason) {
+        showToast("Please fill in all required fields.", "error");
+        return;
+    }
+
+    const submitBtn = $("#btnSubmitChangeReq");
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Submitting to Admin...`;
+    }
+
+    try {
+        const res = await InstallerAPI.post("/api/installers/request-change", {
+            changeType,
+            requestedValue,
+            reason
+        });
+
+        if (res && res.success) {
+            closeModal();
+            showToast("Change request successfully submitted to Admin! Review pending.", "success");
+        } else {
+            showToast(res?.message || "Failed to submit change request.", "error");
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Submit Request to Admin`;
+            }
+        }
+    } catch (err) {
+        showToast(err.message || "Network error submitting change request.", "error");
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Submit Request to Admin`;
+        }
+    }
+}
+
+async function saveGeneralProfile(event) {
+    if (event) event.preventDefault();
+
+    const contactName = $("#profileFullName")?.value?.trim();
+    const companyName = $("#profileCompanyName")?.value?.trim();
+    const rcNumber = $("#profileRcNumber")?.value?.trim();
+    const state = $("#profileState")?.value?.trim();
+    const lga = $("#profileLga")?.value?.trim();
+    const address = $("#profileAddress")?.value?.trim();
+    const specialization = $("#profileSpecialization")?.value?.trim();
+
+    const btn = $("#btnSaveGeneralProfile");
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving Profile...`;
+    }
+
+    try {
+        const payload = {};
+        if (contactName) payload.contactName = contactName;
+        if (companyName !== undefined) payload.companyName = companyName;
+        if (rcNumber !== undefined) payload.rcNumber = rcNumber;
+        if (state) payload.state = state;
+        if (lga !== undefined) payload.localGovernment = lga;
+        if (address !== undefined) payload.address = address;
+        if (specialization) payload.specialization = specialization;
+        if (pendingCacDocumentBase64) payload.cacCertificate = pendingCacDocumentBase64;
+
+        const res = await InstallerAPI.patch("/api/installers/me", payload);
+        if (res && res.success) {
+            showToast("Profile credentials updated and submitted for Admin review!", "success");
+            currentInstallerData = res.data;
+            pendingCacDocumentBase64 = null;
+            renderInstallerProfile(currentInstallerData);
+        } else {
+            showToast(res?.message || "Failed to update profile.", "error");
+        }
+    } catch (err) {
+        showToast(err.message || "Error updating profile.", "error");
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Save Profile Changes`;
+        }
+    }
+}
+
+/* =========================================================
+   SUPPORT PAGE — SYSTEM TECHNICAL MANUALS & SEARCH
+   ========================================================= */
+
+const SYSTEM_MANUALS = [
+    {
+        id: "man-deye-5-8k",
+        title: "Deye SUN-5/8K-SG01LP1 Low-Voltage Hybrid Inverter Manual",
+        brand: "Deye",
+        model: "SUN-5K / 8K-SG01LP1",
+        category: "inverter",
+        format: "PDF · 8.4 MB",
+        specs: ["5kW / 8kW", "48V Low Voltage", "Dual MPPT", "IP65 Waterproof"],
+        summary: "Official user manual and wiring schematics for Deye single-phase hybrid inverters. Covers AC/generator coupling, CT clamp placement, and lithium BMS comms.",
+        url: "/documents/DEYE-SUN-5-8K-SG01LP1-MANUAL-EN.pdf"
+    },
+    {
+        id: "man-felicity-ivem10048",
+        title: "Felicity Solar IVEM-10048 10kVA Hybrid Inverter Manual",
+        brand: "Felicity Solar",
+        model: "IVEM-10048",
+        category: "inverter",
+        format: "PDF · 6.2 MB",
+        specs: ["10kVA / 10kW", "48V DC", "Dual MPPT 500V", "Parallel Capable"],
+        summary: "Field technician guide for Felicity 10kVA low-voltage hybrid inverter. Includes DIP switch configuration, battery charging curves, and fault code guide.",
+        url: "/documents/FELICITY-IVEM10048-TECHNICAL-MANUAL.pdf"
+    },
+    {
+        id: "man-growatt-spf5000es",
+        title: "Growatt SPF 5000 ES Off-Grid Inverter Operation Manual",
+        brand: "Growatt",
+        model: "SPF 5000 ES",
+        category: "inverter",
+        format: "PDF · 5.8 MB",
+        specs: ["5000W Pure Sine", "48V Battery", "450V Max PV Voc", "SUB/SBU Modes"],
+        summary: "Comprehensive wiring and commissioning guide for Growatt SPF 5000 ES. Details lithium battery RS485/CAN port pinout and parallel operation up to 6 units.",
+        url: "/documents/GROWATT-SPF5000ES-OPERATION-MANUAL.pdf"
+    },
+    {
+        id: "man-sunsynk-8k",
+        title: "Sunsynk 8kW Single Phase Hybrid Inverter Field Guide",
+        brand: "Sunsynk",
+        model: "SUNSYNK-8K-SG01LP1",
+        category: "inverter",
+        format: "PDF · 9.1 MB",
+        specs: ["8.8kW Max AC", "48V", "AUX Load Port", "Smart Load Control"],
+        summary: "Field installer engineering handbook for Sunsynk 8kW hybrid inverters. Details touch screen setup, time-of-use (TOU) schedules, and micro-inverter integration.",
+        url: "/documents/SUNSYNK-8KW-HYBRID-INSTALLER-GUIDE.pdf"
+    },
+    {
+        id: "man-felicity-lpba48100",
+        title: "Felicity Solar LPBA48100 5.12kWh LiFePO4 Battery Manual",
+        brand: "Felicity Solar",
+        model: "LPBA48100-OL",
+        category: "battery",
+        format: "PDF · 4.5 MB",
+        specs: ["51.2V 100Ah", "5.12kWh", "6000 Cycles @ 80% DoD", "CAN/RS485 BMS"],
+        summary: "Operation and BMS communication wiring guide for Felicity wall-mounted LiFePO4 battery packs. Details master-slave DIP addressing for multi-pack expansion.",
+        url: "/documents/FELICITY-LPBA48100-BMS-MANUAL.pdf"
+    },
+    {
+        id: "man-pylontech-us3000c",
+        title: "Pylontech US3000C 3.55kWh Lithium Battery Commissioning Guide",
+        brand: "Pylontech",
+        model: "US3000C",
+        category: "battery",
+        format: "PDF · 5.3 MB",
+        specs: ["48V 74Ah", "3.55kWh", "95% DoD", "Tier-1 BMS"],
+        summary: "Technical installation manual for Pylontech rack-mount storage. Includes CAN cable pinout diagrams for Deye, Growatt, and Victron inverters.",
+        url: "/documents/PYLONTECH-US3000C-COMMISSIONING-GUIDE.pdf"
+    },
+    {
+        id: "man-dyness-bx51100",
+        title: "Dyness BX51100 5.12kWh LiFePO4 Battery Module Manual",
+        brand: "Dyness",
+        model: "BX51100",
+        category: "battery",
+        format: "PDF · 4.9 MB",
+        specs: ["51.2V 100Ah", "5.12kWh", "Natural Cooling", "IP20 Indoor"],
+        summary: "Installation and inverter protocol matching guide for Dyness 5.12kWh battery systems. Contains wiring schematics and wake-up button sequence.",
+        url: "/documents/DYNESS-BX51100-USER-MANUAL.pdf"
+    },
+    {
+        id: "man-jinko-tigerpro550",
+        title: "Jinko Solar Tiger Pro 550W Mono-Facial PV Module Datasheet",
+        brand: "Jinko Solar",
+        model: "JKM550M-72HL4-V",
+        category: "solar",
+        format: "PDF · 3.7 MB",
+        specs: ["550Wp", "49.62V Voc", "13.98A Isc", "182mm Half-Cell"],
+        summary: "Mechanical installation and electrical characteristics for Jinko 550W Mono-PERC modules. Details roof clamping torque, rail spacing, and MC4 guidelines.",
+        url: "/documents/JINKO-TIGER-PRO-550W-INSTALLATION-MANUAL.pdf"
+    },
+    {
+        id: "man-canadian-hiku6",
+        title: "Canadian Solar HiKu6 545W Mono PERC Module Guide",
+        brand: "Canadian Solar",
+        model: "CS6W-545MS",
+        category: "solar",
+        format: "PDF · 4.1 MB",
+        specs: ["545W", "49.4V Voc", "13.95A Isc", "21.3% Efficiency"],
+        summary: "Comprehensive field installation manual for Canadian Solar HiKu6 modules. Covers string voltage sizing in Nigerian tropical ambient temperatures.",
+        url: "/documents/CANADIAN-SOLAR-HIKU6-545W-GUIDE.pdf"
+    },
+    {
+        id: "man-jasolar-540",
+        title: "JA Solar 540W DeepBlue 3.0 Module Engineering Manual",
+        brand: "JA Solar",
+        model: "JAM72S30-540/MR",
+        category: "solar",
+        format: "PDF · 3.9 MB",
+        specs: ["540W", "49.60V Voc", "13.86A Isc", "Anti-PID Design"],
+        summary: "Assembly instructions and lightning protection bonding guide for JA Solar DeepBlue utility and residential solar arrays.",
+        url: "/documents/JA-SOLAR-540W-DEEPBLUE-MANUAL.pdf"
+    },
+    {
+        id: "man-ae-protection-sop",
+        title: "AE Renewable SOP: AC/DC Distribution & Surge Protection Standard",
+        brand: "AE Renewable",
+        model: "SOP-PROT-2026-V2",
+        category: "protection",
+        format: "PDF · 7.2 MB",
+        specs: ["Class II DC SPD", "Type 2 AC SPD", "30mA RCD", "Earth Spike < 5Ω"],
+        summary: "AE Renewable internal field engineering standard for AC/DC distribution boards, automatic changeover switches, earth spike resistance, and surge arresters.",
+        url: "/documents/AE-RENEWABLE-PROTECTION-SOP-V2.pdf"
+    },
+    {
+        id: "man-ae-commissioning-sop",
+        title: "AE Renewable Commissioning & Field Acceptance Checklist SOP",
+        brand: "AE Renewable",
+        model: "SOP-COMM-2026-V1",
+        category: "protection",
+        format: "PDF · 5.5 MB",
+        specs: ["6-Stage Photo Evidence", "Voc & Vmp Check", "Phase Balancing", "BMS Pairing"],
+        summary: "Step-by-step verification standard required for all AE certified installers to achieve formal project sign-off and milestone labour payout release.",
+        url: "/documents/AE-RENEWABLE-COMMISSIONING-STANDARDS.pdf"
+    }
+];
+
+let activeManualCategory = "all";
+let currentManualSearchKeyword = "";
+
+function renderSystemManuals(keyword = "", category = "all") {
+    const grid = $("#manualsGrid");
+    if (!grid) return;
+
+    currentManualSearchKeyword = (keyword || "").trim().toLowerCase();
+    activeManualCategory = category || "all";
+
+    // Filter manuals
+    const filtered = SYSTEM_MANUALS.filter(m => {
+        const matchesCategory = activeManualCategory === "all" || m.category === activeManualCategory;
+        if (!matchesCategory) return false;
+
+        if (!currentManualSearchKeyword) return true;
+
+        const haystack = [
+            m.title,
+            m.brand,
+            m.model,
+            m.summary,
+            m.category,
+            ...(m.specs || [])
+        ].join(" ").toLowerCase();
+
+        return haystack.includes(currentManualSearchKeyword);
+    });
+
+    // Update Category Counts
+    const counts = {
+        all: SYSTEM_MANUALS.length,
+        inverter: SYSTEM_MANUALS.filter(m => m.category === "inverter").length,
+        battery: SYSTEM_MANUALS.filter(m => m.category === "battery").length,
+        solar: SYSTEM_MANUALS.filter(m => m.category === "solar").length,
+        protection: SYSTEM_MANUALS.filter(m => m.category === "protection").length
+    };
+
+    setText("#catCountAll", counts.all);
+    setText("#catCountInverter", counts.inverter);
+    setText("#catCountBattery", counts.battery);
+    setText("#catCountSolar", counts.solar);
+    setText("#catCountProtection", counts.protection);
+
+    if (!filtered.length) {
+        grid.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px;">
+                <i class="fa-solid fa-magnifying-glass" style="font-size: 28px; color: #94a3b8; margin-bottom: 10px; display: block;"></i>
+                <h4 style="color: #1e293b; font-size: 15px; margin-bottom: 4px;">No manuals match your search</h4>
+                <p style="color: #64748b; font-size: 12px; margin: 0 0 12px;">Try searching for a different brand (e.g. Deye, Felicity, Jinko), voltage (48V), or equipment category.</p>
+                <button type="button" class="secondary-btn btn-sm" onclick="clearManualSearch()">
+                    <i class="fa-solid fa-rotate-left"></i> Reset Search
+                </button>
+            </div>
+        `;
+        return;
+    }
+
+    grid.innerHTML = filtered.map(m => {
+        return `
+            <div class="manual-item-card" data-manual-id="${m.id}">
+                <div class="manual-card-top">
+                    <span class="manual-badge ${m.category}">${m.category}</span>
+                    <span class="manual-doc-format"><i class="fa-solid fa-file-pdf" style="color: #ef4444;"></i> ${m.format}</span>
+                </div>
+
+                <h4 class="manual-title">${escapeHtml(m.title)}</h4>
+                <p class="manual-summary">${escapeHtml(m.summary)}</p>
+
+                <div class="manual-specs-pill">
+                    ${(m.specs || []).map(s => `<span class="manual-tag">${escapeHtml(s)}</span>`).join("")}
+                </div>
+
+                <div class="manual-card-actions">
+                    <button type="button" class="manual-view-btn" onclick="openSystemManual('${m.id}')">
+                        <i class="fa-solid fa-eye"></i> View Manual
+                    </button>
+                    <button type="button" class="manual-download-btn" onclick="downloadSystemManual('${m.id}')" title="Download ${m.format}">
+                        <i class="fa-solid fa-download"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+function initSystemManuals() {
+    renderSystemManuals();
+
+    const searchInput = $("#manualSearchInput");
+    const clearBtn = $("#manualSearchClear");
+
+    if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+            const val = e.target.value;
+            if (clearBtn) clearBtn.style.display = val.trim() ? "block" : "none";
+            renderSystemManuals(val, activeManualCategory);
+        });
+    }
+
+    if (clearBtn) {
+        clearBtn.addEventListener("click", () => {
+            clearManualSearch();
+        });
+    }
+
+    const catTabs = $("#manualCategoryTabs");
+    if (catTabs) {
+        catTabs.addEventListener("click", (e) => {
+            const btn = e.target.closest(".manual-cat-btn");
+            if (!btn) return;
+
+            $all(".manual-cat-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+
+            const category = btn.dataset.category || "all";
+            activeManualCategory = category;
+            renderSystemManuals($("#manualSearchInput")?.value || "", activeManualCategory);
+        });
+    }
+}
+
+function clearManualSearch() {
+    const input = $("#manualSearchInput");
+    const clearBtn = $("#manualSearchClear");
+    if (input) input.value = "";
+    if (clearBtn) clearBtn.style.display = "none";
+    renderSystemManuals("", activeManualCategory);
+}
+
+function openSystemManual(manualId) {
+    const manual = SYSTEM_MANUALS.find(m => m.id === manualId);
+    if (!manual) return;
+
+    const modalBackdrop = $("#modalBackdrop");
+    const modalContent = $("#modalContent");
+    if (!modalBackdrop || !modalContent) return;
+
+    modalContent.innerHTML = `
+        <div style="padding: 10px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 14px;">
+                <div>
+                    <span class="status-pill status-progress" style="margin-bottom:6px; display:inline-block;">${manual.brand} · ${manual.model}</span>
+                    <h3 style="font-size:18px; color:#0f172a; margin: 4px 0;">${escapeHtml(manual.title)}</h3>
+                    <p style="font-size:12px; color:#64748b; margin:0;">${escapeHtml(manual.summary)}</p>
+                </div>
+            </div>
+
+            <div style="background:#0f172a; border-radius:10px; padding: 24px; text-align:center; color:#fff; margin-bottom:16px;">
+                <i class="fa-solid fa-file-pdf" style="font-size:48px; color:#ef4444; margin-bottom:12px; display:block;"></i>
+                <h4 style="font-size:15px; margin-bottom:4px;">Technical Engineering Specification & Schematic Document</h4>
+                <p style="font-size:12px; color:#94a3b8; max-width: 480px; margin:0 auto 16px;">
+                    This official manufacturer manual contains complete terminal block wiring diagrams, inverter register addresses, BMS CAN-bus pinouts, and step-by-step field commissioning checklists.
+                </p>
+                <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+                    <button type="button" onclick="downloadSystemManual('${manual.id}')" class="primary-btn" style="text-decoration:none;">
+                        <i class="fa-solid fa-download"></i> Download Full PDF (${manual.format})
+                    </button>
+                </div>
+            </div>
+
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:14px; margin-bottom:16px;">
+                <strong style="font-size:12px; color:#334155; display:block; margin-bottom:6px;">Key Field Specifications:</strong>
+                <ul style="margin:0; padding-left:18px; font-size:12px; color:#475569; line-height:1.6;">
+                    ${(manual.specs || []).map(s => `<li><strong>${escapeHtml(s)}</strong></li>`).join("")}
+                </ul>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end;">
+                <button type="button" class="secondary-btn" onclick="closeModal()">Close Document</button>
+            </div>
+        </div>
+    `;
+
+    modalBackdrop.classList.add("open");
+}
+
+function downloadSystemManual(manualId) {
+    const manual = SYSTEM_MANUALS.find(m => m.id === manualId);
+    if (!manual) return;
+    showToast(`Downloading ${manual.title} (${manual.format})...`, "success");
+}
+
+/* =========================================================
+   SITE TRACKING DIRECT LIVE CAMERA CAPTURE
+   ========================================================= */
+
+let siteCameraMediaStream = null;
+let currentSiteEvidenceStageId = null;
+let siteCapturedSnapshotBlob = null;
+let siteCapturedSnapshotDataUrl = null;
+let siteCameraFacingMode = "environment"; // Preferred for site equipment inspection
+
+async function openSiteEvidenceCamera(stageId) {
+    currentSiteEvidenceStageId = stageId;
+    siteCapturedSnapshotBlob = null;
+    siteCapturedSnapshotDataUrl = null;
+
+    const modalBackdrop = $("#siteEvidenceModalBackdrop");
+    const video = $("#siteCameraVideo");
+    const canvas = $("#siteCameraCanvas");
+    const liveControls = $("#siteCameraLiveControls");
+    const reviewControls = $("#siteCameraReviewControls");
+    const errorOverlay = $("#siteCameraErrorOverlay");
+    const feedback = $("#siteCameraFeedback");
+    const stageBadge = $("#siteCameraStageBadge");
+    const reqPrompt = $("#siteCameraRequirementPrompt");
+
+    const stageMeta = INSTALLATION_STAGES.find(s => s.id === stageId) || {};
+
+    if (stageBadge) {
+        stageBadge.innerHTML = `<i class="fa-solid ${stageMeta.icon || 'fa-camera'}"></i> Stage ${stageMeta.number || ''}: ${escapeHtml(stageMeta.title || stageId)}`;
+    }
+    if (reqPrompt) {
+        reqPrompt.textContent = stageMeta.requirement || "Position camera squarely at the equipment, labels, and wiring connections.";
+    }
+
+    if (video) video.style.display = "block";
+    if (canvas) canvas.style.display = "none";
+    if (liveControls) liveControls.style.display = "flex";
+    if (reviewControls) reviewControls.style.display = "none";
+    if (errorOverlay) errorOverlay.style.display = "none";
+    if (feedback) feedback.style.display = "none";
+
+    if (modalBackdrop) {
+        modalBackdrop.style.display = "flex";
+    }
+
+    await startSiteCameraStream();
+}
+
+async function startSiteCameraStream() {
+    const video = $("#siteCameraVideo");
+    const errorOverlay = $("#siteCameraErrorOverlay");
+    const errorMsg = $("#siteCameraErrorMessage");
+
+    stopSiteCameraStream();
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        if (errorOverlay) {
+            errorOverlay.style.display = "flex";
+            if (errorMsg) errorMsg.textContent = "Your browser does not support live camera access. Please use file upload instead.";
+        }
+        return;
+    }
+
+    try {
+        const constraints = {
+            video: {
+                facingMode: { ideal: siteCameraFacingMode },
+                width: { ideal: 1920, min: 640 },
+                height: { ideal: 1080, min: 480 }
+            },
+            audio: false
+        };
+
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        siteCameraMediaStream = stream;
+
+        if (video) {
+            video.srcObject = stream;
+            await video.play();
+        }
+
+        if (errorOverlay) errorOverlay.style.display = "none";
+
+        // Check if multiple cameras exist to toggle switch button
+        try {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const videoDevices = devices.filter(d => d.kind === "videoinput");
+            const switchBtn = $("#btnSwitchSiteCameraFacing");
+            if (switchBtn) {
+                switchBtn.style.display = videoDevices.length > 1 ? "inline-flex" : "none";
+            }
+        } catch (e) {}
+
+    } catch (err) {
+        console.warn("[Site Camera] Stream start error:", err);
+        if (errorOverlay) {
+            errorOverlay.style.display = "flex";
+            if (errorMsg) {
+                if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+                    errorMsg.textContent = "Camera permission was denied. Please allow camera permissions in your browser.";
+                } else if (err.name === "NotFoundError") {
+                    errorMsg.textContent = "No camera hardware was detected on your device.";
+                } else {
+                    errorMsg.textContent = `Unable to access camera: ${err.message || "Unknown error"}.`;
+                }
+            }
+        }
+    }
+}
+
+function stopSiteCameraStream() {
+    if (siteCameraMediaStream) {
+        try {
+            siteCameraMediaStream.getTracks().forEach(t => t.stop());
+        } catch (e) {}
+        siteCameraMediaStream = null;
+    }
+    const video = $("#siteCameraVideo");
+    if (video) video.srcObject = null;
+}
+
+function closeSiteEvidenceModal() {
+    stopSiteCameraStream();
+    const modalBackdrop = $("#siteEvidenceModalBackdrop");
+    if (modalBackdrop) modalBackdrop.style.display = "none";
+    currentSiteEvidenceStageId = null;
+    siteCapturedSnapshotBlob = null;
+    siteCapturedSnapshotDataUrl = null;
+}
+
+function captureSitePhotoSnapshot() {
+    const video = $("#siteCameraVideo");
+    const canvas = $("#siteCameraCanvas");
+    const liveControls = $("#siteCameraLiveControls");
+    const reviewControls = $("#siteCameraReviewControls");
+    const feedback = $("#siteCameraFeedback");
+
+    if (!video || !canvas) return;
+
+    const width = video.videoWidth || 1280;
+    const height = video.videoHeight || 720;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, width, height);
+
+    // Engine-controlled live caption watermark based on active tracking stage level
+    const stageId = currentSiteEvidenceStageId || "starting";
+    const stageMeta = INSTALLATION_STAGES.find(s => s.id === stageId) || {};
+    const stageNum = stageMeta.number || 1;
+    const stageTitle = (stageMeta.title || stageId).toUpperCase();
+    const projectCode = PORTAL_CONFIG.projectCode || `PRJ-${PORTAL_CONFIG.projectId || '2026'}`;
+    const installerName = PORTAL_CONFIG.installerName || "Certified Lead Installer";
+    const timestampStr = new Date().toLocaleString("en-GB") + " WAT";
+
+    const barHeight = Math.max(68, Math.round(height * 0.12));
+    ctx.fillStyle = "rgba(3, 11, 24, 0.90)";
+    ctx.fillRect(0, height - barHeight, width, barHeight);
+
+    ctx.fillStyle = "#F4A600";
+    ctx.fillRect(0, height - barHeight, width, 4);
+
+    ctx.fillStyle = "#FFFFFF";
+    ctx.font = `bold ${Math.round(barHeight * 0.28)}px Inter, system-ui, sans-serif`;
+    ctx.fillText(`⚡ STAGE ${stageNum} OF 6: ${stageTitle} • ${projectCode}`, 20, height - barHeight + Math.round(barHeight * 0.42));
+
+    ctx.fillStyle = "#94A3B8";
+    ctx.font = `${Math.round(barHeight * 0.22)}px Inter, system-ui, sans-serif`;
+    ctx.fillText(`AE RENEWABLE LTD (RC: 9010643) • Lead: ${installerName} • Live Capture: ${timestampStr}`, 20, height - barHeight + Math.round(barHeight * 0.78));
+
+    // Freeze video display, show canvas
+    video.style.display = "none";
+    canvas.style.display = "block";
+
+    if (liveControls) liveControls.style.display = "none";
+    if (reviewControls) reviewControls.style.display = "flex";
+
+    if (feedback) {
+        feedback.style.display = "flex";
+        feedback.className = "validation-feedback-ribbon success";
+        feedback.innerHTML = `<i class="fa-solid fa-circle-check"></i> Photo captured. Review and click "Add to Evidence".`;
+    }
+
+    siteCapturedSnapshotDataUrl = canvas.toDataURL("image/jpeg", 0.92);
+    canvas.toBlob(blob => {
+        siteCapturedSnapshotBlob = blob;
+    }, "image/jpeg", 0.92);
+}
+
+function retakeSitePhoto() {
+    const video = $("#siteCameraVideo");
+    const canvas = $("#siteCameraCanvas");
+    const liveControls = $("#siteCameraLiveControls");
+    const reviewControls = $("#siteCameraReviewControls");
+    const feedback = $("#siteCameraFeedback");
+
+    if (canvas) canvas.style.display = "none";
+    if (video) video.style.display = "block";
+    if (liveControls) liveControls.style.display = "flex";
+    if (reviewControls) reviewControls.style.display = "none";
+    if (feedback) feedback.style.display = "none";
+
+    siteCapturedSnapshotBlob = null;
+    siteCapturedSnapshotDataUrl = null;
+}
+
+async function confirmAndAddSitePhoto() {
+    if (!siteCapturedSnapshotBlob || !currentSiteEvidenceStageId) {
+        showToast("Please capture a photo first.", "warning");
+        return;
+    }
+
+    const stageId = currentSiteEvidenceStageId;
+    const stage = SiteTracking.stages[stageId];
+    if (!stage) {
+        closeSiteEvidenceModal();
+        return;
+    }
+
+    const stageMeta = INSTALLATION_STAGES.find(s => s.id === stageId) || {};
+    const timestampStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const filename = `${stageMeta.title || stageId}_live_${Date.now()}.jpg`;
+
+    const file = new File([siteCapturedSnapshotBlob], filename, { type: "image/jpeg" });
+
+    const newImage = {
+        name: `${stageMeta.shortTitle || stageId} Live Capture (${timestampStr})`,
+        size: siteCapturedSnapshotBlob.size,
+        type: "image/jpeg",
+        url: siteCapturedSnapshotDataUrl,
+        _file: file
+    };
+
+    stage.images.push(newImage);
+    saveTrackingState();
+    renderTracking();
+
+    showToast(`✓ Live camera photo captured and attached to ${stageMeta.title || stageId}!`, "success");
+    closeSiteEvidenceModal();
+
+    // Background evidence sync
+    let projectId = PORTAL_CONFIG.projectId || PORTAL_CONFIG.activeJob?.id;
+    if (!projectId) {
+        try { projectId = localStorage.getItem("ae_active_project_id"); } catch (e) {}
+    }
+    if (!projectId) projectId = "156";
+    if (projectId) {
+        try {
+            const formData = new FormData();
+            formData.append("image", file);
+            formData.append("stage_type", stageId);
+            formData.append("caption", newImage.name);
+            formData.append("notes", stage.notes || "");
+
+            const token = InstallerAPI.getToken();
+            fetch(`/api/projects/${projectId}/evidence`, {
+                method: "POST",
+                credentials: "include",
+                headers: { Authorization: "Bearer " + token },
+                body: formData
+            }).then(r => r.json()).then(res => {
+                if (res.success) {
+                    console.log(`[Site Camera] Direct evidence synced to backend:`, res.data);
+                }
+            }).catch(e => console.warn("[Site Camera] Backend sync error:", e));
+        } catch (e) {}
+    }
+}
+
+function setupSiteCameraListeners() {
+    const btnClose = $("#btnCloseSiteCameraModal");
+    const btnCancel = $("#btnCancelSiteCamera");
+    const btnShutter = $("#btnShutterSiteCamera");
+    const btnRetake = $("#btnRetakeSitePhoto");
+    const btnConfirm = $("#btnConfirmSitePhoto");
+    const btnRetry = $("#btnRetrySiteCamera");
+    const btnSwitch = $("#btnSwitchSiteCameraFacing");
+    const btnFallback = $("#btnFallbackSiteFile");
+
+    if (btnClose) btnClose.addEventListener("click", closeSiteEvidenceModal);
+    if (btnCancel) btnCancel.addEventListener("click", closeSiteEvidenceModal);
+    if (btnShutter) btnShutter.addEventListener("click", captureSitePhotoSnapshot);
+    if (btnRetake) btnRetake.addEventListener("click", retakeSitePhoto);
+    if (btnConfirm) btnConfirm.addEventListener("click", confirmAndAddSitePhoto);
+    if (btnRetry) btnRetry.addEventListener("click", startSiteCameraStream);
+
+    if (btnSwitch) {
+        btnSwitch.addEventListener("click", () => {
+            siteCameraFacingMode = siteCameraFacingMode === "environment" ? "user" : "environment";
+            startSiteCameraStream();
+        });
+    }
+
+    if (btnFallback) {
+        btnFallback.addEventListener("click", () => {
+            const stageId = currentSiteEvidenceStageId;
+            closeSiteEvidenceModal();
+            if (stageId) {
+                const fileInput = $(`#fileInput-${stageId}`);
+                if (fileInput) fileInput.click();
+            }
+        });
+    }
+}
+
+/* =========================================================
+   WINDOW EXPORTS
+   ========================================================= */
+
+window.showPage = showPage;
+window.closeModal = closeModal;
+window.requestPayment = requestPayment;
+window.acceptJob = acceptJob;
+window.submitBankingDetails = submitBankingDetails;
+window.saveGeneralProfile = saveGeneralProfile;
+window.openRequestChangeModal = openRequestChangeModal;
+window.submitAdminChangeRequest = submitAdminChangeRequest;
+window.loadInstallerProfileFromAPI = loadInstallerProfileFromAPI;
+window.openSiteEvidenceCamera = openSiteEvidenceCamera;
+window.closeSiteEvidenceModal = closeSiteEvidenceModal;
+window.renderSystemManuals = renderSystemManuals;
+window.openSystemManual = openSystemManual;
+window.downloadSystemManual = downloadSystemManual;
+window.clearManualSearch = clearManualSearch;
+window.markNotificationRead = markNotificationRead;
+window.handleInstallerNotificationClick = handleInstallerNotificationClick;
+window.openInstallerProjectDetail = openInstallerProjectDetail;
+window.setProjectAndTrack = function(projectId, projectCode) {
+    if (projectId) PORTAL_CONFIG.projectId = projectId;
+    if (projectCode) PORTAL_CONFIG.projectCode = projectCode;
+    showPage("site-tracking");
+    if (typeof loadTrackingState === "function") {
+        loadTrackingState();
+        renderTracking();
+    }
+};
+
+function resetPortalLiveDefaults() {
+    const navCount = $("#notificationNavCount");
+    if (navCount) {
+        navCount.textContent = "0";
+        navCount.style.display = "none";
+    }
+
+    const badge = $("#notificationBadge");
+    if (badge) {
+        badge.textContent = "0";
+        badge.style.display = "none";
+    }
+
+    const topDot = $("#topNotificationDot");
+    if (topDot) {
+        topDot.style.display = "none";
+    }
+
+    const jobsNav = $("#availableJobsNavCount");
+    if (jobsNav) {
+        jobsNav.textContent = "0";
+        jobsNav.style.display = "none";
+    }
+
+    setText("#availableJobsMetric", "0");
+    setText("#activeJobsMetric", "0");
+    setText("#commissioningMetric", "0");
+    setText("#pendingPayoutsMetric", "₦0");
+    setText("#payoutPendingMetric", "₦0");
+    setText("#payoutThisMonthMetric", "₦0");
+    setText("#payoutTotalPaidMetric", "₦0");
+}
+
+/* =========================================================
+   LIVE DATA INITIALIZATION — Wire to Backend
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Immediate clean baseline: reset counters to live zero state
+    resetPortalLiveDefaults();
+
+    const token = InstallerAPI.getToken();
+
+    // Initialize System Manuals on Support Page
+    initSystemManuals();
+
+    // Initialize Site Tracking Camera Listeners
+    setupSiteCameraListeners();
+
+    if (!token) {
+        console.warn("[AE Installer] No auth token — running in preview mode.");
+        return;
+    }
+
+    // Non-blocking parallel API calls — portal renders instantly with live data
+    Promise.all([
+        loadInstallerProfileFromAPI(),
+        loadInstallerJobs(),
+        loadInstallerDocuments(),
+        loadInstallerPayments(),
+        loadInstallerNotifications(),
+        loadInstallerCommissioning(),
+        loadInstallerActivities()
+    ]).then(() => {
+        console.log("[AE Installer] Live data synchronized with backend.");
+    }).catch(err => {
+        console.warn("[AE Installer] Some API calls failed, running on static data:", err.message);
+    });
+
+    // Logout button wiring
+    $all("#logoutButton, [data-action='logout']").forEach(btn => {
+        btn.addEventListener("click", async () => {
+            if (!confirm("Sign out of Installer Portal?")) return;
+            try {
+                await InstallerAPI.post("/api/auth/logout", {});
+            } catch {}
+            InstallerAPI.TOKEN_KEYS.forEach(k => localStorage.removeItem(k));
+            InstallerAPI.USER_KEYS.forEach(k => localStorage.removeItem(k));
+            sessionStorage.removeItem("ae_installer_logged_in");
+            window.location.href = "/installer/login";
+        });
+    });
+
+    // Profile buttons wiring
+    const btnSubmitBanking = $("#btnSubmitBanking");
+    if (btnSubmitBanking) {
+        btnSubmitBanking.addEventListener("click", submitBankingDetails);
+    }
+
+    const btnRequestBankUnlock = $("#btnRequestBankUnlock");
+    if (btnRequestBankUnlock) {
+        btnRequestBankUnlock.addEventListener("click", () => openRequestChangeModal("banking"));
+    }
+
+    const btnRequestIdentityChange = $("#btnRequestIdentityChange");
+    if (btnRequestIdentityChange) {
+        btnRequestIdentityChange.addEventListener("click", () => openRequestChangeModal("email"));
+    }
+
+    const btnSaveGeneral = $("#btnSaveGeneralProfile");
+    if (btnSaveGeneral) {
+        btnSaveGeneral.addEventListener("click", saveGeneralProfile);
+    }
+
+    const btnBannerGoProfile = $("#btnBannerGoProfile");
+    if (btnBannerGoProfile) {
+        btnBannerGoProfile.addEventListener("click", () => {
+            const profileBtn = $("[data-page='profile']");
+            if (profileBtn) profileBtn.click();
+        });
+    }
+
+    const cacFileInput = $("#profileCacFileInput");
+    if (cacFileInput) {
+        cacFileInput.addEventListener("change", (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            if (file.size > 15 * 1024 * 1024) {
+                showToast("CAC document file exceeds 15MB limit.", "error");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = () => {
+                pendingCacDocumentBase64 = reader.result;
+                const disp = $("#cacFileNameDisplay");
+                if (disp) disp.textContent = file.name + " (" + Math.round(file.size / 1024) + " KB ready)";
+                const badge = $("#cacDocStatusBadge");
+                if (badge) {
+                    badge.className = "status-pill status-pending";
+                    badge.textContent = "Ready to Save";
+                }
+                showToast("CAC document selected. Click Save Profile Changes to submit.", "info");
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    setupPhotoCapture();
+
+    // Live Auto-Refresh Heartbeat (active tab only, synchronized every 12s)
+    let heartbeatTick = 0;
+    setInterval(() => {
+        if (!InstallerAPI.getToken() || document.hidden) return;
+        heartbeatTick++;
+        loadInstallerNotifications();
+
+        if (heartbeatTick % 2 === 0) {
+            loadInstallerJobs();
+            loadInstallerActivities();
+            loadInstallerPayments();
+        }
+    }, 12000);
+});

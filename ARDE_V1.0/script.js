@@ -17,13 +17,13 @@ let currentMaterials = null;
 let currentCostSummary = null;
 
 let activeClient = {
-    fullName: "Eniola Abdulrasaq",
-    firstName: "Eniola",
-    projectCode: "PRJ-202610-4757",
+    fullName: "",
+    firstName: "Client",
+    projectCode: "",
     propertyType: "Residential",
-    email: "eniola@aerenewable.com",
-    phone: "+234 803 123 4567",
-    address: "Plot 14, Guzape Hills, Abuja, FCT"
+    email: "",
+    phone: "",
+    address: "Abuja, FCT"
 };
 
 // Sizing Presets
@@ -130,6 +130,37 @@ function initIcons() {
 
 // Load Client Info from Intake if present
 function loadClientFromStorage() {
+    // 1. Check URL parameters first (from client intake redirect)
+    try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("clientEmail")) activeClient.email = params.get("clientEmail").trim();
+        if (params.get("clientName")) activeClient.fullName = params.get("clientName").trim();
+        if (params.get("clientPhone")) activeClient.phone = params.get("clientPhone").trim();
+        if (params.get("clientAddress")) activeClient.address = params.get("clientAddress").trim();
+        if (params.get("projectCode")) activeClient.projectCode = params.get("projectCode").trim();
+        if (params.get("propertyType")) activeClient.propertyType = params.get("propertyType").trim();
+        if (params.get("load")) {
+            const loadInput = document.getElementById("load");
+            if (loadInput) loadInput.value = params.get("load");
+        }
+        if (params.get("backup")) {
+            const backupInput = document.getElementById("backup");
+            if (backupInput) backupInput.value = params.get("backup");
+        }
+        if (params.get("psh")) {
+            const pshInput = document.getElementById("psh");
+            if (pshInput) pshInput.value = params.get("psh");
+        }
+
+        // Clean browser address bar immediately so sensitive query parameters are never exposed
+        if (window.location.search && window.history.replaceState) {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    } catch (err) {
+        console.warn("URL params parse warning:", err);
+    }
+
+    // 2. Load and overlay from localStorage
     try {
         const raw = localStorage.getItem("ae_active_client");
         if (raw) {
@@ -146,7 +177,12 @@ function loadClientFromStorage() {
     }
 
     // Extract first name as initial password
-    activeClient.firstName = activeClient.fullName.trim().split(" ")[0] || "Client";
+    activeClient.firstName = (activeClient.fullName || "Client").trim().split(" ")[0] || "Client";
+
+    // Save synced version back to localStorage
+    try {
+        localStorage.setItem("ae_active_client", JSON.stringify(activeClient));
+    } catch (e) {}
 
     // Update Banner
     const bannerClientName = document.getElementById("bannerClientName");
@@ -175,12 +211,12 @@ function initPresets() {
             pills.forEach(p => p.classList.remove("active"));
             pill.classList.add("active");
             const key = pill.getAttribute("data-preset");
-            applyPreset(key);
+            applyPreset(key, false);
         });
     });
 }
 
-function applyPreset(key) {
+function applyPreset(key, isExplicitSubmit = false) {
     const preset = PRESETS[key];
     if (!preset) return;
 
@@ -192,7 +228,7 @@ function applyPreset(key) {
     document.getElementById("losses").value = preset.losses;
     document.getElementById("batteryPercent").value = preset.batteryPercent;
 
-    runComputation(false);
+    runComputation(isExplicitSubmit);
 }
 
 // ======================================================
@@ -484,21 +520,95 @@ function initEventListeners() {
         });
     }
 
-    // Reset button (if present)
+    // Direct click on ⚡ Compute Design button
+    const btnCompute = document.getElementById("btnCompute");
+    if (btnCompute) {
+        btnCompute.addEventListener("click", (e) => {
+            e.preventDefault();
+            runComputation(true);
+        });
+    }
+
+    // Reset button
     if (btnReset) {
         btnReset.addEventListener("click", () => {
             setTimeout(() => {
-                applyPreset("res3bed");
+                applyPreset("res3bed", false);
             }, 50);
         });
     }
 
-    // Back to Studio Button (The only styled modal button)
+    // Direct Action & Modal Buttons (Preview / View Sheets without re-dispatching email)
+    if (btnQuotation) {
+        btnQuotation.addEventListener("click", () => {
+            runComputation(false);
+            openPrintUpModal("quotation");
+        });
+    }
+
+    if (btnBOQ) {
+        btnBOQ.addEventListener("click", () => {
+            runComputation(false);
+            openPrintUpModal("boq");
+        });
+    }
+
+    if (sidebarOpenQuotation) {
+        sidebarOpenQuotation.addEventListener("click", () => {
+            runComputation(false);
+            openPrintUpModal("quotation");
+        });
+    }
+
+    if (sidebarOpenBOQ) {
+        sidebarOpenBOQ.addEventListener("click", () => {
+            runComputation(false);
+            openPrintUpModal("boq");
+        });
+    }
+
+    if (btnPrint) {
+        btnPrint.addEventListener("click", () => {
+            runComputation(false);
+            openPrintUpModal("quotation");
+            setTimeout(() => window.print(), 350);
+        });
+    }
+
+    if (btnPDF) {
+        btnPDF.addEventListener("click", () => {
+            runComputation(false);
+            openPrintUpModal("quotation");
+            setTimeout(() => window.print(), 350);
+        });
+    }
+
+    if (sheetPrintBtn) {
+        sheetPrintBtn.addEventListener("click", () => window.print());
+    }
+
+    if (sheetPdfBtn) {
+        sheetPdfBtn.addEventListener("click", () => window.print());
+    }
+
+    // Tabs inside modal
+    if (tabQuotationBtn) {
+        tabQuotationBtn.addEventListener("click", () => switchTab("quotation"));
+    }
+
+    if (tabBOQBtn) {
+        tabBOQBtn.addEventListener("click", () => switchTab("boq"));
+    }
+
+    // Modal close controls
+    if (sheetCloseBtn) {
+        sheetCloseBtn.addEventListener("click", closePrintUpModal);
+    }
+
     if (sheetBackBtn) {
         sheetBackBtn.addEventListener("click", closePrintUpModal);
     }
 
-    // Close on backdrop click
     if (printUpModal) {
         printUpModal.addEventListener("click", (e) => {
             if (e.target === printUpModal) closePrintUpModal();

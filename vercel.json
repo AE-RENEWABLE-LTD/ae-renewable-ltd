@@ -1,4 +1,33 @@
 {
-  "cleanUrls": true,
-  "trailingSlash": false
+  "version": 2,
+  "builds": [
+    {
+      "src": "CLI_Folder/backend/server.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "CLI_Folder/**",
+          "admin/**",
+          "client/**",
+          "installer/**",
+          "arde/**",
+          "public/**",
+          "uploads/**",
+          "database/**"
+        ]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "CLI_Folder/backend/server.js"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/automation",
+      "schedule": "*/30 * * * *"
+    }
+  ]
 }
