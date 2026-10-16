@@ -6,7 +6,7 @@ const { query } = require("../config/database");
 const DEFAULT_POSTS = [
     {
         id: "post-101",
-        engineer_name: "Engr. Eniola Abdulrasaq",
+        engineer_name: "Engr. Alimi Babatunde",
         engineer_title: "NEMSA Certified Lead Installer",
         engineer_avatar: "/site-images/instalerface.jpeg",
         stage: "stage3",
@@ -91,7 +91,7 @@ const DEFAULT_POSTS = [
     },
     {
         id: "post-105",
-        engineer_name: "Engr. Eniola Abdulrasaq",
+        engineer_name: "Engr. Alimi Babatunde",
         engineer_title: "Certified Site Auditor",
         engineer_avatar: "/site-images/instaler5.jpeg",
         stage: "stage1",
@@ -156,6 +156,17 @@ async function ensureFieldTable() {
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
             )
+        `);
+
+        await query(`
+            ALTER TABLE field_posts 
+            ADD COLUMN IF NOT EXISTS project_code VARCHAR(64) DEFAULT 'PRJ-2026',
+            ADD COLUMN IF NOT EXISTS chat_url VARCHAR(500) DEFAULT 'https://wa.me/2348133615131',
+            ADD COLUMN IF NOT EXISTS company_name VARCHAR(255) DEFAULT 'AE RENEWABLE LTD',
+            ADD COLUMN IF NOT EXISTS rc_number VARCHAR(64) DEFAULT '9010643',
+            ADD COLUMN IF NOT EXISTS company_phone VARCHAR(64) DEFAULT '08133615131',
+            ADD COLUMN IF NOT EXISTS company_email VARCHAR(255) DEFAULT 'aerenewablesolution@gmail.com',
+            ADD COLUMN IF NOT EXISTS logo_url VARCHAR(500) DEFAULT '/images/logodark.png'
         `);
 
         // Check if empty, seed defaults
@@ -327,8 +338,10 @@ async function deleteFieldPost(req, res, next) {
 async function reactToPost(req, res, next) {
     try {
         const { id } = req.params;
-        const { type } = req.body; // 'like' or 'love'
-        const column = type === "love" ? "loves_count" : "likes_count";
+        const { type } = req.body; // 'like', 'love', 'share', 'reshare'
+        const column = (type === "love") 
+            ? "loves_count" 
+            : ((type === "share" || type === "reshare") ? "shares_count" : "likes_count");
         
         const updateRes = await query(`
             UPDATE field_posts 

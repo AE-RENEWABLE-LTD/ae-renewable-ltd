@@ -50,7 +50,8 @@ async function seedDatabase() {
                 last_name,
                 phone,
                 role,
-                status
+                status,
+                email_verified
             )
             VALUES (
                 $1,
@@ -59,7 +60,8 @@ async function seedDatabase() {
                 $4,
                 $5,
                 $6,
-                $7
+                $7,
+                true
             )
             ON CONFLICT (email)
             DO UPDATE SET
@@ -68,6 +70,7 @@ async function seedDatabase() {
                 phone = EXCLUDED.phone,
                 role = EXCLUDED.role,
                 status = EXCLUDED.status,
+                email_verified = true,
                 updated_at = CURRENT_TIMESTAMP
             RETURNING id, email, role
             `,

@@ -39,6 +39,31 @@ router.get(
     adminController.getPipeline
 );
 
+/* =========================================================
+   GET ROUND-THE-CLOCK TRACKING GRAPH TELEMETRY
+   GET /api/admin/tracking-graph
+   GET /api/admin/round-clock-activity
+========================================================= */
+
+router.get(
+    ["/tracking-graph", "/round-clock-activity"],
+    requireAuth,
+    requireAdmin,
+    adminController.getTrackingGraph
+);
+
+/* =========================================================
+   GET OPERATIONS TRACKING TELEMETRY (QUOTATIONS, PROJECTS, INSTALLERS)
+   GET /api/admin/operations-tracking
+========================================================= */
+
+router.get(
+    "/operations-tracking",
+    requireAuth,
+    requireAdmin,
+    adminController.getOperationsTracking
+);
+
 
 /* =========================================================
    GET SYSTEM STATISTICS
@@ -134,6 +159,13 @@ router.post(
     requireAuth,
     requireAdmin,
     adminController.acceptDispatchedInquiry
+);
+
+router.post(
+    "/consultations/:id/retry-notification",
+    requireAuth,
+    requireAdmin,
+    adminController.retryConsultationNotification
 );
 
 /* =========================================================

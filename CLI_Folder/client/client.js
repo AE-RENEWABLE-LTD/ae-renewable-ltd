@@ -29,35 +29,23 @@ function escapeHtml(value) {
    ========================================================= */
 (function guardClientPortal() {
     try {
-        const token = localStorage.getItem("token") || 
-                      localStorage.getItem("accessToken") || 
-                      localStorage.getItem("aeRenewableToken") || 
-                      localStorage.getItem("aeClientToken") || 
-                      localStorage.getItem("aeAdminToken") || "";
-        const rawUser = localStorage.getItem("user") || 
-                        localStorage.getItem("aeRenewableUser") || 
-                        localStorage.getItem("aeClientUser") || 
-                        localStorage.getItem("aeAdminUser") || "{}";
+        const isLoggedIn = sessionStorage.getItem("ae_client_logged_in") === "true";
+        const token = localStorage.getItem("aeClientToken") || 
+                      localStorage.getItem("aeRenewableToken") || "";
+        const rawUser = localStorage.getItem("aeClientUser") || 
+                        localStorage.getItem("aeRenewableUser") || "{}";
         let user = {};
         try { user = JSON.parse(rawUser); } catch {}
         const role = user && user.role ? String(user.role).toLowerCase() : "";
-        const allowed = ["client", "admin", "staff", "installer"];
 
-        if (token && (role === "admin" || role === "staff")) {
-            try { sessionStorage.setItem("ae_client_logged_in", "true"); } catch (_) {}
-        }
-
-        if (sessionStorage.getItem("ae_client_logged_in") !== "true") {
-            window.location.replace("/client/login");
+        if (isLoggedIn && token && role === "client") {
             return;
         }
 
-        if (!token || !role || !allowed.includes(role)) {
-            window.location.replace("/client/login");
-            return;
-        }
+        window.location.replace("/client/login");
     } catch (e) {
         console.warn("[Security Guard] Storage check error:", e);
+        window.location.replace("/client/login");
     }
 })();
 
@@ -66,43 +54,17 @@ const ClientApp = {
     currentPage: "dashboard",
 
     client: {
-        name: "Eniola Abdulrasaq",
-        email: "AERenewablesolution@gmail.com",
-        phone: "0813 361 5132",
-        location: "Abuja"
+        name: "",
+        email: "",
+        phone: "",
+        location: ""
     },
 
-    notifications: 3,
+    notifications: 0,
 
-    projects: [
-        {
-            id: "AE-PRJ-2026-018",
-            name: "Residential Hybrid Solar System",
-            capacity: "16kVA",
-            battery: "32kWh Lithium",
-            solar: "12kW PV",
-            progress: 72,
-            status: "In Installation"
-        },
+    projects: [],
 
-        {
-            id: "AE-PRJ-2026-009",
-            name: "Home Backup Solar System",
-            capacity: "12kVA",
-            battery: "15kWh Lithium",
-            solar: "9kW PV",
-            progress: 100,
-            status: "Completed"
-        }
-    ],
-
-    quotations: [
-        {
-            id: "AE-QUO-2026-042",
-            amount: "₦8,750,000",
-            status: "Awaiting Approval"
-        }
-    ],
+    quotations: [],
 
     requests: []
 };
@@ -237,8 +199,11 @@ function navigateTo(pageName) {
         loadInstallationMonitoring();
     } else if (pageName === "requests") {
         loadClientRequests();
+    } else if (pageName === "payments") {
+        if (typeof loadClientPayments === "function") loadClientPayments();
+    } else if (pageName === "projects") {
+        if (typeof loadClientProjects === "function") loadClientProjects();
     }
-
 
     closeMobileSidebar();
 
@@ -246,6 +211,14 @@ function navigateTo(pageName) {
         top: 0,
         behavior: "smooth"
     });
+
+    if (window.location.hash !== "#" + pageName) {
+        try {
+            history.replaceState(null, "", "#" + pageName);
+        } catch (e) {
+            window.location.hash = pageName;
+        }
+    }
 
 }
 
@@ -546,7 +519,7 @@ function handleAction(action) {
 }
 
 function openProfileUpdateRequestModal() {
-    const client = ClientApp.client || { name: "Eniola Abdulrasaq", email: "AERenewablesolution@gmail.com", phone: "0813 361 5132", location: "Abuja FCT" };
+    const client = ClientApp.client || { name: "", email: "", phone: "", location: "" };
 
     openModal(`
         <div style="text-align:left;">
@@ -858,7 +831,7 @@ async function openProjectModal(projectId) {
         bargainStatusNotice = `
             <div style="background:#ECFDF5; border:1.5px solid #6EE7B7; border-radius:8px; padding:14px 16px; margin:16px 0; color:#065F46;">
                 <div style="font-weight:800; font-size:13px; margin-bottom:4px;">🎉 Quotation Accepted & Active!</div>
-                <div style="font-size:12px;">Agreed Grand Total: <strong>₦${Number(p.contract_value || baseline).toLocaleString("en-NG", { minimumFractionDigits: 2 })}</strong>. Assigned Lead Installer: <strong>${escapeHtml(p.installer_contact_name || p.installer_name || "Eniola Abdulrasaq")}</strong>. Technical calculations & BOQ quantities are locked and ready for implementation.</div>
+                <div style="font-size:12px;">Agreed Grand Total: <strong>₦${Number(p.contract_value || baseline).toLocaleString("en-NG", { minimumFractionDigits: 2 })}</strong>. Assigned Lead Installer: <strong>${escapeHtml(p.installer_contact_name || p.installer_name || "Awaiting Assignment")}</strong>. Technical calculations & BOQ quantities are locked and ready for implementation.</div>
             </div>
         `;
     } else if (isBargainRejected) {
@@ -1728,7 +1701,7 @@ async function loadClientProfile() {
             `${client.first_name || ""} ${client.last_name || ""}`.trim() ||
             client.company_name || "Client";
 
-        const initials = name.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase() || "CL";
+        const initials = name.split(" ").filter(Boolean).map(w => w[0]).slice(0, 2).join("").toUpperCase() || "CL";
 
         // Update sidebar profile
         ClientApp.client = {
@@ -1749,10 +1722,19 @@ async function loadClientProfile() {
         });
 
         // Update profile mini card
-        const miniName = document.querySelector(".client-mini-profile strong");
+        const miniName = document.getElementById("clientMiniName") || document.querySelector(".client-mini-profile strong");
         if (miniName) miniName.textContent = name;
 
+        const miniAvatar = document.getElementById("clientMiniAvatar");
+        if (miniAvatar) miniAvatar.textContent = initials;
+
         // Update profile page
+        const profileLargeAvatar = document.getElementById("profileLargeAvatar");
+        if (profileLargeAvatar) profileLargeAvatar.textContent = initials;
+
+        const profileLargeName = document.getElementById("profileLargeName");
+        if (profileLargeName) profileLargeName.textContent = name;
+
         const profileName = document.getElementById("profileName");
         if (profileName) profileName.value = name;
 
@@ -1762,12 +1744,16 @@ async function loadClientProfile() {
         const profilePhone = document.getElementById("profilePhone");
         if (profilePhone) profilePhone.value = client.phone || "";
 
+        const profileLoc = document.getElementById("profileLocation");
+        if (profileLoc) profileLoc.value = client.city || client.state || client.location || "";
+
         // Update greeting
-        const greeting = document.querySelector("#dashboardPage h1");
+        const greeting = document.getElementById("clientWelcomeHeading") || document.querySelector("#dashboardPage h2") || document.querySelector("#dashboardPage h1");
         if (greeting) {
             const hour = new Date().getHours();
             const timeGreet = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
-            greeting.textContent = `${timeGreet}, ${name.split(" ")[0]}.`;
+            const firstName = name.split(" ").filter(Boolean)[0] || "Client";
+            greeting.textContent = `${timeGreet}, ${firstName}.`;
         }
 
     } catch (err) {
@@ -1840,20 +1826,67 @@ function renderClientProjects() {
         const bat = p.battery_capacity_kwh ? `${p.battery_capacity_kwh} kWh Storage` : "10.0 kWh Storage";
         const inv = p.inverter_capacity_kva ? `${p.inverter_capacity_kva} kVA` : (p.system_capacity_kw ? `${p.system_capacity_kw} kVA` : "5.0 kVA");
         const val = Number(p.contract_value || p.estimated_value || 0).toLocaleString("en-NG", { minimumFractionDigits: 2 });
-        const lead = p.installer_contact_name || p.installer_name || "Eniola Abdulrasaq";
-        const leadPhone = p.installer_phone || "0813 361 5132";
-        const leadPhoto = p.installer_photo || "/uploads/installer-AEI-B7122F5A-1790967877945-532980.jpg";
+        const hasLead = Boolean(p.installer_contact_name || p.installer_name);
+        const lead = hasLead ? (p.installer_contact_name || p.installer_name) : "Pending Field Assignment";
+        const leadPhone = p.installer_phone || "";
+        const leadPhoto = p.installer_photo || "/uploads/installer-default.jpg";
         const location = [p.city, p.state].filter(Boolean).join(", ") || "Abuja FCT";
         const progress = p.completion_percentage || (p.status === "completed" ? 100 : (p.status === "in_installation" ? 72 : (p.status === "active" ? 50 : 25)));
 
-        const isAccepted = p.bargain_status === "accepted" || p.bargain_status === "client_accepted_original" || ["in_installation", "in_progress", "completed", "approved", "active"].includes(p.status);
+        const isAccepted = p.status === "accepted" || p.bargain_status === "accepted" || p.bargain_status === "client_accepted_original" || ["in_installation", "in_progress", "completed", "approved"].includes(p.status);
+        const isDenied = p.status === "denied" || p.status === "rejected";
+        const isBargainRejected = p.bargain_status === "rejected";
 
         let bargainBadge = "";
         if (p.bargain_status === "pending_admin_review") {
             bargainBadge = `<span style="display:inline-block; font-size:11px; font-weight:800; background:#FEF3C7; color:#92400E; padding:3px 8px; border-radius:12px; margin-top:4px;">⏳ Bargain Under Review: ₦${Number(p.proposed_bargain_amount).toLocaleString("en-NG", { minimumFractionDigits: 2 })}</span>`;
+        } else if (isDenied) {
+            bargainBadge = `<span style="display:inline-block; font-size:11px; font-weight:800; background:#FEE2E2; color:#991B1B; padding:3px 8px; border-radius:12px; margin-top:4px;">✕ Quotation Denied</span>`;
+        } else if (isBargainRejected) {
+            bargainBadge = `<span style="display:inline-block; font-size:11px; font-weight:800; background:#FEE2E2; color:#991B1B; padding:3px 8px; border-radius:12px; margin-top:4px;">✕ Bargain Declined (Standard Rate Maintained)</span>`;
         } else if (isAccepted) {
-            bargainBadge = `<span style="display:inline-block; font-size:11px; font-weight:800; background:#D1FAE5; color:#065F46; padding:3px 8px; border-radius:12px; margin-top:4px;">✅ Quotation Agreed & Active</span>`;
+            bargainBadge = `<span style="display:inline-block; font-size:11px; font-weight:800; background:#D1FAE5; color:#065F46; padding:3px 8px; border-radius:12px; margin-top:4px;">✅ Quotation Accepted</span>`;
         }
+
+        let paymentPromptHtml = "";
+        const amountPaid = Number(p.amount_paid || 0);
+        if (isAccepted && !hasLead && amountPaid <= 0) {
+            paymentPromptHtml = `
+                <div style="margin-top:12px; background:#EFF6FF; border:1px solid #BFDBFE; border-radius:8px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                    <div>
+                        <strong style="color:#1E40AF; font-size:12px; display:block;">💳 Payment Required to Assign Installer</strong>
+                        <span style="color:#3B82F6; font-size:11px;">Quotation accepted. Please make payment in the Payments Page to dispatch your nearest installer.</span>
+                    </div>
+                    <button type="button" class="primary-btn" onclick="navigateTo('payments'); event.stopPropagation();" style="padding:6px 14px; font-size:11.5px; font-weight:700; background:#004AAD; color:#fff; border-radius:6px; border:none; cursor:pointer;">Pay in Payments Page →</button>
+                </div>
+            `;
+        }
+
+        let leadMiniRow = "";
+        if (hasLead) {
+            leadMiniRow = `
+                <div style="margin-top:12px; display:flex; align-items:center; gap:10px; padding:8px 10px; background:#EFF6FF; border-radius:8px;">
+                    <img src="${leadPhoto}" alt="${escapeHtml(lead)}" style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:1.5px solid #004AAD;" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';" />
+                    <div style="flex:1; min-width:0;">
+                        <div style="font-size:11.5px; font-weight:700; color:#0F172A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(lead)}</div>
+                        <div style="font-size:10.5px; color:#64748B;">⭐ Verified Lead Installer ${leadPhone ? `· <a href="tel:${leadPhone.replace(/\s+/g, '')}" onclick="event.stopPropagation();" style="color:#004AAD; text-decoration:none; font-weight:700;">📞 ${leadPhone}</a>` : ''}</div>
+                    </div>
+                </div>
+            `;
+        } else {
+            leadMiniRow = `
+                <div style="margin-top:12px; display:flex; align-items:center; gap:10px; padding:8px 10px; background:#FFFBEB; border:1px solid #FEF3C7; border-radius:8px;">
+                    <div style="width:32px; height:32px; border-radius:50%; background:#FEF3C7; color:#D97706; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700;">⏳</div>
+                    <div style="flex:1; min-width:0;">
+                        <div style="font-size:11.5px; font-weight:700; color:#92400E;">Pending Field Assignment</div>
+                        <div style="font-size:10.5px; color:#B45309;">Assigned immediately after initial deposit is verified</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        const displayStatus = isDenied ? "Denied" : (isAccepted ? "Accepted" : (p.status || "Active"));
+        const statusColorClass = isDenied ? "rejected" : (isAccepted ? "completed" : (p.status === "completed" ? "completed" : "active"));
 
         return `
             <div class="project-card" style="cursor:pointer; background:#FFFFFF; border:1px solid #E2E8F0; border-radius:14px; padding:22px; transition:transform 0.2s, box-shadow 0.2s;" onclick="openProjectModal('${pId}')">
@@ -1863,24 +1896,21 @@ function renderClientProjects() {
                         <h3 style="margin:4px 0 2px 0; font-size:16px; color:#0F172A;">${escapeHtml(name)}</h3>
                         ${bargainBadge}
                     </div>
-                    <span class="status-pill ${p.status === "completed" ? "completed" : "active"}">${escapeHtml(p.status || "Active")}</span>
+                    <span class="status-pill ${statusColorClass}">${escapeHtml(displayStatus)}</span>
                 </div>
 
                 <div class="project-meta" style="margin-top:14px; display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:12px; background:#F8FAFC; padding:12px; border-radius:8px;">
                     <div><span style="color:#64748B; font-size:11px; display:block;">System Sizing</span><strong>${cap} • ${inv}</strong></div>
                     <div><span style="color:#64748B; font-size:11px; display:block;">Battery Bank</span><strong>${bat}</strong></div>
-                    <div><span style="color:#64748B; font-size:11px; display:block;">Assigned Lead</span><strong style="color:#004AAD;">${escapeHtml(lead)}</strong></div>
+                    <div><span style="color:#64748B; font-size:11px; display:block;">Assigned Lead</span><strong style="color:${hasLead ? '#004AAD' : '#D97706'};">${escapeHtml(lead)}</strong></div>
                     <div><span style="color:#64748B; font-size:11px; display:block;">Contract Value</span><strong style="color:#059669;">₦${val}</strong></div>
                 </div>
 
+                <!-- Payment Action Prompt if Accepted & Unpaid -->
+                ${paymentPromptHtml}
+
                 <!-- Assigned Lead Installer Mini-Row -->
-                <div style="margin-top:12px; display:flex; align-items:center; gap:10px; padding:8px 10px; background:#EFF6FF; border-radius:8px;">
-                    <img src="${leadPhoto}" alt="${escapeHtml(lead)}" style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:1.5px solid #004AAD;" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';" />
-                    <div style="flex:1; min-width:0;">
-                        <div style="font-size:11.5px; font-weight:700; color:#0F172A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(lead)}</div>
-                        <div style="font-size:10.5px; color:#64748B;">⭐ 4.96 · Lead Installer · <a href="tel:${leadPhone.replace(/\s+/g, '')}" onclick="event.stopPropagation();" style="color:#004AAD; text-decoration:none; font-weight:700;">📞 ${leadPhone}</a></div>
-                    </div>
-                </div>
+                ${leadMiniRow}
 
                 <div class="progress-section" style="margin-top:14px;">
                     <div class="progress-label" style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;">
@@ -2260,10 +2290,10 @@ function handleNewRequestStudio() {
     const newProjectCode = `PRJ-${year}${month}-${randomNum}`;
 
     const activeClientData = {
-        fullName: client.name || "Eniola Abdulrasaq",
+        fullName: client.name || "Client",
         projectCode: newProjectCode,
-        email: client.email || "e8237140@gmail.com",
-        phone: client.phone || "+234 813 361 5132",
+        email: client.email || "",
+        phone: client.phone || "",
         address: client.location || client.address || "Abuja, FCT",
         propertyType: client.propertyType || "Residential"
     };
@@ -2397,7 +2427,10 @@ window.openMakePaymentModal = function(projectId) {
 
     const projectOptions = projects.map(p => {
         const isSel = targetProj && p.id === targetProj.id ? "selected" : "";
-        const bal = Number(p.balance_due || p.contract_value || 0).toLocaleString();
+        const cVal = Number(p.contract_value || p.original_contract_value || p.estimated_value || 0);
+        const aPaid = Number(p.amount_paid || 0);
+        const pBal = (p.balance_due !== undefined && p.balance_due !== null && Number(p.balance_due) > 0) ? Number(p.balance_due) : Math.max(0, cVal - aPaid);
+        const bal = pBal.toLocaleString();
         return `<option value="${p.id}" ${isSel}>${escapeHtml(p.project_code || 'PRJ-' + p.id)} — ${escapeHtml(p.project_name || 'Solar Installation')} (Bal: ₦${bal})</option>`;
     }).join("");
 
@@ -2506,7 +2539,7 @@ window.onPaymentProjectChange = function(projectId) {
 
     const contractVal = Number(p.contract_value || p.original_contract_value || p.estimated_value || 0);
     const amountPaid = Number(p.amount_paid || 0);
-    const balance = Number(p.balance_due ?? (contractVal - amountPaid));
+    const balance = (p.balance_due !== undefined && p.balance_due !== null && Number(p.balance_due) > 0) ? Number(p.balance_due) : Math.max(0, contractVal - amountPaid);
     const isInitial = amountPaid <= 0;
     const min80 = Math.round(contractVal * 0.80);
 
@@ -2635,7 +2668,19 @@ window.openReceiptModal = function(id, refCode, amount, status) {
 ========================================================= */
 
 async function initializeClientPortal() {
-    navigateTo("dashboard");
+    const initialHash = (window.location.hash || "").replace(/^#/, "").toLowerCase();
+    if (initialHash && PAGE_TITLES[initialHash]) {
+        navigateTo(initialHash);
+    } else {
+        navigateTo("dashboard");
+    }
+
+    window.addEventListener("hashchange", () => {
+        const hash = (window.location.hash || "").replace(/^#/, "").toLowerCase();
+        if (hash && PAGE_TITLES[hash] && ClientApp.currentPage !== hash) {
+            navigateTo(hash);
+        }
+    });
 
     // Update date display
     const dateDisplay = document.getElementById("currentDate");
@@ -2858,23 +2903,68 @@ async function loadInstallationMonitoring(targetProjectId) {
     const batEl = document.getElementById("installHeroBattery");
     if (batEl) batEl.textContent = battery;
 
-    const installerName = fullProject.installer_contact_name || fullProject.installer_name || "Eniola Abdulrasaq";
-    const installerCompany = fullProject.installer_company_name || "AE RENEWABLE LTD";
-    const installerPhone = fullProject.installer_phone || "0813 361 5132";
-    const installerEmail = fullProject.installer_email || "a.e.renewablesolution@gmail.com";
-    const installerPhoto = fullProject.installer_photo || "/uploads/installer-AEI-B7122F5A-1790967877945-532980.jpg";
-    const installerRating = fullProject.installer_rating ? `⭐ ${fullProject.installer_rating} · Master Installer` : "⭐ 4.96 · Master Installer";
-    const installerLoc = [fullProject.installer_city || fullProject.city, fullProject.installer_state || fullProject.state].filter(Boolean).join(", ") || "Central Area / AMAC, Abuja FCT";
+    const hasAssignedInstaller = Boolean(
+        fullProject.installer_id ||
+        fullProject.installer_name ||
+        fullProject.installer_contact_name
+    );
+
+    const installerName = hasAssignedInstaller
+        ? (fullProject.installer_contact_name || fullProject.installer_name)
+        : "Awaiting Installer Assignment";
+    const installerCompany = hasAssignedInstaller
+        ? (fullProject.installer_company_name || "AE Renewable Certified Installer")
+        : "AE Operations Console · Certified Lead Matching in Progress";
+    const installerPhone = hasAssignedInstaller
+        ? (fullProject.installer_phone || "")
+        : "";
+    const installerEmail = hasAssignedInstaller
+        ? (fullProject.installer_email || "a.e.renewablesolution@gmail.com")
+        : "a.e.renewablesolution@gmail.com";
+    const installerPhoto = hasAssignedInstaller
+        ? (fullProject.installer_photo || "/uploads/installer-default.jpg")
+        : "/uploads/installer-default.jpg";
+    const installerRating = hasAssignedInstaller
+        ? (fullProject.installer_rating ? `⭐ ${fullProject.installer_rating} · Certified Installer` : "⭐ 5.0 · Certified Installer")
+        : "⏳ Operations Queue";
+    const installerLoc = hasAssignedInstaller
+        ? ([fullProject.installer_city, fullProject.installer_state].filter(Boolean).join(", ") || location)
+        : (location || "FCT (Abuja), Nigeria");
 
     const instEl = document.getElementById("installHeroInstaller");
-    if (instEl) instEl.textContent = installerName;
+    if (instEl) instEl.textContent = hasAssignedInstaller ? installerName : "Pending Field Assignment";
 
     const locEl = document.getElementById("installHeroLocation");
     if (locEl) locEl.textContent = location;
 
     // Populate Dedicated Installer Profile Card
+    const cardEl = document.getElementById("assignedInstallerProfileCard");
     const cardPhoto = document.getElementById("installCardPhoto");
-    if (cardPhoto) cardPhoto.src = installerPhoto;
+    if (cardPhoto) {
+        cardPhoto.src = installerPhoto;
+        cardPhoto.style.border = hasAssignedInstaller ? "2px solid #004AAD" : "2px solid #94A3B8";
+    }
+
+    const cardBadge = document.getElementById("installCardBadge") || cardEl?.querySelector(".installer-verified-badge");
+    if (cardBadge) {
+        if (hasAssignedInstaller) {
+            cardBadge.textContent = "✓ Verified";
+            cardBadge.title = "AE Certified & Registered Lead Installer";
+            cardBadge.style.background = "#10B981";
+            cardBadge.style.color = "#FFFFFF";
+        } else {
+            cardBadge.textContent = "⏳ Pending";
+            cardBadge.title = "Awaiting Lead Installer Dispatch";
+            cardBadge.style.background = "#F59E0B";
+            cardBadge.style.color = "#FFFFFF";
+        }
+    }
+
+    const cardEyebrow = document.getElementById("installCardEyebrow") || cardEl?.querySelector(".eyebrow");
+    if (cardEyebrow) {
+        cardEyebrow.textContent = hasAssignedInstaller ? "ASSIGNED LEAD INSTALLER & ENGINEER" : "FIELD INSTALLATION DISPATCH DESK";
+        cardEyebrow.style.color = hasAssignedInstaller ? "#004AAD" : "#64748B";
+    }
 
     const cardName = document.getElementById("installCardName");
     if (cardName) cardName.textContent = installerName;
@@ -2883,28 +2973,61 @@ async function loadInstallationMonitoring(targetProjectId) {
     if (cardCompany) cardCompany.textContent = installerCompany;
 
     const cardPhone = document.getElementById("installCardPhone");
+    const cardPhoneLabel = document.getElementById("installCardPhoneLabel");
     if (cardPhone) {
-        cardPhone.textContent = installerPhone;
-        cardPhone.href = `tel:${installerPhone.replace(/\s+/g, "")}`;
+        if (hasAssignedInstaller && installerPhone) {
+            cardPhone.textContent = installerPhone;
+            cardPhone.href = `tel:${installerPhone.replace(/\s+/g, "")}`;
+            if (cardPhoneLabel) cardPhoneLabel.textContent = "Direct Phone";
+        } else {
+            cardPhone.textContent = "AE Dispatch Support";
+            cardPhone.href = "tel:08133615132";
+            if (cardPhoneLabel) cardPhoneLabel.textContent = "Operations Desk";
+        }
     }
 
     const cardEmail = document.getElementById("installCardEmail");
+    const cardEmailLabel = document.getElementById("installCardEmailLabel");
     if (cardEmail) {
         cardEmail.textContent = installerEmail;
         cardEmail.href = `mailto:${installerEmail}`;
+        if (cardEmailLabel) cardEmailLabel.textContent = hasAssignedInstaller ? "Email Address" : "Operations Email";
     }
 
     const cardLoc = document.getElementById("installCardLocation");
     if (cardLoc) cardLoc.textContent = installerLoc;
 
     const cardRating = document.getElementById("installCardRating");
-    if (cardRating) cardRating.textContent = installerRating;
+    if (cardRating) {
+        cardRating.textContent = installerRating;
+        if (hasAssignedInstaller) {
+            cardRating.style.background = "#FEF3C7";
+            cardRating.style.color = "#92400E";
+            cardRating.style.borderColor = "#FDE68A";
+        } else {
+            cardRating.style.background = "#FEF3C7";
+            cardRating.style.color = "#92400E";
+            cardRating.style.borderColor = "#FDE68A";
+        }
+    }
 
     const callBtn = document.getElementById("installCallBtn");
-    if (callBtn) callBtn.href = `tel:${installerPhone.replace(/\s+/g, "")}`;
+    if (callBtn) {
+        if (hasAssignedInstaller && installerPhone) {
+            callBtn.textContent = "📞 Call Installer";
+            callBtn.href = `tel:${installerPhone.replace(/\s+/g, "")}`;
+            callBtn.style.display = "inline-flex";
+        } else {
+            callBtn.textContent = "💬 Message AE Desk";
+            callBtn.href = "mailto:a.e.renewablesolution@gmail.com";
+        }
+    }
 
     const emailBtn = document.getElementById("installEmailBtn");
-    if (emailBtn) emailBtn.href = `mailto:${installerEmail}`;
+    if (emailBtn) {
+        emailBtn.textContent = hasAssignedInstaller ? "✉️ Email" : "✉️ Support";
+        emailBtn.href = `mailto:${installerEmail}`;
+    }
 
     const statusPill = document.getElementById("installStatusPill");
     if (statusPill) {
@@ -3073,8 +3196,11 @@ function renderEvidenceGallery() {
         const statusClass = isApproved ? "approved" : "pending";
         const statusLabel = isApproved ? "✓ AE Verified" : "⏳ Review Pending";
 
+        const curProjId = (ClientApp.projectsList && ClientApp.projectsList[0] && ClientApp.projectsList[0].id) || "";
+        const stageId = ev.stage || ev.stage_type || "stage";
+
         return `
-            <div class="evidence-photo-card" onclick="openEvidenceLightbox('${imgUrl}', '${stageConfig.icon} ${stageConfig.title}', '${encodeURIComponent(caption)}', '${timeStr}', '${statusLabel}')">
+            <div class="evidence-photo-card" onclick="openEvidenceLightbox('${imgUrl}', '${stageConfig.icon} ${stageConfig.title}', '${encodeURIComponent(caption)}', '${timeStr}', '${statusLabel}', '${stageId}', '${curProjId}')">
                 <div class="evidence-card-img-wrap">
                     <img src="${imgUrl}" alt="${stageConfig.title}" loading="lazy" onerror="this.src='/uploads/evidence-default.jpg'" />
                     <span class="evidence-stage-badge">${stageConfig.icon} ${stageConfig.title}</span>
@@ -3092,7 +3218,7 @@ function renderEvidenceGallery() {
     }).join("");
 }
 
-function openEvidenceLightbox(imageUrl, title, encodedCaption, timeStr, statusLabel) {
+function openEvidenceLightbox(imageUrl, title, encodedCaption, timeStr, statusLabel, stageId, projectId) {
     const caption = decodeURIComponent(encodedCaption);
     openModal(`
         <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
@@ -3107,9 +3233,28 @@ function openEvidenceLightbox(imageUrl, title, encodedCaption, timeStr, statusLa
             <img class="evidence-lightbox-img" src="${imageUrl}" alt="${title}" onerror="this.src='/uploads/evidence-default.jpg'" />
         </div>
 
-        <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:12px 14px; margin-bottom:16px;">
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:12px 14px; margin-bottom:14px;">
             <p style="font-size:13px; color:#1E293B; margin:0 0 6px 0; font-weight:600; line-height:1.4;">${caption}</p>
             <div style="font-size:11px; color:#64748B; font-weight:600;">Uploaded: ${timeStr}</div>
+        </div>
+
+        <!-- CLIENT REVIEW & REPUTATION FEEDBACK -->
+        <div style="background:#FFFFFF; border:1.5px solid #CBD5E1; border-radius:8px; padding:14px; margin-bottom:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span style="font-weight:700; font-size:12.5px; color:#0F172A;">⭐ Client Review (Saved for AE Reputation)</span>
+                <select id="lightboxReviewRating" style="padding:3px 8px; border:1px solid #CBD5E1; border-radius:6px; font-size:11.5px;">
+                    <option value="5" selected>★★★★★ 5/5</option>
+                    <option value="4">★★★★☆ 4/5</option>
+                    <option value="3">★★★☆☆ 3/5</option>
+                    <option value="2">★★☆☆☆ 2/5</option>
+                    <option value="1">★☆☆☆☆ 1/5</option>
+                </select>
+            </div>
+            <textarea id="lightboxReviewText" rows="2" placeholder="Write feedback or review for this stage proof..." style="width:100%; padding:8px 10px; border:1px solid #CBD5E1; border-radius:6px; font-size:12px; font-family:inherit;"></textarea>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+                <button type="button" class="secondary-btn" style="color:#DC2626; border-color:#FECACA; font-size:11.5px; padding:6px 12px;" onclick="submitStageClientReview('${projectId}', '${stageId}', true)">⚠️ Report Issue</button>
+                <button type="button" class="primary-btn" style="font-size:11.5px; padding:6px 16px;" onclick="submitStageClientReview('${projectId}', '${stageId}', false)">✓ Save Review</button>
+            </div>
         </div>
 
         <div class="modal-actions">
@@ -3118,9 +3263,84 @@ function openEvidenceLightbox(imageUrl, title, encodedCaption, timeStr, statusLa
     `);
 }
 
+window.submitStageClientReview = async function(projectId, stageId, isReport) {
+    const rating = document.getElementById("lightboxReviewRating")?.value || 5;
+    const text = document.getElementById("lightboxReviewText")?.value?.trim() || "";
+    if (!text) {
+        showClientToast("Please write a short review or note before submitting.", "error");
+        return;
+    }
+    const targetId = projectId || (ClientApp.projectsList && ClientApp.projectsList[0] && ClientApp.projectsList[0].id);
+    if (!targetId) {
+        showClientToast("Project context missing.", "error");
+        return;
+    }
+    try {
+        const res = await ClientAPI.post(`/api/projects/${targetId}/client-review`, {
+            rating: Number(rating),
+            reviewText: text,
+            stageId,
+            isReport
+        });
+        if (res && res.success) {
+            showClientToast(isReport ? "⚠️ Report logged and saved for Admin inspection." : "⭐ Thank you! Review saved for AE Renewable reputation.", "success");
+            closeModal();
+        } else {
+            showClientToast(res?.message || "Could not save review.", "error");
+        }
+    } catch (e) {
+        showClientToast(e.message || "Failed to submit review.", "error");
+    }
+};
+
 function renderEmptyInstallationMonitoring() {
     const heroProgress = document.getElementById("installHeroProgressBar");
     if (heroProgress) heroProgress.style.width = "0%";
+    const heroInstaller = document.getElementById("installHeroInstaller");
+    if (heroInstaller) heroInstaller.textContent = "No Project Active";
+    const heroCap = document.getElementById("installHeroCapacity");
+    if (heroCap) heroCap.textContent = "—";
+    const heroBat = document.getElementById("installHeroBattery");
+    if (heroBat) heroBat.textContent = "—";
+
+    const cardPhoto = document.getElementById("installCardPhoto");
+    if (cardPhoto) {
+        cardPhoto.src = "/uploads/installer-default.jpg";
+        cardPhoto.style.border = "2px solid #94A3B8";
+    }
+    const cardBadge = document.getElementById("installCardBadge") || document.querySelector("#assignedInstallerProfileCard .installer-verified-badge");
+    if (cardBadge) {
+        cardBadge.textContent = "⏳ Pending";
+        cardBadge.style.background = "#94A3B8";
+    }
+    const cardEyebrow = document.getElementById("installCardEyebrow") || document.querySelector("#assignedInstallerProfileCard .eyebrow");
+    if (cardEyebrow) {
+        cardEyebrow.textContent = "FIELD INSTALLATION DISPATCH DESK";
+        cardEyebrow.style.color = "#64748B";
+    }
+    const cardName = document.getElementById("installCardName");
+    if (cardName) cardName.textContent = "No Active Project";
+    const cardCompany = document.getElementById("installCardCompany");
+    if (cardCompany) cardCompany.textContent = "Submit a request to begin live installation tracking";
+    const cardPhone = document.getElementById("installCardPhone");
+    if (cardPhone) {
+        cardPhone.textContent = "AE Dispatch Support";
+        cardPhone.href = "tel:08133615132";
+    }
+    const cardEmail = document.getElementById("installCardEmail");
+    if (cardEmail) {
+        cardEmail.textContent = "a.e.renewablesolution@gmail.com";
+        cardEmail.href = "mailto:a.e.renewablesolution@gmail.com";
+    }
+    const cardLoc = document.getElementById("installCardLocation");
+    if (cardLoc) cardLoc.textContent = "—";
+    const cardRating = document.getElementById("installCardRating");
+    if (cardRating) {
+        cardRating.textContent = "Pending Project";
+        cardRating.style.background = "#F1F5F9";
+        cardRating.style.color = "#64748B";
+    }
+
     const milestonesGrid = document.getElementById("installMilestonesGrid");
     if (milestonesGrid) {
         milestonesGrid.innerHTML = INSTALLATION_STAGES_CONFIG.map(st => `

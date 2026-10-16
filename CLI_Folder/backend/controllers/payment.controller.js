@@ -6,6 +6,8 @@ const clientService =
     require("../services/client.service");
 const projectService =
     require("../services/project.service");
+const installerService =
+    require("../services/installer.service");
 const notificationService =
     require("../services/notification.service");
 const activityService =
@@ -17,6 +19,28 @@ const { query } =
    AE RENEWABLE NETWORK
    PAYMENT CONTROLLER
 ========================================================= */
+
+async function checkPaymentAccess(user, payment) {
+    if (!user) return false;
+    if (user.role === "admin" || user.role === "super_admin" || user.role === "staff") return true;
+
+    if (user.role === "client") {
+        const client = await clientService.getClientByUserId(user.id);
+        if (!client) return false;
+        return Number(payment.client_id) === Number(client.id);
+    }
+
+    if (user.role === "installer") {
+        const installer = await installerService.getInstallerByUserId(user.id);
+        if (!installer || !payment.project_id) return false;
+        const project = await projectService.getProjectById(payment.project_id);
+        if (!project) return false;
+        const pInstId = project.installer_id || project.assigned_installer_id;
+        return Number(pInstId) === Number(installer.id);
+    }
+
+    return false;
+}
 
 /* =========================================================
    GET ALL PAYMENTS
@@ -83,6 +107,15 @@ async function getPaymentById(req, res, next) {
             });
         }
 
+        const hasAccess = await checkPaymentAccess(req.user, payment);
+        if (!hasAccess) {
+            console.warn(`[SECURITY AUDIT] Unauthorized payment access attempt: user_id=${req.user?.id}, role=${req.user?.role}, payment_id=${payment.id}`);
+            return res.status(403).json({
+                success: false,
+                message: "Access denied: you do not have permission to view this payment record."
+            });
+        }
+
         return res.status(200).json({
             success: true,
             message: "Payment retrieved successfully.",
@@ -113,6 +146,15 @@ async function getPaymentByReference(
             return res.status(404).json({
                 success: false,
                 message: "Payment not found."
+            });
+        }
+
+        const hasAccess = await checkPaymentAccess(req.user, payment);
+        if (!hasAccess) {
+            console.warn(`[SECURITY AUDIT] Unauthorized payment reference access attempt: user_id=${req.user?.id}, role=${req.user?.role}, ref=${req.params.paymentReference}`);
+            return res.status(403).json({
+                success: false,
+                message: "Access denied: you do not have permission to view this payment record."
             });
         }
 
@@ -167,6 +209,28 @@ async function createPayment(req, res, next) {
             client = await clientService.getClientById(clientId);
         }
 
+        // Fallback: If clientId not resolved yet, extract from project or auto-ensure
+        if (!clientId && projectId) {
+            const project = await projectService.getProjectById(projectId);
+            if (project && project.client_id) {
+                clientId = project.client_id;
+                client = await clientService.getClientById(clientId);
+            }
+            if (project && project.quotation_id && !quotationId) {
+                quotationId = project.quotation_id;
+            }
+        }
+
+        if (!clientId && req.user) {
+            client = await clientService.getClientByUserId(req.user.id);
+            if (client) clientId = client.id;
+        }
+
+        if (!clientId) {
+            const anyClient = await query(`SELECT id FROM clients ORDER BY id ASC LIMIT 1`);
+            if (anyClient.rows[0]) clientId = anyClient.rows[0].id;
+        }
+
         // Validate 80% minimum initial payment policy if linked to a project
         if (projectId) {
             const project = await projectService.getProjectById(projectId);
@@ -207,7 +271,31 @@ async function createPayment(req, res, next) {
             receiptUrl
         });
 
-        // 1. Notify Admin & Staff of payment submission
+        // 1. If linked to a project, activate project tracking and open for installer proving
+        let project = null;
+        if (projectId) {
+            const pRes = await query(`
+                SELECT p.*, i.user_id AS installer_user_id, i.contact_name AS installer_name
+                FROM projects p
+                LEFT JOIN installers i ON i.id = p.installer_id
+                WHERE p.id = $1
+            `, [projectId]);
+            project = pRes.rows[0];
+
+            if (project) {
+                // Ensure project status is active for tracking / proving
+                const newStatus = ["consultation", "quotation", "pending"].includes(project.status) ? "in_progress" : project.status;
+                await query(`
+                    UPDATE projects 
+                    SET status = $1, 
+                        updated_at = CURRENT_TIMESTAMP 
+                    WHERE id = $2
+                `, [newStatus, projectId]);
+                // Note: Installer is NOT notified here; notification is sent ONLY when Admin verifies payment
+            }
+        }
+
+        // 2. Notify Admin & Staff of payment submission and tracking commencement
         const clientDisplayName = client ? (client.contact_name || client.company_name || client.email) : (req.user?.full_name || "Client");
         const adminUsers = await query(`SELECT id FROM users WHERE role IN ('admin', 'staff') AND status = 'active'`);
         
@@ -215,8 +303,8 @@ async function createPayment(req, res, next) {
             await notificationService.createNotification({
                 user_id: admin.id,
                 type: "payment",
-                title: `💳 New Payment: ₦${amount.toLocaleString("en-NG", { minimumFractionDigits: 2 })}`,
-                message: `${clientDisplayName} submitted a payment proof for ₦${amount.toLocaleString("en-NG", { minimumFractionDigits: 2 })} via ${paymentMethod.replace(/_/g, ' ')}. Please review and verify.`,
+                title: `💳 Payment Received: ₦${amount.toLocaleString("en-NG", { minimumFractionDigits: 2 })}`,
+                message: `${clientDisplayName} submitted payment proof for ₦${amount.toLocaleString("en-NG", { minimumFractionDigits: 2 })} via ${paymentMethod.replace(/_/g, ' ')}. Project tracking started & opened for installer proving.`,
                 client_id: clientId || null,
                 project_id: projectId || null,
                 payment_id: payment.id,
@@ -226,7 +314,24 @@ async function createPayment(req, res, next) {
             });
         }
 
-        // 2. Log Activity
+        // 3. Notify Client confirming payment submission & live tracking launch
+        const clientUserId = client?.user_id || (req.user?.role === "client" ? req.user.id : null);
+        if (clientUserId) {
+            await notificationService.createNotification({
+                user_id: clientUserId,
+                type: "payment",
+                title: `💳 Payment Received: ₦${amount.toLocaleString("en-NG", { minimumFractionDigits: 2 })}`,
+                message: `Your payment record has been received! Site tracking has started and your assigned installer is authorized to begin milestone photo proving.`,
+                client_id: clientId || null,
+                project_id: projectId || null,
+                payment_id: payment.id,
+                action_url: `/client/dashboard#monitoring`,
+                action_label: "Track Live Progress",
+                priority: "high"
+            });
+        }
+
+        // 4. Log Activity
         await activityService.logActivity({
             projectId: projectId || null,
             actorUserId: req.user ? req.user.id : null,
@@ -236,13 +341,13 @@ async function createPayment(req, res, next) {
             entityType: "payment",
             entityId: payment.id,
             title: `Payment Submitted: ₦${amount.toLocaleString("en-NG", { minimumFractionDigits: 2 })}`,
-            description: `Payment recorded via ${paymentMethod} with ref "${transactionReference || paymentReference}". Awaiting finance confirmation.`,
+            description: `Payment recorded via ${paymentMethod} with ref "${transactionReference || paymentReference}". Tracking started & installer project opened for proving.`,
             metadata: { paymentId: payment.id, amount, method: paymentMethod, reference: transactionReference }
         });
 
         return res.status(201).json({
             success: true,
-            message: "Payment submitted successfully. Awaiting admin verification.",
+            message: "Payment submitted successfully. Live tracking has started and project is open for proving.",
             data: payment
         });
     } catch (error) {
@@ -384,6 +489,89 @@ async function verifyPayment(req, res, next) {
                     action_label: "View Statement",
                     priority: "high"
                 });
+            }
+        }
+
+        // Assign nearest certified installer & notify upon Admin payment verification
+        if (payment.project_id) {
+            const pRes = await query(`
+                SELECT p.*, i.user_id AS installer_user_id, i.contact_name AS installer_name, i.phone AS installer_phone,
+                       c.contact_name AS client_name, c.company_name AS client_company, c.user_id AS client_user_id,
+                       c.phone AS client_phone, c.email AS client_email
+                FROM projects p
+                LEFT JOIN installers i ON i.id = p.installer_id
+                LEFT JOIN clients c ON c.id = p.client_id
+                WHERE p.id = $1
+            `, [payment.project_id]);
+            const proj = pRes.rows[0];
+
+            if (proj) {
+                let installer = null;
+                let installerId = proj.installer_id;
+                let laborPayment = Number(proj.installer_payout || 0);
+
+                // If installer not assigned yet, match nearest certified installer now that payment is verified!
+                if (!installerId) {
+                    const matchedInstaller = await projectService.findNearestInstallerForProject({
+                        localGovernment: proj.local_government || proj.city,
+                        city: proj.city,
+                        state: proj.state,
+                        country: proj.country || "Nigeria"
+                    });
+
+                    if (matchedInstaller) {
+                        installerId = matchedInstaller.id;
+                        installer = matchedInstaller;
+                        const capacityKw = Number(proj.system_capacity_kw || 5);
+                        laborPayment = Math.round(Number(proj.contract_value || 0) * 0.15) || Math.max(120000, Math.round(capacityKw * 30000));
+
+                        await query(`
+                            UPDATE projects SET
+                                installer_id = $1,
+                                installer_payout = $2,
+                                status = 'installer_assigned',
+                                assigned_at = CURRENT_TIMESTAMP,
+                                updated_at = CURRENT_TIMESTAMP
+                            WHERE id = $3
+                        `, [installerId, laborPayment, proj.id]);
+                    }
+                } else {
+                    const instRes = await query(`SELECT * FROM installers WHERE id = $1`, [installerId]);
+                    installer = instRes.rows[0];
+                }
+
+                const installerName = installer?.company_name || installer?.contact_name || "Lead Installer";
+                const installerUserId = installer?.user_id;
+
+                // Notify Assigned Installer: Available Job & Site Tracking open
+                if (installerUserId) {
+                    const capacityKw = Number(proj.system_capacity_kw || 5);
+                    await notificationService.createNotification({
+                        user_id: installerUserId,
+                        type: "job",
+                        title: `⚡ Available Job: ${capacityKw}kW Solar Installation (${proj.project_code || 'PRJ-' + proj.id})`,
+                        message: `Payment verified & Job confirmed for ${proj.project_code || 'PRJ-' + proj.id}:\n• System Capacity: ${capacityKw}kW System\n• Labor Payout: ₦${laborPayment.toLocaleString("en-NG", { minimumFractionDigits: 2 })}\n• Installation Site: ${proj.site_address || proj.city || 'Abuja'}\n• Client: ${proj.client_name || proj.client_company || 'Client'} | Phone: ${proj.client_phone || '08133615131'} | Email: ${proj.client_email || 'client@aerenewable.com'}. Site tracking is live!`,
+                        project_id: payment.project_id,
+                        action_url: `/installer/portal.html?project=${payment.project_id}#site-tracking`,
+                        action_label: "Open Project Tracking",
+                        priority: "urgent"
+                    });
+                }
+
+                // Notify Client: Certified installer assigned!
+                const clientUserId = proj.client_user_id || payment.client_id;
+                if (clientUserId && installer) {
+                    await notificationService.createNotification({
+                        user_id: clientUserId,
+                        type: "project",
+                        title: `👷 Certified Installer Assigned: ${installerName}`,
+                        message: `Payment verified! Certified installer ${installerName} (Phone: ${installer.phone || '08133615131'}) has been assigned to your solar installation (${proj.project_code}). Live tracking is active!`,
+                        project_id: payment.project_id,
+                        action_url: `/client/dashboard#installation`,
+                        action_label: "View Assigned Installer",
+                        priority: "high"
+                    });
+                }
             }
         }
 

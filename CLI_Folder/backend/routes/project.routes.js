@@ -38,6 +38,18 @@ router.patch("/:id/status", requireAuth, requireStaff, projectController.updateP
 // Assign installer to project
 router.post("/:id/assign-installer", requireAuth, requireStaff, projectController.assignInstaller);
 
+// Admin accepts project (Locks 5% bargain & sets status to accepted)
+router.post("/:id/admin-accept", requireAuth, requireStaff, projectController.adminAcceptProject);
+
+// Admin marks project pending review
+router.post("/:id/admin-pending", requireAuth, requireStaff, projectController.adminPendingProject);
+
+// Admin denies/declines project quotation
+router.post("/:id/admin-deny", requireAuth, requireStaff, projectController.adminDenyProject);
+
+// Client reviews / reports on installation tracking
+router.post("/:id/client-review", requireAuth, projectController.submitClientReview);
+
 // Installer accepts assigned project
 router.post("/:id/accept", requireAuth, requireInstaller, projectController.acceptProject);
 

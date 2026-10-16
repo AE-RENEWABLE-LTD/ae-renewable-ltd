@@ -482,18 +482,98 @@ async function clientAcceptOriginalQuotation(req, res, next) {
 
 async function deleteProject(req, res, next) {
     try {
-        const project = await projectService.deleteProject(req.params.id);
+        const actorName = req.user
+            ? `${req.user.first_name || ""} ${req.user.last_name || ""}`.trim() || req.user.username || "Admin"
+            : "Admin";
+        const { reason } = req.body || {};
+        const project = await projectService.deleteProject(req.params.id, req.user?.id, actorName, reason);
 
         if (!project) {
             return res.status(404).json({
                 success: false,
-                message: "Project not found."
+                message: "Consultation / project not found."
             });
         }
 
         return res.status(200).json({
             success: true,
-            message: "Project deleted successfully."
+            message: "Consultation deleted successfully."
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function adminAcceptProject(req, res, next) {
+    try {
+        const actorName = req.user
+            ? `${req.user.first_name || ""} ${req.user.last_name || ""}`.trim() || req.user.username || "Admin"
+            : "Admin";
+
+        const project = await projectService.adminAcceptProject(req.params.id, req.user?.id, actorName);
+
+        return res.status(200).json({
+            success: true,
+            message: "Project quotation accepted by Admin. Client notified with portal and payment links.",
+            data: project
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function adminPendingProject(req, res, next) {
+    try {
+        const actorName = req.user
+            ? `${req.user.first_name || ""} ${req.user.last_name || ""}`.trim() || req.user.username || "Admin"
+            : "Admin";
+
+        const { note } = req.body || {};
+        const project = await projectService.adminPendingProject(req.params.id, req.user?.id, actorName, note);
+
+        return res.status(200).json({
+            success: true,
+            message: "Consultation marked as Pending Review by Admin. Client notified.",
+            data: project
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function adminDenyProject(req, res, next) {
+    try {
+        const actorName = req.user
+            ? `${req.user.first_name || ""} ${req.user.last_name || ""}`.trim() || req.user.username || "Admin"
+            : "Admin";
+
+        const { reason } = req.body || {};
+        const project = await projectService.adminDenyProject(req.params.id, req.user?.id, actorName, reason);
+
+        return res.status(200).json({
+            success: true,
+            message: "Project quotation declined by Admin.",
+            data: project
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function submitClientReview(req, res, next) {
+    try {
+        const { rating, reviewText, stageId, isReport } = req.body || {};
+        const project = await projectService.submitClientReview(req.params.id, req.user?.id, {
+            rating,
+            reviewText,
+            stageId,
+            isReport: Boolean(isReport)
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: isReport ? "Client report submitted for technical review." : "Client review saved successfully for company reputation.",
+            data: project
         });
     } catch (error) {
         next(error);
@@ -509,6 +589,9 @@ module.exports = {
     updateProjectStatus,
     assignInstaller,
     acceptProject,
+    adminAcceptProject,
+    adminPendingProject,
+    adminDenyProject,
     submitEvidence,
     reviewEvidence,
     requestPayment,
@@ -519,5 +602,6 @@ module.exports = {
     acceptBargain,
     rejectBargain,
     clientAcceptOriginalQuotation,
+    submitClientReview,
     deleteProject
 };

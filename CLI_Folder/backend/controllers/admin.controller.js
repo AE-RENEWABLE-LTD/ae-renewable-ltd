@@ -3,7 +3,9 @@
 const { query } = require("../config/database");
 const bcrypt = require("bcryptjs");
 const emailService = require("../services/email.service");
+const notificationService = require("../services/notification.service");
 const automationService = require("../services/automation.service");
+const trackingService = require("../services/tracking.service");
 
 /* =========================================================
    AE RENEWABLE NETWORK
@@ -30,7 +32,9 @@ async function getDashboard(req, res, next) {
             recentInstallersResult,
             recentProjectsResult,
             recentQuotationsResult,
-            recentPaymentsResult
+            recentPaymentsResult,
+            roundClockTracking,
+            operationsTracking
         ] = await Promise.all([
 
             /* USERS */
@@ -280,7 +284,13 @@ async function getDashboard(req, res, next) {
                 FROM payments
                 ORDER BY COALESCE(transaction_date, created_at) DESC
                 LIMIT 5
-            `)
+            `),
+
+            /* ROUND-THE-CLOCK ACTIVITY TELEMETRY */
+            trackingService.getRoundClockActivity(),
+
+            /* OPERATIONS PIPELINE TRACKING (QUOTATION, PROJECT, INSTALLER) */
+            trackingService.getOperationsTracking()
         ]);
 
         const projects = projectsResult.rows[0];
@@ -414,7 +424,7 @@ async function getDashboard(req, res, next) {
             solar_capacity_kw: totalSolarKw,
             battery_capacity_kwh: totalBatteryKwh,
             current_load_kw: currentLoadKw,
-            battery_soc_percent: 78,
+            battery_soc_percent: completePaidCount > 0 ? 78 : 0,
             grid_power_kw: "0.0",
             complete_paid_count: completePaidCount,
             active_systems: completePaidCount,
@@ -488,8 +498,8 @@ async function getDashboard(req, res, next) {
 
         const sentNotificationsCount = Number(maintStats.sent_count || 0);
         const reportedBackCount = Number(maintStats.reported_count || 0);
-        const consultationsCount = Number(pipeline.consultation?.count || consultStats.total_consultations || 11);
-        const actedOnCount = Number(pipeline.site_survey?.count || consultStats.acted_on_count || 40);
+        const consultationsCount = Number(consultStats.total_consultations ?? pipeline.consultation?.count ?? 0);
+        const actedOnCount = Number(consultStats.acted_on_count ?? pipeline.site_survey?.count ?? 0);
 
         const systemHealth = {
             notifications_sent: sentNotificationsCount,
@@ -679,10 +689,52 @@ async function getDashboard(req, res, next) {
 
                 notifications: recentNotificationsResult.rows,
 
-                activity: activity.slice(0, 20)
+                activity: activity.slice(0, 20),
+
+                round_clock_tracking: roundClockTracking,
+
+                operations_tracking: operationsTracking
             }
         });
 
+    } catch (error) {
+        next(error);
+    }
+}
+
+/* =========================================================
+   GET ROUND-THE-CLOCK TRACKING GRAPH TELEMETRY
+   GET /api/admin/tracking-graph
+   Tracks 24/7 activity across Engine, Installer, Client & Admin
+========================================================= */
+
+async function getTrackingGraph(req, res, next) {
+    try {
+        const tracking = await trackingService.getRoundClockActivity();
+        return res.status(200).json({
+            success: true,
+            message: "Round-the-clock activity tracking telemetry retrieved successfully.",
+            data: tracking
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+/* =========================================================
+   GET OPERATIONS PIPELINE TRACKING TELEMETRY
+   GET /api/admin/operations-tracking
+   Tracks Quotation, Project, and Installer Velocity
+========================================================= */
+
+async function getOperationsTracking(req, res, next) {
+    try {
+        const tracking = await trackingService.getOperationsTracking();
+        return res.status(200).json({
+            success: true,
+            message: "Operations tracking telemetry (quotation, project, installer) retrieved successfully.",
+            data: tracking
+        });
     } catch (error) {
         next(error);
     }
@@ -954,6 +1006,17 @@ async function deleteUser(req, res, next) {
             });
         }
 
+        const targetUser = await query("SELECT email, role FROM users WHERE id = $1", [userId]);
+        if (targetUser.rows[0]) {
+            const targetEmail = String(targetUser.rows[0].email || "").toLowerCase();
+            if (targetEmail === "earenewablesolution@gmail.com" || targetEmail === "admin@aerenewablesolution.com") {
+                return res.status(400).json({
+                    success: false,
+                    message: "Primary administrator accounts cannot be deleted."
+                });
+            }
+        }
+
         const result = await query(
             `
             DELETE FROM users
@@ -1013,22 +1076,26 @@ async function fetchLivePipelineData() {
     const [
         clientsCountRes,
         quotationsCountRes,
+        consultationCountRes,
         surveyActionRes,
         installationOngoingRes,
-        commissionedPaymentRes
+        commissionedPaymentRes,
+        systemDesignRes
     ] = await Promise.all([
         query("SELECT COUNT(*) AS total FROM clients WHERE status = 'active'"),
-        query("SELECT COUNT(*) AS total FROM quotations"),
-        query("SELECT COUNT(*) AS total FROM (SELECT id FROM quotations UNION ALL SELECT id FROM projects WHERE status IN ('completed', 'installation', 'in_progress')) sub"),
+        query("SELECT COUNT(*) AS total FROM quotations WHERE status NOT IN ('cancelled', 'expired', 'deleted')"),
+        query("SELECT COUNT(*) AS total FROM projects WHERE status = 'consultation' OR notes LIKE '%[ARDE Intake%' OR engineering_data IS NOT NULL"),
+        query("SELECT COUNT(*) AS total FROM projects WHERE (status = 'consultation' AND (notes LIKE '%[Admin Action Dispatched%' OR status != 'consultation')) OR status IN ('site_survey', 'survey_completed', 'site_survey_scheduled')"),
         query("SELECT COUNT(*) AS total FROM projects WHERE (amount_paid > 0 AND balance_due > 0) OR status IN ('installation', 'in_progress', 'payment_requested', 'installer_assigned')"),
-        query("SELECT COUNT(*) AS total FROM projects WHERE (balance_due <= 0 AND amount_paid > 0) OR status IN ('commissioned', 'completed')")
+        query("SELECT COUNT(*) AS total FROM projects WHERE (balance_due <= 0 AND amount_paid > 0) OR status IN ('commissioned', 'completed')"),
+        query("SELECT COUNT(*) AS total FROM projects WHERE status IN ('design', 'engineered', 'ready_for_quote', 'sizing') OR (system_capacity_kw > 0 AND status NOT IN ('consultation', 'cancelled'))")
     ]);
 
     const totalClients = Number(clientsCountRes.rows[0]?.total || 0);
     const totalQuotations = Number(quotationsCountRes.rows[0]?.total || 0);
-    const consultationCount = Math.max(0, totalClients - totalQuotations);
+    const consultationCount = Number(consultationCountRes.rows[0]?.total || 0);
     const siteSurveyCount = Number(surveyActionRes.rows[0]?.total || 0);
-    const systemDesignCount = consultationCount;
+    const systemDesignCount = Number(systemDesignRes.rows[0]?.total || 0);
     const quotationCount = totalQuotations;
     const installationCount = Number(installationOngoingRes.rows[0]?.total || 0);
     const commissionedCount = Number(commissionedPaymentRes.rows[0]?.total || 0);
@@ -1094,6 +1161,124 @@ async function getPipeline(req, res, next) {
 
 
 /* =========================================================
+   APPLIANCE LOAD SCHEDULE PARSER & ENERGY CALCULATIONS
+========================================================= */
+
+const APPLIANCE_WATT_MAP = {
+    "inverter ac (1.5 hp)": 1100,
+    "standard ac (1.5 hp)": 1500,
+    "refrigerator / freezer": 350,
+    "refrigerator": 350,
+    "freezer": 350,
+    "borehole water pump": 1500,
+    "water heater": 2000,
+    "tv & workstations": 250,
+    "tv": 150,
+    "workstation": 200,
+    "led lighting circuit": 200,
+    "lighting": 200,
+    "heavy motor / machine": 3500,
+    "motor": 3000,
+    "fan": 75,
+    "ceiling fan": 75,
+    "standing fan": 60,
+    "microwave": 1200,
+    "washing machine": 800
+};
+
+function parseApplianceSchedule(rawAppliances, fallbackLoadWatts = 5000, backupHours = 8) {
+    if (!Array.isArray(rawAppliances) || rawAppliances.length === 0) {
+        return {
+            items: [],
+            total_load_w: fallbackLoadWatts ? Number(fallbackLoadWatts) : 0,
+            total_load_kw: fallbackLoadWatts ? +(Number(fallbackLoadWatts) / 1000).toFixed(2) : 0,
+            daily_energy_wh: fallbackLoadWatts ? Math.round(Number(fallbackLoadWatts) * (backupHours || 8)) : 0,
+            daily_energy_kwh: fallbackLoadWatts ? +((Number(fallbackLoadWatts) * (backupHours || 8)) / 1000).toFixed(2) : 0,
+            is_empty: true
+        };
+    }
+
+    let itemNo = 1;
+    let sumTotalWatts = 0;
+    let sumDailyWh = 0;
+    const defaultHours = Number(backupHours) > 0 ? Number(backupHours) : 8;
+
+    const items = rawAppliances.map(app => {
+        let name = "Appliance";
+        let qty = 1;
+        let ratedPowerW = 0;
+        let hoursPerDay = defaultHours;
+
+        if (typeof app === "string") {
+            const trimmed = app.trim();
+            const match = trimmed.match(/^(.*?)(?:\s*[xX*×:]\s*(\d+))?$/);
+            if (match) {
+                name = match[1].trim();
+                qty = match[2] ? parseInt(match[2], 10) : 1;
+            } else {
+                name = trimmed;
+            }
+
+            const lowerName = name.toLowerCase();
+            for (const [key, w] of Object.entries(APPLIANCE_WATT_MAP)) {
+                if (lowerName.includes(key)) {
+                    ratedPowerW = w;
+                    break;
+                }
+            }
+            if (!ratedPowerW) {
+                const wMatch = name.match(/(\d+)\s*[wW]/);
+                if (wMatch) {
+                    ratedPowerW = parseInt(wMatch[1], 10);
+                } else {
+                    ratedPowerW = 500;
+                }
+            }
+        } else if (typeof app === "object" && app !== null) {
+            name = app.name || app.load || app.appliance || "Appliance";
+            qty = Math.max(1, Number(app.qty || app.quantity || 1));
+            ratedPowerW = Number(app.watts || app.ratedPower || app.power || 0);
+            if (!ratedPowerW) {
+                const lowerName = String(name).toLowerCase();
+                for (const [key, w] of Object.entries(APPLIANCE_WATT_MAP)) {
+                    if (lowerName.includes(key)) {
+                        ratedPowerW = w;
+                        break;
+                    }
+                }
+                if (!ratedPowerW) ratedPowerW = 500;
+            }
+            hoursPerDay = Number(app.hours || app.hoursPerDay || defaultHours);
+        }
+
+        const totalPowerW = qty * ratedPowerW;
+        const dailyEnergyWh = totalPowerW * hoursPerDay;
+
+        sumTotalWatts += totalPowerW;
+        sumDailyWh += dailyEnergyWh;
+
+        return {
+            no: itemNo++,
+            name,
+            qty,
+            rated_power_w: ratedPowerW,
+            total_power_w: totalPowerW,
+            hours_per_day: hoursPerDay,
+            daily_energy_wh: dailyEnergyWh
+        };
+    });
+
+    return {
+        items,
+        total_load_w: sumTotalWatts,
+        total_load_kw: +(sumTotalWatts / 1000).toFixed(2),
+        daily_energy_wh: sumDailyWh,
+        daily_energy_kwh: +(sumDailyWh / 1000).toFixed(2),
+        is_empty: items.length === 0
+    };
+}
+
+/* =========================================================
    DISPATCHED INTAKE CONSULTATIONS ("✓ Admin Notification Dispatched")
 ========================================================= */
 
@@ -1122,7 +1307,11 @@ async function getDispatchedInquiries(req, res, next) {
                 c.phone,
                 c.client_type,
                 u.id as user_id,
-                u.email as user_email
+                u.email as user_email,
+                EXISTS (
+                    SELECT 1 FROM notifications n 
+                    WHERE (n.project_id = p.id OR n.message LIKE '%' || p.project_code || '%')
+                ) AS notification_dispatched
             FROM projects p
             LEFT JOIN clients c ON c.id = p.client_id
             LEFT JOIN users u ON u.id = c.user_id
@@ -1144,28 +1333,56 @@ async function getDispatchedInquiries(req, res, next) {
                 row.phone === "+234 800 000 0000"
             );
 
+            // Sanitized genuine client email (NEVER admin email, NEVER placeholder)
+            let rawEmail = (row.email || row.user_email || "").trim();
+            const isAdminOrPlaceholder = (
+                !rawEmail ||
+                rawEmail.toLowerCase() === "aerenewablesolution@gmail.com" ||
+                rawEmail.toLowerCase() === "admin@aerenewablesolution.com" ||
+                rawEmail.toLowerCase().includes("aerenewablesolution") ||
+                rawEmail.toLowerCase().startsWith("lead-") ||
+                rawEmail.toLowerCase().startsWith("client-") ||
+                rawEmail.toLowerCase().includes("example.com")
+            );
+            const clientEmail = isAdminOrPlaceholder ? "" : rawEmail;
+
+            // Notification dispatch confirmation check
+            const isDispatched = Boolean(row.notification_dispatched);
+
+            // Full appliance schedule & load calculation
+            const rawLoadWatts = eng.loadWatts || (row.system_capacity_kw ? Number(row.system_capacity_kw) * 1000 : 5000);
+            const loadSchedule = parseApplianceSchedule(eng.appliances, rawLoadWatts, eng.backupHours || 8);
+            const calculatedKw = loadSchedule.total_load_kw || +(Number(rawLoadWatts) / 1000).toFixed(2);
+
             return {
                 id: row.id,
                 project_code: row.project_code,
                 project_name: row.project_name,
                 status: row.status,
                 intake_scenario: eng.intakeScenario || "consultation",
-                dispatched_label: "✓ Admin Notification Dispatched",
+                notification_dispatched: isDispatched,
+                notification_status: isDispatched ? "dispatched" : "pending",
+                dispatched_label: isDispatched ? "✓ Admin Notification Dispatched" : "⏳ Notification Pending",
                 is_unfilled: isUnfilled,
                 client_id: row.client_id,
                 client_code: row.client_code,
-                contact_name: row.contact_name || "Unfilled Inbound Lead",
+                contact_name: row.contact_name || "Prospective Client",
                 company_name: row.company_name || "",
-                email: row.email || "",
+                email: clientEmail,
                 phone: row.phone || "",
                 property_type: row.client_type || eng.propertyType || "Residential",
                 site_address: row.site_address || eng.siteNotes || "Site Location",
                 city: row.city || "Abuja",
                 state: row.state || "FCT",
                 system_capacity_kw: row.system_capacity_kw,
-                load_watts: eng.loadWatts || (row.system_capacity_kw ? Number(row.system_capacity_kw) * 1000 : 5000),
+                load_watts: loadSchedule.total_load_w || rawLoadWatts,
+                load_kw: calculatedKw,
                 battery_type: eng.batteryType || "lithium",
+                backup_hours: eng.backupHours || 8,
+                psh: eng.psh || 5.0,
                 appliances: eng.appliances || [],
+                load_schedule: loadSchedule,
+                engineering_data: eng,
                 created_at: row.created_at
             };
         });
@@ -1177,6 +1394,57 @@ async function getDispatchedInquiries(req, res, next) {
         });
     } catch (error) {
         next(error);
+    }
+}
+
+async function retryConsultationNotification(req, res, next) {
+    try {
+        const projectId = Number(req.params.id);
+        const projRes = await query(`
+            SELECT p.*, c.contact_name, c.email, c.phone, c.client_type
+            FROM projects p
+            LEFT JOIN clients c ON c.id = p.client_id
+            WHERE p.id = $1 LIMIT 1
+        `, [projectId]);
+
+        if (!projRes.rows.length) {
+            return res.status(404).json({ success: false, message: "Consultation record not found." });
+        }
+
+        const project = projRes.rows[0];
+        const eng = project.engineering_data || {};
+        const fullName = project.contact_name || project.project_name || "Prospective Client";
+        const loadKw = (Number(eng.loadWatts || 5000) / 1000).toFixed(2);
+
+        // Notify admins
+        const adminUsers = await query(
+            `SELECT id FROM users WHERE role IN ('admin', 'super_admin') AND status = 'active'`
+        );
+
+        let notifTitle = `⚡ Consultation Notification: ${fullName} (${project.project_code})`;
+        let notifMessage = `Consultation reference ${project.project_code}. Client: ${fullName}. Load: ${loadKw} kW. Battery: ${eng.batteryType || 'lithium'}. Location: ${project.site_address || project.city || 'Abuja'}.`;
+
+        const createdNotifs = [];
+        for (const admin of adminUsers.rows) {
+            const notif = await notificationService.createNotification({
+                user_id: admin.id,
+                type: "project",
+                title: notifTitle,
+                message: notifMessage,
+                project_id: project.id,
+                action_url: `/admin`,
+                priority: "high"
+            });
+            createdNotifs.push(notif);
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Admin notification dispatched successfully.",
+            data: { project_id: project.id, project_code: project.project_code, dispatched_count: createdNotifs.length }
+        });
+    } catch (err) {
+        next(err);
     }
 }
 
@@ -1473,7 +1741,10 @@ module.exports = {
     deleteUser,
     getWhileYouSleep,
     getDispatchedInquiries,
+    retryConsultationNotification,
     acceptDispatchedInquiry,
     broadcastWeeklyMaintenance,
-    getWeeklyMaintenanceRecords
+    getWeeklyMaintenanceRecords,
+    getTrackingGraph,
+    getOperationsTracking
 };

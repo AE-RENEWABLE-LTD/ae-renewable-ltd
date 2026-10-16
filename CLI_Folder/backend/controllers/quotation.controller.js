@@ -252,6 +252,30 @@ async function cancelQuotation(req, res, next) {
     }
 }
 
+async function deleteQuotation(req, res, next) {
+    try {
+        const quotation =
+            await quotationService.deleteQuotation(
+                req.params.id
+            );
+
+        if (!quotation) {
+            return res.status(404).json({
+                success: false,
+                message: "Quotation not found."
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Quotation deleted successfully.",
+            data: quotation
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     getAllQuotations,
     getQuotationById,
@@ -262,5 +286,6 @@ module.exports = {
     markQuotationViewed,
     acceptQuotation,
     rejectQuotation,
-    cancelQuotation
+    cancelQuotation,
+    deleteQuotation
 };

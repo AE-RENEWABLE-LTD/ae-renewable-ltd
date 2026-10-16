@@ -43,7 +43,7 @@ const config = {
 
     jwtSecret: process.env.JWT_SECRET || DEFAULT_JWT_SECRET,
 
-    clientUrl: process.env.CLIENT_URL || "http://localhost:5000"
+    clientUrl: process.env.CLIENT_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:5000")
 };
 
 module.exports = config;

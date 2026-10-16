@@ -147,8 +147,15 @@ async function findUserForPasswordReset(identifier, requiredRole) {
 
     // If an admin/staff role is required, ONLY match active admin or staff
     if (normalizedRole === "admin" || normalizedRole === "staff") {
-        const isGmail = raw.toLowerCase().endsWith("@gmail.com");
-        const cleanUser = isGmail ? raw.toLowerCase().replace("@gmail.com", "").replace(/\./g, "") : "";
+        const lowerRaw = raw.toLowerCase();
+        const isGmail = lowerRaw.endsWith("@gmail.com");
+        const cleanUser = isGmail ? lowerRaw.replace("@gmail.com", "").replace(/\./g, "") : "";
+        let domainVariant = "";
+        if (lowerRaw.endsWith("@a.e.renewablesolution.com")) {
+            domainVariant = lowerRaw.replace("@a.e.renewablesolution.com", "@aerenewablesolution.com");
+        } else if (lowerRaw.endsWith("@aerenewablesolution.com")) {
+            domainVariant = lowerRaw.replace("@aerenewablesolution.com", "@a.e.renewablesolution.com");
+        }
 
         const adminResult = await query(
             `
@@ -156,13 +163,14 @@ async function findUserForPasswordReset(identifier, requiredRole) {
             FROM users
             WHERE (
                 LOWER(TRIM(email)) = LOWER(TRIM($1))
-                OR ($2 != '' AND LOWER(TRIM(email)) LIKE '%@gmail.com' AND REPLACE(REPLACE(LOWER(TRIM(email)), '@gmail.com', ''), '.', '') = $2)
+                OR ($2 != '' AND LOWER(TRIM(email)) = LOWER(TRIM($2)))
+                OR ($3 != '' AND LOWER(TRIM(email)) LIKE '%@gmail.com' AND REPLACE(REPLACE(LOWER(TRIM(email)), '@gmail.com', ''), '.', '') = $3)
             )
               AND role IN ('admin', 'staff')
             ORDER BY id DESC
             LIMIT 1
             `,
-            [raw, cleanUser]
+            [raw, domainVariant, cleanUser]
         );
         return adminResult.rows[0] || null;
     }
@@ -171,10 +179,13 @@ async function findUserForPasswordReset(identifier, requiredRole) {
     if (normalizedRole === "installer") {
         const installerResult = await query(
             `
-            SELECT id, email, username, first_name, last_name, role, status
-            FROM users
-            WHERE LOWER(TRIM(email)) = LOWER(TRIM($1))
-              AND role = 'installer'
+            SELECT u.id, u.email, u.username, u.first_name, u.last_name, u.role, u.status
+            FROM users u
+            JOIN installers i ON i.user_id = u.id
+            WHERE (LOWER(TRIM(u.email)) = LOWER(TRIM($1)) OR LOWER(TRIM(i.email)) = LOWER(TRIM($1)))
+              AND u.role = 'installer'
+              AND u.status = 'active'
+              AND i.status = 'active'
             LIMIT 1
             `,
             [raw]
@@ -186,13 +197,79 @@ async function findUserForPasswordReset(identifier, requiredRole) {
         ? raw.replace("AE-", "PRJ-")
         : (raw.startsWith("PRJ-") ? raw.replace("PRJ-", "AE-") : raw);
 
-    // 1. If identifier contains '@', match exact email
+    // If client role is required (Client Portal OTP/Password Reset)
+    // Must be in registered clients list
+    if (normalizedRole === "client") {
+        if (raw.includes("@")) {
+            const clientEmailResult = await query(
+                `
+                SELECT u.id, u.email, u.username, u.first_name, u.last_name, u.role, u.status
+                FROM clients c
+                JOIN users u ON c.user_id = u.id
+                WHERE (LOWER(TRIM(c.email)) = LOWER(TRIM($1)) OR LOWER(TRIM(u.email)) = LOWER(TRIM($1)))
+                  AND u.status = 'active'
+                LIMIT 1
+                `,
+                [raw]
+            );
+            return clientEmailResult.rows[0] || null;
+        }
+
+        const projectResult = await query(
+            `
+            SELECT u.id, u.email, u.username, u.first_name, u.last_name, u.role, u.status
+            FROM projects p
+            JOIN clients c ON p.client_id = c.id
+            JOIN users u ON c.user_id = u.id
+            WHERE LOWER(TRIM(p.project_code)) = LOWER(TRIM($1))
+               OR LOWER(TRIM(p.project_code)) = LOWER(TRIM($2))
+            ORDER BY p.id DESC
+            LIMIT 1
+            `,
+            [raw, altCode]
+        );
+        if (projectResult.rows[0]) return projectResult.rows[0];
+
+        const quotationResult = await query(
+            `
+            SELECT u.id, u.email, u.username, u.first_name, u.last_name, u.role, u.status
+            FROM quotations q
+            JOIN clients c ON q.client_id = c.id
+            JOIN users u ON c.user_id = u.id
+            WHERE LOWER(TRIM(q.quotation_code)) = LOWER(TRIM($1))
+               OR LOWER(TRIM(q.quotation_number)) = LOWER(TRIM($1))
+            ORDER BY q.id DESC
+            LIMIT 1
+            `,
+            [raw]
+        );
+        if (quotationResult.rows[0]) return quotationResult.rows[0];
+
+        const clientCodeResult = await query(
+            `
+            SELECT u.id, u.email, u.username, u.first_name, u.last_name, u.role, u.status
+            FROM clients c
+            JOIN users u ON c.user_id = u.id
+            WHERE LOWER(TRIM(c.contact_name)) = LOWER(TRIM($1))
+               OR (c.client_code IS NOT NULL AND LOWER(TRIM(c.client_code)) = LOWER(TRIM($1)))
+            ORDER BY u.id DESC
+            LIMIT 1
+            `,
+            [raw]
+        );
+        if (clientCodeResult.rows[0]) return clientCodeResult.rows[0];
+
+        return null;
+    }
+
+    // 1. If identifier contains '@', match exact email (excluding admin/staff for non-admin requests)
     if (raw.includes("@")) {
         const emailResult = await query(
             `
             SELECT id, email, username, first_name, last_name, role, status
             FROM users
             WHERE LOWER(TRIM(email)) = LOWER(TRIM($1))
+              AND role NOT IN ('admin', 'staff')
             LIMIT 1
             `,
             [raw]
@@ -270,7 +347,7 @@ async function findUserForPasswordReset(identifier, requiredRole) {
         return clientResult.rows[0];
     }
 
-    // 3. Direct match on users table, prioritizing client role
+    // 3. Direct match on users table (excluding admin/staff)
     const userResult = await query(
         `
         SELECT
@@ -282,10 +359,11 @@ async function findUserForPasswordReset(identifier, requiredRole) {
             role,
             status
         FROM users
-        WHERE LOWER(TRIM(email)) = LOWER(TRIM($1))
+        WHERE (LOWER(TRIM(email)) = LOWER(TRIM($1))
            OR (username IS NOT NULL AND (LOWER(TRIM(username)) = LOWER(TRIM($1)) OR LOWER(TRIM(username)) = LOWER(TRIM($2))))
            OR (first_name IS NOT NULL AND last_name IS NOT NULL AND LOWER(TRIM(first_name || ' ' || last_name)) = LOWER(TRIM($1)))
-           OR (first_name IS NOT NULL AND LOWER(TRIM(first_name)) = LOWER(TRIM($1)))
+           OR (first_name IS NOT NULL AND LOWER(TRIM(first_name)) = LOWER(TRIM($1))))
+          AND role NOT IN ('admin', 'staff')
         ORDER BY (CASE WHEN role = 'client' THEN 0 ELSE 1 END), id DESC
         LIMIT 1
         `,

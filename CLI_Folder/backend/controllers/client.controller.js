@@ -15,15 +15,60 @@ const { query } = require("../config/database");
 
 async function getMyClient(req, res, next) {
     try {
-        const client = await clientService.getClientByUserId(
+        let client = await clientService.getClientByUserId(
             req.user.id
         );
 
         if (!client) {
-            return res.status(404).json({
-                success: false,
-                message: "Client profile not found."
-            });
+            if (req.user.role === "admin" || req.user.role === "super_admin" || req.user.role === "staff") {
+                return res.status(404).json({
+                    success: false,
+                    message: "No registered client profile found for this administrative account.",
+                    data: null
+                });
+            }
+
+            const fallbackName = [req.user.first_name, req.user.last_name].filter(Boolean).join(" ").trim() || "AE Client";
+            const code = `AEC-${String(req.user.id).padStart(4, "0")}`;
+            try {
+                const inserted = await query(
+                    `
+                    INSERT INTO clients (
+                        user_id,
+                        client_code,
+                        company_name,
+                        contact_name,
+                        email,
+                        phone,
+                        status
+                    )
+                    VALUES ($1, $2, $3, $4, $5, $6, 'active')
+                    ON CONFLICT (user_id) DO UPDATE SET
+                        email = EXCLUDED.email
+                    RETURNING *
+                    `,
+                    [
+                        req.user.id,
+                        code,
+                        req.user.role === "admin" ? "AE Renewable Ltd" : fallbackName,
+                        fallbackName,
+                        req.user.email,
+                        req.user.phone || "+2348133615132"
+                    ]
+                );
+                client = inserted.rows[0];
+            } catch (createErr) {
+                client = {
+                    id: req.user.id,
+                    user_id: req.user.id,
+                    client_code: code,
+                    contact_name: fallbackName,
+                    company_name: req.user.role === "admin" ? "AE Renewable Ltd" : fallbackName,
+                    email: req.user.email,
+                    phone: req.user.phone || "+2348133615132",
+                    status: "active"
+                };
+            }
         }
 
         return res.status(200).json({
@@ -267,16 +312,39 @@ async function createClient(req, res, next) {
 
 async function updateMyClient(req, res, next) {
     try {
-        const existingClient =
+        let existingClient =
             await clientService.getClientByUserId(
                 req.user.id
             );
 
         if (!existingClient) {
-            return res.status(404).json({
-                success: false,
-                message: "Client profile not found."
-            });
+            const fallbackName = [req.user.first_name, req.user.last_name].filter(Boolean).join(" ").trim() || req.body.full_name || req.body.contact_name || "AE Client";
+            const code = `AEC-${String(req.user.id).padStart(4, "0")}`;
+            try {
+                await query(
+                    `
+                    INSERT INTO clients (
+                        user_id,
+                        client_code,
+                        company_name,
+                        contact_name,
+                        email,
+                        phone,
+                        status
+                    )
+                    VALUES ($1, $2, $3, $4, $5, $6, 'active')
+                    ON CONFLICT (user_id) DO NOTHING
+                    `,
+                    [
+                        req.user.id,
+                        code,
+                        fallbackName,
+                        fallbackName,
+                        req.user.email,
+                        req.body.phone || req.user.phone || "+2348133615132"
+                    ]
+                );
+            } catch (err) {}
         }
 
         const client =

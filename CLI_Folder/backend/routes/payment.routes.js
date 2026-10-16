@@ -58,7 +58,6 @@ router.get(
 router.post(
     "/",
     requireAuth,
-    requireStaff,
     paymentController.createPayment
 );
 

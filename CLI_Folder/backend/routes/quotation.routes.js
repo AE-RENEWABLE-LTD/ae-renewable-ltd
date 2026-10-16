@@ -177,6 +177,22 @@ router.post(
 );
 
 /* =========================================================
+   DELETE QUOTATION
+   ADMIN / STAFF
+========================================================= */
+
+/*
+   DELETE /api/quotations/:id
+*/
+
+router.delete(
+    "/:id",
+    requireAuth,
+    requireStaff,
+    quotationController.deleteQuotation
+);
+
+/* =========================================================
    EXPORT
 ========================================================= */
 

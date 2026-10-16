@@ -29,7 +29,9 @@ function clearAuthentication() {
     [TOKEN_KEY, ACCESS_TOKEN_KEY, ADMIN_TOKEN_KEY, USER_KEY, ADMIN_USER_KEY].forEach(k => {
         try { localStorage.removeItem(k); } catch (_) {}
     });
+    try { sessionStorage.removeItem("ae_admin_logged_in"); } catch (_) {}
 }
+try { sessionStorage.removeItem("ae_admin_logged_in"); } catch (_) {}
 
 // Global Floating Toast
 function showToast(message, type = "normal") {
@@ -66,12 +68,18 @@ function showFeedback(elementId, text, type = "error") {
         return;
     }
 
+    let cleanText = String(text);
+    const lower = cleanText.toLowerCase();
+    if (lower.includes("failed to fetch") || lower.includes("networkerror") || lower.includes("connection refused") || lower.includes("err_connection_refused")) {
+        cleanText = "Unable to connect to the AE Renewable server. Please ensure the backend server is running and check your connection.";
+    }
+
     let icon = "fa-circle-exclamation";
     if (type === "success") icon = "fa-circle-check";
     if (type === "warning") icon = "fa-triangle-exclamation";
 
     el.className = `feedback-ribbon ${type}`;
-    el.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${text}</span>`;
+    el.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${cleanText}</span>`;
     el.style.display = "flex";
 }
 
@@ -285,7 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         "Content-Type": "application/json",
                         "Accept": "application/json"
                     },
-                    body: JSON.stringify({ email, password })
+                    body: JSON.stringify({ email, password, portal: "admin" })
                 });
 
                 const data = await response.json().catch(() => null);
@@ -294,6 +302,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (response.status === 423) {
                         const mins = data?.remainingMinutes || (data?.message && data.message.match(/\d+/)?.[0]) || 15;
                         throw new Error(`Account temporarily locked. Try again in ${mins} minute${mins == 1 ? "" : "s"}.`);
+                    }
+                    if (response.status === 403) {
+                        throw new Error(data?.message || "These credentials are not authorized for this portal. Please use the correct sign-in page.");
                     }
                     throw new Error("Invalid email or password.");
                 }
@@ -306,14 +317,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     throw new Error("Invalid email or password.");
                 }
 
-                if (!user || (user.role !== "admin" && user.role !== "staff")) {
+                if (!user || (user.role !== "admin" && user.role !== "super_admin" && user.role !== "staff")) {
                     clearAuthentication();
-                    throw new Error("Invalid email or password.");
+                    throw new Error("These credentials are not authorized for this portal. Please use the correct sign-in page.");
                 }
 
                 if (user.status && user.status !== "active") {
                     clearAuthentication();
-                    throw new Error("Invalid email or password.");
+                    throw new Error("This account is not active.");
                 }
 
                 // Store credentials

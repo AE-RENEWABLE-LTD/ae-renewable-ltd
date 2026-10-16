@@ -223,7 +223,7 @@ async function handleLogin(event) {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ email, password, portal: "client" })
         });
 
         const result = await parseResponse(response);
@@ -239,8 +239,9 @@ async function handleLogin(event) {
         const token = result.data.token;
         const user = result.data.user;
 
-        if (user && user.role && !["client", "admin", "staff", "installer"].includes(user.role)) {
-            throw new Error("This account does not have access to the Client Portal.");
+        if (!user || user.role !== "client") {
+            clearAuthentication();
+            throw new Error("These credentials are not authorized for this portal. Please use the correct sign-in page.");
         }
 
         // Set across all standard key namespaces
@@ -259,14 +260,17 @@ async function handleLogin(event) {
 
         if (!client) {
             clearAuthentication();
-            throw new Error("Your account is authenticated, but no Client profile was found. Please contact AE Renewable support.");
+            throw new Error("Your account is authenticated, but no registered Client profile was found. Please contact AE Renewable support.");
         }
 
         localStorage.setItem("aeRenewableClient", JSON.stringify(client));
         try {
             sessionStorage.setItem("ae_client_logged_in", "true");
         } catch {}
-        window.location.href = CLIENT_DASHBOARD;
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectParam = urlParams.get("redirect");
+        const destination = (redirectParam && redirectParam.startsWith("/client/")) ? redirectParam : CLIENT_DASHBOARD;
+        window.location.href = destination;
     } catch (error) {
         console.error("Client login error:", error);
         showLoginError(getFriendlyErrorMessage(error));
@@ -397,7 +401,7 @@ async function requestPasswordReset() {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
-            body: JSON.stringify({ email: identifier })
+            body: JSON.stringify({ email: identifier, role: "client" })
         });
 
         const data = await parseResponse(response);
@@ -457,7 +461,7 @@ async function verifyPasswordResetCode() {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
-            body: JSON.stringify({ email: identifier, code })
+            body: JSON.stringify({ email: identifier, code, role: "client" })
         });
 
         const data = await parseResponse(response);
@@ -536,7 +540,8 @@ async function resetPassword() {
             body: JSON.stringify({
                 email: identifier,
                 resetToken,
-                newPassword: password
+                newPassword: password,
+                role: "client"
             })
         });
 

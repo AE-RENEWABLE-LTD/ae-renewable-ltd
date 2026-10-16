@@ -12,6 +12,11 @@ const {
     sendInstallerVerificationCode
 } = require("./email.service");
 
+const {
+    generateToken,
+    sanitizeUser
+} = require("./auth.service");
+
 
 /* =========================================================
    AE RENEWABLE NETWORK
@@ -109,6 +114,13 @@ async function createVerificationCode(
 
     const code =
         generateVerificationCode();
+
+    if (process.env.NODE_ENV !== "production") {
+        console.log(`\n======================================================`);
+        console.log(`[AUTH OTP] Email Verification Code for: ${normalizedEmail}`);
+        console.log(`[AUTH OTP] Code: [ ${code} ]  (Expires in ${VERIFICATION_CODE_EXPIRY_MINUTES} min)`);
+        console.log(`======================================================\n`);
+    }
 
 
     /* =====================================================
@@ -408,17 +420,14 @@ async function verifyEmail(
     if (
         user.email_verified
     ) {
-
+        const token = generateToken(user);
         return {
             verified: true,
             alreadyVerified: true,
-            user: {
-                id: user.id,
-                email: user.email,
-                firstName: user.first_name,
-                lastName: user.last_name,
-                emailVerified: true
-            }
+            authenticated: true,
+            token,
+            accessToken: token,
+            user: sanitizeUser(user)
         };
     }
 
@@ -623,6 +632,7 @@ async function verifyEmail(
                 UPDATE users
                 SET
                     email_verified = TRUE,
+                    status = 'active',
                     updated_at = CURRENT_TIMESTAMP
                 WHERE id = $1
                 `,
@@ -631,21 +641,24 @@ async function verifyEmail(
         }
     );
 
-
     /* =====================================================
-       RETURN SUCCESS
+       RETURN SUCCESS WITH AUTHORIZED SESSION
     ===================================================== */
+
+    const updatedUserRes = await query(
+        `SELECT * FROM users WHERE id = $1 LIMIT 1`,
+        [user.id]
+    );
+    const updatedUser = updatedUserRes.rows[0] || user;
+    const token = generateToken(updatedUser);
 
     return {
         verified: true,
         alreadyVerified: false,
-        user: {
-            id: user.id,
-            email: user.email,
-            firstName: user.first_name,
-            lastName: user.last_name,
-            emailVerified: true
-        }
+        authenticated: true,
+        token,
+        accessToken: token,
+        user: sanitizeUser(updatedUser)
     };
 }
 

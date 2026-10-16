@@ -9,26 +9,22 @@
     <script>
         (function() {
             try {
-                if (sessionStorage.getItem("ae_client_logged_in") !== "true") {
-                    document.documentElement.style.display = "none";
-                    window.location.replace("/client/login");
-                    throw new Error("Access Denied: Client authentication required");
-                }
-                var token = localStorage.getItem("aeClientToken") || localStorage.getItem("token") || localStorage.getItem("accessToken") || localStorage.getItem("aeRenewableToken") || localStorage.getItem("aeAdminToken") || "";
-                var rawUser = localStorage.getItem("aeClientUser") || localStorage.getItem("user") || localStorage.getItem("aeRenewableUser") || localStorage.getItem("aeAdminUser") || "{}";
+                var isLoggedIn = sessionStorage.getItem("ae_client_logged_in") === "true";
+                var token = localStorage.getItem("aeClientToken") || localStorage.getItem("aeRenewableToken") || "";
+                var rawUser = localStorage.getItem("aeClientUser") || localStorage.getItem("aeRenewableUser") || "{}";
                 var user = {};
                 try { user = JSON.parse(rawUser) || {}; } catch(e) {}
-                var role = user && user.role ? String(user.role).toLowerCase() : "";
-                var allowed = ["client", "admin", "staff", "installer"];
-                if (!token || !role || !allowed.includes(role)) {
-                    document.documentElement.style.display = "none";
-                    window.location.replace("/client/login");
-                    throw new Error("Access Denied: Client authentication required");
+                var role = user && (user.role || (user.user && user.user.role)) ? String(user.role || user.user.role).toLowerCase() : "";
+
+                if (isLoggedIn && token && role === "client") {
+                    return;
                 }
+
+                document.documentElement.style.display = "none";
+                window.location.replace("/client/login");
             } catch(err) {
                 document.documentElement.style.display = "none";
                 window.location.replace("/client/login");
-                throw err;
             }
         })();
     </script>
@@ -66,12 +62,12 @@
 
         <div class="brand">
 
-            <div class="brand-mark" style="background:#020c1a; border:1px solid #f4a600; padding:2px; overflow:hidden;">
-                <img src="/images/logo.png" alt="AE Renewable" style="width:100%;height:100%;object-fit:contain;border-radius:8px;">
+            <div class="brand-mark" style="background:radial-gradient(circle, rgba(244,166,0,0.2) 0%, rgba(2,12,26,0.95) 70%); border:1px solid #f4a600; display:flex; align-items:center; justify-content:center; box-shadow:0 0 12px rgba(244,166,0,0.3); border-radius:8px; overflow:hidden; padding:3px;">
+                <img src="/arde/assets/images/logodark.png" alt="AE Renewable Logo" style="width:100%; height:100%; object-fit:contain;" onerror="this.src='logodark.png'">
             </div>
 
             <div class="brand-text">
-                <strong>AE RENEWABLE</strong>
+                <strong>AE RENEWABLE LTD</strong>
                 <span>CLIENT PORTAL</span>
             </div>
 
@@ -79,13 +75,13 @@
 
         <div class="client-mini-profile">
 
-            <div class="avatar">
-                EA
+            <div class="avatar" id="clientMiniAvatar">
+                AE
             </div>
 
             <div>
-                <strong>Eniola Abdulrasaq</strong>
-                <span>Client Account</span>
+                <strong id="clientMiniName">Client Portal</strong>
+                <span id="clientMiniRole">Authorized Client</span>
             </div>
 
         </div>
@@ -256,8 +252,8 @@
 
                         <span class="eyebrow">FRIDAY, AUGUST 14, 2026</span>
 
-                        <h2>
-                            Welcome back, Eniola
+                        <h2 id="clientWelcomeHeading">
+                            Welcome to AE Client Portal
                         </h2>
 
                         <p>
@@ -286,6 +282,7 @@
                             <p style="margin:0; font-size:13px; color:#d1fae5; line-height:1.5;">
                                 Our engineering team is performing our scheduled weekly check-in. Please submit your operational write-up or notes on inverter readings, load performance, or issues.
                             </p>
+                            
                         </div>
                         <button type="button" class="primary-btn" onclick="openClientWeeklyCheckupModal()" style="background:#10b981; border-color:#10b981; color:#022c22; font-weight:800; padding:12px 20px; border-radius:8px; cursor:pointer;">
                             Submit Weekly Write-up →
@@ -884,39 +881,39 @@
                 <!-- ASSIGNED INSTALLER PROFILE CARD -->
                 <div class="panel installer-profile-panel" id="assignedInstallerProfileCard">
                     <div class="installer-card-inner">
-                        <div class="installer-avatar-wrap">
-                            <img id="installCardPhoto" src="/uploads/installer-AEI-B7122F5A-1790967877945-532980.jpg" alt="Lead Installer Photo" class="installer-avatar-img" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';" style="object-fit:cover; width:80px; height:80px; border-radius:12px; border:2px solid #004AAD;" />
-                            <span class="installer-verified-badge" title="AE Certified & Registered">✓ Verified</span>
+                        <div class="installer-avatar-wrap" id="installCardAvatarWrap">
+                            <img id="installCardPhoto" src="/uploads/installer-default.jpg" alt="Field Installer" class="installer-avatar-img" onerror="this.onerror=null; this.src='/uploads/installer-default.jpg';" style="object-fit:cover; width:80px; height:80px; border-radius:12px; border:2px solid #94A3B8; background:#F1F5F9;" />
+                            <span class="installer-verified-badge" id="installCardBadge" style="background:#F59E0B; color:#FFFFFF;" title="Awaiting Lead Installer Dispatch">⏳ Pending</span>
                         </div>
                         <div class="installer-details-wrap">
                             <div class="installer-name-row">
                                 <div>
-                                    <span class="eyebrow" style="margin-bottom:2px; color:#004AAD;">ASSIGNED LEAD INSTALLER & ENGINEER</span>
-                                    <h3 id="installCardName" style="margin:0; font-size:17px; color:#0F172A;">Eniola Abdulrasaq</h3>
-                                    <span class="installer-badge-tag" id="installCardCompany">AE Renewable Engineering Network · Lead Solar Installer</span>
+                                    <span class="eyebrow" id="installCardEyebrow" style="margin-bottom:2px; color:#64748B;">FIELD INSTALLATION DISPATCH DESK</span>
+                                    <h3 id="installCardName" style="margin:0; font-size:17px; color:#0F172A;">Awaiting Installer Assignment</h3>
+                                    <span class="installer-badge-tag" id="installCardCompany">AE Operations Console · Certified Lead Matching in Progress</span>
                                 </div>
-                                <div class="installer-rating-pill" id="installCardRating">
-                                    ⭐ 4.96 · Master Installer
+                                <div class="installer-rating-pill" id="installCardRating" style="background:#FEF3C7; color:#92400E; border:1px solid #FDE68A;">
+                                    ⏳ Operations Queue
                                 </div>
                             </div>
                             <div class="installer-contact-grid">
                                 <div class="inst-contact-item">
-                                    <span>Direct Phone</span>
-                                    <strong id="installCardPhoneWrap"><a id="installCardPhone" href="tel:08133615132" style="color:#004AAD; text-decoration:none;">0813 361 5132</a></strong>
+                                    <span id="installCardPhoneLabel">Operations Desk</span>
+                                    <strong id="installCardPhoneWrap"><a id="installCardPhone" href="tel:08133615132" style="color:#004AAD; text-decoration:none;">AE Dispatch Support</a></strong>
                                 </div>
                                 <div class="inst-contact-item">
-                                    <span>Email Address</span>
+                                    <span id="installCardEmailLabel">Operations Email</span>
                                     <strong id="installCardEmailWrap"><a id="installCardEmail" href="mailto:a.e.renewablesolution@gmail.com" style="color:#004AAD; text-decoration:none;">a.e.renewablesolution@gmail.com</a></strong>
                                 </div>
                                 <div class="inst-contact-item">
                                     <span>Operating Location</span>
-                                    <strong id="installCardLocation">Central Area / AMAC, Abuja FCT</strong>
+                                    <strong id="installCardLocation">—</strong>
                                 </div>
                                 <div class="inst-contact-item">
                                     <span>Direct Actions</span>
                                     <div class="installer-quick-actions" id="installCardActions">
-                                        <a id="installCallBtn" href="tel:08133615132" class="btn-inst-call">📞 Call Installer</a>
-                                        <a id="installEmailBtn" href="mailto:AERenewablesolution@gmail.com" class="btn-inst-email">✉️ Email</a>
+                                        <a id="installCallBtn" href="mailto:a.e.renewablesolution@gmail.com" class="btn-inst-call" style="background:#004AAD;">💬 Message AE Desk</a>
+                                        <a id="installEmailBtn" href="mailto:a.e.renewablesolution@gmail.com" class="btn-inst-email">✉️ Support</a>
                                     </div>
                                 </div>
                             </div>
@@ -1277,20 +1274,20 @@
 
                     <div class="panel profile-card-large">
 
-                        <div class="large-avatar">
-                            EA
+                        <div class="large-avatar" id="profileLargeAvatar">
+                            AE
                         </div>
 
-                        <h3>Eniola Abdulrasaq</h3>
+                        <h3 id="profileLargeName">Authorized Client</h3>
 
-                        <p>AE Network Client</p>
+                        <p id="profileLargeRole">AE Network Client</p>
 
                         <span class="status-pill completed">
                             ✓ Verified Client
                         </span>
 
                         <div style="margin-top:16px; font-size:11px; color:#64748b; line-height:1.5;">
-                            Account ID: <strong>AE-CLI-2026-081</strong><br>
+                            Account ID: <strong id="profileLargeAccountId">AE-CLI-2026</strong><br>
                             Status: <strong style="color:#008000;">Active & Compliant</strong>
                         </div>
 
@@ -1308,8 +1305,10 @@
                                 </div>
                                 <input
                                     type="text"
-                                    value="Eniola Abdulrasaq"
+                                    id="profileName"
+                                    value=""
                                     readonly
+                                    placeholder="Client Full Name"
                                     style="background:#f8fafc; color:#1e293b; border:1px solid #cbd5e1; cursor:not-allowed; padding:12px 14px; border-radius:8px; font-weight:600;"
                                 >
                             </div>
@@ -1321,8 +1320,10 @@
                                 </div>
                                 <input
                                     type="email"
-                                    value="AERenewablesolution@gmail.com"
+                                    id="profileEmail"
+                                    value=""
                                     readonly
+                                    placeholder="client@example.com"
                                     style="background:#f8fafc; color:#1e293b; border:1px solid #cbd5e1; cursor:not-allowed; padding:12px 14px; border-radius:8px; font-weight:600;"
                                 >
                             </div>
@@ -1334,8 +1335,10 @@
                                 </div>
                                 <input
                                     type="tel"
-                                    value="0813 361 5132"
+                                    id="profilePhone"
+                                    value=""
                                     readonly
+                                    placeholder="Client Phone Number"
                                     style="background:#f8fafc; color:#1e293b; border:1px solid #cbd5e1; cursor:not-allowed; padding:12px 14px; border-radius:8px; font-weight:600;"
                                 >
                             </div>
@@ -1347,8 +1350,10 @@
                                 </div>
                                 <input
                                     type="text"
-                                    value="Abuja FCT, Nigeria"
+                                    id="profileLocation"
+                                    value=""
                                     readonly
+                                    placeholder="Operating / Site Location"
                                     style="background:#f8fafc; color:#1e293b; border:1px solid #cbd5e1; cursor:not-allowed; padding:12px 14px; border-radius:8px; font-weight:600;"
                                 >
                             </div>

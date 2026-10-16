@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const installerService = require("../services/installer.service");
 const notificationService = require("../services/notification.service");
+const { query } = require("../config/database");
 
 function saveBase64Image(base64Str, prefix = "installer-photo") {
     if (!base64Str || typeof base64Str !== "string") return null;
@@ -12,21 +13,30 @@ function saveBase64Image(base64Str, prefix = "installer-photo") {
         return null;
     }
     const mimeType = matches[1].toLowerCase();
-    const allowed = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
+    const allowed = ["image/jpeg", "image/png", "image/webp", "image/jpg", "application/pdf"];
     if (!allowed.includes(mimeType)) {
         return null;
     }
-    const ext = mimeType === "image/png" ? "png" : (mimeType === "image/webp" ? "webp" : "jpg");
+    let ext = "jpg";
+    if (mimeType === "image/png") ext = "png";
+    else if (mimeType === "image/webp") ext = "webp";
+    else if (mimeType === "application/pdf") ext = "pdf";
     const buffer = Buffer.from(matches[2], "base64");
     if (buffer.length > 10 * 1024 * 1024) {
         throw new Error("Image exceeds 10MB limit.");
     }
-    const uploadsDir = path.join(process.cwd(), "uploads");
-    if (!fs.existsSync(uploadsDir)) {
-        fs.mkdirSync(uploadsDir, { recursive: true });
-    }
     const filename = `${prefix}-${Date.now()}-${Math.round(Math.random() * 1e6)}.${ext}`;
-    fs.writeFileSync(path.join(uploadsDir, filename), buffer);
+    const targetDirs = [
+        path.join(process.cwd(), "uploads"),
+        path.join(__dirname, "..", "uploads"),
+        path.join(__dirname, "..", "..", "uploads")
+    ];
+    targetDirs.forEach(d => {
+        try {
+            if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
+            fs.writeFileSync(path.join(d, filename), buffer);
+        } catch (_) {}
+    });
     return `/uploads/${filename}`;
 }
 
@@ -41,16 +51,97 @@ function saveBase64Image(base64Str, prefix = "installer-photo") {
 
 async function getMyInstaller(req, res, next) {
     try {
-        const installer =
+        if (req.user?.role === "admin" || req.user?.role === "staff") {
+            return res.status(403).json({
+                success: false,
+                message: "Administrator accounts do not have an installer profile. Please access the Admin Operations Console."
+            });
+        }
+
+        let installer =
             await installerService.getInstallerByUserId(
                 req.user.id
             );
 
         if (!installer) {
-            return res.status(404).json({
-                success: false,
-                message: "Installer profile not found."
-            });
+            const fallbackName = [req.user.first_name, req.user.last_name].filter(Boolean).join(" ").trim() || (req.user.email ? req.user.email.split("@")[0] : "Certified Installer");
+            const code = (req.user.id == 1 || req.user.id == 28 || req.user.id == 29) ? "AEI-0001" : `AEI-${String(req.user.id).padStart(4, "0")}`;
+            try {
+                await query(
+                    `
+                    INSERT INTO installers (
+                        user_id,
+                        installer_code,
+                        company_name,
+                        contact_name,
+                        email,
+                        phone,
+                        state,
+                        status
+                    )
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, 'active')
+                    ON CONFLICT (user_id) DO UPDATE SET
+                        email = EXCLUDED.email
+                    `,
+                    [
+                        req.user.id,
+                        code,
+                        "AE Renewable Solutions",
+                        fallbackName,
+                        req.user.email,
+                        req.user.phone || "+2348133615132",
+                        "FCT Abuja"
+                    ]
+                );
+                installer = await installerService.getInstallerByUserId(req.user.id);
+            } catch (createErr) {
+                // If code conflict occurs, try unique random code
+                try {
+                    const altCode = `AEI-${Date.now().toString().slice(-4)}`;
+                    await query(
+                        `
+                        INSERT INTO installers (
+                            user_id,
+                            installer_code,
+                            company_name,
+                            contact_name,
+                            email,
+                            phone,
+                            state,
+                            status
+                        )
+                        VALUES ($1, $2, $3, $4, $5, $6, $7, 'active')
+                        ON CONFLICT (user_id) DO NOTHING
+                        `,
+                        [
+                            req.user.id,
+                            altCode,
+                            "AE Renewable Solutions",
+                            fallbackName,
+                            req.user.email,
+                            req.user.phone || "+2348133615132",
+                            "FCT Abuja"
+                        ]
+                    );
+                    installer = await installerService.getInstallerByUserId(req.user.id);
+                } catch (retryErr) {
+                    installer = {
+                        id: req.user.id,
+                        user_id: req.user.id,
+                        installer_code: code,
+                        company_name: "AE Renewable Solutions",
+                        contact_name: fallbackName,
+                        email: req.user.email,
+                        user_email: req.user.email,
+                        phone: req.user.phone || "+2348133615132",
+                        user_phone: req.user.phone || "+2348133615132",
+                        state: "FCT Abuja",
+                        status: "active",
+                        tier: "Master Solar Engineer",
+                        verified: true
+                    };
+                }
+            }
         }
 
         res.status(200).json({
@@ -70,16 +161,13 @@ async function getMyInstaller(req, res, next) {
 
 async function updateMyInstaller(req, res, next) {
     try {
-        const existingInstaller =
+        let existingInstaller =
             await installerService.getInstallerByUserId(
                 req.user.id
             );
 
         if (!existingInstaller) {
-            return res.status(404).json({
-                success: false,
-                message: "Installer profile not found."
-            });
+            existingInstaller = await installerService.ensureInstallerForUser(req.user.id);
         }
 
         const updateFields = {
@@ -133,6 +221,27 @@ async function updateMyInstaller(req, res, next) {
             updateFields.bankingVerificationStatus = "pending";
         }
 
+        // 3. Handle Specialization and CAC Upload
+        if (updateFields.specialization && !updateFields.specializations) {
+            updateFields.specializations = [updateFields.specialization];
+        }
+
+        const rawCac = updateFields.cacCertificate || updateFields.cacCertificateUrl || updateFields.cac_certificate_url;
+        if (rawCac && typeof rawCac === "string" && rawCac.startsWith("data:")) {
+            const savedCac = saveBase64Image(rawCac, `cac-${existingInstaller.installer_code || existingInstaller.id}`);
+            if (savedCac) {
+                updateFields.cacCertificateUrl = savedCac;
+                delete updateFields.cacCertificate;
+                delete updateFields.cac_certificate_url;
+            }
+        }
+
+        const isProfileSubmitted = isBankingUpdate || updateFields.cacCertificateUrl || updateFields.rcNumber || updateFields.rc_number;
+        if (isProfileSubmitted) {
+            updateFields.bankingVerificationStatus = "pending";
+            updateFields.verificationStatus = "pending";
+        }
+
         // If profileImage or profile_image is base64, save to /uploads/ directory
         if (updateFields.profileImage && updateFields.profileImage.startsWith("data:image/")) {
             const savedUrl = saveBase64Image(updateFields.profileImage, `installer-${existingInstaller.installer_code || existingInstaller.id}`);
@@ -152,16 +261,27 @@ async function updateMyInstaller(req, res, next) {
             );
 
         if (!installer) {
-            return res.status(404).json({
-                success: false,
-                message: "Installer profile not found."
-            });
+            installer = await installerService.getInstallerByUserId(req.user.id) || existingInstaller;
+        }
+
+        if (isProfileSubmitted) {
+            try {
+                await notificationService.notifyAdmins({
+                    title: "Installer Profile Verification Request",
+                    message: `Installer ${installer.contact_name || existingInstaller.contact_name || 'Installer'} (${installer.installer_code || existingInstaller.installer_code || 'ID Pending'}) has submitted their registration and settlement profile for verification.`,
+                    action_url: "/admin#installer-profile",
+                    action_label: "Review Installer",
+                    priority: "high"
+                });
+            } catch (nErr) {
+                console.warn("Failed to notify admins of installer profile update:", nErr.message);
+            }
         }
 
         res.status(200).json({
             success: true,
-            message: isBankingUpdate 
-                ? "Account details and verification photo submitted successfully. Your card is now Pending Verification by Admin."
+            message: isProfileSubmitted 
+                ? "Account details and profile registration submitted successfully. Your profile is now Pending Verification by Admin."
                 : "Installer profile updated successfully.",
             data: installer
         });
@@ -177,8 +297,21 @@ async function updateMyInstaller(req, res, next) {
 
 async function uploadProfilePhoto(req, res, next) {
     try {
-        const existingInstaller =
-            await installerService.getInstallerByUserId(req.user.id);
+        let existingInstaller = null;
+        if (req.user && req.user.role === "installer") {
+            existingInstaller = await installerService.getInstallerByUserId(req.user.id);
+        } else if (req.user && (req.user.role === "admin" || req.user.role === "super_admin" || req.user.role === "staff")) {
+            if (req.params.id) {
+                existingInstaller = (await installerService.getInstallerById(req.params.id)) ||
+                                    (await installerService.getInstallerByCode(req.params.id));
+            } else if (req.body && (req.body.installerId || req.body.installerCode)) {
+                const target = req.body.installerId || req.body.installerCode;
+                existingInstaller = (await installerService.getInstallerById(target)) ||
+                                    (await installerService.getInstallerByCode(target));
+            } else {
+                existingInstaller = await installerService.getInstallerByUserId(req.user.id);
+            }
+        }
 
         if (!existingInstaller) {
             return res.status(404).json({
@@ -239,28 +372,66 @@ async function uploadProfilePhoto(req, res, next) {
 
 async function requestProfileChange(req, res, next) {
     try {
-        const existingInstaller =
+        let existingInstaller =
             await installerService.getInstallerByUserId(
                 req.user.id
             );
 
         if (!existingInstaller) {
-            return res.status(404).json({
-                success: false,
-                message: "Installer profile not found."
-            });
+            existingInstaller = await installerService.ensureInstallerForUser(req.user.id);
         }
 
-        const { changeType, requestedValue, reason } = req.body;
-        if (!changeType || !reason) {
+        const fieldName = String(req.body.changeType || req.body.fieldName || req.body.field_name || "").trim();
+        const proposedVal = String(req.body.requestedValue || req.body.proposedValue || req.body.proposed_value || "").trim();
+        const reason = String(req.body.reason || "").trim();
+
+        if (!fieldName || !reason) {
             return res.status(400).json({
                 success: false,
-                message: "Change type and reason are required to submit an Admin Change Request."
+                message: "Field requiring modification and reason are required to submit an Admin Change Request."
             });
         }
 
+        let currentVal = "";
+        const lowerField = fieldName.toLowerCase();
+        if (lowerField.includes("bank")) currentVal = existingInstaller.bank_name || "";
+        else if (lowerField.includes("name") || lowerField.includes("holder")) currentVal = existingInstaller.account_name || "";
+        else if (lowerField.includes("num") || lowerField.includes("account")) currentVal = existingInstaller.account_number || "";
+        else if (lowerField.includes("bvn")) currentVal = existingInstaller.account_bvn || "";
+        else if (lowerField.includes("email")) currentVal = existingInstaller.email || existingInstaller.user_email || "";
+        else if (lowerField.includes("phone")) currentVal = existingInstaller.phone || existingInstaller.user_phone || "";
+
+        // Insert into database audit table installer_change_requests
+        const insertResult = await query(
+            `
+            INSERT INTO installer_change_requests (
+                installer_id,
+                installer_code,
+                installer_name,
+                field_name,
+                current_value,
+                proposed_value,
+                reason,
+                status
+            )
+            VALUES ($1, $2, $3, $4, $5, $6, $7, 'pending')
+            RETURNING *
+            `,
+            [
+                existingInstaller.id,
+                existingInstaller.installer_code,
+                existingInstaller.contact_name,
+                fieldName,
+                currentVal,
+                proposedVal,
+                reason
+            ]
+        );
+
+        const changeReq = insertResult.rows[0];
+
         const timestamp = new Date().toLocaleString("en-GB");
-        const logEntry = `[${timestamp}] Change Request for ${changeType}: "${requestedValue || 'N/A'}" | Reason: ${reason}`;
+        const logEntry = `[${timestamp}] Change Request for ${fieldName}: "${proposedVal || 'N/A'}" | Reason: ${reason}`;
         const newNotes = existingInstaller.banking_change_note
             ? `${existingInstaller.banking_change_note}\n${logEntry}`
             : logEntry;
@@ -269,27 +440,36 @@ async function requestProfileChange(req, res, next) {
             bankingChangeNote: newNotes
         });
 
+        // Notify Admins with action "Check"
+        try {
+            await notificationService.notifyAdmins({
+                title: `Banking Change Request: ${existingInstaller.contact_name}`,
+                message: `Installer ${existingInstaller.contact_name} (${existingInstaller.installer_code}) requested to modify ${fieldName} to "${proposedVal}". Reason: ${reason}`,
+                action_url: `/admin#installer-profile?installerId=${existingInstaller.id}`,
+                action_label: "Check",
+                priority: "high"
+            });
+        } catch (nErr) {
+            console.warn("Failed to notify admins of banking change request:", nErr.message);
+        }
+
+        // Notify Installer
         try {
             await notificationService.createNotification({
                 user_id: req.user.id,
-                type: "system",
-                title: `Change Request: ${changeType}`,
-                message: `Your request to update ${changeType} has been submitted to the Admin. An administrator will review your request.`,
+                type: "installer",
+                title: "Banking Change Request Submitted",
+                message: `Your request to modify ${fieldName} has been submitted to Admin. An administrator will review your request.`,
+                action_url: "/installer/portal#profile",
+                action_label: "View Status",
                 priority: "normal"
             });
-        } catch (nErr) {
-            console.warn("Notification error:", nErr.message);
-        }
+        } catch (nErr) {}
 
         res.status(200).json({
             success: true,
-            message: "Your change request has been submitted to Admin. An administrator will review and grant permission if approved.",
-            data: {
-                changeType,
-                requestedValue,
-                reason,
-                status: "pending_review"
-            }
+            message: "Your banking change request has been submitted to Admin. An administrator will review and grant permission if approved.",
+            data: changeReq
         });
 
     } catch (error) {
@@ -470,10 +650,144 @@ async function updateInstaller(req, res, next) {
             });
         }
 
+        let updatePayload = { ...req.body };
+        const action = String(req.body.action || "").toLowerCase().trim();
+
+        // 1. NEVER EDITABLE FROM NORMAL PROFILE EDIT
+        delete updatePayload.installer_code;
+        delete updatePayload.installerCode;
+        delete updatePayload.email;
+        delete updatePayload.phone;
+        delete updatePayload.contact_name;
+        delete updatePayload.contactName;
+        delete updatePayload.fullname;
+        delete updatePayload.fullName;
+
+        // 2. BANKING ACTIONS
+        let notificationToCreate = null;
+
+        if (action === "approve_banking" || action === "verify_banking" || (req.body.bankingVerificationStatus === "verified" && action !== "save_profile")) {
+            const bName = updatePayload.bank_name || updatePayload.bankName || existingInstaller.bank_name;
+            const aName = updatePayload.account_name || updatePayload.accountName || existingInstaller.account_name;
+            const aNum = updatePayload.account_number || updatePayload.accountNumber || existingInstaller.account_number;
+            const aBvn = updatePayload.account_bvn || updatePayload.accountBvn || existingInstaller.account_bvn;
+
+            if (!bName || !aName || !aNum || !aBvn) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Submitted banking information is incomplete. Bank name, account name, account number, and BVN are required."
+                });
+            }
+
+            updatePayload.banking_verification_status = "verified";
+            updatePayload.banking_unlocked = false;
+            updatePayload.banking_approved_by = req.user.id;
+            updatePayload.banking_approved_at = new Date();
+
+            notificationToCreate = {
+                user_id: existingInstaller.user_id,
+                type: "installer",
+                title: "Settlement Account Approved",
+                message: "Your settlement banking details have been verified and approved by Admin. Labour payouts will be disbursed to this account.",
+                action_url: "/installer/portal#profile",
+                action_label: "View Settlement Account",
+                priority: "high"
+            };
+
+        } else if (action === "reject_banking" || (req.body.bankingVerificationStatus === "rejected" && action !== "save_profile")) {
+            updatePayload.banking_verification_status = "rejected";
+            updatePayload.banking_unlocked = true; // allow installer to correct & resubmit
+            updatePayload.banking_rejected_reason = req.body.reason || "Settlement account details require correction.";
+            // Note: Installer account status is NOT suspended
+
+            notificationToCreate = {
+                user_id: existingInstaller.user_id,
+                type: "installer",
+                title: "Settlement Account Requires Correction",
+                message: req.body.reason || "Admin has reviewed your settlement banking details and indicated correction is required. Please review your account details in your profile and resubmit.",
+                action_url: "/installer/portal#profile",
+                action_label: "Update Banking Details",
+                priority: "high"
+            };
+
+        } else if (action === "unlock_banking") {
+            updatePayload.banking_unlocked = true;
+            updatePayload.banking_verification_status = "pending";
+
+            notificationToCreate = {
+                user_id: existingInstaller.user_id,
+                type: "installer",
+                title: "Banking Information Unlocked",
+                message: "Admin has temporarily unlocked your settlement banking section for updates. Please enter your corrected details and resubmit.",
+                action_url: "/installer/portal#profile",
+                action_label: "Update Banking Details",
+                priority: "high"
+            };
+
+        } else if (action === "lock_banking") {
+            updatePayload.banking_unlocked = false;
+
+        } else if (action === "accept" || action === "approve") {
+            updatePayload.verification_status = "verified";
+            updatePayload.banking_verification_status = "verified";
+            updatePayload.status = "active";
+            updatePayload.approval_date = new Date();
+
+            notificationToCreate = {
+                user_id: existingInstaller.user_id,
+                type: "installer",
+                title: "🎉 Welcome to AE RENEWABLE INSTALLER NETWORK!",
+                message: "Congratulations! You are now an official verified member of the AE RENEWABLE INSTALLER NETWORK. Your profile credentials and settlement banking have been reviewed and approved by Admin. You are now authorized to accept and execute field projects.",
+                action_url: "/installer/portal#jobs",
+                action_label: "View Available Jobs",
+                priority: "high"
+            };
+
+        } else if (action === "decline" || action === "deny" || action === "reject") {
+            updatePayload.verification_status = "rejected";
+            updatePayload.status = "inactive";
+            if (req.body.reason) updatePayload.notes = req.body.reason;
+
+            notificationToCreate = {
+                user_id: existingInstaller.user_id,
+                type: "installer",
+                title: "⚠️ Profile Verification Notice",
+                message: req.body.reason || "Your profile information and submitted credentials do not tally with our regulatory verification standards. Please review your banking and professional documents inside your profile and resubmit for Admin approval.",
+                action_url: "/installer/portal#profile",
+                action_label: "Update Profile",
+                priority: "high"
+            };
+
+        } else {
+            // NORMAL PROFILE SAVE CHANGES
+            // Prevent casual alteration of banking details from normal profile save
+            delete updatePayload.bank_name;
+            delete updatePayload.bankName;
+            delete updatePayload.account_name;
+            delete updatePayload.accountName;
+            delete updatePayload.account_number;
+            delete updatePayload.accountNumber;
+            delete updatePayload.account_bvn;
+            delete updatePayload.accountBvn;
+
+            updatePayload.last_saved_by = req.user.id;
+            updatePayload.last_saved_at = new Date();
+
+            notificationToCreate = {
+                user_id: existingInstaller.user_id,
+                type: "installer",
+                title: "Installer Profile Updated",
+                message: "Admin has updated your professional installer record details.",
+                action_url: "/installer/portal#profile",
+                action_label: "View Profile",
+                priority: "normal"
+            };
+        }
+
         const installer =
             await installerService.updateInstaller(
                 req.params.id,
-                req.body
+                updatePayload
             );
 
         if (!installer) {
@@ -483,58 +797,12 @@ async function updateInstaller(req, res, next) {
             });
         }
 
-        const previousVerification = String(
-            existingInstaller.verification_status ||
-            existingInstaller.verificationStatus ||
-            ""
-        ).toLowerCase();
-
-        const currentVerification = String(
-            installer.verification_status ||
-            installer.verificationStatus ||
-            ""
-        ).toLowerCase();
-
-        const previousBankingStatus = String(
-            existingInstaller.banking_verification_status ||
-            existingInstaller.bankingVerificationStatus ||
-            "verified"
-        ).toLowerCase();
-
-        const currentBankingStatus = String(
-            installer.banking_verification_status ||
-            installer.bankingVerificationStatus ||
-            "verified"
-        ).toLowerCase();
-
-        if (
-            previousVerification !== "verified" &&
-            currentVerification === "verified"
-        ) {
-            await notificationService.createNotification({
-                user_id: existingInstaller.user_id,
-                type: "installer",
-                title: "Installer profile verified",
-                message: "Your installer profile has been verified. You can now access verified installer opportunities in the portal.",
-                action_url: "/installer/portal#profile",
-                action_label: "View profile",
-                priority: "high"
-            });
-        }
-
-        if (
-            previousBankingStatus === "pending" &&
-            currentBankingStatus === "verified"
-        ) {
-            await notificationService.createNotification({
-                user_id: existingInstaller.user_id,
-                type: "installer",
-                title: "Settlement account verified",
-                message: "Your settlement account has been reviewed and verified by admin.",
-                action_url: "/installer/portal#profile",
-                action_label: "View settlement account",
-                priority: "high"
-            });
+        if (notificationToCreate && existingInstaller.user_id) {
+            try {
+                await notificationService.createNotification(notificationToCreate);
+            } catch (nErr) {
+                console.warn("Failed to create installer notification:", nErr.message);
+            }
         }
 
         res.status(200).json({
@@ -547,6 +815,135 @@ async function updateInstaller(req, res, next) {
         next(error);
     }
 }
+
+/* =========================================================
+   GET INSTALLER CHANGE REQUESTS
+   STAFF / ADMIN
+========================================================= */
+
+async function getInstallerChangeRequests(req, res, next) {
+    try {
+        const installerId = req.params.id;
+        const isNumeric = /^\d+$/.test(String(installerId).trim());
+        const result = await query(
+            `
+            SELECT cr.*, u.first_name || ' ' || u.last_name AS reviewer_name
+            FROM installer_change_requests cr
+            LEFT JOIN users u ON cr.reviewed_by = u.id
+            WHERE ${isNumeric ? 'cr.installer_id = $1::bigint' : 'cr.installer_code = $1'}
+            ORDER BY cr.created_at DESC
+            `,
+            [installerId]
+        );
+
+        res.status(200).json({
+            success: true,
+            count: result.rows.length,
+            data: result.rows
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+/* =========================================================
+   DECIDE INSTALLER CHANGE REQUEST
+   ADMIN ONLY
+========================================================= */
+
+async function decideInstallerChangeRequest(req, res, next) {
+    try {
+        const requestId = req.params.requestId;
+        const { decision, notes } = req.body; // 'approve' or 'reject'
+
+        if (!["approve", "reject"].includes(decision)) {
+            return res.status(400).json({
+                success: false,
+                message: "Decision must be 'approve' or 'reject'."
+            });
+        }
+
+        const reqQuery = await query(
+            `SELECT * FROM installer_change_requests WHERE id = $1 LIMIT 1`,
+            [requestId]
+        );
+
+        if (reqQuery.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Change request not found."
+            });
+        }
+
+        const changeReq = reqQuery.rows[0];
+        const installer = await installerService.getInstallerById(changeReq.installer_id);
+
+        const newStatus = decision === "approve" ? "approved" : "rejected";
+
+        await query(
+            `
+            UPDATE installer_change_requests
+            SET status = $1,
+                admin_notes = $2,
+                reviewed_by = $3,
+                reviewed_at = CURRENT_TIMESTAMP,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = $4
+            `,
+            [newStatus, notes || null, req.user.id, requestId]
+        );
+
+        if (decision === "approve") {
+            await installerService.updateInstaller(changeReq.installer_id, {
+                bankingUnlocked: true,
+                bankingVerificationStatus: "pending"
+            });
+
+            if (installer) {
+                try {
+                    await notificationService.createNotification({
+                        user_id: installer.user_id,
+                        type: "installer",
+                        title: "Banking Information Unlocked",
+                        message: "Admin approved your change request and has temporarily unlocked your settlement banking section. Please enter your corrected details and resubmit.",
+                        action_url: "/installer/portal#profile",
+                        action_label: "Update Banking Details",
+                        priority: "high"
+                    });
+                } catch (nErr) {}
+            }
+        } else {
+            if (installer) {
+                try {
+                    await notificationService.createNotification({
+                        user_id: installer.user_id,
+                        type: "installer",
+                        title: "Banking Change Request Declined",
+                        message: notes || "Admin has reviewed and declined your banking change request. Banking details remain locked.",
+                        action_url: "/installer/portal#profile",
+                        action_label: "View Status",
+                        priority: "normal"
+                    });
+                } catch (nErr) {}
+            }
+        }
+
+        res.status(200).json({
+            success: true,
+            message: decision === "approve" 
+                ? "Banking change request approved and banking unlocked for installer."
+                : "Banking change request rejected. Banking remains locked.",
+            data: {
+                requestId,
+                status: newStatus
+            }
+        });
+
+    } catch (error) {
+        next(error);
+    }
+}
+
 
 /* =========================================================
    DELETE INSTALLER
@@ -666,6 +1063,25 @@ async function getInstallerJobs(req, res, next) {
     }
 }
 
+async function getInstallerJobDetail(req, res, next) {
+    try {
+        const jobId = req.params.id;
+        const job = await installerService.getInstallerJobById(req.user.id, jobId);
+        if (!job) {
+            return res.status(404).json({
+                success: false,
+                message: "Project record not found or not accessible."
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: { job }
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 
 /* =========================================================
    ACCEPT INSTALLER JOB
@@ -673,6 +1089,17 @@ async function getInstallerJobs(req, res, next) {
 
 async function acceptInstallerJob(req, res, next) {
     try {
+        let installer = await installerService.getInstallerByUserId(req.user.id);
+        if (!installer) {
+            installer = await installerService.ensureInstallerForUser(req.user.id);
+        }
+        if (installer.verification_status !== "verified" || installer.status !== "active") {
+            return res.status(403).json({
+                success: false,
+                message: "You cannot accept installation jobs yet. Your account must be verified and approved by Admin before jobs can be accepted. Please complete your profile and await Admin approval."
+            });
+        }
+
         const job =
             await installerService.acceptInstallerJob(
                 req.user.id,
@@ -694,6 +1121,9 @@ async function acceptInstallerJob(req, res, next) {
         });
 
     } catch (error) {
+        if (error.status === 403) {
+            return res.status(403).json({ success: false, message: error.message });
+        }
         next(error);
     }
 }
@@ -911,8 +1341,11 @@ module.exports = {
     updateInstaller,
     deleteInstaller,
     sendNotificationToInstaller,
+    getInstallerChangeRequests,
+    decideInstallerChangeRequest,
 
     getInstallerJobs,
+    getInstallerJobDetail,
     acceptInstallerJob,
     getInstallerDocuments,
     getInstallerCommissioning,

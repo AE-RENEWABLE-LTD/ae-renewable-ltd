@@ -5,6 +5,9 @@ const express = require("express");
 const installerController =
     require("../controllers/installer.controller");
 
+const notificationController =
+    require("../controllers/notification.controller");
+
 const {
     requireAuth,
     requireAdmin,
@@ -40,11 +43,43 @@ router.patch(
     installerController.updateMyInstaller
 );
 
+// PUT /api/installers/me
+router.put(
+    "/me",
+    requireAuth,
+    requireInstaller,
+    installerController.updateMyInstaller
+);
+
 // POST /api/installers/me/photo
 router.post(
     "/me/photo",
     requireAuth,
     requireInstaller,
+    installerController.uploadProfilePhoto
+);
+
+// POST /api/installers/photo
+router.post(
+    "/photo",
+    requireAuth,
+    requireInstaller,
+    installerController.uploadProfilePhoto
+);
+
+// POST /api/installers/profile/photo
+router.post(
+    "/profile/photo",
+    requireAuth,
+    requireInstaller,
+    installerController.uploadProfilePhoto
+);
+
+// POST /api/installers/:id/photo
+router.post(
+    "/:id/photo",
+    requireAuth,
+    requireStaff,
     installerController.uploadProfilePhoto
 );
 
@@ -68,6 +103,14 @@ router.get(
     requireAuth,
     requireInstaller,
     installerController.getInstallerJobs
+);
+
+// GET /api/installers/jobs/:id
+router.get(
+    "/jobs/:id",
+    requireAuth,
+    requireInstaller,
+    installerController.getInstallerJobDetail
 );
 
 // POST /api/installers/jobs/:id/accept
@@ -118,6 +161,22 @@ router.get(
     installerController.getInstallerNotifications
 );
 
+// PATCH /api/installers/notifications/:id/read
+router.patch(
+    "/notifications/:id/read",
+    requireAuth,
+    requireInstaller,
+    notificationController.markAsRead
+);
+
+// PATCH /api/installers/notifications/read-all
+router.patch(
+    "/notifications/read-all",
+    requireAuth,
+    requireInstaller,
+    notificationController.markAllAsRead
+);
+
 // GET /api/installers/activity
 router.get(
     "/activity",
@@ -135,6 +194,8 @@ router.get(
 // GET /api/installers/befitted
 router.get(
     "/befitted",
+    requireAuth,
+    requireStaff,
     installerController.getBefittedInstaller
 );
 
@@ -242,6 +303,28 @@ router.post(
     requireAuth,
     requireAdmin,
     installerController.sendNotificationToInstaller
+);
+
+
+/* =========================================================
+   INSTALLER CHANGE REQUESTS & AUDIT
+   STAFF / ADMIN
+========================================================= */
+
+// GET /api/installers/:id/change-requests
+router.get(
+    "/:id/change-requests",
+    requireAuth,
+    requireStaff,
+    installerController.getInstallerChangeRequests
+);
+
+// POST /api/installers/change-requests/:requestId/decision
+router.post(
+    "/change-requests/:requestId/decision",
+    requireAuth,
+    requireAdmin,
+    installerController.decideInstallerChangeRequest
 );
 
 

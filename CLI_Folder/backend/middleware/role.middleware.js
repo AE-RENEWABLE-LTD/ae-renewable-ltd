@@ -19,6 +19,7 @@ function requireRole(...allowedRoles) {
         }
 
         if (!allowedRoles.includes(req.user.role)) {
+            console.warn(`[SECURITY AUDIT] Unauthorized API access attempt: user_id=${req.user.id}, role=${req.user.role}, endpoint=${req.method} ${req.originalUrl}, required=[${allowedRoles.join(",")}]`);
             return res.status(403).json({
                 success: false,
                 message: "You do not have permission to access this resource."
@@ -34,7 +35,7 @@ function requireRole(...allowedRoles) {
 ========================================================= */
 
 function requireAdmin(req, res, next) {
-    return requireRole("admin")(req, res, next);
+    return requireRole("admin", "super_admin")(req, res, next);
 }
 
 /* =========================================================
@@ -42,7 +43,7 @@ function requireAdmin(req, res, next) {
 ========================================================= */
 
 function requireStaff(req, res, next) {
-    return requireRole("staff", "admin")(req, res, next);
+    return requireRole("admin", "super_admin", "staff")(req, res, next);
 }
 
 /* =========================================================
@@ -66,7 +67,7 @@ function requireClient(req, res, next) {
 ========================================================= */
 
 function requireAdminOrStaff(req, res, next) {
-    return requireRole("admin", "staff")(req, res, next);
+    return requireRole("admin", "super_admin", "staff")(req, res, next);
 }
 
 /* =========================================================

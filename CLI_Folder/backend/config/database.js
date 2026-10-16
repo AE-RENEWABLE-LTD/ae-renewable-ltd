@@ -10,13 +10,17 @@ const config = require("./environment");
 const connectionString = (config.databaseUrl || "")
     .replace("@localhost:", "@127.0.0.1:");
 
+const isRemoteDb = Boolean(
+    config.databaseUrl &&
+    !config.databaseUrl.includes("localhost") &&
+    !config.databaseUrl.includes("127.0.0.1")
+) || process.env.NODE_ENV === "production" || /sslmode=require/i.test(config.databaseUrl || "");
+
 const pool = new Pool({
     connectionString,
-
+    ssl: isRemoteDb ? { rejectUnauthorized: false } : false,
     max: 10,
-
     idleTimeoutMillis: 30000,
-
     connectionTimeoutMillis: 10000
 });
 
@@ -58,6 +62,7 @@ async function initSchemaAlterations() {
         await pool.query(`ALTER TABLE quotations ADD COLUMN IF NOT EXISTS bargain_note TEXT;`);
         await pool.query(`ALTER TABLE quotations ADD COLUMN IF NOT EXISTS bargain_status VARCHAR(40) NOT NULL DEFAULT 'none';`);
         await pool.query(`ALTER TABLE quotations ADD COLUMN IF NOT EXISTS bargain_submitted_at TIMESTAMPTZ;`);
+        await pool.query(`ALTER TABLE clients ALTER COLUMN email DROP NOT NULL;`);
         console.log("[Database] Schema alterations verified successfully.");
     } catch (err) {
         console.warn("[Database] Schema alteration notice:", err.message);

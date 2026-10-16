@@ -13,6 +13,73 @@ const emailService = require("./email.service");
  * Maintains ONE PROJECT RECORD with referential integrity.
  */
 
+/**
+ * Helper: Find nearest verified active installer based on location
+ */
+async function findLocationInstaller({ city = "", state = "", localGovernment = "" } = {}) {
+    try {
+        const norm = (s) => (s || "").trim().toLowerCase();
+        const lga = norm(localGovernment);
+        const cty = norm(city);
+        const st = norm(state);
+
+        // 1. Try LGA / City match with active verified installer
+        if (lga || cty) {
+            const matchVal = lga || cty;
+            const res = await query(`
+                SELECT i.*, u.email as user_email, u.phone as user_phone
+                FROM installers i
+                INNER JOIN users u ON u.id = i.user_id
+                WHERE (LOWER(i.local_government) = $1 OR LOWER(i.city) = $1 OR LOWER(i.local_government) LIKE $2 OR LOWER(i.city) LIKE $2)
+                  AND i.verification_status = 'verified'
+                  AND i.status = 'active'
+                ORDER BY i.years_experience DESC NULLS LAST, i.id ASC
+                LIMIT 1
+            `, [matchVal, `%${matchVal}%`]);
+            if (res.rows.length > 0) return res.rows[0];
+        }
+
+        // 2. Try State match with active verified installer
+        if (st) {
+            const res = await query(`
+                SELECT i.*, u.email as user_email, u.phone as user_phone
+                FROM installers i
+                INNER JOIN users u ON u.id = i.user_id
+                WHERE (LOWER(i.state) = $1 OR LOWER(i.address) LIKE $2)
+                  AND i.verification_status = 'verified'
+                  AND i.status = 'active'
+                ORDER BY i.years_experience DESC NULLS LAST, i.id ASC
+                LIMIT 1
+            `, [st, `%${st}%`]);
+            if (res.rows.length > 0) return res.rows[0];
+        }
+
+        // 3. Fallback to any verified active installer in Nigeria
+        const anyActive = await query(`
+            SELECT i.*, u.email as user_email, u.phone as user_phone
+            FROM installers i
+            INNER JOIN users u ON u.id = i.user_id
+            WHERE i.verification_status = 'verified' AND i.status = 'active'
+            ORDER BY i.id ASC
+            LIMIT 1
+        `);
+        if (anyActive.rows.length > 0) return anyActive.rows[0];
+
+        // 4. Ultimate fallback to any registered installer
+        const anyInst = await query(`
+            SELECT i.*, u.email as user_email, u.phone as user_phone
+            FROM installers i
+            INNER JOIN users u ON u.id = i.user_id
+            ORDER BY CASE WHEN i.verification_status = 'verified' THEN 1 ELSE 2 END, i.id ASC
+            LIMIT 1
+        `);
+        return anyInst.rows[0] || null;
+    } catch (err) {
+        console.warn("[findLocationInstaller] Fallback notice:", err.message);
+        return null;
+    }
+}
+
 async function submitEngineeringProject(payload, actorUserId = null, actorName = "ARDE Engineer") {
     const {
         customer = {},
@@ -99,7 +166,7 @@ async function submitEngineeringProject(payload, actorUserId = null, actorName =
                 UPDATE users
                 SET username = $1,
                     password_hash = $2,
-                    role = 'client',
+                    role = CASE WHEN role IN ('installer', 'admin', 'staff') THEN role ELSE 'client' END,
                     status = 'active',
                     email_verified = TRUE
                 WHERE id = $3
@@ -302,6 +369,11 @@ async function submitEngineeringProject(payload, actorUserId = null, actorName =
             const projectCode = finalProjectCode;
             const projectName = `${fullName} - ${eng.pvCapacityKw || 5}kW Solar Installation`;
 
+            // Certified installer is assigned only AFTER payment is received and verified by Admin
+            const assignedInstallerId = null;
+            const initialStatus = "admin_review";
+            const matchedInstaller = null;
+
             const projectRes = await client.query(
                 `
                 INSERT INTO projects (
@@ -309,6 +381,8 @@ async function submitEngineeringProject(payload, actorUserId = null, actorName =
                     project_name,
                     description,
                     client_id,
+                    installer_id,
+                    assigned_at,
                     quotation_id,
                     site_address,
                     city,
@@ -330,12 +404,13 @@ async function submitEngineeringProject(payload, actorUserId = null, actorName =
                     boq_data,
                     notes
                 ) VALUES (
-                    $1, $2, $3, $4, $5,
-                    $6, $7, $8, 'Nigeria', 'solar',
-                    'admin_review', 'high', CURRENT_TIMESTAMP,
-                    $9, $10, $11, $12,
-                    $13, $13, 0, $13,
-                    $14, $15, $16
+                    $1, $2, $3, $4, $5::bigint,
+                    CASE WHEN $5::bigint IS NOT NULL THEN CURRENT_TIMESTAMP ELSE NULL END,
+                    $6, $7, $8, $9, 'Nigeria', 'solar',
+                    $10, 'high', CURRENT_TIMESTAMP,
+                    $11, $12, $13, $14,
+                    $15, $15, 0, $15,
+                    $16, $17, $18
                 )
                 RETURNING *
                 `,
@@ -344,10 +419,12 @@ async function submitEngineeringProject(payload, actorUserId = null, actorName =
                     projectName,
                     `Turnkey solar installation based on ARDE engineering specifications.`,
                     dbClient.id,
+                    assignedInstallerId,
                     quotation.id,
                     address,
                     city,
                     state,
+                    initialStatus,
                     eng.pvCapacityKw || 0,
                     eng.batteryCapacityKwh || 0,
                     eng.panelCount || 0,
@@ -373,7 +450,8 @@ async function submitEngineeringProject(payload, actorUserId = null, actorName =
             quotation,
             client: dbClient,
             engineering: eng,
-            commercial: comm
+            commercial: comm,
+            matchedInstaller: null
         };
     });
 
@@ -418,7 +496,43 @@ async function submitEngineeringProject(payload, actorUserId = null, actorName =
             });
         }
     } catch (e) {
-        console.warn("[EngineeringProject] Notification error:", e.message);
+        console.warn("[EngineeringProject] Admin notification error:", e.message);
+    }
+
+    // 8b. Client Notification: 5% Discount Bargain Available
+    try {
+        if (transactionResult.client && transactionResult.client.user_id) {
+            await notificationService.createNotification({
+                user_id: transactionResult.client.user_id,
+                type: "project",
+                title: "💰 5% Discount Bargain Available",
+                message: `Your solar project ${transactionResult.project.project_code} has been created with quotation. You can propose up to a 5% discount bargain before admin accepts the project.`,
+                project_id: transactionResult.project.id,
+                client_id: transactionResult.client.id,
+                action_url: "/client/dashboard",
+                priority: "high"
+            });
+        }
+    } catch (e) {
+        console.warn("[EngineeringProject] Bargain notification error:", e.message);
+    }
+
+    // 8c. Instant Installer Notification (executed after transaction commit)
+    try {
+        if (transactionResult.matchedInstaller && transactionResult.matchedInstaller.user_id) {
+            await notificationService.createNotification({
+                user_id: transactionResult.matchedInstaller.user_id,
+                type: "project",
+                title: `⚡ Instant Project Assignment: ${transactionResult.project.project_name}`,
+                message: `You have been automatically assigned to project ${transactionResult.project.project_code} (${transactionResult.engineering.pvCapacityKw || 5}kW) in ${transactionResult.project.city || "Abuja"}, ${transactionResult.project.state || "FCT"} based on your service location.`,
+                project_id: transactionResult.project.id,
+                action_url: `/installer/portal.html?project=${transactionResult.project.id}`,
+                action_label: "View Field Project",
+                priority: "high"
+            });
+        }
+    } catch (e) {
+        console.warn("[EngineeringProject] Installer notification error:", e.message);
     }
 
     // 9. Client Email Dispatch (Credentials & Quotation Notification)
@@ -485,7 +599,7 @@ async function createClientIntake(payload, actorUserId = null, actorName = "Inta
         id: existingClientId = null,
         fullName = "New Prospective Client",
         companyName = null,
-        email = `client-${Date.now()}@aerenewablesolution.com`,
+        email: rawInputEmail = "",
         phone = "+234 800 000 0000",
         address = "Site Location",
         city = "Abuja",
@@ -493,6 +607,22 @@ async function createClientIntake(payload, actorUserId = null, actorName = "Inta
         propertyType = "Residential",
         industry = null
     } = client;
+
+    // Strict client email sanitization:
+    // Never insert placeholder email; never use admin email as client email; if none, leave blank.
+    let cleanClientEmail = (rawInputEmail || "").trim();
+    if (
+        !cleanClientEmail ||
+        cleanClientEmail.toLowerCase() === "aerenewablesolution@gmail.com" ||
+        cleanClientEmail.toLowerCase() === "admin@aerenewablesolution.com" ||
+        cleanClientEmail.toLowerCase().includes("aerenewablesolution") ||
+        cleanClientEmail.toLowerCase().startsWith("lead-") ||
+        cleanClientEmail.toLowerCase().startsWith("client-") ||
+        cleanClientEmail.toLowerCase().includes("example.com")
+    ) {
+        cleanClientEmail = null;
+    }
+    const email = cleanClientEmail;
 
     const {
         roofType = "Pitched Concrete Tile",
@@ -530,7 +660,7 @@ async function createClientIntake(payload, actorUserId = null, actorName = "Inta
         const codeSuffix = projectCode.replace(/^PRJ-|^AE-/, "");
         const clientCode = `AE_CL${codeSuffix}`;
 
-        // 1. Find or Provision User Account in users table
+        // 1. Find or Provision User Account in users table ONLY if valid client email exists
         let dbUser = null;
         if (email) {
             const userRes = await tx.query(
@@ -538,49 +668,49 @@ async function createClientIntake(payload, actorUserId = null, actorName = "Inta
                 [email, projectCode]
             );
             dbUser = userRes.rows[0];
-        }
 
-        const passwordHash = await bcrypt.hash(defaultPassword, 10);
+            const passwordHash = await bcrypt.hash(defaultPassword, 10);
 
-        if (!dbUser) {
-            const newUserRes = await tx.query(
-                `
-                INSERT INTO users (
-                    email,
-                    username,
-                    password_hash,
-                    first_name,
-                    last_name,
-                    phone,
-                    role,
-                    status,
-                    email_verified
-                ) VALUES ($1, $2, $3, $4, $5, $6, 'client', 'active', TRUE)
-                RETURNING *
-                `,
-                [
-                    email,
-                    projectCode,
-                    passwordHash,
-                    firstName,
-                    lastName,
-                    phone
-                ]
-            );
-            dbUser = newUserRes.rows[0];
-        } else {
-            await tx.query(
-                `
-                UPDATE users
-                SET username = COALESCE(username, $1),
-                    password_hash = $2,
-                    role = 'client',
-                    status = 'active',
-                    email_verified = TRUE
-                WHERE id = $3
-                `,
-                [projectCode, passwordHash, dbUser.id]
-            );
+            if (!dbUser) {
+                const newUserRes = await tx.query(
+                    `
+                    INSERT INTO users (
+                        email,
+                        username,
+                        password_hash,
+                        first_name,
+                        last_name,
+                        phone,
+                        role,
+                        status,
+                        email_verified
+                    ) VALUES ($1, $2, $3, $4, $5, $6, 'client', 'active', TRUE)
+                    RETURNING *
+                    `,
+                    [
+                        email,
+                        projectCode,
+                        passwordHash,
+                        firstName,
+                        lastName,
+                        phone
+                    ]
+                );
+                dbUser = newUserRes.rows[0];
+            } else {
+                await tx.query(
+                    `
+                    UPDATE users
+                    SET username = COALESCE(username, $1),
+                        password_hash = $2,
+                        role = CASE WHEN role IN ('installer', 'admin', 'staff') THEN role ELSE 'client' END,
+                        status = 'active',
+                        email_verified = TRUE
+                    WHERE id = $3
+                    `,
+                    [projectCode, passwordHash, dbUser.id]
+                );
+            }
         }
 
         // 2. Find or Provision Client in clients table
@@ -591,7 +721,7 @@ async function createClientIntake(payload, actorUserId = null, actorName = "Inta
             dbClient = cRes.rows[0];
         }
 
-        if (!dbClient && email) {
+        if (!dbClient && email && dbUser) {
             const cRes = await tx.query(`SELECT * FROM clients WHERE email = $1 OR user_id = $2 LIMIT 1`, [email, dbUser.id]);
             dbClient = cRes.rows[0];
         }
@@ -617,11 +747,11 @@ async function createClientIntake(payload, actorUserId = null, actorName = "Inta
                 RETURNING *
                 `,
                 [
-                    dbUser.id,
+                    dbUser ? dbUser.id : null,
                     clientCode,
                     companyName || null,
                     fullName,
-                    email,
+                    email || null,
                     phone,
                     address,
                     city,
@@ -635,7 +765,7 @@ async function createClientIntake(payload, actorUserId = null, actorName = "Inta
             // Update address/phone/user_id
             await tx.query(
                 `UPDATE clients SET user_id = COALESCE(user_id, $1), contact_name = $2, phone = $3, address = $4, city = $5, state = $6 WHERE id = $7`,
-                [dbUser.id, fullName, phone, address, city, state, dbClient.id]
+                [dbUser ? dbUser.id : null, fullName, phone, address, city, state, dbClient.id]
             );
         }
 
@@ -671,6 +801,18 @@ async function createClientIntake(payload, actorUserId = null, actorName = "Inta
 
         const notesFormatted = `[ARDE Intake: ${intakeScenario.toUpperCase()}] Grid: ${gridReliability}. Gen: ${generatorKva || 'None'}. Inverter: ${existingInverter}. Notes: ${siteNotes || generalNotes || 'None'}`.trim();
 
+        const estimatedVal = Math.round(Math.max(1200000, (preliminaryKw || 5) * 650000 + (preliminaryKwh || 10) * 350000));
+
+        // Certified installer is assigned only AFTER payment is received and verified by Admin
+        const assignedInstallerId = null;
+        const initialStatus = "consultation";
+        const matchedInstaller = null;
+
+        const completeBoq = emailService.buildComplete28BOQ ? emailService.buildComplete28BOQ({
+            pvCapacityKw: preliminaryKw,
+            batteryCapacityKwh: preliminaryKwh
+        }) : [];
+
         const projRes = await tx.query(
             `
             INSERT INTO projects (
@@ -678,6 +820,8 @@ async function createClientIntake(payload, actorUserId = null, actorName = "Inta
                 project_name,
                 description,
                 client_id,
+                installer_id,
+                assigned_at,
                 site_address,
                 city,
                 state,
@@ -688,14 +832,20 @@ async function createClientIntake(payload, actorUserId = null, actorName = "Inta
                 consultation_date,
                 system_capacity_kw,
                 battery_capacity_kwh,
+                contract_value,
+                original_contract_value,
+                estimated_value,
                 notes,
-                engineering_data
+                engineering_data,
+                boq_data
             ) VALUES (
-                $1, $2, $3, $4,
-                $5, $6, $7, 'Nigeria', 'solar',
-                'consultation', 'high', CURRENT_DATE,
-                $8, $9,
-                $10, $11
+                $1, $2, $3, $4, $5::bigint,
+                CASE WHEN $5::bigint IS NOT NULL THEN CURRENT_TIMESTAMP ELSE NULL END,
+                $6, $7, $8, 'Nigeria', 'solar',
+                $9, 'high', CURRENT_DATE,
+                $10, $11,
+                $12, $12, $12,
+                $13, $14, $15
             )
             RETURNING *
             `,
@@ -704,29 +854,112 @@ async function createClientIntake(payload, actorUserId = null, actorName = "Inta
                 projectName,
                 `Assessment intake for ${fullName} (${propertyType}) at ${address}. Planned load: ${loadWatts}W.`,
                 dbClient.id,
+                assignedInstallerId,
                 address,
                 city,
                 state,
+                initialStatus,
                 preliminaryKw,
                 preliminaryKwh,
+                estimatedVal,
                 notesFormatted,
-                JSON.stringify(engineeringData)
+                JSON.stringify(engineeringData),
+                JSON.stringify(completeBoq)
             ]
         );
 
         const project = projRes.rows[0];
 
-        const studioUrl = `/arde/studio?clientId=${dbClient.id}&projectId=${project.id}&load=${loadWatts}&backup=${backupHours}&psh=${psh}&batteryType=${batteryType}&clientName=${encodeURIComponent(fullName)}&clientEmail=${encodeURIComponent(email)}&clientPhone=${encodeURIComponent(phone)}&clientAddress=${encodeURIComponent(address)}&clientCode=${encodeURIComponent(dbClient.client_code)}&projectCode=${encodeURIComponent(projectCode)}&propertyType=${encodeURIComponent(propertyType)}`;
+        // Auto-generate formal quotation record for this intake
+        let quotation = null;
+        try {
+            const quoCode = `QUO-${projectCode.replace(/^PRJ-|^AE-/, "")}`;
+            const subtotal = Math.round(estimatedVal / 1.075);
+            const tax = estimatedVal - subtotal;
+            const installationFee = Math.round(Math.max(150000, Number(preliminaryKw || 5) * 25000));
+
+            const quoRes = await tx.query(`
+                INSERT INTO quotations (
+                    quotation_code,
+                    quotation_number,
+                    project_id,
+                    client_id,
+                    title,
+                    description,
+                    subtotal,
+                    tax,
+                    installation_fee,
+                    discount,
+                    total_amount,
+                    status,
+                    valid_until,
+                    notes,
+                    created_at,
+                    updated_at
+                ) VALUES ($1, $1, $2, $3, $4, $5, $6, $7, $8, 0, $9, 'sent', CURRENT_DATE + INTERVAL '30 days', $10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+                ON CONFLICT (quotation_code) DO UPDATE SET total_amount = EXCLUDED.total_amount, updated_at = CURRENT_TIMESTAMP
+                RETURNING *
+            `, [
+                quoCode,
+                project.id,
+                dbClient.id,
+                `Turnkey Solar PV System - ${projectCode}`,
+                `Turnkey Solar PV System with Battery Storage for ${fullName}`,
+                subtotal,
+                tax,
+                installationFee,
+                estimatedVal,
+                `Turnkey solar quotation for ${projectCode}`
+            ]);
+
+            quotation = quoRes.rows[0];
+            await tx.query(`UPDATE projects SET quotation_id = $1 WHERE id = $2`, [quotation.id, project.id]);
+            project.quotation_id = quotation.id;
+        } catch (quoErr) {
+            console.warn("[EngineeringProject] Auto-quotation creation warning:", quoErr.message);
+        }
+
+        const studioUrl = `/arde/studio?clientId=${dbClient.id}&projectId=${project.id}&load=${loadWatts}&backup=${backupHours}&psh=${psh}`;
 
         return {
             client: dbClient,
             project,
+            quotation,
             studioUrl,
-            intakeScenario
+            intakeScenario,
+            defaultPassword,
+            firstName,
+            preliminaryKw,
+            preliminaryKwh,
+            estimatedVal,
+            matchedInstaller
         };
     });
 
-    // Admin Notification based on intake scenario
+    // Quotation email is strictly deferred: it will be dispatched only when client/engineer chooses an ENGINEERING PRESET or clicks "⚡ Compute Design" in ARDE Studio.
+
+    // 2. Client Portal Notification: 5% Bargain Discount Available
+    try {
+        if (transactionResult.client && transactionResult.client.user_id) {
+            await notificationService.createNotification({
+                user_id: transactionResult.client.user_id,
+                type: "project",
+                title: "💰 5% Discount Bargain Available",
+                message: `Your solar project ${transactionResult.project.project_code} has been registered. You can negotiate up to a 5% discount bargain before admin accepts the project quotation.`,
+                project_id: transactionResult.project.id,
+                client_id: transactionResult.client.id,
+                action_url: "/client/dashboard",
+                priority: "high"
+            });
+        }
+    } catch (e) {
+        console.warn("[EngineeringProject] Client bargain notification warning:", e.message);
+    }
+
+    // 3. Installer Notification: Deferred until client makes payment and Admin verifies it
+    // Per business workflow, installer must NOT receive project notifications until client makes payment and Admin accepts/verifies it.
+
+    // 4. Admin Notification based on intake scenario
     try {
         const adminUsers = await query(
             `SELECT id FROM users WHERE role IN ('admin', 'super_admin') AND status = 'active'`
@@ -734,23 +967,23 @@ async function createClientIntake(payload, actorUserId = null, actorName = "Inta
 
         const scenario = payload.intakeScenario || "full";
         let notifTitle = `⚡ ARDE Client Intake: ${fullName}`;
-        let notifMessage = `Pre-studio assessment submitted for ${propertyType} at ${address}, ${state}. Load: ${(loadWatts / 1000).toFixed(1)}kW. Project Code: ${transactionResult.project.project_code}.`;
+        let notifMessage = `Pre-studio assessment submitted for ${propertyType} at ${address}, ${state}. Load: ${(loadWatts / 1000).toFixed(1)}kW. Project Code: ${transactionResult.project.project_code}. Admin can Accept or Delete.`;
 
         const appliancesSummary = appliances && appliances.length ? appliances.join(", ") : `${loadWatts} W`;
 
         if (scenario === "site_only") {
-            notifTitle = `🏗️ Site Survey: "I need someone to attend to me"`;
-            notifMessage = `Site Survey Consultation inquiry. Grid: ${gridReliability}. Existing Generator: ${generatorKva ? generatorKva + ' kVA' : 'None'}. Inverter: ${existingInverter}. Notes: ${siteNotes || 'None'}. Client requested immediate attention via WhatsApp/Call.`;
+            notifTitle = `🏗️ Site Survey Consultation: ${fullName}`;
+            notifMessage = `Site Survey Consultation inquiry from ${email} (${phone}). Grid: ${gridReliability}. Existing Gen: ${generatorKva ? generatorKva + ' kVA' : 'None'}. Inverter: ${existingInverter}. Client requested immediate attention. Admin can Accept or Delete.`;
         } else if (scenario === "energy_only") {
-            notifTitle = `⚡ Energy Profiling: "I need you to call me"`;
-            notifMessage = `Load sizing profile submitted: ${(loadWatts / 1000).toFixed(2)} kW. Appliances: ${appliancesSummary}. Battery: ${batteryType}. Notes: ${generalNotes || 'None'}. Reminder dispatched: "I need you to call me".`;
+            notifTitle = `⚡ Energy Profiling Consultation: ${fullName}`;
+            notifMessage = `Load sizing consultation from ${email} (${phone}): ${(loadWatts / 1000).toFixed(2)} kW. Appliances: ${appliancesSummary}. Battery: ${batteryType}. Admin can Accept or Delete.`;
         } else if (scenario === "client_only") {
-            notifTitle = `👤 New Client Profile: ${fullName} (${transactionResult.client.client_code})`;
-            notifMessage = `Client profile registered. Contact: ${fullName}, ${phone}, ${email}. Property: ${propertyType} at ${address}, ${city}, ${state}. Client ID: ${transactionResult.client.client_code}. Studio opened.`;
+            notifTitle = `👤 New Client Project: ${fullName} (${transactionResult.project.project_code})`;
+            notifMessage = `Client profile registered: ${fullName}, ${phone}, ${email}. Property: ${propertyType} at ${address}, ${city}, ${state}. Project Code: ${transactionResult.project.project_code}. Admin can Accept or Delete.`;
         } else {
             // Full 3 cards filled
-            notifTitle = `👤⚡ ARDE Intake: ${fullName} (${transactionResult.client.client_code})`;
-            notifMessage = `Identity: ${fullName}, ${companyName ? companyName + ', ' : ''}${phone}, ${email}, ${propertyType}, ${address}, ${city}, ${state}. Site: Grid ${gridReliability}, Gen: ${generatorKva ? generatorKva + ' kVA' : 'None'}, Inv: ${existingInverter}, Notes: ${siteNotes || 'None'}. Consumption: ${appliancesSummary} (${(loadWatts / 1000).toFixed(2)} kW). Battery Chemistry: ${batteryType}. Client ID: ${transactionResult.client.client_code}.`;
+            notifTitle = `👤⚡ New Client Project Intake: ${fullName} (${transactionResult.project.project_code})`;
+            notifMessage = `Identity: ${fullName}, ${phone}, ${email}, ${propertyType}, ${address}, ${city}, ${state}. System Load: ${(loadWatts / 1000).toFixed(2)} kW. Admin can Accept or Delete.`;
         }
 
         for (const admin of adminUsers.rows) {
@@ -760,7 +993,8 @@ async function createClientIntake(payload, actorUserId = null, actorName = "Inta
                 title: notifTitle,
                 message: notifMessage,
                 project_id: transactionResult.project.id,
-                action_url: `/admin`,
+                action_url: `/admin#consultations?ref=${transactionResult.project.project_code}`,
+                action_label: "View Consultation",
                 priority: "high"
             });
         }

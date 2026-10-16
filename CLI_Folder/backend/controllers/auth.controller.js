@@ -1,4 +1,4 @@
-﻿"use strict";
+"use strict";
 
 const authService =
     require("../services/auth.service");
@@ -98,14 +98,18 @@ async function login(req, res, next) {
 
         const {
             email,
-            password
+            password,
+            portal,
+            expectedRole
         } = req.body;
 
+        const requestedPortal = portal || expectedRole || req.headers["x-portal-context"] || null;
 
         const result =
             await authService.login(
                 email,
-                password
+                password,
+                requestedPortal
             );
 
 
@@ -121,6 +125,10 @@ async function login(req, res, next) {
         });
 
     } catch (error) {
+
+        if (error.status === 403 || error.status === 401) {
+            console.warn(`[SECURITY AUDIT] Login rejected: email=${req.body?.email}, portal=${req.body?.portal || 'none'}, status=${error.status}, reason="${error.message}", ip=${req.ip}`);
+        }
 
         next(error);
 
@@ -219,6 +227,21 @@ async function resendVerification(req, res, next) {
 ========================================================= */
 
 
+function resolveResetRole(req) {
+    let role = req.body?.role || req.body?.requiredRole || req.body?.portal || "";
+    if (!role) {
+        const ref = String(req.headers?.referer || req.headers?.origin || "").toLowerCase();
+        if (ref.includes("/installer")) {
+            role = "installer";
+        } else if (ref.includes("/admin")) {
+            role = "admin";
+        } else if (ref.includes("/client")) {
+            role = "client";
+        }
+    }
+    return role ? String(role).toLowerCase().trim() : "";
+}
+
 /* =========================================================
    PASSWORD RESET
    POST /api/auth/request-password-reset
@@ -228,10 +251,11 @@ async function requestPasswordReset(req, res, next) {
 
     try {
 
+        const role = resolveResetRole(req);
         const result =
             await passwordResetService.requestPasswordReset(
                 req.body.email,
-                req.body.role || req.body.requiredRole || req.body.portal || ""
+                role
             );
 
         return res.status(200).json({
@@ -261,11 +285,12 @@ async function verifyPasswordResetCode(req, res, next) {
 
     try {
 
+        const role = resolveResetRole(req);
         const result =
             await passwordResetService.verifyPasswordResetCode(
                 req.body.email,
                 req.body.code,
-                req.body.role || req.body.requiredRole || req.body.portal || ""
+                role
             );
 
         return res.status(200).json({
@@ -295,12 +320,13 @@ async function resetPassword(req, res, next) {
 
     try {
 
+        const role = resolveResetRole(req);
         const result =
             await passwordResetService.resetPassword(
                 req.body.email,
                 req.body.resetToken,
                 req.body.newPassword,
-                req.body.role || req.body.requiredRole || req.body.portal || ""
+                role
             );
 
         return res.status(200).json({

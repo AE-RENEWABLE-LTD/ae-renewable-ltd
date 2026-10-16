@@ -1,4 +1,4 @@
-﻿"use strict";
+"use strict";
 
 /*
 =========================================================
@@ -116,7 +116,8 @@ loginForm?.addEventListener("submit", async event => {
 
                     body: JSON.stringify({
                         email,
-                        password
+                        password,
+                        portal: "installer"
                     })
                 }
             );
@@ -137,6 +138,10 @@ loginForm?.addEventListener("submit", async event => {
 
         const token =
             data.data.token;
+
+        if (!data.data.user || data.data.user.role !== "installer") {
+            throw new Error("These credentials are not authorized for this portal. Please use the correct sign-in page.");
+        }
 
         /*
          * Store the JWT where installer.js

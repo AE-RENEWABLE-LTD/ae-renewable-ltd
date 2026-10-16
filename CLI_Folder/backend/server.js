@@ -100,23 +100,50 @@ p { color:#94a3b8; font-size:0.9rem; margin:0; }
 (function(){
   try {
     var sessionKey = '${sKey}';
-    var token = localStorage.getItem('token') || localStorage.getItem('accessToken') || localStorage.getItem('aeAdminToken') || localStorage.getItem('aeInstallerToken') || localStorage.getItem('aeRenewableToken') || localStorage.getItem('aeClientToken') || '';
-    var rawUser = localStorage.getItem('user') || localStorage.getItem('aeAdminUser') || localStorage.getItem('aeInstallerUser') || localStorage.getItem('aeRenewableUser') || localStorage.getItem('aeClientUser') || '{}';
+    var allowed = ${rolesJson}.map(function(r){ return String(r).toLowerCase(); });
+    var isAdminRoute = allowed.indexOf('admin') !== -1 || allowed.indexOf('staff') !== -1;
+    var isInstallerRoute = allowed.indexOf('installer') !== -1;
+    var isClientRoute = allowed.indexOf('client') !== -1;
+
+    var token = '';
+    var rawUser = '{}';
+
+    if (isAdminRoute) {
+      token = localStorage.getItem('aeAdminToken') || '';
+      rawUser = localStorage.getItem('aeAdminUser') || '{}';
+    } else if (isInstallerRoute) {
+      token = localStorage.getItem('aeInstallerToken') || '';
+      rawUser = localStorage.getItem('aeInstallerUser') || '{}';
+    } else if (isClientRoute) {
+      token = localStorage.getItem('aeClientToken') || localStorage.getItem('aeRenewableToken') || localStorage.getItem('token') || '';
+      rawUser = localStorage.getItem('aeClientUser') || localStorage.getItem('aeRenewableUser') || localStorage.getItem('user') || '{}';
+    } else {
+      token = localStorage.getItem('token') || localStorage.getItem('accessToken') || '';
+      rawUser = localStorage.getItem('user') || '{}';
+    }
+
     var user = {};
     try { user = JSON.parse(rawUser) || {}; } catch(e) { user = {}; }
-    var role = user && user.role ? String(user.role).toLowerCase() : '';
-    if (sessionKey && sessionStorage.getItem(sessionKey) !== 'true') {
-      window.location.replace('${loginRedirect}');
+    var role = (user && (user.role || (user.user && user.user.role))) ? String(user.role || user.user.role).toLowerCase() : "";
+
+    if (!token || !role || allowed.indexOf(role) === -1) {
+      var currentUrl = window.location.pathname + window.location.search + window.location.hash;
+      var redirectTarget = '${loginRedirect}';
+      if (currentUrl && currentUrl !== '/' && currentUrl !== redirectTarget) {
+        redirectTarget += (redirectTarget.indexOf('?') === -1 ? '?' : '&') + 'redirect=' + encodeURIComponent(currentUrl);
+      }
+      window.location.replace(redirectTarget);
       return;
     }
-    var allowed = ${rolesJson}.map(function(r){ return String(r).toLowerCase(); });
-    if (!token || !role || !allowed.includes(role)) {
-      window.location.replace('${loginRedirect}');
-    } else {
-      var url = new URL(window.location.href);
-      url.searchParams.set('__auth_pass', '1');
-      window.location.replace(url.toString());
+
+    // Role is authorized! Ensure session is recognized for this browser tab
+    if (sessionKey) {
+      try { sessionStorage.setItem(sessionKey, 'true'); } catch(e) {}
     }
+
+    var url = new URL(window.location.href);
+    url.searchParams.set('__auth_pass', '1');
+    window.location.replace(url.toString());
   } catch(e) {
     window.location.replace('${loginRedirect}');
   }
@@ -212,7 +239,17 @@ rateLimit({
         15 * 60 * 1000,
 
     max:
-        200,
+        process.env.NODE_ENV === "production" ? 2000 : 20000,
+
+    skip: (req) => {
+        const ip = req.ip || req.connection?.remoteAddress || "";
+        return (
+            ip === "127.0.0.1" ||
+            ip === "::1" ||
+            ip.includes("127.0.0.1") ||
+            process.env.NODE_ENV !== "production"
+        );
+    },
 
     standardHeaders:
         true,
@@ -485,6 +522,19 @@ app.use("/api/field", fieldPostRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "..", "..", "uploads")));
+app.use("/uploads", (req, res, next) => {
+    if (req.path.match(/\.(png|jpe?g|webp|gif|svg)$/i)) {
+        const defaultImg = path.join(__dirname, "..", "uploads", "installer-default.jpg");
+        if (fs.existsSync(defaultImg)) return res.sendFile(defaultImg);
+        const letsGoImg = path.join(__dirname, "..", "..", "LETS_GO", "images", "installerface1.jpeg");
+        if (fs.existsSync(letsGoImg)) return res.sendFile(letsGoImg);
+        const transparentPng = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==", "base64");
+        res.setHeader("Content-Type", "image/png");
+        return res.status(200).send(transparentPng);
+    }
+    next();
+});
 
 app.use("/images", express.static(path.join(__dirname, "..", "client", "images")));
 app.use("/images", express.static(path.join(__dirname, "..", "client", "assets")));
@@ -545,10 +595,10 @@ app.get("/installer/dashboard", (req, res) => {
     return res.redirect("/installer/portal");
 });
 
-// Protected Installer Portal (Installer, Admin, Staff ONLY)
+// Protected Installer Portal (Installer ONLY)
 app.get(
     ["/installer/portal", "/installer/portal.html"],
-    requirePageRole(["installer", "admin", "staff"], "/installer/login", "ae_installer_logged_in"),
+    requirePageRole(["installer"], "/installer/login", "ae_installer_logged_in"),
     (req, res) => {
         return res.sendFile(path.join(installerFrontendPath, "portal.html"));
     }
@@ -566,7 +616,7 @@ CLIENT ROUTES & ACCESS CONTROL
 ========================================================= */
 
 // Public landing & auth pages
-app.get(["/client", "/client/landing", "/client/landing.html"], (req, res) => {
+app.get(["/client/landing", "/client/landing.html", "/explore", "/explore.html", "/field", "/field.html", "/stories"], (req, res) => {
     return res.sendFile(path.join(clientFrontendPath, "landing.html"));
 });
 
@@ -578,10 +628,10 @@ app.get(["/client/register", "/client/register.html"], (req, res) => {
     return res.redirect("/client/login");
 });
 
-// Protected Client Portal (Client, Admin, Staff, Installer ONLY)
+// Protected Client Portal (Registered Clients ONLY)
 app.get(
-    ["/client/dashboard", "/client/portal", "/client/portal.html", "/client/client.html"],
-    requirePageRole(["client", "admin", "staff", "installer"], "/client/login", "ae_client_logged_in"),
+    ["/client", "/client/", "/client/dashboard", "/client/portal", "/client/portal.html", "/client/client.html"],
+    requirePageRole(["client"], "/client/login", "ae_client_logged_in"),
     (req, res) => {
         return res.sendFile(path.join(clientFrontendPath, "client.html"));
     }
@@ -769,6 +819,7 @@ async function startServer() {
 
         app.listen(
             config.port,
+            "0.0.0.0",
             () => {
                 require("./services/automation.service").initScheduler();
 

@@ -17,13 +17,13 @@ let currentMaterials = null;
 let currentCostSummary = null;
 
 let activeClient = {
-    fullName: "Eniola Abdulrasaq",
-    firstName: "Eniola",
-    projectCode: "PRJ-202610-4757",
+    fullName: "",
+    firstName: "Client",
+    projectCode: "",
     propertyType: "Residential",
-    email: "eniola@aerenewable.com",
-    phone: "+234 803 123 4567",
-    address: "Plot 14, Guzape Hills, Abuja, FCT"
+    email: "",
+    phone: "",
+    address: "Abuja, FCT"
 };
 
 // Sizing Presets
@@ -151,6 +151,11 @@ function loadClientFromStorage() {
             const pshInput = document.getElementById("psh");
             if (pshInput) pshInput.value = params.get("psh");
         }
+
+        // Clean browser address bar immediately so sensitive query parameters are never exposed
+        if (window.location.search && window.history.replaceState) {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
     } catch (err) {
         console.warn("URL params parse warning:", err);
     }
@@ -160,12 +165,12 @@ function loadClientFromStorage() {
         const raw = localStorage.getItem("ae_active_client");
         if (raw) {
             const data = JSON.parse(raw);
-            if (data.fullName && (!activeClient.fullName || activeClient.fullName === "Eniola Abdulrasaq")) activeClient.fullName = data.fullName;
-            if (data.projectCode && (!activeClient.projectCode || activeClient.projectCode === "PRJ-202610-4757")) activeClient.projectCode = data.projectCode;
+            if (data.fullName) activeClient.fullName = data.fullName;
+            if (data.projectCode) activeClient.projectCode = data.projectCode;
             if (data.propertyType) activeClient.propertyType = data.propertyType;
-            if (data.email && (!activeClient.email || activeClient.email === "eniola@aerenewable.com")) activeClient.email = data.email;
-            if (data.phone && (!activeClient.phone || activeClient.phone === "+234 803 123 4567")) activeClient.phone = data.phone;
-            if (data.address && (!activeClient.address || activeClient.address === "Plot 14, Guzape Hills, Abuja, FCT")) activeClient.address = data.address;
+            if (data.email) activeClient.email = data.email;
+            if (data.phone) activeClient.phone = data.phone;
+            if (data.address) activeClient.address = data.address;
         }
     } catch (e) {
         console.warn("Using default client intake data", e);
@@ -206,12 +211,12 @@ function initPresets() {
             pills.forEach(p => p.classList.remove("active"));
             pill.classList.add("active");
             const key = pill.getAttribute("data-preset");
-            applyPreset(key);
+            applyPreset(key, false);
         });
     });
 }
 
-function applyPreset(key) {
+function applyPreset(key, isExplicitSubmit = false) {
     const preset = PRESETS[key];
     if (!preset) return;
 
@@ -223,7 +228,7 @@ function applyPreset(key) {
     document.getElementById("losses").value = preset.losses;
     document.getElementById("batteryPercent").value = preset.batteryPercent;
 
-    runComputation(false);
+    runComputation(isExplicitSubmit);
 }
 
 // ======================================================
@@ -515,47 +520,56 @@ function initEventListeners() {
         });
     }
 
+    // Direct click on ⚡ Compute Design button
+    const btnCompute = document.getElementById("btnCompute");
+    if (btnCompute) {
+        btnCompute.addEventListener("click", (e) => {
+            e.preventDefault();
+            runComputation(true);
+        });
+    }
+
     // Reset button
     if (btnReset) {
         btnReset.addEventListener("click", () => {
             setTimeout(() => {
-                applyPreset("res3bed");
+                applyPreset("res3bed", false);
             }, 50);
         });
     }
 
-    // Direct Action & Modal Buttons
+    // Direct Action & Modal Buttons (Preview / View Sheets without re-dispatching email)
     if (btnQuotation) {
         btnQuotation.addEventListener("click", () => {
-            runComputation(true);
+            runComputation(false);
             openPrintUpModal("quotation");
         });
     }
 
     if (btnBOQ) {
         btnBOQ.addEventListener("click", () => {
-            runComputation(true);
+            runComputation(false);
             openPrintUpModal("boq");
         });
     }
 
     if (sidebarOpenQuotation) {
         sidebarOpenQuotation.addEventListener("click", () => {
-            runComputation(true);
+            runComputation(false);
             openPrintUpModal("quotation");
         });
     }
 
     if (sidebarOpenBOQ) {
         sidebarOpenBOQ.addEventListener("click", () => {
-            runComputation(true);
+            runComputation(false);
             openPrintUpModal("boq");
         });
     }
 
     if (btnPrint) {
         btnPrint.addEventListener("click", () => {
-            runComputation(true);
+            runComputation(false);
             openPrintUpModal("quotation");
             setTimeout(() => window.print(), 350);
         });
@@ -563,7 +577,7 @@ function initEventListeners() {
 
     if (btnPDF) {
         btnPDF.addEventListener("click", () => {
-            runComputation(true);
+            runComputation(false);
             openPrintUpModal("quotation");
             setTimeout(() => window.print(), 350);
         });

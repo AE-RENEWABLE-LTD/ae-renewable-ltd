@@ -6,7 +6,8 @@ const express = require("express");
 const clientController = require("../controllers/client.controller");
 const {
     requireAuth,
-    requireAdmin
+    requireAdmin,
+    requireClient
 } = require("../middleware/auth.middleware");
 
 const router = express.Router();
@@ -27,6 +28,7 @@ const router = express.Router();
 router.get(
     "/me",
     requireAuth,
+    requireClient,
     clientController.getMyClient
 );
 
@@ -37,6 +39,18 @@ router.get(
 router.patch(
     "/me",
     requireAuth,
+    requireClient,
+    clientController.updateMyClient
+);
+
+/*
+   POST /api/clients/me
+*/
+
+router.post(
+    "/me",
+    requireAuth,
+    requireClient,
     clientController.updateMyClient
 );
 
@@ -125,12 +139,14 @@ router.delete(
 router.get(
     "/weekly-maintenance/active",
     requireAuth,
+    requireClient,
     clientController.getActiveWeeklyMaintenance
 );
 
 router.post(
     "/weekly-maintenance/reply",
     requireAuth,
+    requireClient,
     clientController.submitWeeklyMaintenanceReply
 );
 

@@ -267,7 +267,47 @@ const deleteAllNotifications = async (userId) => {
 };
 
 
+/**
+ * Notify all admins and staff
+ */
+const notifyAdmins = async ({
+    title,
+    message,
+    type = 'installer',
+    action_url = '/admin#installer-profile',
+    action_label = 'View Profile',
+    priority = 'high'
+}) => {
+    try {
+        const adminUsers = await pool.query(
+            "SELECT id FROM users WHERE role IN ('admin', 'staff') AND status = 'active'"
+        );
+        const notifications = [];
+        for (const admin of adminUsers.rows) {
+            try {
+                const notif = await createNotification({
+                    user_id: admin.id,
+                    type,
+                    title,
+                    message,
+                    action_url,
+                    action_label,
+                    priority
+                });
+                notifications.push(notif);
+            } catch (e) {
+                console.warn("[notifyAdmins] Error notifying admin", admin.id, e.message);
+            }
+        }
+        return notifications;
+    } catch (err) {
+        console.warn("[notifyAdmins] Error querying admins:", err.message);
+        return [];
+    }
+};
+
 module.exports = {
+    notifyAdmins,
     createNotification,
     createInstallerBroadcast,
     getUserNotifications,

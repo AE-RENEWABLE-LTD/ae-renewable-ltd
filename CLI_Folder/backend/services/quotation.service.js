@@ -106,35 +106,24 @@ async function getAllQuotations(filters = {}) {
     const result = await query(
         `
         SELECT
-            q.id,
-            q.quotation_code,
-            q.quotation_number,
-            q.client_id,
-            q.project_id,
-            q.title,
-            q.description,
-            q.version,
-            q.subtotal,
-            q.discount,
-            q.tax,
-            q.installation_fee,
-            q.total_amount,
-            q.amount_paid,
-            q.balance_due,
-            q.currency,
-            q.status,
-            q.issue_date,
-            q.valid_until,
-            q.client_viewed_at,
-            q.client_responded_at,
-            q.rejection_reason,
-            q.approved_at,
-            q.approved_by,
-            q.pdf_url,
-            q.notes,
-            q.created_at,
-            q.updated_at
+            q.*,
+            c.contact_name AS client_name,
+            c.company_name AS client_company,
+            c.email AS client_email,
+            c.phone AS client_phone,
+            c.address AS client_address,
+            c.city AS client_city,
+            c.state AS client_state,
+            c.client_code,
+            p.project_code,
+            p.project_name,
+            p.system_capacity_kw,
+            p.inverter_capacity_kva,
+            p.battery_capacity_kwh,
+            p.site_address
         FROM quotations q
+        LEFT JOIN clients c ON q.client_id = c.id
+        LEFT JOIN projects p ON q.project_id = p.id
         ${whereClause}
         ORDER BY q.created_at DESC
         `,
@@ -152,42 +141,44 @@ async function getQuotationById(id) {
     const result = await query(
         `
         SELECT
-            q.id,
-            q.quotation_code,
-            q.quotation_number,
-            q.client_id,
-            q.project_id,
-            q.title,
-            q.description,
-            q.version,
-            q.subtotal,
-            q.discount,
-            q.tax,
-            q.installation_fee,
-            q.total_amount,
-            q.amount_paid,
-            q.balance_due,
-            q.currency,
-            q.status,
-            q.issue_date,
-            q.valid_until,
-            q.client_viewed_at,
-            q.client_responded_at,
-            q.rejection_reason,
-            q.approved_at,
-            q.approved_by,
-            q.pdf_url,
-            q.notes,
-            q.created_at,
-            q.updated_at
+            q.*,
+            c.contact_name AS client_name,
+            c.company_name AS client_company,
+            c.email AS client_email,
+            c.phone AS client_phone,
+            c.address AS client_address,
+            c.city AS client_city,
+            c.state AS client_state,
+            c.client_code,
+            p.project_code,
+            p.project_name,
+            p.system_capacity_kw,
+            p.inverter_capacity_kva,
+            p.battery_capacity_kwh,
+            p.site_address
         FROM quotations q
+        LEFT JOIN clients c ON q.client_id = c.id
+        LEFT JOIN projects p ON q.project_id = p.id
         WHERE q.id = $1
         LIMIT 1
         `,
         [id]
     );
 
-    return result.rows[0] || null;
+    const quotation = result.rows[0] || null;
+    if (quotation) {
+        try {
+            const itemsRes = await query(
+                `SELECT * FROM quotation_items WHERE quotation_id = $1 ORDER BY sort_order ASC, id ASC`,
+                [quotation.id]
+            );
+            quotation.items = itemsRes.rows || [];
+        } catch (e) {
+            quotation.items = [];
+        }
+    }
+
+    return quotation;
 }
 
 /* =========================================================
@@ -198,42 +189,44 @@ async function getQuotationByCode(code) {
     const result = await query(
         `
         SELECT
-            q.id,
-            q.quotation_code,
-            q.quotation_number,
-            q.client_id,
-            q.project_id,
-            q.title,
-            q.description,
-            q.version,
-            q.subtotal,
-            q.discount,
-            q.tax,
-            q.installation_fee,
-            q.total_amount,
-            q.amount_paid,
-            q.balance_due,
-            q.currency,
-            q.status,
-            q.issue_date,
-            q.valid_until,
-            q.client_viewed_at,
-            q.client_responded_at,
-            q.rejection_reason,
-            q.approved_at,
-            q.approved_by,
-            q.pdf_url,
-            q.notes,
-            q.created_at,
-            q.updated_at
+            q.*,
+            c.contact_name AS client_name,
+            c.company_name AS client_company,
+            c.email AS client_email,
+            c.phone AS client_phone,
+            c.address AS client_address,
+            c.city AS client_city,
+            c.state AS client_state,
+            c.client_code,
+            p.project_code,
+            p.project_name,
+            p.system_capacity_kw,
+            p.inverter_capacity_kva,
+            p.battery_capacity_kwh,
+            p.site_address
         FROM quotations q
-        WHERE q.quotation_code = $1
+        LEFT JOIN clients c ON q.client_id = c.id
+        LEFT JOIN projects p ON q.project_id = p.id
+        WHERE q.quotation_code = $1 OR q.quotation_number = $1
         LIMIT 1
         `,
         [code]
     );
 
-    return result.rows[0] || null;
+    const quotation = result.rows[0] || null;
+    if (quotation) {
+        try {
+            const itemsRes = await query(
+                `SELECT * FROM quotation_items WHERE quotation_id = $1 ORDER BY sort_order ASC, id ASC`,
+                [quotation.id]
+            );
+            quotation.items = itemsRes.rows || [];
+        } catch (e) {
+            quotation.items = [];
+        }
+    }
+
+    return quotation;
 }
 
 /* =========================================================
@@ -873,6 +866,40 @@ async function cancelQuotation(id) {
 }
 
 /* =========================================================
+   DELETE QUOTATION
+========================================================= */
+
+async function deleteQuotation(id) {
+    return await transaction(async (client) => {
+        await client.query(
+            "UPDATE projects SET quotation_id = NULL WHERE quotation_id = $1",
+            [id]
+        );
+        await client.query(
+            "UPDATE payments SET quotation_id = NULL WHERE quotation_id = $1",
+            [id]
+        );
+        await client.query(
+            "UPDATE notifications SET quotation_id = NULL WHERE quotation_id = $1",
+            [id]
+        );
+        await client.query(
+            "UPDATE activities SET quotation_id = NULL WHERE quotation_id = $1",
+            [id]
+        );
+        await client.query(
+            "DELETE FROM quotation_items WHERE quotation_id = $1",
+            [id]
+        );
+        const result = await client.query(
+            "DELETE FROM quotations WHERE id = $1 RETURNING id, quotation_number, quotation_code",
+            [id]
+        );
+        return result.rows[0] || null;
+    });
+}
+
+/* =========================================================
    EXPORT
 ========================================================= */
 
@@ -888,5 +915,6 @@ module.exports = {
     markQuotationViewed,
     acceptQuotation,
     rejectQuotation,
-    cancelQuotation
+    cancelQuotation,
+    deleteQuotation
 };

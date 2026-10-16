@@ -75,7 +75,10 @@ async function requireAuth(req, res, next) {
         if (user.status !== "active") {
             return res.status(403).json({
                 success: false,
-                message: "User account is not active."
+                code: !user.email_verified ? "OTP_VERIFICATION_REQUIRED" : "ACCOUNT_INACTIVE",
+                message: !user.email_verified 
+                    ? "OTP verification is required before accessing your account."
+                    : "User account is not active."
             });
         }
 
@@ -107,6 +110,7 @@ function requireRole(...allowedRoles) {
         }
 
         if (!allowedRoles.includes(req.user.role)) {
+            console.warn(`[SECURITY AUDIT] Unauthorized API access attempt: user_id=${req.user.id}, role=${req.user.role}, endpoint=${req.method} ${req.originalUrl}, required=[${allowedRoles.join(",")}]`);
             return res.status(403).json({
                 success: false,
                 message: "You do not have permission to access this resource."
@@ -122,7 +126,7 @@ function requireRole(...allowedRoles) {
 ========================================================= */
 
 function requireAdmin(req, res, next) {
-    return requireRole("admin")(req, res, next);
+    return requireRole("admin", "super_admin")(req, res, next);
 }
 
 /* =========================================================
@@ -132,6 +136,7 @@ function requireAdmin(req, res, next) {
 function requireStaff(req, res, next) {
     return requireRole(
         "admin",
+        "super_admin",
         "staff"
     )(req, res, next);
 }
@@ -141,11 +146,30 @@ function requireStaff(req, res, next) {
 ========================================================= */
 
 function requireInstaller(req, res, next) {
-    return requireRole(
-        "admin",
-        "staff",
-        "installer"
-    )(req, res, next);
+    if (!req.user) {
+        return res.status(401).json({
+            success: false,
+            message: "Authentication required."
+        });
+    }
+
+    if (req.user.role !== "installer") {
+        console.warn(`[SECURITY AUDIT] Unauthorized installer API access attempt: user_id=${req.user.id}, role=${req.user.role}, endpoint=${req.method} ${req.originalUrl}`);
+        return res.status(403).json({
+            success: false,
+            message: "You do not have permission to access this resource."
+        });
+    }
+
+    if (!req.user.email_verified) {
+        return res.status(403).json({
+            success: false,
+            code: "OTP_VERIFICATION_REQUIRED",
+            message: "OTP verification is required before accessing the installer portal."
+        });
+    }
+
+    next();
 }
 
 /* =========================================================
@@ -153,11 +177,22 @@ function requireInstaller(req, res, next) {
 ========================================================= */
 
 function requireClient(req, res, next) {
-    return requireRole(
-        "admin",
-        "staff",
-        "client"
-    )(req, res, next);
+    if (!req.user) {
+        return res.status(401).json({
+            success: false,
+            message: "Authentication required."
+        });
+    }
+
+    if (req.user.role !== "client") {
+        console.warn(`[SECURITY AUDIT] Unauthorized client API access attempt: user_id=${req.user.id}, role=${req.user.role}, endpoint=${req.method} ${req.originalUrl}`);
+        return res.status(403).json({
+            success: false,
+            message: "You do not have permission to access this resource."
+        });
+    }
+
+    next();
 }
 
 /* =========================================================
